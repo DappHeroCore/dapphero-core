@@ -1,2 +1,2 @@
-export {EthParent} from './EthParent'
-export {EthChild} from './EthChild'
+export * from "./EthParent"
+export * from "./EthChild"
