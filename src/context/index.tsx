@@ -4,6 +4,7 @@ import { useWeb3Injected } from "@openzeppelin/network/react";
 const modules = ["eth", "erc20"];
 
 const Web3Context = createContext({});
+
 function Web3ContextProvider(props) {
   const injected = useWeb3Injected();
   const { connected, accounts } = injected;
@@ -13,7 +14,6 @@ function Web3ContextProvider(props) {
     accounts,
     modules
   };
-  console.log('initialcontextvalue', initialContextValue)
 
   return (
     <Web3Context.Provider value={initialContextValue}>

@@ -15,32 +15,28 @@ const App: React.FC = () => {
     <Web3ContextProvider>
       <Web3ContextConsumer>
         {({ connected, accounts }) => {
-          console.log('connected in app', connected)
-          console.log('accounts in app', accounts)
-          if(!connected || !accounts){
+          if (!connected || !accounts) {
             return null;
           }
 
           return (
-          <Fragment>
-            {elements.map(element => {
-              console.log('element:', element)
-              const domElementId = element.id;
-              const requestString = domElementId.split("-");
-              const index = 1;
-              const request: Request = {
-                requestString,
-                element,
-                arg: requestString[index],
-                index
-              };
-              return reducer(request, connected, accounts);
-            })}
-          </Fragment>
-
-          )
-        } 
-      }
+            <Fragment>
+              {elements.map(element => {
+                console.log("element:", element);
+                const domElementId = element.id;
+                const requestString = domElementId.split("-");
+                const index = 1;
+                const request: Request = {
+                  requestString,
+                  element,
+                  arg: requestString[index],
+                  index
+                };
+                return reducer(request, connected, accounts);
+              })}
+            </Fragment>
+          );
+        }}
       </Web3ContextConsumer>
     </Web3ContextProvider>
   );
