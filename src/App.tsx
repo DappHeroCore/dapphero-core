@@ -2,6 +2,7 @@ import React, { Fragment } from "react";
 import logo from "./logo.svg";
 import "./App.css";
 import { useWeb3Injected } from "@openzeppelin/network/react";
+import {EthParent} from "./modules/eth"
 
 interface request {
   requestString: string[];
