@@ -1,7 +1,6 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import TestComponent from "./TestComponent";
 
 const App: React.FC = () => (
   <div className="App">
@@ -21,7 +20,6 @@ and save to reload.
         rel="noopener noreferrer"
       >
           Learn React
-          <TestComponent />
       </a>
     </header>
   </div>
