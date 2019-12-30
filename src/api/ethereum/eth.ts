@@ -36,7 +36,6 @@ export const getBalance = (
   return web3Instance.eth.getBalance(address);
 };
 
-// necessary?
 export const getStorageAt = (
   address: string,
   defaultBlock: number,
@@ -45,7 +44,6 @@ export const getStorageAt = (
   return web3Instance.eth.getStorageAt(address, defaultBlock);
 };
 
-// necessary?
 export const getCode = (
   address: string,
   defaultBlock: number,

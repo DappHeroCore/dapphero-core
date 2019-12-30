@@ -19,3 +19,9 @@ export interface EventFilter {
   address?: string | string[];
   topics?: any[];
 }
+
+export interface ENSOptions {
+    from: string;
+    gasPrice?: string;
+    gas?: number;
+}
