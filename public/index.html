@@ -27,8 +27,88 @@
     <title>React App</title>
   </head>
   <body>
+    <div>
+      Address of User:
+      <div id="dh-eth-getBalance-user">Address</div>
+    </div>
+
+    <div>
+      Web3 Provider Name:
+      <div id="dh-eth-getBalance-user">Address</div>
+    </div>
+
+    <div>
+      Web3 Network Name:
+      <div id="dh-eth-getBalance-user">Address</div>
+    </div>
+
+    <div>
+      Web3 Network Id:
+      <div id="dh-eth-getBalance-user">Address</div>
+    </div>
+
+    <div>
+      Web3 Metamask Enable Button:
+      <button id="dh-eth-enable">Enable MetaMask</button>
+    </div>
+
+    <div>Web3: ERC20 Contract</div>
+
+    <div>Public Methods</div>
+    <div>
+      Contract: Total Supply:
+      <div id="dh-erc20-totalSupply">here goes data</div>
+    </div>
+
+    <div>
+      Contract: balanceOf (user):
+      <div id="dh-erc20-balanceOf-user">here goes data</div>
+    </div>
+
+    <div>
+      Contract: name:
+      <div id="dh-erc20-name">here goes data</div>
+    </div>
+
+    <div>
+      Contract: symbol:
+      <div id="dh-erc20-symbol">here goes data</div>
+    </div>
+
+    <div>
+      Contract: decimals:
+      <div id="dh-erc20-decimals">here goes data</div>
+    </div>
+
+    <div>State Change Methods (Transactions)</div>
+
+    <div>
+      Contract: Transfer Method Grouping
+      <div>
+        Transfer: transfer(recipient, amount)
+        <div>
+          Input: recipient:
+          <input type="text" id="dh-erc20-transfer-recipient" />
+        </div>
+        <div>
+          Input: amount:
+          <input type="text" id="dh-erc20-transfer-amount" />
+        </div>
+        <div>
+          Trigger: sendTx to transfer:
+          <button id="dh-erc20-transfer">transfer!</button>
+        </div>
+      </div>
+
+    </div>
+
+    <div>Config DiV: 
+      <div> Configuration goes here:</div>
+      <div>{contractName: "erc20", network: {networkId: 1, address: 'address', abi: 'abi here}}'</div>
+    </div>
+
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
+    <div id="dh-root"></div>
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
