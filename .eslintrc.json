@@ -175,7 +175,7 @@
         "react/state-in-constructor": ["warn", "never"],
         "react/jsx-filename-extension": [1, { "extensions": [".tsx", ".jsx"] }],
         "semi-spacing": ["warn", { "before": false, "after": true }],
-        "semi": ["warn", "always"],
+        "semi": ["warn", "never"],
         "sort-vars": "off", // variables should be initialized in the order they are used
         "space-before-blocks": ["warn", "always"],
         "space-before-function-paren": ["warn", { "anonymous": "always", "named": "never", "asyncArrow": "always" } ],
