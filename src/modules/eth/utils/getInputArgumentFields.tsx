@@ -20,9 +20,10 @@ export const getInputArgumentFields: any = (modules, position, request, method) 
   })
 
   inputs.map(module => {
+    const element = document.getElementById(module.element.id)
     newObj[
       module.requestString[position + 1]
-    ] = document.getElementById(module.element.id).value
+    ] = (element as HTMLInputElement).value
   })
 
   method.inputs.map(method => {
