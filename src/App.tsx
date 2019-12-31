@@ -9,12 +9,10 @@ const App: React.FC = () => {
     document.querySelectorAll(`[id^=${dappHeroTopLevelModule}]`)
   );
 
-  console.log("Elements: ", elements);
 
   return (
     <EthereumContextProvider>
         {elements.map(element => {
-          console.log("element:", element);
           const domElementId = element.id;
           const requestString = domElementId.split("-");
           const index = 1;

@@ -8,9 +8,12 @@ import {dappHeroConfig} from "./types"
 const getConfig = () : dappHeroConfig => {
   let config: dappHeroConfig;
   const configElement = document.getElementById('dh-config')
+  //TODO Clean this data to prevent injections
   config = JSON.parse(configElement.textContent)
-  console.log("The config: ", config)
-  console.log("Config: ", config)
+  //Hide the Element if not hidden.
+  if(configElement.style.display !== "none"){
+  configElement.style.display = "none";
+  }
   return config;
 };
 

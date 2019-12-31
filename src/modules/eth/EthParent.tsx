@@ -1,31 +1,51 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent, useState, Fragment } from "react";
 import { Request, dappHeroConfig } from "../types";
 import { EthStaticView } from "./EthStaticView";
-import { EthereumContextConsumer } from "../../context/ethereum"
+import {EthContractParent} from "./EthContractParent"
+import { EthereumContextConsumer } from "../../context/ethereum";
 
 interface EthParentProps {
   request: Request;
   config: dappHeroConfig;
 }
-
-// our components props accept a number for the initial value
-export const EthParent: FunctionComponent<EthParentProps> = ({ request }) => {
-  // since we pass a number here, clicks is going to be a number.
-  // setClicks is a function that accepts either a number or a function returning
-  // a number
-  const reducer = () => {
+export const EthParent: FunctionComponent<EthParentProps> = ({ request, config }) => {
+  return (
     <EthereumContextConsumer>
       {({ connected, accounts, injected }) => {
-        switch (request.arg) {
+        switch (request.requestString[2]) { //TODO Be explicit about the index
           case "address":
-            if(connected && accounts.length > 0){
-              return <EthStaticView request={request} />;
+          case "getBalance": {
+            if (connected && accounts.length > 0) {
+              return (
+                <EthStaticView
+                  request={request}
+                  injected={injected}
+                  accounts={accounts}
+                />
+              );
             }
-        }
+            break;
+          }
 
+          case config.contractName: {
+            if (connected && accounts.length > 0) {
+              return (
+                <EthContractParent
+                  request={request}
+                  injected={injected}
+                  accounts={accounts}
+                  config={config}
+                />
+              );
+            }
+
+            break;
+          }
+
+          default:
+            return null;
+        }
       }}
     </EthereumContextConsumer>
-  };
-
-  return <div>eth</div>;
+  );
 };
