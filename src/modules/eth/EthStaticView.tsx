@@ -19,7 +19,7 @@ const STATIC_MAPPING = {
   address: async ({ accounts }) => accounts[0],
   getBalance: async ({ accounts, injected }) =>
     await getBalance(accounts[0], injected.lib), // move to static args?
-  getProvider: async ({ injected }) => await currentProvider(injected.lib), // which value do we return from this obj?
+  getProvider: ({ injected }) => injected.providerName, // which value do we return from this obj?
   getNetworkName: ({ injected }) =>
     NETWORK_MAPPING[injected.lib.givenProvider.networkVersion],
   getNetworkId: ({ injected }) => injected.lib.givenProvider.networkVersion
