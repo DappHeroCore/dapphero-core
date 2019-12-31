@@ -1,19 +1,19 @@
 import * as React from "react";
 import { Request } from "./types";
 import { EthParent } from "./eth";
+import { EthereumContextConsumer } from "../context/ethereum";
 
-const reducer = (request: Request, connected: boolean, accounts: string[]) => {
+const reducer = (request: Request) => {
   console.log("The Request: ", request);
-  switch (request.arg) {
-    case "eth":
-      if (connected && accounts.length > 0) {
-        return <EthParent request={request} />
-      }
-      break;
+     switch (request.arg) {
+       case "eth":
+           return <EthParent request={request} />
+         break;
+   
+       default:
+         return null;
+     }
 
-    default:
-      return null;
-  }
 };
 
 export default reducer;

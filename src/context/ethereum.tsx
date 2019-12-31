@@ -3,9 +3,9 @@ import { useWeb3Injected } from "@openzeppelin/network/react";
 
 const modules = ["eth", "erc20"];
 
-const Web3Context = createContext({});
+const EthereumContext = createContext({});
 
-function Web3ContextProvider(props) {
+function EthereumContextProvider(props) {
   const injected = useWeb3Injected();
   const { connected, accounts } = injected;
   const initialContextValue = {
@@ -16,16 +16,14 @@ function Web3ContextProvider(props) {
   };
 
   return (
-    <Web3Context.Provider value={initialContextValue}>
+    <EthereumContext.Provider value={initialContextValue}>
       {props.children}
-    </Web3Context.Provider>
+    </EthereumContext.Provider>
   );
 }
 
-function Web3ContextConsumer(props) {
-  return <Web3Context.Consumer>{props.children}</Web3Context.Consumer>;
+function EthereumContextConsumer(props) {
+  return <EthereumContext.Consumer>{props.children}</EthereumContext.Consumer>;
 }
 
-export { Web3ContextConsumer };
-
-export default Web3ContextProvider;
+export { EthereumContextConsumer, EthereumContextProvider };

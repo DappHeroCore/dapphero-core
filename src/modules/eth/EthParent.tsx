@@ -1,6 +1,7 @@
 import React, { FunctionComponent, useState } from "react";
 import { Request } from "../types";
-import { EthChild } from "./EthViewStatic";
+import { EthStaticView } from "./EthStaticView";
+import { EthereumContextConsumer } from "../../context/ethereum"
 
 interface EthParentProps {
   request: Request;
@@ -12,10 +13,17 @@ export const EthParent: FunctionComponent<EthParentProps> = ({ request }) => {
   // setClicks is a function that accepts either a number or a function returning
   // a number
   const reducer = () => {
-    switch (request.arg) {
-      case "address":
-        return <EthChild request={request} />;
-    }
+    <EthereumContextConsumer>
+      {({ connected, accounts, injected }) => {
+        switch (request.arg) {
+          case "address":
+            if(connected && accounts.length > 0){
+              return <EthStaticView request={request} />;
+            }
+        }
+
+      }}
+    </EthereumContextConsumer>
   };
 
   return <div>eth</div>;

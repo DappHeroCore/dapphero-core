@@ -1,2 +1,2 @@
 export * from "./EthParent"
-export * from "./EthViewStatic"
+export * from "./EthStaticView"
