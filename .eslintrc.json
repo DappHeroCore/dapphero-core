@@ -158,7 +158,7 @@
         "no-useless-rename": "warn",
         "no-var": "warn",
         "no-void": "warn",
-        "no-warning-comments": ["warn", { "terms": ["todo", "tofix"], "location": "start" }],
+        "no-warning-comments": ["off", { "terms": ["todo", "tofix"], "location": "start" }],
         "no-with": "warn",
         "object-curly-newline": [ "warn", { "multiline": true } ],
         "object-curly-spacing": ["warn", "always"],
