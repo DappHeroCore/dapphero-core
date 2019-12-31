@@ -1,20 +1,29 @@
 import React, { FunctionComponent, useState, Fragment } from "react";
 import { Request, dappHeroConfig } from "../types";
 import { EthStaticView } from "./EthStaticView";
-import {EthContractParent} from "./EthContractParent"
+import { EthContractParent } from "./EthContractParent";
 import { EthereumContextConsumer } from "../../context/ethereum";
 
 interface EthParentProps {
   request: Request;
   config: dappHeroConfig;
 }
-export const EthParent: FunctionComponent<EthParentProps> = ({ request, config }) => {
+
+export const EthParent: FunctionComponent<EthParentProps> = ({
+  request,
+  config
+}) => {
   return (
     <EthereumContextConsumer>
       {({ connected, accounts, injected }) => {
-        switch (request.requestString[2]) { //TODO Be explicit about the index
+        switch (
+          request.requestString[2] //TODO Be explicit about the index
+        ) {
           case "address":
-          case "getBalance": {
+          case "getBalance":
+          case "getProvider":
+          case "getNetworkName":
+          case "getNetworkId": {
             if (connected && accounts.length > 0) {
               return (
                 <EthStaticView
