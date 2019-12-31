@@ -1,28 +1,33 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { EthereumContextProvider } from "./context/ethereum";
+import reducer from "./modules/reducer";
+import { Request } from "./modules/types";
 
-const App: React.FC = () => (
-  <div className="App">
-    <header className="App-header">
-      <img src={logo} className="App-logo" alt="logo" />
-      <p>
-          Edit
-        {' '}
-        <code>src/App.tsx</code>
-        {' '}
-and save to reload.
-      </p>
-      <a
-        className="App-link"
-        href="https://reactjs.org"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-          Learn React
-      </a>
-    </header>
-  </div>
-);
+const App: React.FC = () => {
+  const dappHeroTopLevelModule = "dh"; //MOCK THIS FOR NOW BUT LATER SHOULD COME FROM DATABASE
+  const elements: any[] = Array.prototype.slice.call(
+    document.querySelectorAll(`[id^=${dappHeroTopLevelModule}]`)
+  );
+
+  console.log("Elements: ", elements);
+
+  return (
+    <EthereumContextProvider>
+        {elements.map(element => {
+          console.log("element:", element);
+          const domElementId = element.id;
+          const requestString = domElementId.split("-");
+          const index = 1;
+          const request: Request = {
+            requestString,
+            element,
+            arg: requestString[index],
+            index
+          };
+          return reducer(request);
+        })}
+    </EthereumContextProvider>
+  );
+};
 
 export default App;
