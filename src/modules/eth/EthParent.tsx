@@ -1,10 +1,11 @@
 import React, { FunctionComponent, useState } from "react";
-import { Request } from "../types";
+import { Request, dappHeroConfig } from "../types";
 import { EthStaticView } from "./EthStaticView";
 import { EthereumContextConsumer } from "../../context/ethereum"
 
 interface EthParentProps {
   request: Request;
+  config: dappHeroConfig;
 }
 
 // our components props accept a number for the initial value
