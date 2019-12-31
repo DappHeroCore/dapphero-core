@@ -189,8 +189,7 @@
         "vars-on-top": "warn",
         "wrap-iife": ["warn", "inside"],
         "wrap-regex": "warn",
-        "yoda": ["warn", "never"],
-
+        "yoda": ["warn", "never"]
     },
     "settings": {
         "import/extensions": [
