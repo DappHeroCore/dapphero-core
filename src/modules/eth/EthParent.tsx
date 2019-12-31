@@ -8,14 +8,15 @@ interface EthParentProps {
 }
 
 export const EthParent: FunctionComponent<EthParentProps> = ({ request }) => {
-  console.log("ETHPARENT REQUEst", request);
   return (
     <EthereumContextConsumer>
       {({ connected, accounts, injected }) => {
         switch (request.requestString[2]) {
           case "address":
-          case "getBalance": {
-            // what will address native tag be??
+          case "getBalance": 
+          case "getProvider":
+          case "getNetworkName":
+          case "getNetworkId": {
             if (connected && accounts.length > 0) {
               return (
                 <EthStaticView

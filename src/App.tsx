@@ -14,7 +14,6 @@ const App: React.FC = () => {
   return (
     <EthereumContextProvider>
         {elements.map(element => {
-          console.log("element:", element);
           const domElementId = element.id;
           const requestString = domElementId.split("-");
           const index = 1;
