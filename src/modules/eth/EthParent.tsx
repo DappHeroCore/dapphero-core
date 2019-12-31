@@ -3,6 +3,7 @@ import { Request, dappHeroConfig } from "../types";
 import { EthStaticView } from "./EthStaticView";
 import { EthContractParent } from "./EthContractParent";
 import { EthereumContextConsumer } from "../../context/ethereum";
+import { EthEnable } from "../eth/EthEnable";
 
 interface EthParentProps {
   request: Request;
@@ -19,9 +20,9 @@ export const EthParent: FunctionComponent<EthParentProps> = ({
         switch (
           request.requestString[2] //TODO Be explicit about the index
         ) {
-          case "address":
-          case "getBalance":
-          case "getProvider":
+          case "address": //TODO We shouldn't let this just fall through like this (I think) 
+          case "getBalance": //TODO we should be explicit about how this works
+          case "getProvider": //TODO and maybe we should not need to hard code this but rather build a function which takes from database
           case "getNetworkName":
           case "getNetworkId": {
             if (connected && accounts.length > 0) {
@@ -48,6 +49,16 @@ export const EthParent: FunctionComponent<EthParentProps> = ({
               );
             }
 
+            break;
+          }
+          case "enable": {
+            return (
+              <EthEnable
+                request={request}
+                injected={injected}
+                accounts={accounts}
+              />
+            );
             break;
           }
 

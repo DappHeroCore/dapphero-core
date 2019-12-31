@@ -6,7 +6,6 @@ interface EthStaticViewProps {
   request: Request;
   injected: any; // come back to type
   accounts: any; // come back to type
-  enable?: boolean;
 }
 
 const NETWORK_MAPPING = {
@@ -37,7 +36,7 @@ export const EthStaticView: FunctionComponent<EthStaticViewProps> = props => {
         const data = await func(props);
 
         el.innerHTML = data;
-        el.style.color = "blue";
+        el.style.color = "blue"; //TODO Why blue?
       } catch (e) {
         console.log(e);
       }
