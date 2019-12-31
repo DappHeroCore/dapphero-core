@@ -4,6 +4,7 @@ import { EthStaticView } from "./EthStaticView";
 import { EthContractParent } from "./EthContractParent";
 import { EthereumContextConsumer } from "../../context/ethereum";
 import { EthEnable } from "../eth/EthEnable";
+import { EthEvent } from "../eth/EthEvent"
 
 interface EthParentProps {
   request: Request;
@@ -57,6 +58,17 @@ export const EthParent: FunctionComponent<EthParentProps> = ({
                 request={request}
                 injected={injected}
                 accounts={accounts}
+              />
+            );
+            break;
+          }
+          case "event": {
+            return (
+              <EthEvent
+                request={request}
+                injected={injected}
+                accounts={accounts}
+                config={config}
               />
             );
             break;
