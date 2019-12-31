@@ -14,3 +14,4 @@ export interface dappHeroConfig {
   contractName?: string,
   network?: Network;
 };
+

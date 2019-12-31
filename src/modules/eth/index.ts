@@ -1,3 +1,5 @@
 export * from "./EthParent"
 export * from "./EthStaticView"
 export * from "./EthContractParent"
+export * from "./EthEnable"
+export * from "./EthEvent"
