@@ -61,8 +61,7 @@
         "keyword-spacing": "warn",
         "linebreak-style": "off",
         "lines-between-class-members": "warn",
-        "max-depth": ["off", 3], // Due to common use of objects as configuration and templates
-        "max-len": ["off", 500, 2], // Very long strings are common in lifion and 
+        "max-depth": ["warn", 3], // Due to common use of objects as configuration and templates
         "max-nested-callbacks": ["off", 3],
         "max-params": "off",
         "max-statements": "off",
@@ -75,7 +74,7 @@
         "no-caller": "warn",
         "no-case-declarations": "warn",
         "no-cond-assign": ["warn", "except-parens"],
-        "no-console": "off", // due to lifion, we have to debug this way instead of using proper debugging tools
+        "no-console": "off", 
         "no-constant-condition": "warn",
         "no-continue": "warn",
         "no-control-regex": "warn",
@@ -94,7 +93,7 @@
         "no-extend-native": "warn",
         "no-extra-bind": "warn",
         "no-extra-boolean-cast": "warn",
-        "no-extra-parens": "warn",
+        "no-extra-parens": "off",
         "no-extra-semi": "warn",
         "no-fallthrough": "error",
         "no-floating-decimal": "warn",
