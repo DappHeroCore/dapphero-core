@@ -4,11 +4,12 @@ import { getBalance, currentProvider } from "../../api/ethereum";
 
 interface EthStaticViewProps {
   request: Request;
-  injected: any; // come back to type
-  accounts: any; // come back to type
+  injected: {[key: string]: any}; // come back to type
+  accounts: string[]; // come back to type
 }
 
-const NETWORK_MAPPING = { //TODO Think of how to do this for side chains as well. 
+const NETWORK_MAPPING = {
+  //TODO Think of how to do this for side chains as well.
   1: "mainnet",
   3: "ropsten",
   4: "rinkeby"

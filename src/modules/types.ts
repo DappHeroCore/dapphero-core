@@ -8,7 +8,7 @@ export interface Request {
 export interface Network {
   networkId?: number;
   address?: string;
-  abi?: any;
+  abi?: {[key: string]: any};
 }
 export interface dappHeroConfig {
   contractName?: string,

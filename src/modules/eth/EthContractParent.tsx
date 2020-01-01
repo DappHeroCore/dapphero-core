@@ -8,8 +8,6 @@ interface EthContractParentProps {
 }
 
 export const EthContractParent:FunctionComponent<EthContractParentProps> = ({ request, config }) => {
-
-  console.log("In the ETHCONTRACT PARENT!")
   useEffect(() => {
 
   }, [])
