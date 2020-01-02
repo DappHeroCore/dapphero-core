@@ -1,12 +1,12 @@
 import React, { FunctionComponent, useState, Fragment } from "react";
-import { Request, dappHeroConfig } from "../types";
+import { Request, DappHeroConfig } from "../types";
 import { EthStaticView } from "./EthStaticView";
 import { EthContractParent } from "./EthContractParent";
 import { EthereumContextConsumer } from "../../context/ethereum";
 
 interface EthParentProps {
   request: Request;
-  config: dappHeroConfig;
+  config: DappHeroConfig;
 }
 
 export const EthParent: FunctionComponent<EthParentProps> = ({
@@ -38,12 +38,14 @@ export const EthParent: FunctionComponent<EthParentProps> = ({
 
           case config.contractName: {
             if (connected && accounts.length > 0) {
+              console.log("request", request)
               return (
                 <EthContractParent
                   request={request}
                   injected={injected}
                   accounts={accounts}
                   config={config}
+                  element={request.element}
                 />
               );
             }

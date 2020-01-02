@@ -2,11 +2,11 @@ import * as React from "react";
 import { Request } from "./types";
 import { EthParent } from "./eth";
 import { EthereumContextConsumer } from "../context/ethereum";
-import {dappHeroConfig} from "./types"
+import { DappHeroConfig } from "./types"
 
 
-const getConfig = () : dappHeroConfig => {
-  let config: dappHeroConfig;
+const getConfig = () : DappHeroConfig => {
+  let config: DappHeroConfig;
   const configElement = document.getElementById('dh-config')
   //TODO Clean this data to prevent injections
   config = JSON.parse(configElement.textContent)

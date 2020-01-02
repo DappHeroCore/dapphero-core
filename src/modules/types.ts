@@ -10,7 +10,7 @@ export interface Network {
   address?: string;
   abi?: any;
 }
-export interface dappHeroConfig {
+export interface DappHeroConfig {
   contractName?: string,
   network?: Network;
 };
