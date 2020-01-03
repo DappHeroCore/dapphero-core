@@ -8,7 +8,8 @@ import { useContractInstance } from "./utils";
 import { useGetMethods } from "./utils";
 
 import ERC20 from "../../abi/ERC20.json"; // from db
-let contractAddressMock = "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"; //WETH on Mainnet
+// let contractAddressMock = "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"; //WETH on Mainnet
+let contractAddressMock = "0xad6d458402f60fd3bd25163575031acdce07538d"; //DAI on Ropsten
 
 enum FunctionTypes {
   VIEW = "view",

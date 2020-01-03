@@ -10,16 +10,23 @@ const getTxFieldInputs = (modules: any[], position: number, request: any, method
     );
   });
 
+  console.log("***getTxFieldInputs")
+  console.log("***getTxFieldInputs: inputs", inputs)
+  console.log("***getTxFieldInputs: position", position)
+  console.log("***getTxFieldInputs: modules", modules)
+  console.log("***getTxFieldInputs: method", method)
+
   inputs.map(module => {
-    newObj[module.requestString[position + 1]] = document.getElementById(
+    console.log("within input: document.getElement", document.getElementById(module.element.id).value)
+    newObj[module.requestString[position + 1]] = (document.getElementById(
       module.element.id
-    );
-    // ).value;
+    )as any).value;
   });
 
   method.inputs.map(method => {
     inputArgArray.push(newObj[method.name]);
   });
+  console.log("inputArgArray", inputArgArray)
   return { inputFields: inputs, txArgArray: inputArgArray };
 };
 

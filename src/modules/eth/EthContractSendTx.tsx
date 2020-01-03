@@ -1,38 +1,72 @@
-import React, { useEffect, useState, FunctionComponent } from 'react';
-import { EthContractProps } from '../types';
-import { getTxFieldInputs } from './utils';
-import { HTMLContextConsumer } from '../../context/html';
+import React, { useEffect, useState, FunctionComponent, useMemo } from 'react'
+import { EthContractProps } from '../types'
+import {
+  getTxFieldInputs,
+  sendTransactionToContract,
+  getTriggerElement
+} from './utils'
+import { HTMLContextConsumer } from '../../context/html'
 
 type EthContractSendTxProps = EthContractProps & {
   // any more?
 };
-
+// 0x885583955F14970CbC0046B91297e9915f4DE6E4
 export const EthContractSendTx: FunctionComponent<EthContractSendTxProps> = ({
   instance,
   method,
   request,
   injected,
   element
-}) => {
-    console.log("******")
-    console.log("method:", method)
-    console.log("request:", request)
-    console.log("element:", element)
+}: EthContractSendTxProps) => {
+  const defaultState = {
+    transactionHash: null,
+    confirmations: null,
+    receipt: null,
+    error: null
+  }
+  const [ txState, setTxState ] = useState(defaultState)
+  console.log('txState', txState) // state updated on txHash, receipt, error
 
   const position = request.requestString.indexOf(method.name)
-  console.log("position", position)  
+
   return (
     <HTMLContextConsumer>
-      {({ elements, requests }) => {
-          console.log("elements", elements)
-          console.log("requests", requests)
-        // const { signature } = method;
-        // console.log("ETHCONTRACTSENDTX:elements", elements)
-        // const { inputFields, txArgArray } = getTxFieldInputs(elements, position, method.name, method);
-        // console.log("INPUTfields", inputFields)
-        // console.log("txArgArray", txArgArray)
-        return null;
+      {({ requests }) => {
+        const { signature } = method
+
+        const onClick = async () => {
+          const { inputFields, txArgArray } = getTxFieldInputs(
+            requests,
+            position,
+            method.name,
+            method
+          )
+
+          await sendTransactionToContract(
+            instance,
+            signature,
+            txArgArray,
+            injected.accounts,
+            setTxState
+          )
+          // TODO: Best way to clean input fields?
+          // Timeout set because function needs to pull value first
+          setTimeout(() => {
+            inputFields.forEach((module) => {
+              document.getElementById(module.element.id).value = null
+            })
+            return null
+          }, 1000)
+        }
+
+        const triggerElement = getTriggerElement(requests, method.name, position)
+        const triggerClone = triggerElement.cloneNode(true)
+        // TODO: clone element to remove all prev event listeners
+        triggerElement.parentNode.replaceChild(triggerClone, triggerElement)
+        triggerClone.addEventListener('click', onClick)
+
+        return null
       }}
     </HTMLContextConsumer>
-  );
-};
+  )
+}

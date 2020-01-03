@@ -1,6 +1,7 @@
 export * from "./callPublicMethodWithArg"
 export * from "./getFunctionRequirements"
 export * from "./getInputArgumentFields"
+export * from "./getTriggerElement"
 export * from "./getTxFieldInputs"
 export * from "./sendTransactionToContract"
 export * from "./useContractInstance"

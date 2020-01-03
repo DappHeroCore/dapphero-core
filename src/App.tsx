@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { EthereumContextProvider } from './context/ethereum';
 import { HTMLContextProvider, HTMLContextConsumer } from './context/html';
 import reducer from './modules/reducer';
-import { Request } from './modules/types';
 
 const App: React.FC = () => {
   return (
