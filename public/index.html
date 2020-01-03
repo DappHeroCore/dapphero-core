@@ -27,6 +27,11 @@
     <title>React App</title>
   </head>
   <body>
+    <style>
+      div {
+        margin: 10px;
+      }
+    </style>
     <div>
       Address of User: <div id="dh-eth-address">0x</div>
       Balance: <div id="dh-eth-getBalance-user">balance goes here</div>
@@ -82,6 +87,13 @@
 
     <div>State Change Methods (Transactions)</div>
 
+    <div>Web3: Non-ERC20 Contract multiple return values</div>
+
+    <div>
+      Contract: dappHeroTest: _hello
+      <div id="dh-eth-dappHeroTest-viewNoArgsMultipleReturn-*_hello">here goes data</div>
+    </div>
+
     <div>
       Contract: Transfer Method Grouping
       <div>
@@ -105,7 +117,8 @@
       Config DiV:
       <div>Configuration goes here: NOTE: When running it is hidden</div>
       <div id="dh-config">{
-        "contractName": "erc20",
+        "contractName": "dappHeroTest",
+        <!-- "contractName": "erc20", -->
         "network": {
           "networkId": 1,
           "address": "address",
