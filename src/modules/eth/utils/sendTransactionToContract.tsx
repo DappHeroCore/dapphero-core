@@ -1,4 +1,5 @@
-
+import Web3 from "web3";
+const web3 = new Web3()
 
 //This function will send an arbitary Transaction. It requires:
 export const sendTransactionToContract: any = (
@@ -9,20 +10,11 @@ export const sendTransactionToContract: any = (
   setTxState, //These two areguments are the current state of a tx object in a functional component
   txState, //And the function required to set the state of this tx object
 ) => {
-
-  //The functional compoment that calls this has something like this: 
-  // const defaultState = {
-  //   transactionHash: null,
-  //   confirmations: null,
-  //   receipt: null,
-  //   error: null,
-  // }
-  //const [txState, setTxState] = useState(defaultState)
-
+  const from = web3.utils.toChecksumAddress(accounts[0]);
 
   //TODO: Keep track of transactions for website owners analytics
   instance.methods[signature](...args)
-    .send({ from: accounts[0] })
+    .send({ from })
     .on('transactionHash', function(hash) {
       setTxState(txState => {
         return { ...txState, transactionHash: hash }

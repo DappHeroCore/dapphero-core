@@ -1,6 +1,6 @@
 import React, { useEffect, useState, FunctionComponent } from 'react';
 import { EthContractProps } from '../types';
-import { getTxFieldInputs } from './utils';
+import { getTxFieldInputs, sendTransactionToContract, getTriggerElement } from './utils';
 import { HTMLContextConsumer } from '../../context/html';
 
 type EthContractSendTxProps = EthContractProps & {
@@ -14,23 +14,40 @@ export const EthContractSendTx: FunctionComponent<EthContractSendTxProps> = ({
   injected,
   element
 }) => {
-    console.log("******")
-    console.log("method:", method)
-    console.log("request:", request)
-    console.log("element:", element)
+  const defaultState = {
+    transactionHash: null,
+    confirmations: null,
+    receipt: null,
+    error: null
+  };
+  const [txState, setTxState] = useState(defaultState);
+  console.log("txState", txState) // state updated on txHash, receipt, error
 
-  const position = request.requestString.indexOf(method.name)
-  console.log("position", position)  
+  const position = request.requestString.indexOf(method.name);
+
   return (
     <HTMLContextConsumer>
-      {({ elements, requests }) => {
-          console.log("elements", elements)
-          console.log("requests", requests)
-        // const { signature } = method;
-        // console.log("ETHCONTRACTSENDTX:elements", elements)
-        // const { inputFields, txArgArray } = getTxFieldInputs(elements, position, method.name, method);
-        // console.log("INPUTfields", inputFields)
-        // console.log("txArgArray", txArgArray)
+      {({ requests }) => {
+        const { signature } = method;
+
+        const onClick = async() => {
+          const { inputFields, txArgArray } = getTxFieldInputs(
+            requests,
+            position,
+            method.name,
+            method
+          );
+
+          await sendTransactionToContract(instance, signature, txArgArray, injected.accounts, setTxState)
+          setTimeout(() => {
+            inputFields.map(module => {
+              (document.getElementById(module.element.id)).value = null
+            })
+          }, 1000)
+        };
+
+        let triggerElement = getTriggerElement(requests, method.name, position)
+        triggerElement.addEventListener('click', onClick)
         return null;
       }}
     </HTMLContextConsumer>
