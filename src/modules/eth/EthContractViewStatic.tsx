@@ -15,10 +15,6 @@ export const EthContractViewStatic: FunctionComponent<
   const { signature } = method
   const value = useGetStaticFunc(instance, signature, identifiedReturnValue)
 
-  console.log('ETHCONTRACTVIEWSTATIC: method', method)
-  console.log('ETHCONTRACTVIEWSTATIC: element', element)
-  console.log('ETHCONTRACTVIEWSTATIC: value', value)
-
   const el = document.getElementById(element.id)
   el.innerText = value
   el.style.color = 'blue'
