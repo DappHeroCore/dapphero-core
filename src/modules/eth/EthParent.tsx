@@ -40,7 +40,6 @@ export const EthParent: FunctionComponent<EthParentProps> = ({
 
           case config.contractName: {
             if (connected && accounts.length > 0) {
-              console.log("request", request)
               return (
                 <EthContractParent
                   request={request}

@@ -1,29 +1,23 @@
-import React from "react";
-import { EthereumContextProvider } from "./context/ethereum";
-import reducer from "./modules/reducer";
-import { Request } from "./modules/types";
+import React, { useState, useEffect } from 'react';
+import { EthereumContextProvider } from './context/ethereum';
+import { HTMLContextProvider, HTMLContextConsumer } from './context/html';
+import reducer from './modules/reducer';
+import { Request } from './modules/types';
 
 const App: React.FC = () => {
-  const dappHeroTopLevelModule = "dh"; //MOCK THIS FOR NOW BUT LATER SHOULD COME FROM DATABASE
-  const elements: any[] = Array.prototype.slice.call(
-    document.querySelectorAll(`[id^=${dappHeroTopLevelModule}]`)
-  );
-
-
   return (
     <EthereumContextProvider>
-        {elements.map(element => {
-          const domElementId = element.id;
-          const requestString = domElementId.split("-");
-          const index = 1;
-          const request: Request = {
-            requestString,
-            element,
-            arg: requestString[index],
-            index
-          };
-          return reducer(request);
-        })}
+      <HTMLContextProvider>
+        <HTMLContextConsumer>
+          {({ elements, requests }) => {
+            {
+              return requests.map(request => {
+                return reducer(request);
+              });
+            }
+          }}
+        </HTMLContextConsumer>
+      </HTMLContextProvider>
     </EthereumContextProvider>
   );
 };
