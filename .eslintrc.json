@@ -140,7 +140,7 @@
         "no-shadow-restricted-names": "warn",
         "no-shadow": "warn",
         "no-sparse-arrays": "warn",
-        "no-sync": "off", // sync meethods are useful
+        "no-sync": "off", // sync methods are useful
         "no-ternary": "off", // ternaries are useful
         "no-this-before-super": "warn",
         "no-throw-literal": "warn",
@@ -162,7 +162,6 @@
         "object-curly-newline": [ "warn", { "multiline": true } ],
         "object-curly-spacing": ["warn", "always"],
         "object-shorthand": "warn",
-        "one-var": ["warn", "never"],
         "operator-assignment": ["off", "never"],
         "padded-blocks": ["off", "never"],
         "prefer-const": "warn",
@@ -191,6 +190,16 @@
         "yoda": ["warn", "never"]
     },
     "settings": {
+        "import/resolver": {
+            "node": {
+                "extensions": [
+                    ".js",
+                    ".jsx",
+                    ".ts",
+                    ".tsx"
+                ]
+            }
+        },
         "import/extensions": [
             ".js",
             ".jsx",
