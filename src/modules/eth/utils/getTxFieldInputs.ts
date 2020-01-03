@@ -1,33 +1,22 @@
-import { Request } from '../../types';
+import { Request } from '../../types'
 
 const getTxFieldInputs = (modules: any[], position: number, request: any, method: any) => {
-  let newObj = {};
-  let inputArgArray = [];
-  let inputs = modules.filter(module => {
-    return (
-      module.requestString[position] === request &&
-      module.requestString.length === position + 2
-    );
-  });
+  const newObj = {}
+  const inputArgArray = []
+  const inputs = modules.filter((module) => (
+    module.requestString[position] === request
+      && module.requestString.length === position + 2
+  ))
 
-  console.log("***getTxFieldInputs")
-  console.log("***getTxFieldInputs: inputs", inputs)
-  console.log("***getTxFieldInputs: position", position)
-  console.log("***getTxFieldInputs: modules", modules)
-  console.log("***getTxFieldInputs: method", method)
+  inputs.forEach((module) => {
+    newObj[module.requestString[position + 1]] = (document.getElementById(module.element.id) as any).value  // eslint-disable-line
+  })
 
-  inputs.map(module => {
-    console.log("within input: document.getElement", document.getElementById(module.element.id).value)
-    newObj[module.requestString[position + 1]] = (document.getElementById(
-      module.element.id
-    )as any).value;
-  });
+  method.inputs.forEach((method) => {
+    inputArgArray.push(newObj[method.name])
+  })
 
-  method.inputs.map(method => {
-    inputArgArray.push(newObj[method.name]);
-  });
-  console.log("inputArgArray", inputArgArray)
-  return { inputFields: inputs, txArgArray: inputArgArray };
-};
+  return { inputFields: inputs, txArgArray: inputArgArray }
+}
 
-export { getTxFieldInputs };
+export { getTxFieldInputs }
