@@ -1,34 +1,48 @@
-import React, { useEffect, useState, FunctionComponent } from "react";
-import { callPublicMethodWithArgs } from "./utils/callPublicMethodWithArg";
-import { Request, EthContractProps } from "../types";
+import React, { useEffect, useState, FunctionComponent } from 'react'
+import { callPublicMethodWithArgs } from './utils/callPublicMethodWithArg'
+import { Request, EthContractProps, Signifiers } from '../types'
 
 type EthContractViewArgsProps = EthContractProps & {
-  // any more?
-}
+  identifiedReturnValue: string | undefined;
+};
 
-// This feature right now is just single argument, single
-// return value functions called as soon as component renders,
-// the most common example being an ERC20 token balance.
-// TODO: Building for multiple arguments immediate-view functionality
-// TODO: Building for multiple return values immediate-view functionality
-// TODO: Building for mult arg, mult return values onClick functionality
 export const EthContractViewArgs: FunctionComponent<
   EthContractViewArgsProps
-> = ({ instance, method, element, request, injected }) => {
-  const { signature } = method;
-  const [value, setValue] = useState(null);
+> = ({
+  instance,
+  method,
+  element,
+  request: { requestString },
+  injected,
+  identifiedReturnValue
+}) => {
+  const { signature } = method
+  const [ value, setValue ] = useState(null)
 
-  let pointerIndex = 3; // this is where param-arg pairs begin
-  // does user even need to specify param name though?
+  const pointerIndex = 3 // this is where args begin
 
-  let argument = request.requestString[pointerIndex + 1];
-  if(argument === "user"){
-      argument = injected.accounts[0];
-  }
+  const args = requestString.slice(pointerIndex + 1)
+  const sanitizedArgs = []
+  args.forEach((arg, i) => {
+    if (arg === 'user') {
+      sanitizedArgs.push(injected.accounts[0])
+    } else if (arg.startsWith(Signifiers.IDENTIFY_RETURN_VALUE)) {
+      // do nothing: this is the return signifier
+    } else {
+      sanitizedArgs.push(arg)
+    }
+  })
+  // TODO: add to util function file? ^
 
-  callPublicMethodWithArgs(instance, signature, argument, setValue)
- 
-  element.innerText = value;
-  element.style.color = "blue";
-  return null;
-};
+  callPublicMethodWithArgs(
+    instance,
+    signature,
+    sanitizedArgs,
+    setValue,
+    identifiedReturnValue
+  )
+
+  element.innerText = value
+  element.style.color = 'blue'
+  return null
+}

@@ -14,7 +14,7 @@ export interface Network {
 export interface DappHeroConfig {
   contractName?: string,
   network?: Network;
-};
+}
 
 export type EthContractProps = {
   method: any; // add type
@@ -22,4 +22,14 @@ export type EthContractProps = {
   request: Request;
   injected: { [key: string]: any };
   instance: any; // build this type
+}
+
+export enum FunctionTypes {
+  VIEW = 'view',
+  NONPAYABLE = 'nonpayable',
+  PAYABLE = 'payable'
+}
+
+export enum Signifiers {
+  IDENTIFY_RETURN_VALUE = '*'
 }
