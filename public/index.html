@@ -32,32 +32,33 @@
         margin: 10px;
       }
     </style>
+    <h4>Web3 funcs</h4>
     <div>
       Address of User: <div id="dh-eth-address">0x</div>
       Balance: <div id="dh-eth-getBalance-user">balance goes here</div>
     </div>
-
+    
     <div>
       Web3 Provider Name:
       <div id="dh-eth-getProvider">provider goes here</div>
     </div>
-
+    
     <div>
       Web3 Network Name:
       <div id="dh-eth-getNetworkName">network name goes here</div>
     </div>
-
+    
     <div>
       Web3 Network Id:
       <div id="dh-eth-getNetworkId">network id goes here</div>
     </div>
-
+    
     <div>
       Web3 Metamask Enable Button:
       <button id="dh-eth-enable">Enable MetaMask</button>
     </div>
-
-    <div>Web3: ERC20 Contract</div>
+    
+    <h4>Web3 ERC20 Contract</h4>
 
     <div>Public Methods</div>
     <div>
@@ -85,17 +86,25 @@
       <div id="dh-eth-erc20-decimals">here goes data</div>
     </div>
 
-    <div>State Change Methods (Transactions)</div>
-
-    <div>Web3: Non-ERC20 Contract multiple return values</div>
+    <h4>Web3: Non-ERC20 Contract edge cases</h4>
 
     <div>
-      Contract: dappHeroTest: _hello
+      Contract: dappHeroTest: mult return
       <div id="dh-eth-dappHeroTest-viewNoArgsMultipleReturn-*_hello">here goes data</div>
     </div>
 
     <div>
-      Contract: Transfer Method Grouping
+      Contract: dappHeroTest: mult static args, single return
+      <div id="dh-eth-dappHeroTest-viewMultipleArgsSingleReturn-user-12">here goes data</div>
+    </div>
+
+    <div>
+      Contract: dappHeroTest: mult static args, mult return
+      <div id="dh-eth-dappHeroTest-viewMultipleArgsMultipleReturn-user-12-*_balanceMultiplied">here goes data</div>
+    </div>
+
+    <h4>Contract: Transfer Method Grouping</h4>
+    <div>
       <div>
         Transfer: transfer(recipient, amount)
         <div>

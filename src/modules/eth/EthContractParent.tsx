@@ -1,5 +1,5 @@
 import React, { useEffect, FunctionComponent } from 'react'
-import { EthContractProps } from '../types'
+import { EthContractProps, FunctionTypes, Signifiers } from '../types'
 import { EthContractViewStatic } from './EthContractViewStatic'
 import { EthContractViewArgs } from './EthContractViewArgs'
 import { EthContractSendTx } from './EthContractSendTx'
@@ -7,6 +7,7 @@ import { EthContractSendTx } from './EthContractSendTx'
 import { useContractInstance, useGetMethods } from './utils'
 
 /* test area */
+
 import ERC20 from '../../abi/ERC20.json' // from db
 import DappHeroTest from '../../abi/DappHeroTest.json'
 // from db
@@ -18,17 +19,8 @@ const dappHeroTestAddress = '0x8d02c8e873bb27335ffeec3d20bfa68aefba1785' // rops
 // const contractAddress = contractAddressMockRopsten;
 const abi = DappHeroTest
 const contractAddress = dappHeroTestAddress
+
 /* test area */
-
-enum FunctionTypes {
-  VIEW = 'view',
-  NONPAYABLE = 'nonpayable',
-  PAYABLE = 'payable'
-}
-
-enum Signifiers {
-  IDENTIFY_RETURN_VALUE = '*'
-}
 
 type EthContractParentProps = Pick<
   EthContractProps,
@@ -83,6 +75,7 @@ export const EthContractParent: FunctionComponent<EthContractParentProps> = ({
             request={request}
             element={element}
             injected={injected}
+            identifiedReturnValue={identifiedReturnValue}
           />
         )
       }
