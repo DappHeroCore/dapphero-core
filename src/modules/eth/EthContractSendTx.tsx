@@ -34,40 +34,45 @@ export const EthContractSendTx: FunctionComponent<EthContractSendTxProps> = ({
 
   useEffect(() => {
     const { txProcessingElement, txConfirmedElement } = getUserLoadedElements()
-    console.log('txprocessingelement', txProcessingElement)
 
     const updateState = () => {
       const { transactionHash, receipt } = txState
-      if (transactionHash && !receipt) {
-        const el = document.getElementById(element.id)
 
-        if (txProcessingElement) {
+      // tx sent
+      if (transactionHash && !receipt) {
+        const el = document.getElementById(element.id) // send button
+
+        if (txProcessingElement) { // user-loaded element
           const txProcessingEl = txProcessingElement.cloneNode(true);
           (txProcessingEl as HTMLElement).style.display = 'block'
-          el.parentNode.replaceChild(txProcessingEl, el)
+          $(el).replaceWith((txProcessingEl as HTMLElement))
+          $(el.id).prop('id', transactionHash)
         } else {
-          const elem = document.getElementById(el.id)
-          if (elem) {
+          if (el) {
             $(el.id).prop('disabled', true)
-            elem.innerText = 'Processing...'
+            el.id = transactionHash
+            el.innerText = 'Processing...'
           }
         }
       }
 
+      // tx confirmed
       if (transactionHash && receipt) {
         const el = document.getElementById(transactionHash)
 
+        let txConfirmedEl
         if (txConfirmedElement && el) {
-          const txConfirmedEl = txConfirmedElement.cloneNode(true);
+          txConfirmedEl = txConfirmedElement.cloneNode(true);
           (txConfirmedEl as HTMLElement).style.display = 'block'
-          el.parentNode.replaceChild(txConfirmedEl, el)
+          $(el).replaceWith(txConfirmedEl)
         } else if (el) {
           el.innerText = 'Confirmed!'
         }
 
         if (el) {
           setTimeout(() => {
-            el.parentNode.replaceChild(originalDomElement, el)
+            const replaceEl = document.getElementById(transactionHash)
+            $(replaceEl).replaceWith(originalDomElement)
           }, 5000) // add this to constants file
 
         }
