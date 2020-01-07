@@ -1,6 +1,6 @@
 import React, { useEffect, useState, FunctionComponent } from 'react'
 import { callPublicMethodWithArgs } from './utils/callPublicMethodWithArg'
-import { Request, EthContractProps, Signifiers } from '../types'
+import { EthContractProps, Signifiers } from '../types'
 
 type EthContractViewArgsProps = EthContractProps & {
   identifiedReturnValue: string | undefined;

@@ -4,7 +4,6 @@ import { EthStaticView } from './EthStaticView'
 import { EthContractParent } from './EthContractParent'
 import { EthereumContextConsumer } from '../../context/ethereum'
 import { EthEnable } from '../eth/EthEnable'
-import { EthEvent } from '../eth/EthEvent'
 
 interface EthParentProps {
   request: Request;
@@ -34,10 +33,9 @@ export const EthParent: FunctionComponent<EthParentProps> = ({
             />
           )
         }
-        break
       }
 
-      case config.contractName: {
+      case config.contractName: { // eslint-disable-line
         if (connected && accounts.length > 0) {
           return (
             <EthContractParent
@@ -47,10 +45,8 @@ export const EthParent: FunctionComponent<EthParentProps> = ({
             />
           )
         }
-
-        break
       }
-      case 'enable': {
+      case 'enable': { // eslint-disable-line
         return (
           <EthEnable
             request={request}
@@ -58,18 +54,6 @@ export const EthParent: FunctionComponent<EthParentProps> = ({
             accounts={accounts}
           />
         )
-        break
-      }
-      case 'event': {
-        return (
-          <EthEvent
-            request={request}
-            injected={injected}
-            accounts={accounts}
-            config={config}
-          />
-        )
-        break
       }
 
       default:
