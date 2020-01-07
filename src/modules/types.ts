@@ -31,5 +31,6 @@ export enum FunctionTypes {
 }
 
 export enum Signifiers {
-  IDENTIFY_RETURN_VALUE = '*'
+  IDENTIFY_RETURN_VALUE = '*',
+  EVENT_TRIGGER = '#'
 }

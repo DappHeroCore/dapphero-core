@@ -3,8 +3,9 @@ import { EthContractProps, FunctionTypes, Signifiers } from '../types'
 import { EthContractViewStatic } from './EthContractViewStatic'
 import { EthContractViewArgs } from './EthContractViewArgs'
 import { EthContractSendTx } from './EthContractSendTx'
+import { EthContractEvent } from './EthContractEvent'
 
-import { useContractInstance, useGetMethods } from './utils'
+import { getBaseContractData } from './utils'
 
 /* test area */
 
@@ -13,7 +14,7 @@ import DappHeroTest from '../../abi/DappHeroTest.json'
 // from db
 const contractAddressMock = '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2' // WETH on Mainnet
 const contractAddressMockRopsten = '0xad6d458402f60fd3bd25163575031acdce07538d' // DAI on Ropsten
-const dappHeroTestAddress = '0x8d02c8e873bb27335ffeec3d20bfa68aefba1785' // ropsten
+const dappHeroTestAddress = '0xd652a9c23f234fCee253aE9B8362d51d833f1e64' // ropsten
 
 // const abi = ERC20;
 // const contractAddress = contractAddressMockRopsten;
@@ -33,23 +34,35 @@ export const EthContractParent: FunctionComponent<EthContractParentProps> = ({
   injected,
   element
 }: EthContractParentProps) => {
-  const method = requestString[3]
-  const instance = useContractInstance(abi, contractAddress, injected.lib)
-  const methods = useGetMethods(abi, injected.lib)
-
-  // user identifies which return value in case of multiple return
-  // TODO: below is candidate for helper util
-  const identifyReturnValue = requestString.filter((rs) => rs.startsWith(Signifiers.IDENTIFY_RETURN_VALUE)); // eslint-disable-line
-  let identifiedReturnValue
-  if (identifyReturnValue.length) {
-    identifiedReturnValue = identifyReturnValue[0].split('*')[1]
-  }
+  let {
+    method,
+    instance,
+    methods,
+    identifiedReturnValue,
+    eventTrigger
+  } = getBaseContractData(requestString, abi, contractAddress, injected.lib)
 
   if (instance && methods) {
     try {
+      if (eventTrigger.length) {
+        method = method.split(Signifiers.EVENT_TRIGGER)[1]
+      }
+
       // TODO: Set up method for differentiating between functions
       // with same name and different number of args
       const func = methods.filter((m) => m.name === method)[0]
+
+      if (eventTrigger.length) { // component is an event listener
+        return (
+          <EthContractEvent
+            instance={instance}
+            injected={injected}
+            method={func}
+            element={element}
+            request={request}
+          />
+        )
+      }
 
       if (!func) return null // unsupported method or module
 

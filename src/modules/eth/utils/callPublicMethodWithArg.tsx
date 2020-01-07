@@ -17,8 +17,6 @@ export const callPublicMethodWithArgs = async (
   useEffect(() => {
     const run = async () => {
       try {
-        console.log('...args', ...args)
-        console.log('identifiedReturnValue', identifiedReturnValue)
         value = await instance.methods[signature](...args).call()
         value = identifiedReturnValue ? value[identifiedReturnValue] : value
         callback(value)

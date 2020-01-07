@@ -34,30 +34,32 @@
     </style>
     <h4>Web3 funcs</h4>
     <div>
-      Address of User: <div id="dh-eth-address">0x</div>
-      Balance: <div id="dh-eth-getBalance-user">balance goes here</div>
+      Address of User:
+      <div id="dh-eth-address">0x</div>
+      Balance:
+      <div id="dh-eth-getBalance-user">balance goes here</div>
     </div>
-    
+
     <div>
       Web3 Provider Name:
       <div id="dh-eth-getProvider">provider goes here</div>
     </div>
-    
+
     <div>
       Web3 Network Name:
       <div id="dh-eth-getNetworkName">network name goes here</div>
     </div>
-    
+
     <div>
       Web3 Network Id:
       <div id="dh-eth-getNetworkId">network id goes here</div>
     </div>
-    
+
     <div>
       Web3 Metamask Enable Button:
       <button id="dh-eth-enable">Enable MetaMask</button>
     </div>
-    
+
     <h4>Web3 ERC20 Contract</h4>
 
     <div>Public Methods</div>
@@ -90,17 +92,25 @@
 
     <div>
       Contract: dappHeroTest: mult return
-      <div id="dh-eth-dappHeroTest-viewNoArgsMultipleReturn-*_hello">here goes data</div>
+      <div id="dh-eth-dappHeroTest-viewNoArgsMultipleReturn-*_hello">
+        here goes data
+      </div>
     </div>
 
     <div>
       Contract: dappHeroTest: mult static args, single return
-      <div id="dh-eth-dappHeroTest-viewMultipleArgsSingleReturn-user-12">here goes data</div>
+      <div id="dh-eth-dappHeroTest-viewMultipleArgsSingleReturn-user-12">
+        here goes data
+      </div>
     </div>
 
     <div>
       Contract: dappHeroTest: mult static args, mult return
-      <div id="dh-eth-dappHeroTest-viewMultipleArgsMultipleReturn-user-12-*_balanceMultiplied">here goes data</div>
+      <div
+        id="dh-eth-dappHeroTest-viewMultipleArgsMultipleReturn-user-12-*_balanceMultiplied"
+      >
+        here goes data
+      </div>
     </div>
 
     <h4>Contract: Transfer Method Grouping</h4>
@@ -122,19 +132,51 @@
       </div>
     </div>
 
+    <h4>Contract: Event Testing</h4>
+
+    <div>
+      <div>
+        TriggerEvent function triggerEvent(value)
+        <div>
+          Input: value
+          <input type="text" id="dh-eth-dappHeroTest-triggerEvent-value" />
+        </div>
+        <div>
+          Trigger: submit triggerEvent
+          <button id="dh-eth-dappHeroTest-triggerEvent">triggerEvent!</button>
+        </div>
+        <div id="dh-eth-dappHeroTest-#EventTrigger">
+          <!-- No TX: (start value) -->
+        </div>
+      </div>
+    </div>
+
+    <!-- we need some work on tx flow behavior-->
+    <div id="dh-eth-dappHeroTest-^triggerEvent">
+      <!-- ^ caret: element hidden until function called -->
+    </div>
+
     <div>
       Config DiV:
       <div>Configuration goes here: NOTE: When running it is hidden</div>
-      <div id="dh-config">{
-        "contractName": "dappHeroTest",
+      <div id="dh-config">
+        { "contractName": "dappHeroTest",
         <!-- "contractName": "erc20", -->
-        "network": {
-          "networkId": 1,
-          "address": "address",
-          "abi": "abi here"
-        }
-      }</div>
+        "network": { "networkId": 1, "address": "address", "abi": "abi here" } }
+      </div>
     </div>
+
+    <h4 style="display:hidden">Hidden user-loaded components</h4>
+
+    <div
+      id="dh-eth-txProcessing"
+      style="display: none; color: yellowgreen; padding: 10px; border: 1px solid blue; width: 100px"
+    >Processing...</div>
+
+    <div
+      id="dh-eth-txConfirmed-X"
+      style="display: none; color: blue; padding: 10px; border: 1px solid green; width: 100px"
+    >Confirmed!.</div>
 
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="dh-root"></div>

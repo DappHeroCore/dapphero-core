@@ -1,6 +1,5 @@
 pragma solidity 0.5.0;
 
-
 contract DappHeroTest {
     uint important = 20;
     bytes32 hello = "hello";
@@ -21,5 +20,11 @@ contract DappHeroTest {
             address(from).balance * multiplier,
             hello
         );
+    }
+
+    event EventTrigger(address indexed sender, uint value);
+
+    function triggerEvent(uint value) public {
+        emit EventTrigger (msg.sender, value);
     }
 }
