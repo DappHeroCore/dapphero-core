@@ -17,7 +17,6 @@ export const EthContractEvent: FunctionComponent<EthContractEventProps> = ({
   // TODO: add filters
   instance.events[name]()
     .on('data', (event) => {
-      console.log('event', event)
       element.innerText = 'Transaction Confirmed!'
       element.style.color = 'blue'
     })

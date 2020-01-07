@@ -1,12 +1,8 @@
 import { useEffect, useState } from 'react'
-// This function takes an Instance, the signature of the public method to be called
-// The array of args and a callback. The callback should be a: setState(value)
-// From the functional compoment above so for example:
+import { useFormatter } from './useFormatter'
 
-// const defaultState = 0
-// const [methodState, setMethodState] = useState(defaultState)
-// And then the callback passed in would be setMethodState.
 export const callPublicMethodWithArgs = async (
+  injected,
   instance,
   signature,
   args: any[],
@@ -19,6 +15,8 @@ export const callPublicMethodWithArgs = async (
       try {
         value = await instance.methods[signature](...args).call()
         value = identifiedReturnValue ? value[identifiedReturnValue] : value
+        // value = useFormatter(value, true)
+        value = useFormatter(injected.lib, value, 'fromWei')
         callback(value)
       } catch (error) {
         console.log('In Call Instance Error: ', error)
