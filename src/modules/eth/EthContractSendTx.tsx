@@ -32,6 +32,8 @@ export const EthContractSendTx: FunctionComponent<EthContractSendTxProps> = ({
 
   const originalDomElement = element
 
+  const elId = 'replace'
+
   useEffect(() => {
     const { txProcessingElement, txConfirmedElement } = getUserLoadedElements()
 
@@ -43,14 +45,14 @@ export const EthContractSendTx: FunctionComponent<EthContractSendTxProps> = ({
         const el = document.getElementById(element.id) // send button
 
         if (txProcessingElement) { // user-loaded element
-          const txProcessingEl = txProcessingElement.cloneNode(true);
-          (txProcessingEl as HTMLElement).style.display = 'block'
-          $(el).replaceWith((txProcessingEl as HTMLElement))
-          $(el.id).prop('id', transactionHash)
+          const txProcessingEl = txProcessingElement.cloneNode(true) as HTMLElement
+          txProcessingEl.style.display = 'block'
+          txProcessingEl.id = elId
+          el.parentNode.replaceChild(txProcessingEl, el)
         } else {
           if (el) {
             $(el.id).prop('disabled', true)
-            el.id = transactionHash
+            el.id = elId
             el.innerText = 'Processing...'
           }
         }
@@ -58,21 +60,26 @@ export const EthContractSendTx: FunctionComponent<EthContractSendTxProps> = ({
 
       // tx confirmed
       if (transactionHash && receipt) {
-        const el = document.getElementById(transactionHash)
+        const el = document.getElementById(elId)
 
         let txConfirmedEl
         if (txConfirmedElement && el) {
           txConfirmedEl = txConfirmedElement.cloneNode(true);
           (txConfirmedEl as HTMLElement).style.display = 'block'
-          $(el).replaceWith(txConfirmedEl)
+          txConfirmedEl.id = elId
+          el.parentElement.replaceChild(txConfirmedEl, el)
         } else if (el) {
           el.innerText = 'Confirmed!'
         }
 
-        if (el) {
+        const replaceEl = document.getElementById(elId)
+        const parentEl = replaceEl.parentElement
+
+        if (replaceEl) {
           setTimeout(() => {
-            const replaceEl = document.getElementById(transactionHash)
-            $(replaceEl).replaceWith(originalDomElement)
+            parentEl.appendChild(originalDomElement)
+            replaceEl.style.display = 'none'
+            // TODO: ^very hacky...need to delete from DOM
           }, 5000) // add this to constants file
 
         }
@@ -93,6 +100,7 @@ export const EthContractSendTx: FunctionComponent<EthContractSendTxProps> = ({
             method.name,
             method
           )
+          console.log('inputfields', inputFields)
 
           await sendTransactionToContract(
             instance,
@@ -116,6 +124,7 @@ export const EthContractSendTx: FunctionComponent<EthContractSendTxProps> = ({
           method.name,
           position
         )
+        console.log('triggerel', triggerElement)
 
         if (triggerElement) {
           const triggerClone = triggerElement.cloneNode(true)

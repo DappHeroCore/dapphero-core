@@ -35,6 +35,7 @@ export const EthContractViewArgs: FunctionComponent<
   // TODO: add to util function file? ^
 
   callPublicMethodWithArgs(
+    injected,
     instance,
     signature,
     sanitizedArgs,
