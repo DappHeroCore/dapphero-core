@@ -12,7 +12,7 @@ import { HTMLContextConsumer } from '../../context/html'
 type EthContractSendTxProps = EthContractProps & {
   // any more?
 };
-// 0x885583955F14970CbC0046B91297e9915f4DE6E4
+// 0x885583955F14970CbC0046B91297e9915f4DE6E4 //test addr
 export const EthContractSendTx: FunctionComponent<EthContractSendTxProps> = ({
   instance,
   method,
@@ -73,16 +73,12 @@ export const EthContractSendTx: FunctionComponent<EthContractSendTxProps> = ({
         }
 
         const replaceEl = document.getElementById(elId)
-        const parentEl = replaceEl.parentElement
 
-        if (replaceEl) {
-          setTimeout(() => {
-            parentEl.appendChild(originalDomElement)
-            replaceEl.style.display = 'none'
-            // TODO: ^very hacky...need to delete from DOM
-          }, 5000) // add this to constants file
-
-        }
+        setTimeout(() => {
+          const newOriginal = originalDomElement.cloneNode(true)
+          replaceEl.replaceWith(newOriginal)
+          setTxState(defaultState)
+        }, 5000) // add this to constants file
       }
     }
     updateState()
@@ -100,7 +96,6 @@ export const EthContractSendTx: FunctionComponent<EthContractSendTxProps> = ({
             method.name,
             method
           )
-          console.log('inputfields', inputFields)
 
           await sendTransactionToContract(
             instance,
@@ -124,7 +119,6 @@ export const EthContractSendTx: FunctionComponent<EthContractSendTxProps> = ({
           method.name,
           position
         )
-        console.log('triggerel', triggerElement)
 
         if (triggerElement) {
           const triggerClone = triggerElement.cloneNode(true)
