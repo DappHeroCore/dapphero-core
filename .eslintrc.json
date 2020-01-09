@@ -26,6 +26,7 @@
         "@typescript-eslint"
     ],
     "rules": {
+        "@typescript-eslint/no-unused-vars": "warn",
         "accessor-pairs": "off",
         "array-bracket-spacing": ["warn", "always"],
         "brace-style": ["warn", "1tbs", { "allowSingleLine": true }],
@@ -50,6 +51,7 @@
         "function-paren-newline": ["warn", "multiline"],
         "guard-for-in": "off",
         "handle-callback-err": "warn",
+        "import/extensions": ["warn", "never"],
         "import/newline-after-import": "warn",
         "import/no-absolute-path": "off", // eslint does not parse path aliases properly
         "import/no-unresolved": "warn",
@@ -125,7 +127,7 @@
         "no-octal": "warn",
         "no-param-reassign": "warn",
         "no-path-concat": "warn",
-        "no-plusplus": "warn",
+        "no-plusplus": "off",
         "no-process-env": "warn",
         "no-process-exit": "warn",
         "no-proto": "warn",
@@ -191,11 +193,10 @@
         "yoda": ["warn", "never"]
     },
     "settings": {
-        "import/extensions": [
-            ".js",
-            ".jsx",
-            ".ts",
-            ".tsx"
-          ]
+        "import/resolver": {
+            "typescript": {
+              "alwaysTryTypes": true // always try to resolve types under `<roo/>@types` directory even it doesn't contain any source code, like `@types/unist`
+            }
+        }
     }
 }
