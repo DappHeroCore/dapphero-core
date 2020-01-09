@@ -17,27 +17,25 @@ export const EthContractParent: FunctionComponent<EthContractParentProps> = ({
   request,
   request: { requestString },
   injected,
-  element
+  element,
+  signifiers
 }: EthContractParentProps) => {
-  let {
-    method,
-    instance,
-    methods,
-    identifiedReturnValue,
-    eventTrigger
-  } = getBaseContractData(requestString, abi, contractAddress, injected.lib)
+  const { method, instance, methods } = getBaseContractData(
+    requestString,
+    abi,
+    contractAddress,
+    injected.lib
+  )
 
   if (instance && methods) {
     try {
-      if (eventTrigger.length) {
-        method = method.split(Signifiers.EVENT_TRIGGER)[1]
-      }
-
       // TODO: Set up method for differentiating between functions
       // with same name and different number of args
       const func = methods.filter((m) => m.name === method)[0]
 
-      if (eventTrigger.length) { // component is an event listener
+      // TODO: figure out best way to listen to events
+      // do we even need this outside of the current tx flow
+      /* if (eventTrigger.length) { // component is an event listener
         return (
           <EthContractEvent
             instance={instance}
@@ -47,7 +45,7 @@ export const EthContractParent: FunctionComponent<EthContractParentProps> = ({
             request={request}
           />
         )
-      }
+      } */
 
       if (!func) return null // unsupported method or module
 
@@ -62,7 +60,8 @@ export const EthContractParent: FunctionComponent<EthContractParentProps> = ({
               instance={instance}
               method={func}
               element={element}
-              identifiedReturnValue={identifiedReturnValue}
+              injected={injected}
+              signifiers={signifiers}
             />
           )
         }
@@ -73,7 +72,7 @@ export const EthContractParent: FunctionComponent<EthContractParentProps> = ({
             request={request}
             element={element}
             injected={injected}
-            identifiedReturnValue={identifiedReturnValue}
+            signifiers={signifiers}
           />
         )
       }
@@ -86,6 +85,7 @@ export const EthContractParent: FunctionComponent<EthContractParentProps> = ({
             request={request}
             injected={injected}
             instance={instance}
+            signifiers={signifiers}
           />
         )
       }

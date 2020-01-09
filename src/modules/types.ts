@@ -21,6 +21,7 @@ export type EthContractProps = {
   element: HTMLElement;
   request: Request;
   injected: { [key: string]: any };
+  signifiers: { [key: string]: string };
   instance: any; // build this type
 }
 
@@ -32,5 +33,13 @@ export enum FunctionTypes {
 
 export enum Signifiers {
   IDENTIFY_RETURN_VALUE = '*',
-  EVENT_TRIGGER = '#'
+  EVENT_TRIGGER = '#',
+  UNIT ='%',
+  DECIMAL = '>'
+}
+
+export enum RequestString {
+  ETH_PARENT_TYPE = 2,
+  ETH_CONTRACT_FUNCTION = 3,
+  ETH_CONTRACT_ARGS = 4
 }

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useFormatter } from './useFormatter'
+import { useUnitFormatter } from '../element/useUnitFormatter'
 
 export const callPublicMethodWithArgs = async (
   injected,
@@ -15,8 +15,6 @@ export const callPublicMethodWithArgs = async (
       try {
         value = await instance.methods[signature](...args).call()
         value = identifiedReturnValue ? value[identifiedReturnValue] : value
-        // value = useFormatter(value, true)
-        value = useFormatter(injected.lib, value, 'fromWei')
         callback(value)
       } catch (error) {
         console.log('In Call Instance Error: ', error)

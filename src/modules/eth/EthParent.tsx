@@ -1,9 +1,10 @@
 import React, { FunctionComponent, useState, Fragment } from 'react'
-import { Request, DappHeroConfig } from '../types'
+import { Request, DappHeroConfig, RequestString } from '../types'
 import { EthStaticView } from './EthStaticView'
 import { EthContractParent } from './EthContractParent'
 import { EthereumContextConsumer } from '../../context/ethereum'
 import { EthEnable } from '../eth/EthEnable'
+import { useSignifierParser } from './utils'
 
 interface EthParentProps {
   request: Request;
@@ -12,12 +13,20 @@ interface EthParentProps {
 
 export const EthParent: FunctionComponent<EthParentProps> = ({
   request,
+  request: { requestString },
   config
 }: EthParentProps) => (
   <EthereumContextConsumer>
     {({ connected, accounts, injected }) => {
+      // pull out signifiers from request string
+      const signifiers = useSignifierParser(requestString)
+      const signifierValues = Object.values(signifiers)
+
+      const sanitizedRequestString = requestString.filter((rs) => !signifierValues.includes(rs.slice(1)))
+      request.requestString = sanitizedRequestString
+
       switch (
-        request.requestString[2] // TODO Be explicit about the index
+        sanitizedRequestString[RequestString.ETH_PARENT_TYPE]
       ) {
       case 'address': // TODO We shouldn't let this just fall through like this (I think)
       case 'getBalance': // TODO we should be explicit about how this works
@@ -30,6 +39,7 @@ export const EthParent: FunctionComponent<EthParentProps> = ({
               request={request}
               injected={injected}
               accounts={accounts}
+              signifiers={signifiers}
             />
           )
         }
@@ -42,19 +52,23 @@ export const EthParent: FunctionComponent<EthParentProps> = ({
               request={request}
               injected={injected}
               element={request.element}
+              signifiers={signifiers}
             />
           )
         }
       }
         break
       case 'enable': { // eslint-disable-line
-        return (
-          <EthEnable
-            request={request}
-            injected={injected}
-            accounts={accounts}
-          />
-        )
+        if (!connected) {
+          return (
+            <EthEnable
+              request={request}
+              injected={injected}
+              accounts={accounts}
+            />
+          )
+        }
+        break
       }
 
       default:

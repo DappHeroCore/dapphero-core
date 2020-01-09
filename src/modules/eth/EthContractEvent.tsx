@@ -18,7 +18,6 @@ export const EthContractEvent: FunctionComponent<EthContractEventProps> = ({
   instance.events[name]()
     .on('data', (event) => {
       element.innerText = 'Transaction Confirmed!'
-      element.style.color = 'blue'
     })
     .on('error', (error) => {
       console.log('error', error)

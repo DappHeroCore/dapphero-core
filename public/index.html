@@ -37,7 +37,7 @@
       Address of User:
       <div id="dh-eth-address">0x</div>
       Balance:
-      <div id="dh-eth-getBalance-user">balance goes here</div>
+      <div id="dh-eth-getBalance-user-%ether->4">balance goes here</div>
     </div>
 
     <div>
@@ -92,14 +92,14 @@
 
     <div>
       Contract: dappHeroTest: mult return
-      <div id="dh-eth-dappHeroTest-viewNoArgsMultipleReturn-*_hello">
+      <div id="dh-eth-dappHeroTest-viewNoArgsMultipleReturn-*_hello-%ascii">
         here goes data
       </div>
     </div>
 
     <div>
       Contract: dappHeroTest: mult static args, single return
-      <div id="dh-eth-dappHeroTest-viewMultipleArgsSingleReturn-user-12">
+      <div id="dh-eth-dappHeroTest-viewMultipleArgsSingleReturn-user-12-%ether">
         here goes data
       </div>
     </div>
@@ -107,7 +107,7 @@
     <div>
       Contract: dappHeroTest: mult static args, mult return
       <div
-        id="dh-eth-dappHeroTest-viewMultipleArgsMultipleReturn-user-12-*_balanceMultiplied"
+        id="dh-eth-dappHeroTest-viewMultipleArgsMultipleReturn-user-12-*_balanceMultiplied-%ether->6"
       >
         here goes data
       </div>
@@ -145,9 +145,9 @@
           Trigger: submit triggerEvent
           <button id="dh-eth-dappHeroTest-triggerEvent">triggerEvent!</button>
         </div>
-        <div id="dh-eth-dappHeroTest-#EventTrigger">
+        <!-- <div id="dh-eth-dappHeroTest-#EventTrigger"> -->
           <!-- No TX: (start value) -->
-        </div>
+        <!-- </div> -->
       </div>
     </div>
 
@@ -159,7 +159,7 @@
       Config DiV:
       <div>Configuration goes here: NOTE: When running it is hidden</div>
       <div id="dh-config">
-        { "contractName": "erc20",
+        { "contractName": "dappHeroTest",
         "network": { "networkId": 1, "address": "address", "abi": "abi here" } }
       </div>
     </div>
