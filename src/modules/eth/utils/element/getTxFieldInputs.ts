@@ -1,4 +1,4 @@
-import { Request } from '../../types'
+import { Request } from '../../../types'
 
 const getTxFieldInputs = (modules: any[], position: number, request: any, method: any) => {
   const newObj = {}

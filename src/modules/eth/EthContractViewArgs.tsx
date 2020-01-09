@@ -1,10 +1,8 @@
 import React, { useEffect, useState, FunctionComponent } from 'react'
-import { callPublicMethodWithArgs } from './utils/callPublicMethodWithArg'
-import { EthContractProps, Signifiers } from '../types'
+import { callPublicMethodWithArgs, useDecimalFormatter, useUnitFormatter } from './utils'
+import { EthContractProps, Signifiers, RequestString } from '../types'
 
-type EthContractViewArgsProps = EthContractProps & {
-  identifiedReturnValue: string | undefined;
-};
+type EthContractViewArgsProps = EthContractProps
 
 export const EthContractViewArgs: FunctionComponent<
   EthContractViewArgsProps
@@ -14,25 +12,13 @@ export const EthContractViewArgs: FunctionComponent<
   element,
   request: { requestString },
   injected,
-  identifiedReturnValue
+  signifiers: { retVal, unit, decimal }
 }) => {
   const { signature } = method
   const [ value, setValue ] = useState(null)
 
-  const pointerIndex = 3 // this is where args begin
-
-  const args = requestString.slice(pointerIndex + 1)
-  const sanitizedArgs = []
-  args.forEach((arg, i) => {
-    if (arg === 'user') {
-      sanitizedArgs.push(injected.accounts[0])
-    } else if (arg.startsWith(Signifiers.IDENTIFY_RETURN_VALUE)) {
-      // do nothing: this is the return signifier
-    } else {
-      sanitizedArgs.push(arg)
-    }
-  })
-  // TODO: add to util function file? ^
+  const args = requestString.slice(RequestString.ETH_CONTRACT_ARGS)
+  const sanitizedArgs = args.map((arg) => (arg === 'user' ? injected.accounts[0] : arg))
 
   callPublicMethodWithArgs(
     injected,
@@ -40,10 +26,12 @@ export const EthContractViewArgs: FunctionComponent<
     signature,
     sanitizedArgs,
     setValue,
-    identifiedReturnValue
+    retVal
   )
 
-  element.innerText = value
-  element.style.color = 'blue'
+  let sanitizedValue = useUnitFormatter(injected.lib, value, unit)
+  sanitizedValue = useDecimalFormatter(sanitizedValue, decimal)
+
+  element.innerText = sanitizedValue
   return null
 }

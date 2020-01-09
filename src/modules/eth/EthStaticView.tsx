@@ -1,11 +1,13 @@
 import React, { useEffect, FunctionComponent, Fragment } from 'react'
-import { Request } from '../types'
+import { Request, RequestString, Signifiers } from '../types'
 import { getBalance, currentProvider } from '../../api/ethereum'
+import { useUnitFormatter, useDecimalFormatter } from './utils'
 
 interface EthStaticViewProps {
   request: Request;
-  injected: {[key: string]: any}; // come back to type
-  accounts: string[]; // come back to type
+  injected: {[key: string]: any};
+  accounts: string[];
+  signifiers: {[key: string]: string};
 }
 
 const NETWORK_MAPPING = {
@@ -24,18 +26,20 @@ const STATIC_MAPPING = {
 }
 
 export const EthStaticView: FunctionComponent<EthStaticViewProps> = (props) => { // eslint-disable-line
-  const requestString = props.request.requestString[2] // eslint-disable-line
+  const { request, injected, signifiers: { unit, decimal } } = props
+  const requestString = request.requestString[RequestString.ETH_PARENT_TYPE] // eslint-disable-line
 
   useEffect(() => {
     const getData = async () => {
       try {
         const el = document.getElementById(props.request.element.id)
-
         const func = STATIC_MAPPING[requestString]
-        const data = await func(props)
+
+        let data = await func(props)
+        data = useUnitFormatter(injected.lib, data, unit)
+        data = useDecimalFormatter(data, decimal)
 
         el.innerHTML = data
-        el.style.color = 'blue' // TODO Why blue?
       } catch (e) {
         console.log(e)
       }
