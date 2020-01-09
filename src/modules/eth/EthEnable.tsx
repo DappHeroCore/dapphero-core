@@ -7,7 +7,7 @@ interface EthEnableProps {
   accounts: string[]; // come back to type
 }
 
-export const EthEnable = (props): FunctionComponent<EthEnableProps> => {
+export const EthEnable: FunctionComponent<EthEnableProps> = (props) => {
   const { injected, request } = props
 
   const web3Enable = async () => {

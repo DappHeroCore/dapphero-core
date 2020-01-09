@@ -34,7 +34,7 @@ export const EthParent: FunctionComponent<EthParentProps> = ({
           )
         }
       }
-
+        break
       case config.contractName: { // eslint-disable-line
         if (connected && accounts.length > 0) {
           return (
@@ -46,6 +46,7 @@ export const EthParent: FunctionComponent<EthParentProps> = ({
           )
         }
       }
+        break
       case 'enable': { // eslint-disable-line
         return (
           <EthEnable
