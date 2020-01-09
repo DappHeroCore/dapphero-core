@@ -1,5 +1,7 @@
 # DappHero Core
 
+*dependencies last pinned 1/8/20*
+
 ### `npm start`
 
 Runs the app in the development mode.<br />
@@ -20,3 +22,7 @@ It bundles in production mode and optimizes the build for the best performance.
 
 The build is minified and the filenames include the hashes.<br />
 
+
+### Eslint fix example
+For `getBaseContractData` file
+`npx eslint --fix src/modules/eth/utils/getBaseContractData.ts`
