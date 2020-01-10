@@ -17,24 +17,24 @@ export const sendTransactionToContract: any = (
   instance.methods[signature](...args)
     .send({ from })
     .on('transactionHash', (hash) => {
-      setTxState((txState) => ({ ...txState, transactionHash: hash }))
+      setTxState((newTxState) => ({ ...newTxState, transactionHash: hash }))
     })
     .on('confirmation', (confirmationNumber, receipt) => {
-      setTxState((txState) => ({
-        ...txState,
+      setTxState((newTxState) => ({
+        ...newTxState,
         confirmations: confirmationNumber,
         receipt,
       }))
     })
     .on('receipt', (receipt) => {
-      setTxState((txState) => ({
-        ...txState,
+      setTxState((newTxState) => ({
+        ...newTxState,
         receipt,
       }))
     })
     .on('error', (error, receipt) => {
-      setTxState((txState) => ({
-        ...txState,
+      setTxState((newTxState) => ({
+        ...newTxState,
         error,
         receipt,
       }))

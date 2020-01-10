@@ -26,7 +26,7 @@
         "@typescript-eslint"
     ],
     "rules": {
-        "@typescript-eslint/no-unused-vars": ["warn", { "varsIgnorePattern": "React" } ],
+        "@typescript-eslint/no-unused-vars": ["warn", { "args": "all", "varsIgnorePattern": "React", "argsIgnorePattern": "event" } ],
         "accessor-pairs": "off",
         "array-bracket-spacing": ["warn", "always"],
         "brace-style": ["warn", "1tbs", { "allowSingleLine": true }],
@@ -63,7 +63,8 @@
         "keyword-spacing": "warn",
         "linebreak-style": "off",
         "lines-between-class-members": "warn",
-        "max-depth": ["warn", 3], // Due to common use of objects as configuration and templates
+        "max-depth": ["warn", 7], // Due to common use of objects as configuration and templates
+        "max-len": ["warn", 150],
         "max-nested-callbacks": ["off", 3],
         "max-params": "off",
         "max-statements": "off",
@@ -125,7 +126,7 @@
         "no-obj-calls": "warn",
         "no-octal-escape": "warn",
         "no-octal": "warn",
-        "no-param-reassign": "warn",
+        "no-param-reassign": [ "warn", { "props": false } ],    
         "no-path-concat": "warn",
         "no-plusplus": "off",
         "no-process-env": "warn",
@@ -155,7 +156,7 @@
         "no-unneeded-ternary": "warn",
         "no-unreachable": "warn",
         "no-unused-expressions": "warn",
-        "no-unused-vars": ["warn", { "vars": "local", "args": "after-used", "varsIgnorePattern": "React" }],
+        "no-unused-vars": ["warn", { "args": "all", "varsIgnorePattern": "React", "argsIgnorePattern": "event" }],
         "no-useless-rename": "warn",
         "no-var": "warn",
         "no-void": "warn",

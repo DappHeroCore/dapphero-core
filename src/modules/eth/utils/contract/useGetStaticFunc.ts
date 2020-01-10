@@ -6,14 +6,13 @@ function useGetStaticFunc(instance: any, signature: any, identifiedReturnValue?:
 
   useEffect(() => {
     async function getValue() {
-      let value
       try {
-        value = await instance.methods[signature]().call()
-        value = identifiedReturnValue ? value[identifiedReturnValue] : value
+        const signatureValue = await instance.methods[signature]().call()
+        const value = identifiedReturnValue ? signatureValue[identifiedReturnValue] : signatureValue
+        setValue(value)
       } catch (error) {
         console.log('The Function View Static error: ', error)
       }
-      setValue(value)
     }
     getValue()
   }, [])

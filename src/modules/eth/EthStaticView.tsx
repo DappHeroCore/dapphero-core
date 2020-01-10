@@ -30,7 +30,7 @@ export const EthStaticView: FunctionComponent<EthStaticViewProps> = (props) => {
   const requestString = request.requestString[RequestString.ETH_PARENT_TYPE] // eslint-disable-line
 
   useEffect(() => {
-    const getData = async () => {
+    const getData = async () => { // TODO: Could we use more descriptive names or just invoke the anonymous function
       try {
         const el = document.getElementById(props.request.element.id)
         const func = STATIC_MAPPING[requestString]

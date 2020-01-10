@@ -1,9 +1,4 @@
-export const getUserLoadedElements = () => {
-  const txProcessingElement = document.getElementById('dh-eth-txProcessing')
-  const txConfirmedElement = document.getElementById('dh-eth-txConfirmed')
-
-  return {
-    txProcessingElement,
-    txConfirmedElement
-  }
-}
+export const getUserLoadedElements = () => ({
+  txProcessingElement: document.getElementById('dh-eth-txProcessing'),
+  txConfirmedElement: document.getElementById('dh-eth-txConfirmed')
+})
