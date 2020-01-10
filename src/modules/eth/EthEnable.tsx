@@ -15,7 +15,7 @@ export const EthEnable: FunctionComponent<EthEnableProps> = (props) => {
   }
 
   useEffect(() => {
-    const getData = async () => {
+    const getData = async () => { // TODO: should this be called addListener instead? or make it anonymous
       try {
         const el = document.getElementById(request.element.id)
         el.addEventListener('click', web3Enable, false)

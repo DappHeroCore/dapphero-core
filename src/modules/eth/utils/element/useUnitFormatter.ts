@@ -1,6 +1,5 @@
 import Web3 from 'web3'
-import { fromWei, toWei, hexToAscii, bytesToHex, utf8ToHex } from '../../../../api/ethereum'
-import { Signifiers } from '../../../types'
+import { fromWei, toWei, hexToAscii } from '../../../../api/ethereum'
 
 const FORMAT_MAPPING = {
   ether: fromWei,

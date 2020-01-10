@@ -1,6 +1,4 @@
-import { Request } from '../../../types'
-
-const getTxFieldInputs = (modules: any[], position: number, request: any, method: any) => {
+export const getTxFieldInputs = (modules: any[], position: number, request: any, method: any) => {
   const newObj = {}
   const inputArgArray = []
   const inputs = modules.filter((module) => (
@@ -12,11 +10,9 @@ const getTxFieldInputs = (modules: any[], position: number, request: any, method
     newObj[module.requestString[position + 1]] = (document.getElementById(module.element.id) as any).value  // eslint-disable-line
   })
 
-  method.inputs.forEach((method) => {
-    inputArgArray.push(newObj[method.name])
+  method.inputs.forEach((moduleInputs) => {
+    inputArgArray.push(newObj[moduleInputs.name])
   })
 
   return { inputFields: inputs, txArgArray: inputArgArray }
 }
-
-export { getTxFieldInputs }

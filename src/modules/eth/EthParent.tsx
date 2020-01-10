@@ -3,7 +3,7 @@ import { Request, DappHeroConfig, RequestString } from '../types'
 import { EthStaticView } from './EthStaticView'
 import { EthContractParent } from './EthContractParent'
 import { EthereumContextConsumer } from '../../context/ethereum'
-import { EthEnable } from '../eth/EthEnable'
+import { EthEnable } from './EthEnable'
 import { useSignifierParser } from './utils'
 
 interface EthParentProps {
@@ -32,7 +32,7 @@ export const EthParent: FunctionComponent<EthParentProps> = ({
       case 'getBalance': // TODO we should be explicit about how this works
       case 'getProvider': // TODO and maybe we should not need to hard code this but rather build a function which takes from database
       case 'getNetworkName':
-      case 'getNetworkId': {
+      case 'getNetworkId':
         if (connected && accounts.length > 0) {
           return (
             <EthStaticView
@@ -43,7 +43,6 @@ export const EthParent: FunctionComponent<EthParentProps> = ({
             />
           )
         }
-      }
         break
       case config.contractName: { // eslint-disable-line
         if (connected && accounts.length > 0) {

@@ -7,16 +7,16 @@
 // Basically we take in all the elements for the module, so for example "transfer"
 // requires a transfer-amount and transfer-recipient elements.
 
-export const getInputArgumentFields: {inputFields: {[key: string]:string}[], txArgArray: string[]} = (modules, position, request, method) => {
+export const getInputArgumentFields: {inputFields: {[key: string]:string}[], txArgArray: string[]} = (modules, position, request, method) => { //eslint-disable-line
 
-  const inputs = modules.filter((module) => module.requestString[position] === request
+  const inputFields = modules.filter((module) => module.requestString[position] === request
       && module.requestString.length === position + 2)
 
-  const newObj = inputs.reduce((acc, module) => {
-    const element: HTMLInputElement = document.getElementById(module.element.id)
+  const newObj = inputFields.reduce((acc, module) => {
+    const element = (<HTMLInputElement>document.getElementById(module.element.id))
     return { ...acc, [module.requestString[position + 1]]: element.value }
   }, {})
 
-  const inputArgArray = method.inputs.map((thisMethod) => newObj[thisMethod.name])
-  return { inputFields: inputs, txArgArray: inputArgArray }
+  const txArgArray = method.inputs.map((thisMethod) => newObj[thisMethod.name])
+  return { inputFields, txArgArray }
 }

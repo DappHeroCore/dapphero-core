@@ -1,5 +1,5 @@
-import React, { useEffect, useState, FunctionComponent } from 'react'
-import { EthContractProps, Signifiers } from '../types'
+import React, { FunctionComponent } from 'react'
+import { EthContractProps } from '../types'
 
 type EthContractEventProps = EthContractProps & {
   //
