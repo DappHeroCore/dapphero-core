@@ -26,7 +26,7 @@
         "@typescript-eslint"
     ],
     "rules": {
-        "@typescript-eslint/no-unused-vars": "warn",
+        "@typescript-eslint/no-unused-vars": ["warn", { "varsIgnorePattern": "React" } ],
         "accessor-pairs": "off",
         "array-bracket-spacing": ["warn", "always"],
         "brace-style": ["warn", "1tbs", { "allowSingleLine": true }],
@@ -155,7 +155,7 @@
         "no-unneeded-ternary": "warn",
         "no-unreachable": "warn",
         "no-unused-expressions": "warn",
-        "no-unused-vars": ["warn", { "vars": "local", "args": "after-used" }],
+        "no-unused-vars": ["warn", { "vars": "local", "args": "after-used", "varsIgnorePattern": "React" }],
         "no-useless-rename": "warn",
         "no-var": "warn",
         "no-void": "warn",
