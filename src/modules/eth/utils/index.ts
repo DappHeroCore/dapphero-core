@@ -1,5 +1,6 @@
-export * from './contract/callPublicMethodWithArg'
+export * from './contract/callPublicMethodWithArg' //eslint-disable-line
 export * from './contract/getBaseContractData'
+export * from './contract/sanitizeTransactionArguments'
 export * from './element/getInputArgumentFields'
 export * from './element/getTriggerElement'
 export * from './element/getTxFieldInputs'

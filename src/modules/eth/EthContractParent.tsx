@@ -1,4 +1,4 @@
-import React, { useEffect, FunctionComponent } from 'react'
+import React, { useEffect, FunctionComponent } from 'react' //eslint-disable-line
 import { EthContractProps, FunctionTypes, Signifiers } from '../types'
 import { EthContractViewStatic } from './EthContractViewStatic'
 import { EthContractViewArgs } from './EthContractViewArgs'
@@ -32,7 +32,6 @@ export const EthContractParent: FunctionComponent<EthContractParentProps> = ({
       // TODO: Set up method for differentiating between functions
       // with same name and different number of args
       const func = methods.filter((m) => m.name === method)[0]
-
       // TODO: figure out best way to listen to events
       // do we even need this outside of the current tx flow
       /* if (eventTrigger.length) { // component is an event listener
@@ -77,6 +76,7 @@ export const EthContractParent: FunctionComponent<EthContractParentProps> = ({
         )
       }
 
+      case FunctionTypes.PAYABLE:
       case FunctionTypes.NONPAYABLE: {
         return (
           <EthContractSendTx
