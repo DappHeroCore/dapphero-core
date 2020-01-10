@@ -11,7 +11,6 @@ export const sanitizeTransactionArguments = (
   method: any,
   injected: Web3
 ) => {
-  console.log('args', args)
   const sanitizedArgs = args.map((arg, i) => {
     if (
       typeof arg === MethodTypes.STRING
