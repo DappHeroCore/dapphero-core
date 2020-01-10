@@ -1,6 +1,6 @@
-import React, { useEffect, useState, FunctionComponent, useMemo } from 'react'
+import React, { useEffect, useState, FunctionComponent, useMemo } from 'react' //eslint-disable-line
 import $ from 'jquery'
-import { EthContractProps } from '../types'
+import { EthContractProps, FunctionTypes } from '../types'
 import {
   getTxFieldInputs,
   sendTransactionToContract,
@@ -18,7 +18,8 @@ export const EthContractSendTx: FunctionComponent<EthContractSendTxProps> = ({
   method,
   request,
   injected,
-  element
+  element,
+  signifiers
 }: EthContractSendTxProps) => {
   const defaultState = {
     transactionHash: null,
@@ -32,7 +33,7 @@ export const EthContractSendTx: FunctionComponent<EthContractSendTxProps> = ({
 
   const originalDomElement = element
 
-  const elId = 'replace'
+  const elId = 'replace' // button => processing element => confirmed element => button
 
   useEffect(() => {
     const { txProcessingElement, txConfirmedElement } = getUserLoadedElements()
@@ -44,7 +45,8 @@ export const EthContractSendTx: FunctionComponent<EthContractSendTxProps> = ({
       if (transactionHash && !receipt) {
         const el = document.getElementById(element.id) // send button
 
-        if (txProcessingElement) { // user-loaded element
+        if (txProcessingElement) {
+          // user-loaded element
           const txProcessingEl = txProcessingElement.cloneNode(true) as HTMLElement
           txProcessingEl.style.display = 'block'
           txProcessingEl.id = elId
@@ -90,19 +92,25 @@ export const EthContractSendTx: FunctionComponent<EthContractSendTxProps> = ({
         const { signature } = method
 
         const onClick = async () => {
-          const { inputFields, txArgArray } = getTxFieldInputs(
+          const { inputFields, txArgArray, valueArg } = getTxFieldInputs(
             requests,
             position,
             method.name,
             method
           )
+          console.log('inputfields', inputFields)
+          console.log('txArgArray', txArgArray)
+          console.log('valueArg', valueArg)
 
           await sendTransactionToContract(
+            injected.lib,
             instance,
             signature,
             txArgArray,
             injected.accounts,
-            setTxState
+            setTxState,
+            method,
+            signifiers.payable || valueArg
           )
           // TODO: Best way to clean input fields?
           // Timeout set because function needs to pull value first
@@ -111,7 +119,7 @@ export const EthContractSendTx: FunctionComponent<EthContractSendTxProps> = ({
               document.getElementById(module.element.id).value = null
             })
             return null
-          }, 10000) // add this to CONSTANTS file
+          }, 10000) // TODO: clean when tx confirms
         }
 
         const triggerElement = getTriggerElement(

@@ -33,9 +33,10 @@ export enum FunctionTypes {
 
 export enum Signifiers {
   IDENTIFY_RETURN_VALUE = '*',
-  EVENT_TRIGGER = '#',
+  // EVENT_TRIGGER = '#', // TODO: revisit
   UNIT ='%',
-  DECIMAL = '>'
+  DECIMAL = '>',
+  PAYABLE = '$'
 }
 
 export enum RequestString {

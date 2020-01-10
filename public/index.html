@@ -113,7 +113,7 @@
       </div>
     </div>
 
-    <h4>Contract: Transfer Method Grouping</h4>
+    <h4>Contract: ERC20 Transfer Method Grouping</h4>
     <div>
       <div>
         Transfer: transfer(recipient, amount)
@@ -132,7 +132,7 @@
       </div>
     </div>
 
-    <h4>Contract: Event Testing</h4>
+    <h4>Contract: Tx Testing</h4>
 
     <div>
       <div>
@@ -148,6 +148,58 @@
         <!-- <div id="dh-eth-dappHeroTest-#EventTrigger"> -->
           <!-- No TX: (start value) -->
         <!-- </div> -->
+      </div>
+    </div>
+
+    <div>
+      <div>Send eth no args sendEthNoArgs() fixed payable (no user input)</div>
+      <div>
+        <div>
+          Send fixed payable in eth
+          <button id="dh-eth-dappHeroTest-sendEthNoArgs-$0.01">send eth</button>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div>Send eth with args sendEthWithArgs() fixed payable</div>
+      <div>
+        <div>
+            Input: message
+            <input type="text" id="dh-eth-dappHeroTest-sendEthWithArgs-message" />
+        </div>
+        <div>
+          Send fixed payable in eth
+          <button id="dh-eth-dappHeroTest-sendEthWithArgs-$0.01">send eth</button>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div>Send eth no args sendVariableEthNoArgs() variable payable</div>
+      <div>
+        How much eth?
+        <input id="dh-eth-dappHeroTest-sendVariableEthNoArgs-payable"/>
+        <div>
+          Send variable payable in eth
+          <button id="dh-eth-dappHeroTest-sendVariableEthNoArgs">send eth</button>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div>Send eth with args sendVariableEthWithArgs() variable payable</div>
+      <div>
+        <div>
+          Input: message
+          <input id="dh-eth-dappHeroTest-sendVariableEthWithArgs-message" />
+        </div>
+        How much eth?
+        <input id="dh-eth-dappHeroTest-sendVariableEthWithArgs-payable"/>
+        <div>
+          Send variable payable in eth
+          <button id="dh-eth-dappHeroTest-sendVariableEthWithArgs">send eth</button>
+        </div>
       </div>
     </div>
 
