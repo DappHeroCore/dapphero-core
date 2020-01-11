@@ -57,6 +57,7 @@
         "import/no-unresolved": "warn",
         "import/no-useless-path-segments": "warn",
         "import/order": "warn",
+        "import/no-default-export": "warn", // named exports are better and make aliasing explicit
         "import/prefer-default-export": "off", // named exports are better and make aliasing explicit
         "indent": ["warn", 2],
         "key-spacing": ["warn", { "beforeColon": false, "afterColon": true }],
@@ -128,7 +129,7 @@
         "no-octal": "warn",
         "no-param-reassign": [ "warn", { "props": false } ],    
         "no-path-concat": "warn",
-        "no-plusplus": "off",
+        "no-plusplus": [ "warn", { "allowForLoopAfterthoughts": true } ],
         "no-process-env": "warn",
         "no-process-exit": "warn",
         "no-proto": "warn",
@@ -141,7 +142,7 @@
         "no-self-compare": "warn",
         "no-sequences": "warn",
         "no-shadow-restricted-names": "warn",
-        "no-shadow": "warn",
+        "no-shadow": ["warn", { "allow": ["reject", "resolve", "error", "err", "e"] } ],
         "no-sparse-arrays": "warn",
         "no-sync": "off", // sync meethods are useful
         "no-ternary": "off", // ternaries are useful
