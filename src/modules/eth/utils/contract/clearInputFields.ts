@@ -9,7 +9,7 @@
 export const clearInputFields = (inputFields) => {
   setTimeout(() => {
     inputFields.forEach((module) => {
-      document.getElementById(module.element.id).value = null
+      (<HTMLInputElement> document.getElementById(module.element.id)).value = null
     })
     return null
   }, 10000) // TODO: clean when tx confirms
