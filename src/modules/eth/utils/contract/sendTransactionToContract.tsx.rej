@@ -1,8 +1,0 @@
-diff a/src/modules/eth/utils/contract/sendTransactionToContract.tsx b/src/modules/eth/utils/contract/sendTransactionToContract.tsx	(rejected hunks)
-@@ -7,2 +7 @@ const apiKey = process.env.REACT_APP_BLOCKNATIVE_API
--const useBlockNative = true;
--
-+const useBlockNative = true
-@@ -28 +26 @@ export const sendTransactionToContract: any = (
--    networkId: networkId // [Integer] The Ethereum network ID your Dapp uses.
-+    networkId // [Integer] The Ethereum network ID your Dapp uses.

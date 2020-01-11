@@ -1,4 +1,6 @@
-import { getTxFieldInputs, sendTransactionToContract, clearInputFields } from '../../utils'
+import { getTxFieldInputs } from '../element/getTxFieldInputs'
+import { sendTransactionToContract } from './sendTransactionToContract'
+import { clearInputFields } from './clearInputFields'
 
 export const sendTransactionWrapper = async (
   requests,
@@ -26,8 +28,9 @@ export const sendTransactionWrapper = async (
     injected.accounts,
     setTxState,
     method,
+    injected.networkId,
     signifiers.payable || valueArg,
-    injected.networkId
+
   )
 
   clearInputFields(inputFields)
