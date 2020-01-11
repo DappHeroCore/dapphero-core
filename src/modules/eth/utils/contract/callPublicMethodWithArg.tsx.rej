@@ -1,0 +1,7 @@
+diff a/src/modules/eth/utils/contract/callPublicMethodWithArg.tsx b/src/modules/eth/utils/contract/callPublicMethodWithArg.tsx	(rejected hunks)
+@@ -5 +5 @@ import { useEffect } from 'react'
+-// TODO: Is this a custom hook and therefore should follow React hooks format? 
++// TODO: Is this a custom hook and therefore should follow React hooks format?
+@@ -14 +14 @@ import { useEffect } from 'react'
+- * This is typically a "setState" function from higher up. 
++ * This is typically a "setState" function from higher up.
