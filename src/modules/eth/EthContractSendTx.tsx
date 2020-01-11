@@ -2,11 +2,10 @@ import React, { useEffect, useState, FunctionComponent, useMemo } from 'react' /
 import $ from 'jquery'
 import { EthContractProps, FunctionTypes } from '../types'
 import {
-  getTxFieldInputs,
-  sendTransactionToContract,
   getTriggerElement,
   getUserLoadedElements,
-  clearInputFields
+  addClickHandlerToTriggerElement,
+  sendTransactionWrapper
 } from './utils'
 import { HTMLContextConsumer } from '../../context/html'
 
@@ -93,31 +92,17 @@ export const EthContractSendTx: FunctionComponent<EthContractSendTxProps> = ({
       {({ requests }) => {
         const { signature } = method
 
-        const sentTransaction = async () => {
-          const { inputFields, txArgArray, valueArg } = getTxFieldInputs(
+        const sendTransaction = () => {
+          sendTransactionWrapper(
             requests,
             position,
-            method.name,
-            method
-          )
-          console.log('inputfields', inputFields)
-          console.log('txArgArray', txArgArray)
-          console.log('valueArg', valueArg)
-
-          await sendTransactionToContract(
-            injected.lib,
+            method,
+            injected,
             instance,
             signature,
-            txArgArray,
-            injected.accounts,
             setTxState,
-            method,
-            signifiers.payable || valueArg,
-            injected.networkId
+            signifiers
           )
-
-          clearInputFields(inputFields)
-
         }
 
         const triggerElement = getTriggerElement(
@@ -126,12 +111,7 @@ export const EthContractSendTx: FunctionComponent<EthContractSendTxProps> = ({
           position
         )
 
-        if (triggerElement) {
-          const triggerClone = triggerElement.cloneNode(true)
-          // TODO: clone element to remove all prev event listeners. is there a better way?
-          triggerElement.parentNode.replaceChild(triggerClone, triggerElement)
-          triggerClone.addEventListener('click', sentTransaction)
-        }
+        addClickHandlerToTriggerElement(triggerElement, sendTransaction)
 
         return null
       }}
