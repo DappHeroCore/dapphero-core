@@ -5,7 +5,8 @@ import {
   getTxFieldInputs,
   sendTransactionToContract,
   getTriggerElement,
-  getUserLoadedElements
+  getUserLoadedElements,
+  clearInputFields
 } from './utils'
 import { HTMLContextConsumer } from '../../context/html'
 
@@ -114,14 +115,9 @@ export const EthContractSendTx: FunctionComponent<EthContractSendTxProps> = ({
             signifiers.payable || valueArg,
             injected.networkId
           )
-          // TODO: Best way to clean input fields?
-          // Timeout set because function needs to pull value first
-          setTimeout(() => {
-            inputFields.forEach((module) => {
-              document.getElementById(module.element.id).value = null
-            })
-            return null
-          }, 10000) // TODO: clean when tx confirms
+
+          clearInputFields(inputFields)
+
         }
 
         const triggerElement = getTriggerElement(
