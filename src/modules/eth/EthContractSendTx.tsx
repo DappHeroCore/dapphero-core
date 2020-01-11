@@ -110,7 +110,8 @@ export const EthContractSendTx: FunctionComponent<EthContractSendTxProps> = ({
             injected.accounts,
             setTxState,
             method,
-            signifiers.payable || valueArg
+            signifiers.payable || valueArg,
+            injected.networkId
           )
           // TODO: Best way to clean input fields?
           // Timeout set because function needs to pull value first
