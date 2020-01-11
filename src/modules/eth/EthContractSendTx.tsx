@@ -9,10 +9,10 @@ import {
 } from './utils'
 import { HTMLContextConsumer } from '../../context/html'
 
+// TODO: This should be explicit and clarified. 
 type EthContractSendTxProps = EthContractProps & {
   // TODO: any more?
 };
-
 
 export const EthContractSendTx: FunctionComponent<EthContractSendTxProps> = ({
   instance,
@@ -34,6 +34,10 @@ export const EthContractSendTx: FunctionComponent<EthContractSendTxProps> = ({
 
   const { txProcessingElement, txConfirmedElement } = getUserLoadedElements()
 
+  // In cases where a user has their own custom elements that they would like to show when
+  // executing a transaction, this function will automatically find those custom elements
+  // and toggle their visiblity based on the state of a transaction.
+  // Note that this useEffect() will run when the values of txState change.
   useEffect(() => {
     getUserCustomTxStateNotification(
       txState,
@@ -50,7 +54,10 @@ export const EthContractSendTx: FunctionComponent<EthContractSendTxProps> = ({
       {({ requests }) => {
         const { signature } = method
 
-        // This will send the transaction and clear the input fields.
+        // This function will initiate a transaction and subsequently clear any
+        // input field values.
+        // TODO: The action of clearing input field values should be seperated from
+        // sending a transaction.
         const sendTransaction = () => {
           sendTransactionWrapper(
             requests,
@@ -64,12 +71,17 @@ export const EthContractSendTx: FunctionComponent<EthContractSendTxProps> = ({
           )
         }
 
+        // Find the user defined element which will serve as a trigger for an action
+        // IE: a button that will initiate a transaction to the blockchain.
         const triggerElement = getTriggerElement(
           requests,
           method.name,
           position
         )
 
+        // This function adds a click handler to the trigger element from above.
+        // This allows us to add interactivity to elements that a user identifies as
+        // a trigger element.
         addClickHandlerToTriggerElement(triggerElement, sendTransaction)
 
         return null
