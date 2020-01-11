@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react'
 import $ from 'jquery'
 
 export const getUserCustomTxStateNotification = (txState, setTxState, defaultState, txProcessingElement, txConfirmedElement, element) => {

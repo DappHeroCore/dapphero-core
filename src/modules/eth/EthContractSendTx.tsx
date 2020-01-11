@@ -1,5 +1,4 @@
 import React, { useEffect, useState, FunctionComponent, useMemo } from 'react'; //eslint-disable-line
-import $ from 'jquery'
 import { EthContractProps, FunctionTypes } from '../types'
 import {
   getTriggerElement,
@@ -11,9 +10,10 @@ import {
 import { HTMLContextConsumer } from '../../context/html'
 
 type EthContractSendTxProps = EthContractProps & {
-  // any more?
+  // TODO: any more?
 };
-// 0x885583955F14970CbC0046B91297e9915f4DE6E4 //test addr
+
+
 export const EthContractSendTx: FunctionComponent<EthContractSendTxProps> = ({
   instance,
   method,
