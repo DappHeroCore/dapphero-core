@@ -17,6 +17,7 @@ import { useEffect } from 'react'
  * TODO: verify that the above assumption is the case.
  */
 export const callPublicMethodWithArgs = async (
+  injected,
   instance,
   signature,
   args: any[],

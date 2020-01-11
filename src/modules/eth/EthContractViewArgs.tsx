@@ -1,6 +1,6 @@
-import React, { useEffect, useState, FunctionComponent } from 'react'
+import React, { useState, FunctionComponent } from 'react'
 import { callPublicMethodWithArgs, useDecimalFormatter, useUnitFormatter } from './utils'
-import { EthContractProps, Signifiers, RequestString } from '../types'
+import { EthContractProps, RequestString } from '../types'
 
 type EthContractViewArgsProps = EthContractProps
 

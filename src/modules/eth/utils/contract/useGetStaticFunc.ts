@@ -15,8 +15,8 @@ function useGetStaticFunc(instance: any, signature: any, identifiedReturnValue?:
     async function getValue() {
       try {
         const signatureValue = await instance.methods[signature]().call()
-        const value = identifiedReturnValue ? signatureValue[identifiedReturnValue] : signatureValue
-        setValue(value)
+        const returnedValued = identifiedReturnValue ? signatureValue[identifiedReturnValue] : signatureValue
+        setValue(returnedValued)
       } catch (error) {
         console.log('The Function View Static error: ', error)
       }
