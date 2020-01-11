@@ -6,6 +6,13 @@ enum MethodTypes {
   BYTES32 = 'bytes32'
 }
 
+// TODO: Is this really santizing arguments or is it properlly converting from string to bytes32?
+/**
+ * This function does what exactly? santize arguments or convert arguments?
+ * @param args {array} array of arguments for a function method
+ * @param method {object} an object representing a method. On this method are our inputs and their types.
+ * @param injected {object} a web3 object.
+ */
 export const sanitizeTransactionArguments = (
   args: any[],
   method: any,
