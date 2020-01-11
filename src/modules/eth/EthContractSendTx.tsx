@@ -84,6 +84,7 @@ export const EthContractSendTx: FunctionComponent<EthContractSendTxProps> = ({
       }
     }
     updateState()
+
   }, [ defaultState ])
 
   return (
@@ -91,7 +92,7 @@ export const EthContractSendTx: FunctionComponent<EthContractSendTxProps> = ({
       {({ requests }) => {
         const { signature } = method
 
-        const onClick = async () => {
+        const sentTransaction = async () => {
           const { inputFields, txArgArray, valueArg } = getTxFieldInputs(
             requests,
             position,
@@ -133,7 +134,7 @@ export const EthContractSendTx: FunctionComponent<EthContractSendTxProps> = ({
           const triggerClone = triggerElement.cloneNode(true)
           // TODO: clone element to remove all prev event listeners. is there a better way?
           triggerElement.parentNode.replaceChild(triggerClone, triggerElement)
-          triggerClone.addEventListener('click', onClick)
+          triggerClone.addEventListener('click', sentTransaction)
         }
 
         return null

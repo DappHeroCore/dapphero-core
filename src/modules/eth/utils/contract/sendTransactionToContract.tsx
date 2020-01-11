@@ -20,7 +20,6 @@ export const sendTransactionToContract: any = (
 ) => {
   const from = toChecksumAddress(injected, accounts[0])
   const sanitizedArgs = sanitizeTransactionArguments(args, method, injected)
-
   const notify = Notify({
     dappId: apiKey, // [String] The API key created by step one above
     networkId // [Integer] The Ethereum network ID your Dapp uses.
