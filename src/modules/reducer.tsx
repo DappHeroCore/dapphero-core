@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import ErrorBoundary from 'react-error-boundary'
 import { Request, DappHeroConfig } from './types'
 import { EthParent } from './eth'
@@ -40,5 +40,3 @@ export const reducer = (request: Request) => {
     return null
   }
 }
-
-export default reducer
