@@ -1,4 +1,5 @@
 import React, { FunctionComponent, useState, Fragment } from 'react'
+import ErrorBoundary from 'react-error-boundary'
 import { Request, DappHeroConfig, RequestString } from '../types'
 import { EthStaticView } from './EthStaticView'
 import { EthContractParent } from './EthContractParent'
@@ -11,6 +12,33 @@ interface EthParentProps {
   config: DappHeroConfig;
 }
 
+// TODO: Connect this up to an error tracking system
+const errorHandlerEthStaticView = (error: Error, componentStack: string) => {
+  // Do something with the error
+  // E.g. log to an error logging client here
+  console.log(`Error: ${error}`)
+  console.log(`StackTrace: ${componentStack}`)
+}
+const errorHandlerEthContractParent = (error: Error, componentStack: string) => {
+  // Do something with the error
+  // E.g. log to an error logging client here
+  console.log(`Error: ${error}`)
+  console.log(`StackTrace: ${componentStack}`)
+}
+const errorHandlerEthEnable = (error: Error, componentStack: string) => {
+  // Do something with the error
+  // E.g. log to an error logging client here
+  console.log(`Error: ${error}`)
+  console.log(`StackTrace: ${componentStack}`)
+}
+
+/**
+ * This functional component serves as a reducer for all the request strings which fall under the 
+ * module name "eth". For each request string which is filtered through EthParent, we render a component
+ * submodule that matches the request. In this way we create a subtree of react components designed to
+ * handle the requirements of each particular eth sub request module. 
+ * @param param
+ */
 export const EthParent: FunctionComponent<EthParentProps> = ({
   request,
   request: { requestString },
@@ -28,31 +56,42 @@ export const EthParent: FunctionComponent<EthParentProps> = ({
       switch (
         sanitizedRequestString[RequestString.ETH_PARENT_TYPE]
       ) {
-      case 'address': // TODO We shouldn't let this just fall through like this (I think)
-      case 'getBalance': // TODO we should be explicit about how this works
-      case 'getProvider': // TODO and maybe we should not need to hard code this but rather build a function which takes from database
+        /**
+         * The below stacked case's are designed so that an match on any of the following falls through
+         * to the default handler: EthStaticView
+         */
+      case 'address':
+      case 'getBalance':
+      case 'getProvider':
       case 'getNetworkName':
       case 'getNetworkId':
         if (connected && accounts.length > 0) {
+          // TODO: Here we will attach metrics to identify which was used. 
           return (
-            <EthStaticView
-              request={request}
-              injected={injected}
-              accounts={accounts}
-              signifiers={signifiers}
-            />
+            <ErrorBoundary onError={errorHandlerEthStaticView}>
+              <EthStaticView
+                request={request}
+                injected={injected}
+                accounts={accounts}
+                signifiers={signifiers}
+              />
+            </ErrorBoundary>
+
           )
         }
         break
       case config.contractName: { // eslint-disable-line
         if (connected && accounts.length > 0) {
           return (
-            <EthContractParent
-              request={request}
-              injected={injected}
-              element={request.element}
-              signifiers={signifiers}
-            />
+            <ErrorBoundary onError={errorHandlerEthContractParent}>
+              <EthContractParent
+                request={request}
+                injected={injected}
+                element={request.element}
+                signifiers={signifiers}
+              />
+            </ErrorBoundary>
+
           )
         }
       }
@@ -60,11 +99,14 @@ export const EthParent: FunctionComponent<EthParentProps> = ({
       case 'enable': { // eslint-disable-line
         if (!connected) {
           return (
-            <EthEnable
-              request={request}
-              injected={injected}
-              accounts={accounts}
-            />
+            <ErrorBoundary onError={errorHandlerEthEnable}>
+              <EthEnable
+                request={request}
+                injected={injected}
+                accounts={accounts}
+              />
+            </ErrorBoundary>
+
           )
         }
         break

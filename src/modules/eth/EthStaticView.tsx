@@ -31,6 +31,7 @@ export const EthStaticView: FunctionComponent<EthStaticViewProps> = (props) => {
 
   useEffect(() => {
     const getData = async () => { // TODO: Could we use more descriptive names or just invoke the anonymous function
+      console.log('Now we are polling')
       try {
         const el = document.getElementById(props.request.element.id)
         const func = STATIC_MAPPING[requestString]
@@ -44,7 +45,12 @@ export const EthStaticView: FunctionComponent<EthStaticViewProps> = (props) => {
         console.log(e)
       }
     }
-    getData()
+    const thisPoll = setInterval(getData, 4000)
+    // TODO: Polling shoudl be set by a configuration tool
+    const stopPolling = () => {
+      clearInterval(thisPoll)
+    }
+    return stopPolling
   }, [ props ])
 
   return null

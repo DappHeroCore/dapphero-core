@@ -1,4 +1,5 @@
 import React from 'react'
+import ErrorBoundary from 'react-error-boundary'
 import { Request, DappHeroConfig } from './types'
 import { EthParent } from './eth'
 
@@ -13,16 +14,26 @@ const getConfig = (): DappHeroConfig => {
   return config
 }
 
+// TODO: This is a temporary placement for the error handler. This should connect to the Database.
+const myErrorHandler = (error: Error, componentStack: string) => {
+  // Do something with the error
+  // E.g. log to an error logging client here
+}
+
 // This increments a key so each element out of reducer has unique Key so react doesn't complain.
 let reactKeyIndex = 0
 
+// NOTE: Each case should have it's own error boundary.
 export const reducer = (request: Request) => {
   switch (request.arg) {
   case 'eth': {
     const config = getConfig()
     reactKeyIndex += 1
     return (
-      <EthParent request={request} config={config} key={reactKeyIndex} />
+      <ErrorBoundary key={reactKeyIndex} onError={myErrorHandler}>
+        <EthParent request={request} config={config} />
+      </ErrorBoundary>
+
     )
   }
   default:

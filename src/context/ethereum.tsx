@@ -1,5 +1,6 @@
-import React, { createContext, useState, useEffect } from 'react'
-import { useWeb3Injected, useWeb3Network } from '@openzeppelin/network/react'
+import React, { createContext } from 'react'
+import { useWeb3Injected } from '@openzeppelin/network/react'
+import PropTypes from 'prop-types'
 
 const modules = [ 'eth', 'erc20' ] // deprecated?
 
@@ -15,15 +16,22 @@ function EthereumContextProvider(props) {
     modules
   }
 
+  const { children } = props
+
   return (
     <EthereumContext.Provider value={initialContextValue}>
-      {props.children}
+      {children}
     </EthereumContext.Provider>
   )
 }
 
 function EthereumContextConsumer(props) {
-  return <EthereumContext.Consumer>{props.children}</EthereumContext.Consumer>
+  const { children } = props
+  return <EthereumContext.Consumer>{children}</EthereumContext.Consumer>
 }
+
+// EthereumContextProvider.propTypes = { children: PropTypes.element.isRequired }
+
+// EthereumContextConsumer.propTypes = { children: PropTypes.symbol.isRequired }
 
 export { EthereumContextConsumer, EthereumContextProvider }
