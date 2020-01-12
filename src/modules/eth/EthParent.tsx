@@ -1,4 +1,5 @@
 import React, { FunctionComponent, useState, Fragment } from 'react'
+import ErrorBoundary from 'react-error-boundary'
 import { Request, DappHeroConfig, RequestString } from '../types'
 import { EthStaticView } from './EthStaticView'
 import { EthContractParent } from './EthContractParent'
@@ -9,6 +10,26 @@ import { useSignifierParser } from './utils'
 interface EthParentProps {
   request: Request;
   config: DappHeroConfig;
+}
+
+// TODO: Connect this up to an error tracking system
+const errorHandlerEthStaticView = (error: Error, componentStack: string) => {
+  // Do something with the error
+  // E.g. log to an error logging client here
+  console.log(`Error: ${error}`)
+  console.log(`StackTrace: ${componentStack}`)
+}
+const errorHandlerEthContractParent = (error: Error, componentStack: string) => {
+  // Do something with the error
+  // E.g. log to an error logging client here
+  console.log(`Error: ${error}`)
+  console.log(`StackTrace: ${componentStack}`)
+}
+const errorHandlerEthEnable = (error: Error, componentStack: string) => {
+  // Do something with the error
+  // E.g. log to an error logging client here
+  console.log(`Error: ${error}`)
+  console.log(`StackTrace: ${componentStack}`)
 }
 
 export const EthParent: FunctionComponent<EthParentProps> = ({
@@ -35,24 +56,30 @@ export const EthParent: FunctionComponent<EthParentProps> = ({
       case 'getNetworkId':
         if (connected && accounts.length > 0) {
           return (
-            <EthStaticView
-              request={request}
-              injected={injected}
-              accounts={accounts}
-              signifiers={signifiers}
-            />
+            <ErrorBoundary onError={errorHandlerEthStaticView}>
+              <EthStaticView
+                request={request}
+                injected={injected}
+                accounts={accounts}
+                signifiers={signifiers}
+              />
+            </ErrorBoundary>
+
           )
         }
         break
       case config.contractName: { // eslint-disable-line
         if (connected && accounts.length > 0) {
           return (
-            <EthContractParent
-              request={request}
-              injected={injected}
-              element={request.element}
-              signifiers={signifiers}
-            />
+            <ErrorBoundary onError={errorHandlerEthContractParent}>
+              <EthContractParent
+                request={request}
+                injected={injected}
+                element={request.element}
+                signifiers={signifiers}
+              />
+            </ErrorBoundary>
+
           )
         }
       }
@@ -60,11 +87,14 @@ export const EthParent: FunctionComponent<EthParentProps> = ({
       case 'enable': { // eslint-disable-line
         if (!connected) {
           return (
-            <EthEnable
-              request={request}
-              injected={injected}
-              accounts={accounts}
-            />
+            <ErrorBoundary onError={errorHandlerEthEnable}>
+              <EthEnable
+                request={request}
+                injected={injected}
+                accounts={accounts}
+              />
+            </ErrorBoundary>
+
           )
         }
         break

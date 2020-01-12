@@ -23,7 +23,7 @@ const myErrorHandler = (error: Error, componentStack: string) => {
 // This increments a key so each element out of reducer has unique Key so react doesn't complain.
 let reactKeyIndex = 0
 
-// NOTE: Each case that
+// NOTE: Each case should have it's own error boundary.
 export const reducer = (request: Request) => {
   switch (request.arg) {
   case 'eth': {
