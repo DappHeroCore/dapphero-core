@@ -32,6 +32,13 @@ const errorHandlerEthEnable = (error: Error, componentStack: string) => {
   console.log(`StackTrace: ${componentStack}`)
 }
 
+/**
+ * This functional component serves as a reducer for all the request strings which fall under the 
+ * module name "eth". For each request string which is filtered through EthParent, we render a component
+ * submodule that matches the request. In this way we create a subtree of react components designed to
+ * handle the requirements of each particular eth sub request module. 
+ * @param param
+ */
 export const EthParent: FunctionComponent<EthParentProps> = ({
   request,
   request: { requestString },
@@ -49,12 +56,17 @@ export const EthParent: FunctionComponent<EthParentProps> = ({
       switch (
         sanitizedRequestString[RequestString.ETH_PARENT_TYPE]
       ) {
-      case 'address': // TODO We shouldn't let this just fall through like this (I think)
-      case 'getBalance': // TODO we should be explicit about how this works
-      case 'getProvider': // TODO and maybe we should not need to hard code this but rather build a function which takes from database
+        /**
+         * The below stacked case's are designed so that an match on any of the following falls through
+         * to the default handler: EthStaticView
+         */
+      case 'address':
+      case 'getBalance':
+      case 'getProvider':
       case 'getNetworkName':
       case 'getNetworkId':
         if (connected && accounts.length > 0) {
+          // TODO: Here we will attach metrics to identify which was used. 
           return (
             <ErrorBoundary onError={errorHandlerEthStaticView}>
               <EthStaticView
