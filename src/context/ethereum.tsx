@@ -17,7 +17,7 @@ function EthereumContextProvider(props) {
   }
 
   const { children } = props
-  console.log('What is children? ', children)
+
   return (
     <EthereumContext.Provider value={initialContextValue}>
       {children}
