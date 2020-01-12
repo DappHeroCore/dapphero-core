@@ -1,9 +1,9 @@
 import React from 'react'
 import { EthereumContextProvider } from './context/ethereum'
 import { HTMLContextProvider, HTMLContextConsumer } from './context/html'
-import reducer from './modules/reducer'
+import { reducer } from './modules/reducer'
 
-const App: React.FC = () => (
+export const App: React.FC = () => (
   <EthereumContextProvider>
     <HTMLContextProvider>
       <HTMLContextConsumer>
@@ -12,5 +12,3 @@ const App: React.FC = () => (
     </HTMLContextProvider>
   </EthereumContextProvider>
 )
-
-export default App
