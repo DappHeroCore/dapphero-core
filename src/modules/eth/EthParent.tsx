@@ -33,10 +33,10 @@ const errorHandlerEthEnable = (error: Error, componentStack: string) => {
 }
 
 /**
- * This functional component serves as a reducer for all the request strings which fall under the 
+ * This functional component serves as a reducer for all the request strings which fall under the
  * module name "eth". For each request string which is filtered through EthParent, we render a component
  * submodule that matches the request. In this way we create a subtree of react components designed to
- * handle the requirements of each particular eth sub request module. 
+ * handle the requirements of each particular eth sub request module.
  * @param param
  */
 export const EthParent: FunctionComponent<EthParentProps> = ({
@@ -49,14 +49,18 @@ export const EthParent: FunctionComponent<EthParentProps> = ({
       // pull out signifiers from request string
       const signifiers = useSignifierParser(requestString)
       const signifierValues = Object.values(signifiers)
-
       const sanitizedRequestString = requestString.filter((rs) => !signifierValues.includes(rs.slice(1)))
       request.requestString = sanitizedRequestString
+      const isSanitizedContractRequestString = config.contracts
+        .map((contract) => contract.contractName)
+        .includes(sanitizedRequestString[RequestString.ETH_PARENT_TYPE])
+        ? sanitizedRequestString[RequestString.ETH_PARENT_TYPE]
+        : null
 
       switch (
         sanitizedRequestString[RequestString.ETH_PARENT_TYPE]
       ) {
-        /**
+      /**
          * The below stacked case's are designed so that an match on any of the following falls through
          * to the default handler: EthStaticView
          */
@@ -66,7 +70,7 @@ export const EthParent: FunctionComponent<EthParentProps> = ({
       case 'getNetworkName':
       case 'getNetworkId':
         if (connected && accounts.length > 0) {
-          // TODO: Here we will attach metrics to identify which was used. 
+          // TODO: Here we will attach metrics to identify which was used.
           return (
             <ErrorBoundary onError={errorHandlerEthStaticView}>
               <EthStaticView
@@ -80,8 +84,9 @@ export const EthParent: FunctionComponent<EthParentProps> = ({
           )
         }
         break
-      case config.contractName: { // eslint-disable-line
+      case isSanitizedContractRequestString: // Is set to the correct value IFF the name exists in the array of contract names
         if (connected && accounts.length > 0) {
+          const mock = config.contracts.filter((contract) => contract.contractName === requestString[2])[0]
           return (
             <ErrorBoundary onError={errorHandlerEthContractParent}>
               <EthContractParent
@@ -89,14 +94,13 @@ export const EthParent: FunctionComponent<EthParentProps> = ({
                 injected={injected}
                 element={request.element}
                 signifiers={signifiers}
+                mock={mock}
               />
             </ErrorBoundary>
-
           )
         }
-      }
         break
-      case 'enable': { // eslint-disable-line
+      case 'enable':
         if (!connected) {
           return (
             <ErrorBoundary onError={errorHandlerEthEnable}>
@@ -110,8 +114,6 @@ export const EthParent: FunctionComponent<EthParentProps> = ({
           )
         }
         break
-      }
-
       default:
         return null
       }

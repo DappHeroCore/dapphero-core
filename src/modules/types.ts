@@ -12,6 +12,7 @@ export interface Network {
 }
 
 export interface DappHeroConfig {
+  contracts: any[],
   contractName?: string,
   network?: Network;
 }
@@ -23,6 +24,10 @@ export type EthContractProps = {
   injected: { [key: string]: any };
   signifiers: { [key: string]: string };
   instance: any; // build this type
+  mock?: {
+    abi: any[],
+    contractAddress: string
+  }
 }
 
 export enum FunctionTypes {

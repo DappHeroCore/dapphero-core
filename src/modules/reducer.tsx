@@ -2,12 +2,15 @@ import React from 'react'
 import ErrorBoundary from 'react-error-boundary'
 import { Request, DappHeroConfig } from './types'
 import { EthParent } from './eth'
+import { mockConfig } from './eth/mocks/mockConfig'
 
 const getConfig = (): DappHeroConfig => {
+
   const configElement = document.getElementById('dh-config')
   // TODO Clean this data to prevent injections
-  const config: DappHeroConfig = JSON.parse(configElement.textContent)
+  // const config: DappHeroConfig = JSON.parse(configElement.textContent)
   // Hide the Element if not hidden.
+  const config = mockConfig
   if (configElement.style.display !== 'none') {
     configElement.style.display = 'none'
   }

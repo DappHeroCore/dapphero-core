@@ -19,19 +19,13 @@ export const EthEnable: FunctionComponent<EthEnableProps> = (props) => {
   }
 
   useEffect(() => {
-    const getData = async () => { // TODO: should this be called addListener instead? or make it anonymous
-      try {
-        const el = document.getElementById(request.element.id)
-        el.addEventListener('click', web3Enable, false)
-
-      } catch (e) {
-        console.log(e)
-      }
+    try {
+      const el = document.getElementById(request.element.id)
+      el.addEventListener('click', web3Enable, false)
+    } catch (e) {
+      console.log(e)
     }
-    getData()
   }, [ props ])
-
   return null
 }
 
-export default EthEnable
