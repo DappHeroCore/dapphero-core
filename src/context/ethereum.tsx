@@ -30,8 +30,8 @@ function EthereumContextConsumer(props) {
   return <EthereumContext.Consumer>{children}</EthereumContext.Consumer>
 }
 
-EthereumContextProvider.propTypes = { children: PropTypes.element.isRequired }
+// EthereumContextProvider.propTypes = { children: PropTypes.element.isRequired }
 
-EthereumContextConsumer.propTypes = { children: PropTypes.element.isRequired }
+// EthereumContextConsumer.propTypes = { children: PropTypes.symbol.isRequired }
 
 export { EthereumContextConsumer, EthereumContextProvider }
