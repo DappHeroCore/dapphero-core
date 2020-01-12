@@ -1,4 +1,5 @@
 import React, { useEffect, FunctionComponent } from 'react' //eslint-disable-line
+import ErrorBoundary from 'react-error-boundary'
 import { EthContractProps, FunctionTypes, Signifiers } from '../types'
 import { EthContractViewStatic } from './EthContractViewStatic'
 import { EthContractViewArgs } from './EthContractViewArgs'
@@ -12,6 +13,25 @@ type EthContractParentProps = Pick<
   EthContractProps,
   Exclude<keyof EthContractProps, 'method' | 'instance'>
 >;
+
+const errorEthContractViewStatic = (error: Error, componentStack: string) => {
+  // Do something with the error
+  // E.g. log to an error logging client here
+  console.log(`Error: ${error}`)
+  console.log(`StackTrace: ${componentStack}`)
+}
+const errorEthContractViewArgs = (error: Error, componentStack: string) => {
+  // Do something with the error
+  // E.g. log to an error logging client here
+  console.log(`Error: ${error}`)
+  console.log(`StackTrace: ${componentStack}`)
+}
+const errorEthContractSendTx = (error: Error, componentStack: string) => {
+  // Do something with the error
+  // E.g. log to an error logging client here
+  console.log(`Error: ${error}`)
+  console.log(`StackTrace: ${componentStack}`)
+}
 
 export const EthContractParent: FunctionComponent<EthContractParentProps> = ({
   request,
@@ -31,7 +51,7 @@ export const EthContractParent: FunctionComponent<EthContractParentProps> = ({
     try {
       // TODO: Set up method for differentiating between functions
       // with same name and different number of args
-      const func = methods.filter((m) => m.name === method)[0]
+      const func = methods.filter((m) => m.name === method)[0] // TODO: be explicit about this Zero.
       // TODO: figure out best way to listen to events
       // do we even need this outside of the current tx flow
       /* if (eventTrigger.length) { // component is an event listener
@@ -55,38 +75,47 @@ export const EthContractParent: FunctionComponent<EthContractParentProps> = ({
           // no args
 
           return (
-            <EthContractViewStatic
+            <ErrorBoundary onError={errorEthContractViewStatic}>
+              <EthContractViewStatic
+                instance={instance}
+                method={func}
+                element={element}
+                injected={injected}
+                signifiers={signifiers}
+              />
+            </ErrorBoundary>
+
+          )
+        }
+        return (
+          <ErrorBoundary onError={errorEthContractViewArgs}>
+            <EthContractViewArgs
               instance={instance}
               method={func}
+              request={request}
               element={element}
               injected={injected}
               signifiers={signifiers}
             />
-          )
-        }
-        return (
-          <EthContractViewArgs
-            instance={instance}
-            method={func}
-            request={request}
-            element={element}
-            injected={injected}
-            signifiers={signifiers}
-          />
+          </ErrorBoundary>
+
         )
       }
 
       case FunctionTypes.PAYABLE:
       case FunctionTypes.NONPAYABLE: {
         return (
-          <EthContractSendTx
-            method={func}
-            element={element}
-            request={request}
-            injected={injected}
-            instance={instance}
-            signifiers={signifiers}
-          />
+          <ErrorBoundary onError={errorEthContractSendTx}>
+            <EthContractSendTx
+              method={func}
+              element={element}
+              request={request}
+              injected={injected}
+              instance={instance}
+              signifiers={signifiers}
+            />
+          </ErrorBoundary>
+
         )
       }
 
