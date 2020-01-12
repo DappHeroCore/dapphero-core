@@ -47,7 +47,7 @@ export const EthContractParent: FunctionComponent<EthContractParentProps> = ({
     injected.lib
   )
 
-  console.log("What are the signifiers: ", signifiers)
+  console.log('What are the signifiers: ', signifiers)
   if (instance && methods) {
     try {
       // TODO: Set up method for differentiating between functions
