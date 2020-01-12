@@ -1,18 +1,19 @@
-import React, { useEffect, useState, FunctionComponent, useMemo } from 'react' //eslint-disable-line
-import $ from 'jquery'
+import React, { useEffect, useState, FunctionComponent, useMemo } from 'react'; //eslint-disable-line
 import { EthContractProps, FunctionTypes } from '../types'
 import {
-  getTxFieldInputs,
-  sendTransactionToContract,
   getTriggerElement,
-  getUserLoadedElements
+  getUserLoadedElements,
+  addClickHandlerToTriggerElement,
+  sendTransactionWrapper,
+  getUserCustomTxStateNotification
 } from './utils'
 import { HTMLContextConsumer } from '../../context/html'
 
+// TODO: This should be explicit and clarified. 
 type EthContractSendTxProps = EthContractProps & {
-  // any more?
+  // TODO: any more?
 };
-// 0x885583955F14970CbC0046B91297e9915f4DE6E4 //test addr
+
 export const EthContractSendTx: FunctionComponent<EthContractSendTxProps> = ({
   instance,
   method,
@@ -31,109 +32,57 @@ export const EthContractSendTx: FunctionComponent<EthContractSendTxProps> = ({
 
   const position = request.requestString.indexOf(method.name)
 
-  const originalDomElement = element
+  const { txProcessingElement, txConfirmedElement } = getUserLoadedElements()
 
-  const elId = 'replace' // button => processing element => confirmed element => button
-
+  // In cases where a user has their own custom elements that they would like to show when
+  // executing a transaction, this function will automatically find those custom elements
+  // and toggle their visiblity based on the state of a transaction.
+  // Note that this useEffect() will run when the values of txState change.
   useEffect(() => {
-    const { txProcessingElement, txConfirmedElement } = getUserLoadedElements()
-
-    const updateState = () => {
-      const { transactionHash, receipt } = txState
-
-      // tx sent
-      if (transactionHash && !receipt) {
-        const el = document.getElementById(element.id) // send button
-
-        if (txProcessingElement) {
-          // user-loaded element
-          const txProcessingEl = txProcessingElement.cloneNode(true) as HTMLElement
-          txProcessingEl.style.display = 'block'
-          txProcessingEl.id = elId
-          el.parentNode.replaceChild(txProcessingEl, el)
-        } else {
-          if (el) {
-            $(el.id).prop('disabled', true)
-            el.id = elId
-            el.innerText = 'Processing...'
-          }
-        }
-      }
-
-      // tx confirmed
-      if (transactionHash && receipt) {
-        const el = document.getElementById(elId)
-
-        let txConfirmedEl
-        if (txConfirmedElement && el) {
-          txConfirmedEl = txConfirmedElement.cloneNode(true);
-          (txConfirmedEl as HTMLElement).style.display = 'block'
-          txConfirmedEl.id = elId
-          el.parentElement.replaceChild(txConfirmedEl, el)
-        } else if (el) {
-          el.innerText = 'Confirmed!'
-        }
-
-        const replaceEl = document.getElementById(elId)
-
-        setTimeout(() => {
-          const newOriginal = originalDomElement.cloneNode(true)
-          replaceEl.replaceWith(newOriginal)
-          setTxState(defaultState)
-        }, 5000) // add this to constants file
-      }
-    }
-    updateState()
-  }, [ defaultState ])
+    getUserCustomTxStateNotification(
+      txState,
+      setTxState,
+      defaultState,
+      txProcessingElement,
+      txConfirmedElement,
+      element
+    )
+  }, [ txState ])
 
   return (
     <HTMLContextConsumer>
       {({ requests }) => {
         const { signature } = method
 
-        const onClick = async () => {
-          const { inputFields, txArgArray, valueArg } = getTxFieldInputs(
+        // This function will initiate a transaction and subsequently clear any
+        // input field values.
+        // TODO: The action of clearing input field values should be seperated from
+        // sending a transaction.
+        const sendTransaction = () => {
+          sendTransactionWrapper(
             requests,
             position,
-            method.name,
-            method
-          )
-          console.log('inputfields', inputFields)
-          console.log('txArgArray', txArgArray)
-          console.log('valueArg', valueArg)
-
-          await sendTransactionToContract(
-            injected.lib,
+            method,
+            injected,
             instance,
             signature,
-            txArgArray,
-            injected.accounts,
             setTxState,
-            method,
-            signifiers.payable || valueArg
+            signifiers
           )
-          // TODO: Best way to clean input fields?
-          // Timeout set because function needs to pull value first
-          setTimeout(() => {
-            inputFields.forEach((module) => {
-              document.getElementById(module.element.id).value = null
-            })
-            return null
-          }, 10000) // TODO: clean when tx confirms
         }
 
+        // Find the user defined element which will serve as a trigger for an action
+        // IE: a button that will initiate a transaction to the blockchain.
         const triggerElement = getTriggerElement(
           requests,
           method.name,
           position
         )
 
-        if (triggerElement) {
-          const triggerClone = triggerElement.cloneNode(true)
-          // TODO: clone element to remove all prev event listeners. is there a better way?
-          triggerElement.parentNode.replaceChild(triggerClone, triggerElement)
-          triggerClone.addEventListener('click', onClick)
-        }
+        // This function adds a click handler to the trigger element from above.
+        // This allows us to add interactivity to elements that a user identifies as
+        // a trigger element.
+        addClickHandlerToTriggerElement(triggerElement, sendTransaction)
 
         return null
       }}
