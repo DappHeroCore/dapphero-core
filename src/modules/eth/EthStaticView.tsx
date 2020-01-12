@@ -45,9 +45,9 @@ export const EthStaticView: FunctionComponent<EthStaticViewProps> = (props) => {
         console.log(e)
       }
     }
-    const thisPoll = setInterval(getData, 2000)
-
-    const stopPolling = (thisPoll) => {
+    const thisPoll = setInterval(getData, 4000)
+    // TODO: Polling shoudl be set by a configuration tool
+    const stopPolling = () => {
       clearInterval(thisPoll)
     }
     return stopPolling
