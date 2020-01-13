@@ -1,8 +1,9 @@
 import React, { FunctionComponent } from 'react'
 import ErrorBoundary from 'react-error-boundary'
-import { Request, DappHeroConfig, RequestString } from '../types'
+import { Request, DappHeroConfig, RequestString, ModuleTypes } from '../types'
 import { EthStaticView } from './EthStaticView'
 import { EthContractParent } from './EthContractParent'
+import { ThreeBoxParent } from '../3-box/ThreeBoxParent'
 import { EthereumContextConsumer } from '../../context/ethereum'
 import { EthEnable } from './EthEnable'
 import { useSignifierParser } from './utils'
@@ -26,6 +27,12 @@ const errorHandlerEthContractParent = (error: Error, componentStack: string) => 
   console.log(`StackTrace: ${componentStack}`)
 }
 const errorHandlerEthEnable = (error: Error, componentStack: string) => {
+  // Do something with the error
+  // E.g. log to an error logging client here
+  console.log(`Error: ${error}`)
+  console.log(`StackTrace: ${componentStack}`)
+}
+const errorHandlerThreeBox = (error: Error, componentStack: string) => {
   // Do something with the error
   // E.g. log to an error logging client here
   console.log(`Error: ${error}`)
@@ -65,11 +72,11 @@ export const EthParent: FunctionComponent<EthParentProps> = ({
          * The below stacked case's are designed so that an match on any of the following falls through
          * to the default handler: EthStaticView
          */
-      case 'address':
-      case 'getBalance':
-      case 'getProvider':
-      case 'getNetworkName':
-      case 'getNetworkId':
+      case ModuleTypes.ADDRESS:
+      case ModuleTypes.GET_BALANCE:
+      case ModuleTypes.GET_PROVIDER:
+      case ModuleTypes.GET_NETWORK_NAME:
+      case ModuleTypes.GET_NETWORK_ID:
         if (connected && accounts.length > 0) {
           // TODO: Here we will attach metrics to identify which was used.
           return (
@@ -101,7 +108,7 @@ export const EthParent: FunctionComponent<EthParentProps> = ({
           )
         }
         break
-      case 'enable':
+      case ModuleTypes.ENABLE:
         if (!connected) {
           return (
             <ErrorBoundary onError={errorHandlerEthEnable}>
@@ -109,6 +116,17 @@ export const EthParent: FunctionComponent<EthParentProps> = ({
                 request={request}
                 injected={injected}
                 accounts={accounts}
+              />
+            </ErrorBoundary>
+          )
+        }
+        break
+      case ModuleTypes.THREE_BOX:
+        if (connected && accounts.length) {
+          return (
+            <ErrorBoundary onError={errorHandlerThreeBox}>
+              <ThreeBoxParent
+                account={accounts[0]}
               />
             </ErrorBoundary>
           )

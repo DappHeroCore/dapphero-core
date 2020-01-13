@@ -1,16 +1,23 @@
-import React, { Component } from 'react'
+import React, { FunctionComponent, useEffect, useState } from 'react'
+import Box from '3box'
 
-export class ThreeBoxParent extends Component {
-  state = {
-    state1: 1,
-    state2: 3,
-  }
-
-  render() {
-    return (
-      <div>
-        Some Text
-      </div>
-    )
-  }
+interface ThreeBoxParentProps {
+  account: string;
 }
+
+export const ThreeBoxParent: FunctionComponent<ThreeBoxParentProps> = ({ account }) => {
+  const [ userProfile, setUserProfile ] = useState()
+
+  useEffect(() => {
+    const getProfile = async () => {
+      console.log('account', account)
+      const profile = await Box.getProfile(account)
+      console.log('profile', profile)
+      setUserProfile(profile)
+    }
+    getProfile()
+  }, [ account ])
+
+  return null
+}
+

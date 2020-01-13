@@ -49,3 +49,14 @@ export enum RequestString {
   ETH_CONTRACT_FUNCTION = 3,
   ETH_CONTRACT_ARGS = 4
 }
+
+// user-loaded contracts are identified separately in EthParent
+export enum ModuleTypes {
+  ADDRESS = 'address',
+  GET_BALANCE = 'getBalance',
+  GET_PROVIDER = 'getProvider',
+  GET_NETWORK_NAME = 'getNetworkName',
+  GET_NETWORK_ID = 'getNetworkId',
+  ENABLE = 'enable',
+  THREE_BOX = '3box' // key can't start with num
+}

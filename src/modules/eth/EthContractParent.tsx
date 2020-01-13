@@ -10,7 +10,9 @@ import { getBaseContractData } from './utils'
 type EthContractParentProps = Pick<
   EthContractProps,
   Exclude<keyof EthContractProps, 'method' | 'instance'>
->;
+> & {
+  mock: any;
+};
 
 const errorEthContractViewStatic = (error: Error, componentStack: string) => {
   // Do something with the error
