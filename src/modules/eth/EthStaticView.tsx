@@ -1,6 +1,6 @@
-import React, { useEffect, FunctionComponent, Fragment } from 'react'
-import { Request, RequestString, Signifiers } from '../types'
-import { getBalance, currentProvider } from '../../api/ethereum'
+import React, { useEffect, FunctionComponent } from 'react'
+import { Request, RequestString } from '../types'
+import { getBalance } from '../../api/ethereum'
 import { useUnitFormatter, useDecimalFormatter } from './utils'
 
 interface EthStaticViewProps {
@@ -55,5 +55,3 @@ export const EthStaticView: FunctionComponent<EthStaticViewProps> = (props) => {
 
   return null
 }
-
-export default EthStaticView

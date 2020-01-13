@@ -1,10 +1,9 @@
 import React, { useEffect, FunctionComponent } from 'react' //eslint-disable-line
 import ErrorBoundary from 'react-error-boundary'
-import { EthContractProps, FunctionTypes, Signifiers } from '../types'
+import { EthContractProps, FunctionTypes } from '../types'
 import { EthContractViewStatic } from './EthContractViewStatic'
 import { EthContractViewArgs } from './EthContractViewArgs'
 import { EthContractSendTx } from './EthContractSendTx'
-import { EthContractEvent } from './EthContractEvent'
 
 import { getBaseContractData } from './utils'
 
@@ -129,4 +128,3 @@ export const EthContractParent: FunctionComponent<EthContractParentProps> = ({
   return null
 }
 
-export default EthContractParent

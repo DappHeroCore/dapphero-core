@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState, Fragment } from 'react'
+import React, { FunctionComponent } from 'react'
 import ErrorBoundary from 'react-error-boundary'
 import { Request, DappHeroConfig, RequestString } from '../types'
 import { EthStaticView } from './EthStaticView'
@@ -51,6 +51,7 @@ export const EthParent: FunctionComponent<EthParentProps> = ({
       const signifierValues = Object.values(signifiers)
       const sanitizedRequestString = requestString.filter((rs) => !signifierValues.includes(rs.slice(1)))
       request.requestString = sanitizedRequestString
+
       const isSanitizedContractRequestString = config.contracts
         .map((contract) => contract.contractName)
         .includes(sanitizedRequestString[RequestString.ETH_PARENT_TYPE])
@@ -110,7 +111,6 @@ export const EthParent: FunctionComponent<EthParentProps> = ({
                 accounts={accounts}
               />
             </ErrorBoundary>
-
           )
         }
         break
