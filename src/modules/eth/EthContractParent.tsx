@@ -1,13 +1,11 @@
 import React, { useEffect, FunctionComponent } from 'react' //eslint-disable-line
 import ErrorBoundary from 'react-error-boundary'
-import { EthContractProps, FunctionTypes, Signifiers } from '../types'
+import { EthContractProps, FunctionTypes } from '../types'
 import { EthContractViewStatic } from './EthContractViewStatic'
 import { EthContractViewArgs } from './EthContractViewArgs'
 import { EthContractSendTx } from './EthContractSendTx'
-import { EthContractEvent } from './EthContractEvent'
 
 import { getBaseContractData } from './utils'
-import { abi, contractAddress } from './mocks/mockConfig'
 
 type EthContractParentProps = Pick<
   EthContractProps,
@@ -38,7 +36,8 @@ export const EthContractParent: FunctionComponent<EthContractParentProps> = ({
   request: { requestString },
   injected,
   element,
-  signifiers
+  signifiers,
+  mock: { abi, contractAddress }
 }: EthContractParentProps) => {
   const { method, instance, methods } = getBaseContractData(
     requestString,
@@ -46,8 +45,7 @@ export const EthContractParent: FunctionComponent<EthContractParentProps> = ({
     contractAddress,
     injected.lib
   )
-
-  console.log('What are the signifiers: ', signifiers)
+  // console.log('What are the signifiers: ', signifiers)
   if (instance && methods) {
     try {
       // TODO: Set up method for differentiating between functions
@@ -66,15 +64,13 @@ export const EthContractParent: FunctionComponent<EthContractParentProps> = ({
           />
         )
       } */
-
       if (!func) return null // unsupported method or module
-
+      console.log('func.stateMutability', func.stateMutability)
       switch (func.stateMutability) {
       case FunctionTypes.VIEW: {
         // "view" func
         if (!func.inputs.length) {
           // no args
-
           return (
             <ErrorBoundary onError={errorEthContractViewStatic}>
               <EthContractViewStatic
@@ -132,4 +128,3 @@ export const EthContractParent: FunctionComponent<EthContractParentProps> = ({
   return null
 }
 
-export default EthContractParent

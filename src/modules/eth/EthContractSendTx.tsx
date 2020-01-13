@@ -1,5 +1,5 @@
-import React, { useEffect, useState, FunctionComponent, useMemo } from 'react'; //eslint-disable-line
-import { EthContractProps, FunctionTypes } from '../types'
+import React, { useEffect, useState, FunctionComponent } from 'react'; //eslint-disable-line
+import { EthContractProps } from '../types'
 import {
   getTriggerElement,
   getUserLoadedElements,
@@ -9,7 +9,7 @@ import {
 } from './utils'
 import { HTMLContextConsumer } from '../../context/html'
 
-// TODO: This should be explicit and clarified. 
+// TODO: This should be explicit and clarified.
 type EthContractSendTxProps = EthContractProps & {
   // TODO: any more?
 };
@@ -29,9 +29,7 @@ export const EthContractSendTx: FunctionComponent<EthContractSendTxProps> = ({
     error: null
   }
   const [ txState, setTxState ] = useState(defaultState)
-
   const position = request.requestString.indexOf(method.name)
-
   const { txProcessingElement, txConfirmedElement } = getUserLoadedElements()
 
   // In cases where a user has their own custom elements that they would like to show when

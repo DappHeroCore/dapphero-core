@@ -1,4 +1,0 @@
-diff a/src/modules/eth/EthContractSendTx.tsx b/src/modules/eth/EthContractSendTx.tsx	(rejected hunks)
-@@ -12,2 +11,0 @@ import { HTMLContextConsumer } from '../../context/html'
--
--
