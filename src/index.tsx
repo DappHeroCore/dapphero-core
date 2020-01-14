@@ -4,9 +4,14 @@ import './index.css'
 import { App } from './App'
 import * as serviceWorker from './serviceWorker'
 
-// Mocks
-const dappHeroRoot = 'dh-root' // This should eventually be loaded somehow from a config file.
-ReactDOM.render(<App />, document.getElementById(dappHeroRoot))
+// The root here could eventually be random.
+const dappHeroRootIdTag = 'dh-root' // This should eventually be loaded somehow from a config file.
+
+const root = document.createElement('DIV')
+root.id = dappHeroRootIdTag
+document.body.appendChild(root)
+
+ReactDOM.render(<App />, root)
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
