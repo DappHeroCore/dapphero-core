@@ -41,7 +41,8 @@ export enum Signifiers {
   // EVENT_TRIGGER = '#', // TODO: revisit
   UNIT ='%',
   DECIMAL = '>',
-  PAYABLE = '$'
+  PAYABLE = '$',
+  CHILD_ELEMENT = '~'
 }
 
 export enum RequestString {

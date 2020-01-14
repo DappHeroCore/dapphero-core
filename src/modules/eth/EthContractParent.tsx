@@ -51,21 +51,8 @@ export const EthContractParent: FunctionComponent<EthContractParentProps> = ({
       // TODO: Set up method for differentiating between functions
       // with same name and different number of args
       const func = methods.filter((m) => m.name === method)[0] // TODO: be explicit about this Zero.
-      // TODO: figure out best way to listen to events
-      // do we even need this outside of the current tx flow
-      /* if (eventTrigger.length) { // component is an event listener
-        return (
-          <EthContractEvent
-            instance={instance}
-            injected={injected}
-            method={func}
-            element={element}
-            request={request}
-          />
-        )
-      } */
       if (!func) return null // unsupported method or module
-      console.log('func.stateMutability', func.stateMutability)
+
       switch (func.stateMutability) {
       case FunctionTypes.VIEW: {
         // "view" func
