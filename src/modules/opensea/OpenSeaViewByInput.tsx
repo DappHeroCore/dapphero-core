@@ -1,6 +1,10 @@
 import React, { FunctionComponent, useEffect, useState } from 'react'
 import { openSeaApi } from './api'
-import { OpenSeaRequestString, OpenSeaViewProps } from './types'
+import {
+  OpenSeaRequestString,
+  OpenSeaViewProps,
+  OpenSeaFallbacks
+} from './types'
 import { useDecimalFormatter, useUnitFormatter } from '../eth/utils'
 import { getReturnValue } from './util'
 
@@ -25,7 +29,7 @@ export const OpenSeaViewByInput: FunctionComponent<OpenSeaViewProps> = ({
     setTimer(null)
     setSearchValue((e.target as any).value)
 
-      const timeout = setTimeout(renderElements, SEARCH_INTERVAL) //eslint-disable-line
+    const timeout = setTimeout(renderElements, SEARCH_INTERVAL); //eslint-disable-line
     setTimer(timeout)
   }
 
@@ -59,9 +63,15 @@ export const OpenSeaViewByInput: FunctionComponent<OpenSeaViewProps> = ({
           unitFormatted,
           signifiers.decimals
         )
-        el.tagName === 'IMG'
-          ? (node.src = decimalFormatted)
-          : (node.innerText = decimalFormatted)
+
+        if (el.tagName === 'IMG') {
+          decimalFormatted
+            ? (node.src = decimalFormatted)
+            : node.src = OpenSeaFallbacks.GIF
+        } else {
+          node.innerText = decimalFormatted
+        }
+
         el.style.display = 'block'
 
         itemParent.appendChild(node)

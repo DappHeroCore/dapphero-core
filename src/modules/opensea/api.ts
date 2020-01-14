@@ -13,7 +13,7 @@ export const openSeaApi = async (
   func: string,
   args: string[]
 ) => {
-  const seaport = new OpenSeaPort(provider, { networkName: Network.Rinkeby })
+  const seaport = new OpenSeaPort(provider, { networkName: provider.networkVersion === 1 ? Network.Main : Network.Rinkeby })
 
   switch (func) {
   case OpenSeaFunctions.RETRIEVE_ASSET: {

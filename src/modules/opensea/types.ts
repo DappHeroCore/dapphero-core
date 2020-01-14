@@ -20,3 +20,7 @@ export type OpenSeaViewProps = {
   injected: { [key: string]: any };
   element: HTMLElement;
 }
+
+export enum OpenSeaFallbacks {
+  GIF = 'https://media.giphy.com/media/26xBIygOcC3bAWg3S/giphy.gif'
+}

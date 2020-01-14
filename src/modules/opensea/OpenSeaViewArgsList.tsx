@@ -1,6 +1,10 @@
 import React, { FunctionComponent, useEffect, useState } from 'react'
 import { openSeaApi } from './api'
-import { OpenSeaRequestString, OpenSeaViewProps } from './types'
+import {
+  OpenSeaRequestString,
+  OpenSeaViewProps,
+  OpenSeaFallbacks
+} from './types'
 import { useDecimalFormatter, useUnitFormatter } from '../eth/utils'
 import { getReturnValue } from './util'
 
@@ -56,13 +60,16 @@ export const OpenSeaViewArgsList: FunctionComponent<OpenSeaViewProps> = ({
             unitFormatted,
             signifiers.decimals
           )
-
           // TODO: CORS error intermittently?
           // Some imgs may no longer have valid urls as well
           // We should add a fallback img option
-          el.tagName === 'IMG'
-            ? (node.src = decimalFormatted)
-            : (node.innerText = decimalFormatted)
+          if (el.tagName === 'IMG') {
+            decimalFormatted
+              ? (node.src = decimalFormatted)
+              : node.src = OpenSeaFallbacks.GIF
+          } else {
+            node.innerText = decimalFormatted
+          }
 
           itemParent.appendChild(node)
         })
