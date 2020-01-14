@@ -80,7 +80,8 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js"
+    "test": "node scripts/test.js",
+    "deploy": "aws s3 cp ./build/static/js/main.6a1a3428.js s3://internal-dev-dapphero/ --acl public-read"
   },
   "eslintConfig": {
     "extends": "react-app"
