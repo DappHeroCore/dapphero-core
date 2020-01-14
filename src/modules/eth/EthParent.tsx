@@ -3,6 +3,7 @@ import ErrorBoundary from 'react-error-boundary'
 import { Request, DappHeroConfig, RequestString } from '../types'
 import { EthStaticView } from './EthStaticView'
 import { EthContractParent } from './EthContractParent'
+import { OpenSeaParent } from '../opensea/OpenSeaParent'
 import { EthereumContextConsumer } from '../../context/ethereum'
 import { EthEnable } from './EthEnable'
 import { useSignifierParser } from './utils'
@@ -114,6 +115,20 @@ export const EthParent: FunctionComponent<EthParentProps> = ({
           )
         }
         break
+
+      case 'opensea':
+        if(connected && accounts.length){
+          return (
+            <ErrorBoundary>
+              <OpenSeaParent 
+                request={request}
+                injected={injected}
+                signifiers={signifiers}
+                element={request.element}
+              />
+            </ErrorBoundary>
+          )
+        }  
       default:
         return null
       }
