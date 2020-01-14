@@ -60,7 +60,7 @@
       <button id="dh-eth-enable">Enable MetaMask</button>
     </div>
 
-    <h4>Web3 ERC20 Contract</h4>
+    <!-- <h4>Web3 ERC20 Contract</h4>
 
     <div>Public Methods</div>
     <div>
@@ -86,9 +86,9 @@
     <div>
       Contract: decimals:
       <div id="dh-eth-erc20-decimals">here goes data</div>
-    </div>
+    </div> -->
 
-    <h4>Web3: Non-ERC20 Contract edge cases</h4>
+    <!-- <h4>Web3: Non-ERC20 Contract edge cases</h4>
 
     <div>
       Contract: dappHeroTest: mult return
@@ -130,8 +130,8 @@
           <button id="dh-eth-erc20-transfer">transfer!</button>
         </div>
       </div>
-    </div>
-
+    </div> -->
+<!-- 
     <h4>Contract: Tx Testing</h4>
 
     <div>
@@ -145,12 +145,9 @@
           Trigger: submit triggerEvent
           <button id="dh-eth-dappHeroTest-triggerEvent">triggerEvent!</button>
         </div>
-        <!-- <div id="dh-eth-dappHeroTest-#EventTrigger"> -->
-          <!-- No TX: (start value) -->
-        <!-- </div> -->
       </div>
-    </div>
-
+    </div> -->
+<!-- 
     <div>
       <div>Send eth no args sendEthNoArgs() fixed payable (no user input)</div>
       <div>
@@ -159,9 +156,9 @@
           <button id="dh-eth-dappHeroTest-sendEthNoArgs-$0.01">send eth</button>
         </div>
       </div>
-    </div>
+    </div> -->
 
-    <div>
+    <!-- <div>
       <div>Send eth with args sendEthWithArgs() fixed payable</div>
       <div>
         <div>
@@ -173,8 +170,8 @@
           <button id="dh-eth-dappHeroTest-sendEthWithArgs-$0.01">send eth</button>
         </div>
       </div>
-    </div>
-
+    </div> -->
+<!-- 
     <div>
       <div>Send eth no args sendVariableEthNoArgs() variable payable</div>
       <div>
@@ -185,9 +182,9 @@
           <button id="dh-eth-dappHeroTest-sendVariableEthNoArgs">send eth</button>
         </div>
       </div>
-    </div>
+    </div> -->
 
-    <div>
+    <!-- <div>
       <div>Send eth with args sendVariableEthWithArgs() variable payable</div>
       <div>
         <div>
@@ -201,24 +198,78 @@
           <button id="dh-eth-dappHeroTest-sendVariableEthWithArgs">send eth</button>
         </div>
       </div>
-    </div>
+    </div> -->
 
-
+    <!-- Example calls are from Rinkeby -->
     <h4>OpenSea</h4>
 
-    <div>
+    <!-- <div>
       Grab an asset from OpenSea
       <div id="dh-eth-opensea-retrieveAsset-0x9f8052dc99582d00a8d7b339cab52fb5409502fb-4242442-*owner.address"></div>
-                                            <!-- contract-tokenId (rinkeby) -->
-    </div>
+    </div> -->
 
     <div>
       Grab assets by owner
       <div id="dh-eth-opensea-retrieveAssetsByOwner-0x8e966e75dab5fa5a22ea3ff1f6032851cb22c30d-~opensearetrieve">
         <div id="opensearetrieve-*tokenId">tokenId</div>
         <div id="opensearetrieve-*assetContract.name">asset contract name</div>
+        <img id="opensearetrieve-*imageUrlThumbnail" src=""/>
+        <div id="opensearetrieve-item" style="border: 1px solid green; width: 200px; margin: 10px; display: none;"/>
+
       </div>
     </div>
+
+    <!-- <div>
+      Grab assets by asset contract address
+      <div id="dh-eth-opensea-retrieveAssetsByContract-0x9f8052dc99582d00a8d7b339cab52fb5409502fb-~oscontract">
+        <div id="oscontract-*owner.address">asset owner</div>
+        <div id="oscontract-*description">asset description</div>
+      </div>
+    </div> -->
+
+    <!-- <div>
+      Grab assets by preloaded search
+      <div id="dh-eth-opensea-retrieveAssetsBySearch-doge-~osdoge">
+        <div id="osdoge-*name">asset name</div>
+        <img id="osdoge-*imageUrl" />
+      </div>
+    </div> -->
+
+    <!-- <div>
+      Grab assets by user search
+      <input id="dh-eth-opensea-retrieveAssetsBySearchInput-~usergensearch" />
+      <div id="usergensearch-parent">
+         <div id="usergensearch-item" style="border: 1px dashed orange; width: 250px; margin: 12px; display: none"/>
+          <div id="usergensearch-*owner.address">
+              asset owner
+          </div>
+          <div id="usergensearch-*name">
+              name
+          </div>
+          <img id="usergensearch-*imageUrl" />
+      </div>
+    </div> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     <div id="dh-eth-dappHeroTest-^triggerEvent">
       <!-- ^ caret: element hidden until function called -->

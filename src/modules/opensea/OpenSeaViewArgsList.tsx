@@ -1,7 +1,8 @@
-import React, { FunctionComponent, useEffect, useState } from 'react';
-import { openSeaApi } from './api';
-import { OpenSeaRequestString, OpenSeaViewProps } from './types';
-import { getReturnValue } from './util';
+import React, { FunctionComponent, useEffect, useState } from 'react'
+import { openSeaApi } from './api'
+import { OpenSeaRequestString, OpenSeaViewProps } from './types'
+import { useDecimalFormatter, useUnitFormatter } from '../eth/utils'
+import { getReturnValue } from './util'
 
 export const OpenSeaViewArgsList: FunctionComponent<OpenSeaViewProps> = ({
   requestString,
@@ -9,40 +10,69 @@ export const OpenSeaViewArgsList: FunctionComponent<OpenSeaViewProps> = ({
   func,
   provider,
   signifiers,
-  element
+  signifiers: { childElement },
+  element,
+  injected
 }) => {
-  const [list, setList] = useState([]);
-  console.log('signifiers', signifiers);
-
+  // refactor
   useEffect(() => {
     const queryOpenSea = async () => {
-      const args = requestString.slice(OpenSeaRequestString.ARGUMENTS);
-      const resultObj = await openSeaApi(provider, func, args);
-      const assets = (resultObj as any).assets;
-      setList((resultObj as any).assets);
+      const args = requestString.slice(OpenSeaRequestString.ARGUMENTS)
+      const resultObj = await openSeaApi(provider, func, args)
 
-      // TODO: add format and decimals
+      if (!resultObj) return
+      const { assets } = resultObj as any
 
-      const elements = Array.prototype.slice.call(
-        document.querySelectorAll(`[id^=${signifiers.childElement}]`)
-      );
+      let itemTag
+      // Pull out item-parent tag if it exists
+      // users may want to define list item parent
+      const elements = Array.prototype.slice
+        .call(document.querySelectorAll(`[id^=${childElement}]`))
+        .filter((el) => {
+          if (el.id === `${childElement}-item`) {
+            itemTag = el
+            return false
+          }
+          return true
+        })
 
       assets.forEach((item, i) => {
-        const parent = document.createElement('div');
+        let itemParent = itemTag || document.createElement('div')
+        itemParent = itemParent.cloneNode(true)
+        itemParent.style.display = 'block'
+
         elements.forEach((el, i) => {
-          const node = el.cloneNode(true);
-          const copyPath = el.id.split('-')[1].slice(1);
-          const retVal = getReturnValue(item, copyPath);
-          node.innerText = retVal;
-          parent.appendChild(node);
-        });
-        element.appendChild(parent);
-      });
+          const node = el.cloneNode(true)
+          const copyPath = el.id.split('-')[1].slice(1)
 
-      elements.forEach(el => (el.style.display = 'none'));
-    };
-    queryOpenSea();
-  }, [requestString, networkName]);
+          const retVal = getReturnValue(item, copyPath)
+          // TODO: factor out format flow for use everywhere
+          const unitFormatted = useUnitFormatter(
+            injected.lib,
+            retVal,
+            signifiers.unit
+          )
+          const decimalFormatted = useDecimalFormatter(
+            unitFormatted,
+            signifiers.decimals
+          )
 
-  return null;
-};
+          // TODO: CORS error intermittently?
+          // Some imgs may no longer have valid urls as well
+          // We should add a fallback img option
+          el.tagName === 'IMG'
+            ? (node.src = decimalFormatted)
+            : (node.innerText = decimalFormatted)
+
+          itemParent.appendChild(node)
+        })
+        element.appendChild(itemParent)
+      })
+
+      elements.forEach((el) => (el.style.display = 'none'))
+    }
+    queryOpenSea()
+  }, [ requestString, networkName ])
+
+  return null
+}

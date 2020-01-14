@@ -1,7 +1,9 @@
 export enum OpenSeaFunctions {
   RETRIEVE_ASSET = 'retrieveAsset',
   RETRIEVE_ASSETS_BY_OWNER = 'retrieveAssetsByOwner',
-
+  RETRIEVE_ASSETS_BY_CONTRACT = 'retrieveAssetsByContract',
+  RETRIEVE_ASSETS_BY_SEARCH = 'retrieveAssetsBySearch',
+  RETRIEVE_ASSETS_BY_SEARCH_INPUT = 'retrieveAssetsBySearchInput'
 }
 
 export enum OpenSeaRequestString {
@@ -15,5 +17,6 @@ export type OpenSeaViewProps = {
   provider: any;
   func: string;
   signifiers: { [key: string]: any };
+  injected: { [key: string]: any };
   element: HTMLElement;
 }
