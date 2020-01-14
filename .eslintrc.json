@@ -177,6 +177,7 @@
         "radix": "off", // This is overkill
         "react/state-in-constructor": ["warn", "never"],
         "react/jsx-filename-extension": [1, { "extensions": [".tsx", ".jsx"] }],
+        "react/prop-types": "off",
         "semi-spacing": ["warn", { "before": false, "after": true }],
         "semi": ["warn", "never"],
         "sort-vars": "off", // variables should be initialized in the order they are used
