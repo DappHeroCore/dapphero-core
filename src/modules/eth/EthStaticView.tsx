@@ -36,7 +36,6 @@ export const EthStaticView: FunctionComponent<EthStaticViewProps> = (props) => {
         const func = STATIC_MAPPING[requestString]
 
         let data = await func(props)
-        console.log('data', data)
         data = useUnitFormatter(injected.lib, data, unit)
         data = useDecimalFormatter(data, decimal)
 
