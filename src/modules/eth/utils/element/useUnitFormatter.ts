@@ -15,12 +15,6 @@ export const useUnitFormatter = (
   format?: string
 ) => {
   if (!format || !value) return value
-  if (format === 'abridged') {
-    console.log('val', value)
-    console.log('typeofval', typeof value)
-    console.log('format', format)
-
-  }
 
   const func = FORMAT_MAPPING[format]
 
