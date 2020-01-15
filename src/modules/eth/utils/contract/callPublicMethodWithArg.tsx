@@ -1,6 +1,4 @@
 import { useEffect } from 'react'
-// TODO: Does this need to be here?
-// import { useUnitFormatter } from '../element/useUnitFormatter'
 
 // TODO: Is this a custom hook and therefore should follow React hooks format?
 // IE: it shoudl start with "useCallPublicMethodWithArgs"

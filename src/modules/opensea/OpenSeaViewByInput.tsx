@@ -5,9 +5,9 @@ import {
   OpenSeaViewProps,
   OpenSeaFallbacks
 } from './types'
-import { useDecimalFormatter, useUnitFormatter } from '../eth/utils'
 import { RequestString } from '../types'
 import { getReturnValue } from './util'
+import { useUnitAndDecimalFormat } from '../utils'
 
 const SEARCH_INTERVAL = 500 // 500 ms
 
@@ -37,46 +37,38 @@ export const OpenSeaViewByInput: FunctionComponent<OpenSeaViewProps> = ({
   const renderElements = async () => {
     if (timer) return null
     const resultObj = await openSeaApi(provider, func, [ searchValue ])
-    if (!resultObj) return
+    if (!resultObj || !itemTag) return
 
     const { assets } = resultObj as any
 
     if (!parentTag || !baseElements || !assets) return null // required for this element
-
     parentTag.innerHTML = ''
+
     assets.forEach((item, i) => {
-      let itemParent = itemTag || document.createElement('div')
-      itemParent = itemParent.cloneNode(true)
+      const itemParent = itemTag.cloneNode(true)
       itemParent.style.display = 'block'
 
-      baseElements.forEach((el, i) => {
+      const innerElements = itemTag.querySelectorAll(`[id^=${childElement}]`)
+      innerElements.forEach((el, i) => {
         el.innerHTML = ''
+        el.style.display = 'block'
         const node = el.cloneNode(true)
-        const copyPath = el.id.split('-')[1].slice(RequestString.SIGNIFIER_LENGTH)
+        const copyPath = el.id
+          .split('-')[1]
+          .slice(RequestString.SIGNIFIER_LENGTH)
 
         const retVal = getReturnValue(item, copyPath)
-        // TODO: factor out format flow for use everywhere
-        const unitFormatted = useUnitFormatter(
-          injected.lib,
-          retVal,
-          signifiers.unit
-        )
-        const decimalFormatted = useDecimalFormatter(
-          unitFormatted,
-          signifiers.decimals
-        )
+        const unitAndDecimalFormatted = useUnitAndDecimalFormat(injected, retVal, signifiers)
 
         if (el.tagName === 'IMG') {
-          decimalFormatted
-            ? (node.src = decimalFormatted)
-            : node.src = OpenSeaFallbacks.GIF
+          unitAndDecimalFormatted
+            ? (node.src = unitAndDecimalFormatted)
+            : (node.src = OpenSeaFallbacks.GIF)
         } else {
-          node.innerText = decimalFormatted
+          node.innerText = unitAndDecimalFormatted
         }
 
-        el.style.display = 'block'
-
-        itemParent.appendChild(node)
+        el.replaceWith(node)
       })
       parentTag.appendChild(itemParent)
     })
@@ -98,7 +90,7 @@ export const OpenSeaViewByInput: FunctionComponent<OpenSeaViewProps> = ({
         }
         return true
       })
-    setBaseElements(elements)
+    setBaseElements(elements) // might no longer need
     element.oninput = onInput
   }, [])
 

@@ -1,6 +1,7 @@
 import React, { useState, FunctionComponent } from 'react'
-import { callPublicMethodWithArgs, useDecimalFormatter, useUnitFormatter } from './utils'
+import { callPublicMethodWithArgs } from './utils'
 import { EthContractProps, RequestString } from '../types'
+import { useUnitAndDecimalFormat } from '../utils'
 
 type EthContractViewArgsProps = EthContractProps
 
@@ -12,6 +13,7 @@ export const EthContractViewArgs: FunctionComponent<
   element,
   request: { requestString },
   injected,
+  signifiers,
   signifiers: { retVal, unit, decimal }
 }) => {
   const { signature } = method
@@ -29,8 +31,7 @@ export const EthContractViewArgs: FunctionComponent<
     retVal
   )
 
-  let sanitizedValue = useUnitFormatter(injected.lib, value, unit)
-  sanitizedValue = useDecimalFormatter(sanitizedValue, decimal)
+  const sanitizedValue = useUnitAndDecimalFormat(injected, value, signifiers)
 
   element.innerText = sanitizedValue
   return null

@@ -5,9 +5,9 @@ import {
   OpenSeaViewProps,
   OpenSeaFallbacks
 } from './types'
-import { useDecimalFormatter, useUnitFormatter } from '../eth/utils'
 import { RequestString } from '../types'
 import { getReturnValue } from './util'
+import { useUnitAndDecimalFormat } from '../utils'
 
 export const OpenSeaViewArgsList: FunctionComponent<OpenSeaViewProps> = ({
   requestString,
@@ -51,25 +51,17 @@ export const OpenSeaViewArgsList: FunctionComponent<OpenSeaViewProps> = ({
           const copyPath = el.id.split('-')[1].slice(RequestString.SIGNIFIER_LENGTH)
 
           const retVal = getReturnValue(item, copyPath)
-          // TODO: factor out format flow for use everywhere
-          const unitFormatted = useUnitFormatter(
-            injected.lib,
-            retVal,
-            signifiers.unit
-          )
-          const decimalFormatted = useDecimalFormatter(
-            unitFormatted,
-            signifiers.decimals
-          )
+          const unitAndDecimalFormatted = useUnitAndDecimalFormat(injected, retVal, signifiers)
+
           // TODO: CORS error intermittently?
           // Some imgs may no longer have valid urls as well
           // We should add a fallback img option
           if (el.tagName === 'IMG') {
-            decimalFormatted
-              ? (node.src = decimalFormatted)
+            unitAndDecimalFormatted
+              ? (node.src = unitAndDecimalFormatted)
               : node.src = OpenSeaFallbacks.GIF
           } else {
-            node.innerText = decimalFormatted
+            node.innerText = unitAndDecimalFormatted
           }
 
           itemParent.appendChild(node)
