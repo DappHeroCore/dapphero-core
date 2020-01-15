@@ -37,16 +37,22 @@ export enum FunctionTypes {
 }
 
 export enum Signifiers {
-  IDENTIFY_RETURN_VALUE = '*',
+  IDENTIFY_RETURN_VALUE = 'zr',
+  // IDENTIFY_RETURN_VALUE = '*',
   // EVENT_TRIGGER = '#', // TODO: revisit
-  UNIT ='%',
-  DECIMAL = '>',
-  PAYABLE = '$',
-  CHILD_ELEMENT = '~'
+  UNIT ='zu',
+  // UNIT ='%',
+  DECIMAL = 'zd',
+  // DECIMAL = '>',
+  PAYABLE = 'zp',
+  // PAYABLE = '$',
+  CHILD_ELEMENT = 'zc'
+  // CHILD_ELEMENT = '~'
 }
 
 export enum RequestString {
   ETH_PARENT_TYPE = 2,
   ETH_CONTRACT_FUNCTION = 3,
-  ETH_CONTRACT_ARGS = 4
+  ETH_CONTRACT_ARGS = 4,
+  SIGNIFIER_LENGTH = 2
 }
