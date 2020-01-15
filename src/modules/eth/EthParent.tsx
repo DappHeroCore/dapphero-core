@@ -20,7 +20,10 @@ const errorHandlerEthStaticView = (error: Error, componentStack: string) => {
   console.log(`Error: ${error}`)
   console.log(`StackTrace: ${componentStack}`)
 }
-const errorHandlerEthContractParent = (error: Error, componentStack: string) => {
+const errorHandlerEthContractParent = (
+  error: Error,
+  componentStack: string
+) => {
   // Do something with the error
   // E.g. log to an error logging client here
   console.log(`Error: ${error}`)
@@ -50,7 +53,7 @@ export const EthParent: FunctionComponent<EthParentProps> = ({
       // pull out signifiers from request string
       const signifiers = useSignifierParser(requestString)
       const signifierValues = Object.values(signifiers)
-      const sanitizedRequestString = requestString.filter((rs) => !signifierValues.includes(rs.slice(1)))
+      const sanitizedRequestString = requestString.filter((rs) => !signifierValues.includes(rs.slice(RequestString.SIGNIFIER_LENGTH)))
       request.requestString = sanitizedRequestString
 
       const isSanitizedContractRequestString = config.contracts
@@ -59,9 +62,7 @@ export const EthParent: FunctionComponent<EthParentProps> = ({
         ? sanitizedRequestString[RequestString.ETH_PARENT_TYPE]
         : null
 
-      switch (
-        sanitizedRequestString[RequestString.ETH_PARENT_TYPE]
-      ) {
+      switch (sanitizedRequestString[RequestString.ETH_PARENT_TYPE]) {
       /**
          * The below stacked case's are designed so that an match on any of the following falls through
          * to the default handler: EthStaticView
@@ -82,7 +83,6 @@ export const EthParent: FunctionComponent<EthParentProps> = ({
                 signifiers={signifiers}
               />
             </ErrorBoundary>
-
           )
         }
         break
@@ -117,10 +117,10 @@ export const EthParent: FunctionComponent<EthParentProps> = ({
         break
 
       case 'opensea':
-        if(connected && accounts.length){
+        if (connected && accounts.length) {
           return (
             <ErrorBoundary>
-              <OpenSeaParent 
+              <OpenSeaParent
                 request={request}
                 injected={injected}
                 signifiers={signifiers}
@@ -128,7 +128,8 @@ export const EthParent: FunctionComponent<EthParentProps> = ({
               />
             </ErrorBoundary>
           )
-        }  
+        }
+        break
       default:
         return null
       }

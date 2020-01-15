@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect, useState } from 'react'
+import React, { FunctionComponent, useEffect } from 'react'
 import { openSeaApi } from './api'
 import {
   OpenSeaRequestString,
@@ -6,6 +6,7 @@ import {
   OpenSeaFallbacks
 } from './types'
 import { useDecimalFormatter, useUnitFormatter } from '../eth/utils'
+import { RequestString } from '../types'
 import { getReturnValue } from './util'
 
 export const OpenSeaViewArgsList: FunctionComponent<OpenSeaViewProps> = ({
@@ -47,7 +48,7 @@ export const OpenSeaViewArgsList: FunctionComponent<OpenSeaViewProps> = ({
 
         elements.forEach((el, i) => {
           const node = el.cloneNode(true)
-          const copyPath = el.id.split('-')[1].slice(1)
+          const copyPath = el.id.split('-')[1].slice(RequestString.SIGNIFIER_LENGTH)
 
           const retVal = getReturnValue(item, copyPath)
           // TODO: factor out format flow for use everywhere
