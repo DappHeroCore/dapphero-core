@@ -1,7 +1,7 @@
 import React, { useEffect, FunctionComponent } from 'react'
 import { Request, RequestString } from '../types'
 import { getBalance } from '../../api/ethereum'
-import { useUnitFormatter, useDecimalFormatter } from './utils'
+import { useUnitAndDecimalFormat } from '../utils'
 
 interface EthStaticViewProps {
   request: Request;
@@ -36,8 +36,7 @@ export const EthStaticView: FunctionComponent<EthStaticViewProps> = (props) => {
         const func = STATIC_MAPPING[requestString]
 
         let data = await func(props)
-        data = useUnitFormatter(injected.lib, data, unit)
-        data = useDecimalFormatter(data, decimal)
+        data = useUnitAndDecimalFormat(injected, data, props.signifiers)
 
         el.innerHTML = data
       } catch (e) {

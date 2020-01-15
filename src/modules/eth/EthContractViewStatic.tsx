@@ -1,6 +1,7 @@
 import React, { FunctionComponent } from 'react'
-import { useGetStaticFunc, useDecimalFormatter, useUnitFormatter } from './utils'
+import { useGetStaticFunc } from './utils'
 import { EthContractProps } from '../types'
+import { useUnitAndDecimalFormat } from '../utils'
 
 type EthContractViewStaticProps = Pick<
   EthContractProps,
@@ -13,6 +14,7 @@ export const EthContractViewStatic: FunctionComponent<
   instance,
   method,
   element,
+  signifiers,
   signifiers: { retVal, unit, decimal },
   injected
 }) => {
@@ -20,10 +22,9 @@ export const EthContractViewStatic: FunctionComponent<
   const el = document.getElementById(element.id)
 
   const staticReturnValue = useGetStaticFunc(instance, signature, retVal)
-  const formattedReturnValue = useUnitFormatter(injected.lib, staticReturnValue, unit)
-  const finalValueWithDecimalFormatting = useDecimalFormatter(formattedReturnValue, decimal)
+  const formattedValue = useUnitAndDecimalFormat(injected, staticReturnValue, signifiers)
 
-  el.innerText = finalValueWithDecimalFormatting
+  el.innerText = formattedValue
 
   return null
 }

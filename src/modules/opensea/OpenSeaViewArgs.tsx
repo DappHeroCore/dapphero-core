@@ -2,7 +2,7 @@ import React, { FunctionComponent, useEffect, useState } from 'react'
 import { openSeaApi } from './api'
 import { OpenSeaRequestString, OpenSeaViewProps } from './types'
 import { getReturnValue } from './util'
-import { useDecimalFormatter, useUnitFormatter } from '../eth/utils'
+import { useUnitAndDecimalFormat } from '../utils'
 
 export const OpenSeaViewArgs: FunctionComponent<OpenSeaViewProps> = ({
   requestString,
@@ -27,8 +27,7 @@ export const OpenSeaViewArgs: FunctionComponent<OpenSeaViewProps> = ({
   }, [ requestString, networkName ])
 
   // TODO: factor out format flow for use everywhere
-  const unitFormattedVal = useUnitFormatter(injected.lib, value, signifiers.unit)
-  const decimalFormattedVal = useDecimalFormatter(unitFormattedVal, signifiers.decimal)
-  element.innerText = decimalFormattedVal
+  const formattedValue = useUnitAndDecimalFormat(injected, value, signifiers)
+  element.innerText = formattedValue
   return null
 }
