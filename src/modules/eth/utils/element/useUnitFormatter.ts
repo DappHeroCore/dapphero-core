@@ -1,10 +1,11 @@
 import Web3 from 'web3'
-import { fromWei, toWei, hexToAscii } from '../../../../api/ethereum'
+import { fromWei, toWei, hexToAscii, abridgedAddress } from '../../../../api/ethereum'
 
 const FORMAT_MAPPING = {
   ether: fromWei,
   wei: toWei,
-  ascii: hexToAscii
+  ascii: hexToAscii,
+  abridged: abridgedAddress
 }
 
 // value is either a return value from a call or an input value for a call

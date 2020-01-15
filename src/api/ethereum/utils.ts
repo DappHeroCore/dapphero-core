@@ -68,6 +68,8 @@ export const hexToBytes = (web3Instance: Web3, hex: string | Hex): any[] => web3
 
 export const bytesToHex = (web3Instance: Web3, byteArray: any[]): string => web3Instance.utils.bytesToHex(byteArray)
 
+export const abridgedAddress = (web3Instance: Web3, str: string): string => str.slice(0, 6) + '...' + str.slice(38)
+
 // find unit type
 export const toWei = (
   web3Instance: Web3,
