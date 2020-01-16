@@ -1,9 +1,11 @@
 import React, { FunctionComponent } from 'react'
 import ErrorBoundary from 'react-error-boundary'
-import { Request, DappHeroConfig, RequestString } from '../types'
+import { element } from 'prop-types'
+import { Request, DappHeroConfig, RequestString, ModuleTypes } from '../types'
 import { EthStaticView } from './EthStaticView'
 import { EthContractParent } from './EthContractParent'
 import { OpenSeaParent } from '../opensea/OpenSeaParent'
+import { ThreeBoxParent } from '../3-box/ThreeBoxParent'
 import { EthereumContextConsumer } from '../../context/ethereum'
 import { EthEnable } from './EthEnable'
 import { useSignifierParser } from './utils'
@@ -67,11 +69,11 @@ export const EthParent: FunctionComponent<EthParentProps> = ({
          * The below stacked case's are designed so that an match on any of the following falls through
          * to the default handler: EthStaticView
          */
-      case 'address':
-      case 'getBalance':
-      case 'getProvider':
-      case 'getNetworkName':
-      case 'getNetworkId':
+      case ModuleTypes.ADDRESS:
+      case ModuleTypes.GET_BALANCE:
+      case ModuleTypes.GET_PROVIDER:
+      case ModuleTypes.GET_NETWORK_NAME:
+      case ModuleTypes.GET_NETWORK_ID:
         if (connected && accounts.length > 0) {
           // TODO: Here we will attach metrics to identify which was used.
           return (
@@ -88,7 +90,7 @@ export const EthParent: FunctionComponent<EthParentProps> = ({
         break
       case isSanitizedContractRequestString: // Is set to the correct value IFF the name exists in the array of contract names
         if (connected && accounts.length > 0) {
-          const mock = config.contracts.filter((contract) => contract.contractName === requestString[2])[0]
+          const mock = config.contracts.filter((contract) => contract.contractName === requestString[RequestString.ETH_PARENT_TYPE])[0]
           return (
             <ErrorBoundary onError={errorHandlerEthContractParent}>
               <EthContractParent
@@ -102,7 +104,7 @@ export const EthParent: FunctionComponent<EthParentProps> = ({
           )
         }
         break
-      case 'enable':
+      case ModuleTypes.ENABLE:
         if (!connected) {
           return (
             <ErrorBoundary onError={errorHandlerEthEnable}>
@@ -116,7 +118,7 @@ export const EthParent: FunctionComponent<EthParentProps> = ({
         }
         break
 
-      case 'opensea':
+      case ModuleTypes.OPENSEA:
         if (connected && accounts.length) {
           return (
             <ErrorBoundary>
@@ -130,6 +132,20 @@ export const EthParent: FunctionComponent<EthParentProps> = ({
           )
         }
         break
+
+      case ModuleTypes.THREE_BOX: {
+        if (connected && accounts.length) {
+          return (
+            <ThreeBoxParent
+              account={accounts[0]}
+              request={request}
+              element={request.element}
+              signifiers={signifiers}
+            />
+          )
+        }
+        break
+      }
       default:
         return null
       }

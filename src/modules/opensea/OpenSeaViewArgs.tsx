@@ -1,8 +1,7 @@
 import React, { FunctionComponent, useEffect, useState } from 'react'
 import { openSeaApi } from './api'
 import { OpenSeaRequestString, OpenSeaViewProps } from './types'
-import { getReturnValue } from './util'
-import { useUnitAndDecimalFormat } from '../utils'
+import { useUnitAndDecimalFormat, getReturnValueWithCopyPath } from '../utils'
 
 export const OpenSeaViewArgs: FunctionComponent<OpenSeaViewProps> = ({
   requestString,
@@ -20,7 +19,7 @@ export const OpenSeaViewArgs: FunctionComponent<OpenSeaViewProps> = ({
       const args = requestString.slice(OpenSeaRequestString.ARGUMENTS)
       const resultObj = await openSeaApi(provider, func, args)
 
-      const finalRetVal = getReturnValue(resultObj, signifiers.retVal)
+      const finalRetVal = getReturnValueWithCopyPath(resultObj, signifiers.retVal)
       setValue(finalRetVal)
     }
     queryOpenSea()
