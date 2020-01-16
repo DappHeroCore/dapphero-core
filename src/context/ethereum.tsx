@@ -1,4 +1,4 @@
-import React, { createContext } from 'react'
+import React, { createContext, useState } from 'react'
 import { useWeb3Injected } from '@openzeppelin/network/react'
 import PropTypes from 'prop-types'
 
@@ -16,7 +16,9 @@ function EthereumContextProvider(props) {
     modules
   }
 
-  const { children } = props
+  const { children, forceUpdate } = props
+
+  injected.on('NetworkIdChanged', forceUpdate)
 
   return (
     <EthereumContext.Provider value={initialContextValue}>
@@ -29,9 +31,5 @@ function EthereumContextConsumer(props) {
   const { children } = props
   return <EthereumContext.Consumer>{children}</EthereumContext.Consumer>
 }
-
-// EthereumContextProvider.propTypes = { children: PropTypes.element.isRequired }
-
-// EthereumContextConsumer.propTypes = { children: PropTypes.symbol.isRequired }
 
 export { EthereumContextConsumer, EthereumContextProvider }
