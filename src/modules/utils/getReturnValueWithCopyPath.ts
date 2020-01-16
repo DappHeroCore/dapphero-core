@@ -1,5 +1,4 @@
-// TODO: is there more precise naming for this?
-export const getReturnValue = (retVal: any, copyPath: string) => {
+export const getReturnValueWithCopyPath = (retVal: any, copyPath: string) => {
   if (!retVal || !copyPath) return retVal
 
   const path = copyPath.split('.')
@@ -10,6 +9,8 @@ export const getReturnValue = (retVal: any, copyPath: string) => {
     finalReturnValue = finalReturnValue[path[pathIndex]]
     pathIndex++
   }
+
+  if (finalReturnValue === undefined) finalReturnValue = 'n/a'
 
   return finalReturnValue
 }

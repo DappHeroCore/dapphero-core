@@ -11,7 +11,7 @@ const getConfig = (): DappHeroConfig => {
   // const config: DappHeroConfig = JSON.parse(configElement.textContent)
   // Hide the Element if not hidden.
   const config = mockConfig
-  if (configElement.style.display !== 'none') {
+  if (configElement && configElement.style.display !== 'none') {
     configElement.style.display = 'none'
   }
   return config

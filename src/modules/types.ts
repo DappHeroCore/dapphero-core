@@ -38,16 +38,10 @@ export enum FunctionTypes {
 
 export enum Signifiers {
   IDENTIFY_RETURN_VALUE = 'zr',
-  // IDENTIFY_RETURN_VALUE = '*',
-  // EVENT_TRIGGER = '#', // TODO: revisit
   UNIT ='zu',
-  // UNIT ='%',
   DECIMAL = 'zd',
-  // DECIMAL = '>',
   PAYABLE = 'zp',
-  // PAYABLE = '$',
   CHILD_ELEMENT = 'zc'
-  // CHILD_ELEMENT = '~'
 }
 
 export enum RequestString {
@@ -55,4 +49,15 @@ export enum RequestString {
   ETH_CONTRACT_FUNCTION = 3,
   ETH_CONTRACT_ARGS = 4,
   SIGNIFIER_LENGTH = 2
+}
+
+export enum ModuleTypes {
+  ADDRESS = 'address',
+  GET_BALANCE = 'getBalance',
+  GET_PROVIDER = 'getProvider',
+  GET_NETWORK_NAME = 'getNetworkName',
+  GET_NETWORK_ID = 'getNetworkId',
+  ENABLE = 'enable',
+  THREE_BOX = '3box', // key can't start with num
+  OPENSEA = 'opensea'
 }

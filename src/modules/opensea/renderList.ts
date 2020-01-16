@@ -1,7 +1,6 @@
 import { RequestString } from '../types'
 import { OpenSeaFallbacks } from './types'
-import { useUnitAndDecimalFormat } from '../utils'
-import { getReturnValue } from './util'
+import { useUnitAndDecimalFormat, getReturnValueWithCopyPath } from '../utils'
 
 export const renderList = (
   injected: any,
@@ -37,7 +36,7 @@ export const renderList = (
         .split('-')[1]
         .slice(RequestString.SIGNIFIER_LENGTH)
 
-      const retVal = getReturnValue(item, copyPath)
+      const retVal = getReturnValueWithCopyPath(item, copyPath)
       const unitAndDecimalFormatted = useUnitAndDecimalFormat(
         injected,
         retVal,
