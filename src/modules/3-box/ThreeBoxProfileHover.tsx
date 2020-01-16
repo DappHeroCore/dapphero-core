@@ -8,7 +8,7 @@ interface ThreeBoxProfileHoverProps {
 }
 
 export const ThreeBoxProfileHover: FunctionComponent<ThreeBoxProfileHoverProps> = ({ account, element }) => {
-  const ProfileComponent = (<ProfileHover address={account} tileStyle noTheme />)
+  const ProfileComponent = (<ProfileHover address={account} tileStyle showName noTheme />)
   element.innerHTML = ''
   return ReactDOM.createPortal(
     ProfileComponent,

@@ -6,7 +6,7 @@ import { ThreeBoxRequestString, ThreeBoxFeature } from './types'
 
 type ThreeBoxParentProps = Pick<
   EthContractProps,
-  Exclude<keyof EthContractProps, 'method' | 'instance' | 'injected'>
+  Exclude<keyof EthContractProps, 'method' | 'instance'>
 > & {
   account: string;
 };
@@ -15,7 +15,8 @@ export const ThreeBoxParent: FunctionComponent<ThreeBoxParentProps> = ({
   account,
   signifiers,
   request: { requestString },
-  element
+  element,
+  injected
 }) => {
   const feature = requestString[ThreeBoxRequestString.FEATURE]
 

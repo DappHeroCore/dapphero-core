@@ -4,5 +4,6 @@ export enum ThreeBoxRequestString {
 
 export enum ThreeBoxFeature {
     PROFILE = 'profile',
-    PROFILE_HOVER = 'profile_hover'
+    PROFILE_HOVER = 'profile_hover',
+    CHATBOX = 'chatbox'
 }

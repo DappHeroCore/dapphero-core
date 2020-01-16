@@ -141,6 +141,7 @@ export const EthParent: FunctionComponent<EthParentProps> = ({
               request={request}
               element={request.element}
               signifiers={signifiers}
+              injected={injected}
             />
           )
         }
