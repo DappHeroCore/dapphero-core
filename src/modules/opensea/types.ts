@@ -3,7 +3,8 @@ export enum OpenSeaFunctions {
   RETRIEVE_ASSETS_BY_OWNER = 'retrieveAssetsByOwner',
   RETRIEVE_ASSETS_BY_CONTRACT = 'retrieveAssetsByContract',
   RETRIEVE_ASSETS_BY_SEARCH = 'retrieveAssetsBySearch',
-  RETRIEVE_ASSETS_BY_SEARCH_INPUT = 'retrieveAssetsBySearchInput'
+  RETRIEVE_ASSETS_BY_SEARCH_INPUT = 'retrieveAssetsBySearchInput',
+  ASSET_PAGE = 'asset_page'
 }
 
 export enum OpenSeaRequestString {

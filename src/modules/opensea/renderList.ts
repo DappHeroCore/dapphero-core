@@ -16,14 +16,12 @@ export const renderList = (
     itemParent.style.display = 'block'
     itemParent.style.backgroundColor = item.backgroundColor
 
-    // beginning of navigating to item page
-    /*  const onClick = () => {
-        console.log(window.location)
-        console.log('clicked')
-        window.location.href = `asset/${item.tokenAddress}/${item.tokenId}`
+    const { tokenAddress, tokenId } = item
+    if (itemParent.href) {
+      itemParent.href.concat(`?address=${tokenAddress}/&id=${tokenId}`)
     }
-
-    itemParent.addEventListener('click', onClick) */
+    console.log('clicked')
+    // itemParent.addEventListener('click', onClick)
 
     const innerElements = itemTag.querySelectorAll(`[id^=${childElement}]`)
 

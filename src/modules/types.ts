@@ -41,7 +41,8 @@ export enum Signifiers {
   UNIT ='zu',
   DECIMAL = 'zd',
   PAYABLE = 'zp',
-  CHILD_ELEMENT = 'zc'
+  CHILD_ELEMENT = 'zc',
+  ITEM_PAGE = 'zi'
 }
 
 export enum RequestString {
