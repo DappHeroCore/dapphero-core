@@ -27,8 +27,11 @@ export const renderList = (
     innerElements.forEach((el, i) => {
       el.innerHTML = ''
       el.style.display = 'block'
+      // TODO: delete all child (list) elements on render, in case designers has prepopulated with demo placeholder items
 
       const node = el.cloneNode(true)
+      // taking out signifier tag to allow for clean traversal of api return object
+      // e.g. 'zrowner.address' => obj[owner][address]
       const copyPath = el.id
         .split('-')[1]
         .slice(RequestString.SIGNIFIER_LENGTH)
@@ -40,6 +43,7 @@ export const renderList = (
         signifiers
       )
 
+      /* usually we will just be changing inner text of element, but in the case of img elements, we want to change src attribute */
       if (el.tagName === 'IMG') {
         unitAndDecimalFormatted
           ? (node.src = unitAndDecimalFormatted)
