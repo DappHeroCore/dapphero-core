@@ -203,21 +203,23 @@
     <!-- Example calls are from Rinkeby -->
     <!-- <h4>OpenSea</h4> -->
 
-    <!-- <div>
+    <div>
       Grab an asset from OpenSea
       <div id="dh-eth-opensea-retrieveAsset-0x9f8052dc99582d00a8d7b339cab52fb5409502fb-4242442-zrowner.address"></div>
-    </div> -->
+    </div>
 
-    <!-- <div>
+    <div>
       Grab assets by owner
       <div id="dh-eth-opensea-retrieveAssetsByOwner-0x8e966e75dab5fa5a22ea3ff1f6032851cb22c30d-zcopensearetrieve">
-        <div id="opensearetrieve-zrtokenId">tokenId</div>
-        <div id="opensearetrieve-zrassetContract.name">asset contract name</div>
-        <img id="opensearetrieve-zrimageUrlThumbnail" src=""/>
-        <div id="opensearetrieve-item" style="border: 1px solid green; width: 200px; margin: 10px; display: none;"/>
-
+        <div id="opensearetrieve-parent">
+          <div id="opensearetrieve-item" style="border: 1px solid green; width: 200px; margin: 10px; display: none;">
+            <div id="opensearetrieve-zrtokenId">tokenId</div>
+            <div id="opensearetrieve-zrassetContract.name">asset contract name</div>
+            <img id="opensearetrieve-zrimageUrlThumbnail" src=""/>
+          </div>
+        </div>
       </div>
-    </div> -->
+    </div>
 
     <!-- <div>
       Grab assets by asset contract address
@@ -227,7 +229,7 @@
       </div>
     </div> -->
 
-    <div>
+    <!-- <div>
       Item page (should only work with activated url)
       <div id="dh-eth-opensea-asset_page-zcosasset">
         <div id="osasset-parent">
@@ -235,19 +237,19 @@
           <img id="osasset-zrimagePreviewUrl"/>
         </div>
       </div>
-    </div>
+    </div> -->
 
-    <div>
+    <!-- <div>
       Grab assets by preloaded search
       <div id="dh-eth-opensea-retrieveAssetsBySearch-building-zcosbuilding">
         <div id="osbuilding-parent"> 
-          <a id="osbuilding-item" style="width:200px; border: 1px solid blue; margin: 20px; display: none">
+          <a href='/' id="osbuilding-item" style="width:200px; border: 1px solid blue; margin: 20px; display: none">
             <div id="osbuilding-zrname" style="display: none">asset name</div>
             <img id="osbuilding-zrimageUrl" style="display: none" />
           </a>
         </div>
       </div>
-    </div>
+    </div> -->
 
     <!-- <div>
       Grab assets by user search

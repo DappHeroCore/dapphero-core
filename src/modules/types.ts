@@ -36,6 +36,7 @@ export enum FunctionTypes {
   PAYABLE = 'payable'
 }
 
+// TODO: Be clear in docs that ideas cannot start with any of these 'z's
 export enum Signifiers {
   IDENTIFY_RETURN_VALUE = 'zr',
   UNIT ='zu',

@@ -19,9 +19,8 @@ export const renderList = (
     const { tokenAddress, tokenId } = item
     if (itemParent.href) {
       itemParent.href.concat(`?address=${tokenAddress}/&id=${tokenId}`)
+      console.log('itemparent.href', itemParent.href)
     }
-    console.log('clicked')
-    // itemParent.addEventListener('click', onClick)
 
     const innerElements = itemTag.querySelectorAll(`[id^=${childElement}]`)
 
