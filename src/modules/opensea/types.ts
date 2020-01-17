@@ -22,6 +22,7 @@ export type OpenSeaViewProps = {
   element: HTMLElement;
 }
 
+// TODO: have designer create custom fallback(s)
 export enum OpenSeaFallbacks {
   GIF = 'https://media.giphy.com/media/26xBIygOcC3bAWg3S/giphy.gif'
 }
