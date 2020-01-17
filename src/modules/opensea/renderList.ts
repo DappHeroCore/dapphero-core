@@ -10,6 +10,17 @@ export const renderList = (
   signifiers: any
 ) => {
   const { childElement } = signifiers
+
+  /* remove all non-dh items within itemtag from DOM (
+    still exists within list item
+  ) */
+  const otherElements = itemTag.querySelectorAll('*')
+  otherElements.forEach((el) => {
+    if (!el.id || !el.id.startsWith(childElement)) {
+      el.style.display = 'none'
+    }
+  })
+
   parentTag.innerHTML = ''
   assets.forEach((item, i) => {
     const itemParent = itemTag.cloneNode(true)
@@ -19,7 +30,6 @@ export const renderList = (
     const { tokenAddress, tokenId } = item
     if (itemParent.href) {
       itemParent.href.concat(`?address=${tokenAddress}/&id=${tokenId}`)
-      console.log('itemparent.href', itemParent.href)
     }
 
     const innerElements = itemTag.querySelectorAll(`[id^=${childElement}]`)
