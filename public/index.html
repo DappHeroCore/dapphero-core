@@ -14,7 +14,6 @@
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
     <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
@@ -204,21 +203,29 @@
     <!-- Example calls are from Rinkeby -->
     <!-- <h4>OpenSea</h4> -->
 
-    <!-- <div>
+    <div>
       Grab an asset from OpenSea
       <div id="dh-eth-opensea-retrieveAsset-0x9f8052dc99582d00a8d7b339cab52fb5409502fb-4242442-zrowner.address"></div>
-    </div> -->
+    </div>
 
-    <!-- <div>
+    <div>
       Grab assets by owner
-      <div id="dh-eth-opensea-retrieveAssetsByOwner-0x8e966e75dab5fa5a22ea3ff1f6032851cb22c30d-zcopensearetrieve">
-        <div id="opensearetrieve-zrtokenId">tokenId</div>
-        <div id="opensearetrieve-zrassetContract.name">asset contract name</div>
-        <img id="opensearetrieve-zrimageUrlThumbnail" src=""/>
-        <div id="opensearetrieve-item" style="border: 1px solid green; width: 200px; margin: 10px; display: none;"/>
-
+      <div id="dh-eth-opensea-retrieveAssetsByOwner-0x8e966e75dab5fa5a22ea3ff1f6032851cb22c30d-zcdennison">
+        <div id="dennison-parent">
+          <div id="dennison-item" style="border: 1px solid green; width: 200px; margin: 10px; display: none;">
+            <div id="dennison-zrtokenId">tokenId</div>
+            <div>list item</div>
+            <div id="dennison-zrassetContract.name">asset contract name</div>
+            <img id="dennison-zrimageUrlThumbnail" src=""/>
+          </div>
+        </div>
       </div>
-    </div> -->
+    </div>
+
+    <!-- TODO: troubleshoot duplicate tags 
+    this tag uses same id as list parent above. it is being removed from the page on render. figure out
+    why it's removed -->
+    <!-- <div id="dennison-zrassetContract.name">here</div> -->
 
     <!-- <div>
       Grab assets by asset contract address
@@ -229,18 +236,28 @@
     </div> -->
 
     <!-- <div>
+      Item page (should only work with activated url)
+      <div id="dh-eth-opensea-asset_page-zcosasset">
+        <div id="osasset-parent">
+          <div id="osasset-zrname">name</div>
+          <img id="osasset-zrimagePreviewUrl"/>
+        </div>
+      </div>
+    </div> -->
+
+    <!-- <div>
       Grab assets by preloaded search
       <div id="dh-eth-opensea-retrieveAssetsBySearch-building-zcosbuilding">
         <div id="osbuilding-parent"> 
-          <a id="osbuilding-item" style="width:200px; border: 1px solid blue; margin: 20px; display: none">
+          <a href='/' id="osbuilding-item" style="width:200px; border: 1px solid blue; margin: 20px; display: none">
             <div id="osbuilding-zrname" style="display: none">asset name</div>
             <img id="osbuilding-zrimageUrl" style="display: none" />
           </a>
         </div>
       </div>
-    </div>
+    </div> -->
 
-    <div>
+    <!-- <div>
       Grab assets by user search
       <input id="dh-eth-opensea-retrieveAssetsBySearchInput-zcusergensearch" />
       <div id="usergensearch-parent">
@@ -255,12 +272,12 @@
       </div>
     </div> -->
 
-
+<!-- 
     <h4>3box</h4>
 
     <div id="dh-eth-3box-profile-zrname">3box name</div>
     <div id="dh-eth-3box-profile-zrlocation">3box location</div>
-    <div id="dh-eth-3box-profile-zrmajor">3box major</div>
+    <div id="dh-eth-3box-profile-zrmajor">3box major</div> -->
 
 
 

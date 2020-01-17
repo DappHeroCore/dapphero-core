@@ -36,12 +36,15 @@ export enum FunctionTypes {
   PAYABLE = 'payable'
 }
 
+// rename Z-TAGS?
+// TODO: Be clear in docs that ideas cannot start with any of these 'z's
 export enum Signifiers {
   IDENTIFY_RETURN_VALUE = 'zr',
   UNIT ='zu',
   DECIMAL = 'zd',
   PAYABLE = 'zp',
-  CHILD_ELEMENT = 'zc'
+  CHILD_ELEMENT = 'zc',
+  ITEM_PAGE = 'zi'
 }
 
 export enum RequestString {

@@ -3,7 +3,8 @@ export enum OpenSeaFunctions {
   RETRIEVE_ASSETS_BY_OWNER = 'retrieveAssetsByOwner',
   RETRIEVE_ASSETS_BY_CONTRACT = 'retrieveAssetsByContract',
   RETRIEVE_ASSETS_BY_SEARCH = 'retrieveAssetsBySearch',
-  RETRIEVE_ASSETS_BY_SEARCH_INPUT = 'retrieveAssetsBySearchInput'
+  RETRIEVE_ASSETS_BY_SEARCH_INPUT = 'retrieveAssetsBySearchInput',
+  ASSET_PAGE = 'asset_page'
 }
 
 export enum OpenSeaRequestString {
@@ -21,6 +22,7 @@ export type OpenSeaViewProps = {
   element: HTMLElement;
 }
 
+// TODO: have designer create custom fallback(s)
 export enum OpenSeaFallbacks {
   GIF = 'https://media.giphy.com/media/26xBIygOcC3bAWg3S/giphy.gif'
 }

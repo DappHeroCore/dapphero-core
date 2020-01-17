@@ -1,6 +1,7 @@
 import { useDecimalFormatter } from './useDecimalFormatter'
 import { useUnitFormatter } from './useUnitFormatter'
 
+// TODO: this function needs to be tested for invalid user formatting and decimal inputs
 export const useUnitAndDecimalFormat = (
   injected: any,
   retVal: any,

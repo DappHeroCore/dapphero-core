@@ -20,8 +20,9 @@ function EthereumContextProvider(props) {
 
   const { children, forceUpdate } = props
 
-  injected.on('NetworkIdChanged', forceUpdate)
-  emitter.setMaxListeners(2)
+  // TODO: determine if this is necessary...seems to work without it
+  // injected.on('NetworkIdChanged', forceUpdate)
+  // emitter.setMaxListeners(2)
 
   return (
     <EthereumContext.Provider value={initialContextValue}>

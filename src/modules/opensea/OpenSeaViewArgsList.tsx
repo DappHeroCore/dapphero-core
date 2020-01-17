@@ -27,6 +27,7 @@ export const OpenSeaViewArgsList: FunctionComponent<OpenSeaViewProps> = ({
 
       if (!resultObj || !itemTag || !parentTag) return
       const { assets } = resultObj as any
+      console.log('assets', assets)
 
       renderList(injected, assets, parentTag, itemTag, signifiers)
     }

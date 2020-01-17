@@ -10,6 +10,8 @@ function HTMLContextProvider(props) {
   }
   const dappHeroTopLevelModule = 'dh' // MOCK THIS FOR NOW BUT LATER SHOULD COME FROM DATABASE
 
+  // TODO: run all elements through sanitizing function to protect us
+  // for example: someone could inject JS in id tag
   const elements: any[] = Array.prototype.slice.call(document.querySelectorAll(`[id^=${dappHeroTopLevelModule}]`))
 
   const requests = elements.map((element) => {

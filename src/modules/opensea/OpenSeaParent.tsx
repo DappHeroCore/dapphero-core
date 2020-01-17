@@ -2,6 +2,7 @@ import React, { FunctionComponent, useEffect } from 'react'
 import { OpenSeaViewArgs } from './OpenSeaViewArgs'
 import { OpenSeaViewArgsList } from './OpenSeaViewArgsList'
 import { OpenSeaViewByInput } from './OpenSeaViewByInput'
+import { OpenSeaAssetPage } from './OpenSeaAssetPage'
 import { EthContractProps } from '../types'
 import { OpenSeaFunctions, OpenSeaRequestString } from './types'
 
@@ -21,6 +22,7 @@ export const OpenSeaParent: FunctionComponent<OpenSeaParentProps> = ({
   if (!OPENSEA_SUPPORTED_NETWORKS.includes(injected.networkName)) return null
 
   const func = requestString[OpenSeaRequestString.FUNCTION]
+  console.log('func', func)
 
   switch (func) {
   case OpenSeaFunctions.RETRIEVE_ASSET: {
@@ -56,6 +58,20 @@ export const OpenSeaParent: FunctionComponent<OpenSeaParentProps> = ({
   case OpenSeaFunctions.RETRIEVE_ASSETS_BY_SEARCH_INPUT: {
     return (
       <OpenSeaViewByInput
+        requestString={requestString}
+        networkName={injected.networkName}
+        provider={injected.lib._provider}
+        injected={injected}
+        func={func}
+        signifiers={signifiers}
+        element={element}
+      />
+    )
+  }
+
+  case OpenSeaFunctions.ASSET_PAGE: {
+    return (
+      <OpenSeaAssetPage
         requestString={requestString}
         networkName={injected.networkName}
         provider={injected.lib._provider}
