@@ -15,8 +15,6 @@
     "@types/react": "^16.9.17",
     "@types/react-dom": "^16.9.4",
     "@types/web3": "^1.2.2",
-    "@typescript-eslint/eslint-plugin": "^2.8.0",
-    "@typescript-eslint/parser": "^2.8.0",
     "babel-eslint": "10.0.3",
     "babel-jest": "^24.9.0",
     "babel-loader": "8.0.6",
@@ -82,7 +80,7 @@
   },
   "scripts": {
     "start": "node scripts/start.js",
-    "build": "node scripts/build.js",
+    "build": "node --max-old-space-size=4096 scripts/build.js",
     "test": "node scripts/test.js"
   },
   "eslintConfig": {
