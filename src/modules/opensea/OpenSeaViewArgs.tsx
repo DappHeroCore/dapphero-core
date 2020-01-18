@@ -14,6 +14,7 @@ export const OpenSeaViewArgs: FunctionComponent<OpenSeaViewProps> = ({
 }) => {
   const [ value, setValue ] = useState(null)
 
+  console.log('here')
   useEffect(() => {
     const queryOpenSea = async () => {
       const args = requestString.slice(OpenSeaRequestString.ARGUMENTS)
@@ -22,7 +23,9 @@ export const OpenSeaViewArgs: FunctionComponent<OpenSeaViewProps> = ({
       const finalRetVal = getReturnValueWithCopyPath(resultObj, signifiers.retVal)
       setValue(finalRetVal)
     }
+
     queryOpenSea()
+
   }, [ requestString, networkName ])
 
   // TODO: factor out format flow for use everywhere

@@ -2,13 +2,13 @@ import ERC20 from '../../../abi/ERC20.json' //eslint-disable-line
 import DappHeroTest from '../../../abi/DappHeroTest.json'
 
 const mocks = [
-  // {
-  //   contractName: 'erc20',
-  //   description: 'DWeth on Mainnet',
-  //   abi: ERC20,
-  //   contractAddress: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
-  //   networkId: 1,
-  // },
+  {
+    contractName: 'erc20',
+    description: 'Weth on Mainnet',
+    abi: ERC20,
+    contractAddress: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+    networkId: 1,
+  },
   {
     contractName: 'erc20',
     description: 'Dai on ropsten',
