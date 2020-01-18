@@ -51,6 +51,7 @@ export const EthParent: FunctionComponent<EthParentProps> = ({
 }: EthParentProps) => (
   <EthereumContextConsumer>
     {({ connected, accounts, injected }) => {
+
       // pull out signifiers from request string
       const signifiers = useSignifierParser(requestString)
       const signifierValues = Object.values(signifiers)
