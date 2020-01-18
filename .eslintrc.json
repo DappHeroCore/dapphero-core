@@ -32,7 +32,7 @@
         "brace-style": ["warn", "1tbs", { "allowSingleLine": true }],
         "camelcase": ["warn", { "properties": "always" }],
         "class-methods-use-this": "off", //sometimes we use class methods to create singletons, with typescript these should be static methods
-        "comma-dangle": ["warn", "only-multiline"],
+        "comma-dangle": ["warn", "always-multiline"],
         "comma-spacing": ["warn", { "before": false, "after": true }],
         "comma-style": ["warn", "last"],
         "complexity": "off",

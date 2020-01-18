@@ -1,0 +1,191 @@
+.body {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -webkit-box-align: start;
+  -webkit-align-items: flex-start;
+  -ms-flex-align: start;
+  align-items: flex-start;
+  -webkit-align-content: flex-start;
+  -ms-flex-line-pack: start;
+  align-content: flex-start;
+}
+
+.page-div {
+  width: 50%;
+  max-width: 650px;
+  margin-top: 32px;
+  margin-right: 24px;
+  margin-left: 24px;
+  padding-bottom: 32px;
+}
+
+.headline {
+  margin-top: 12px;
+  margin-bottom: 12px;
+  font-size: 18px;
+  line-height: 18px;
+  font-weight: 700;
+}
+
+.component-div {
+  margin-top: 12px;
+  margin-bottom: 32px;
+  padding: 24px 32px;
+  border-radius: 6px;
+  background-color: #f7f6f3;
+}
+
+.rectangle-div {
+  width: 100px;
+  height: 25px;
+  border-radius: 2px;
+  background-color: #b6b6b6;
+}
+
+.rectangle-div:hover {
+  opacity: 0.8;
+}
+
+.button {
+  border-radius: 4px;
+  background-color: #ee8d48;
+}
+
+.body-text {
+  font-family: Robotomono, sans-serif;
+}
+
+.nav {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  width: 100%;
+  height: 80px;
+  margin-right: auto;
+  margin-left: auto;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: start;
+  -webkit-align-items: flex-start;
+  -ms-flex-align: start;
+  align-items: flex-start;
+}
+
+.nav-button {
+  display: block;
+  height: 42px;
+  margin-right: 8px;
+  margin-left: 8px;
+  padding: 12px 18px;
+  border-radius: 4px;
+  background-color: #e4e0d6;
+  color: #000;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+
+@media (max-width: 991px) {
+  .page-div {
+    width: 9%;
+  }
+}
+
+@media (max-width: 767px) {
+  .page-div {
+    width: 95%;
+  }
+}
+
+@media (max-width: 479px) {
+  .page-div {
+    width: 90%;
+    margin-top: 12px;
+  }
+  .component-div {
+    overflow: scroll;
+  }
+  .nav {
+    height: auto;
+    -webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+  }
+  .nav-button {
+    margin-bottom: 8px;
+  }
+}
+
+@font-face {
+  font-family: 'Robotomono';
+  src: url('../fonts/RobotoMono-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Robotomono';
+  src: url('../fonts/RobotoMono-BoldItalic.ttf') format('truetype');
+  font-weight: 700;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Robotomono';
+  src: url('../fonts/RobotoMono-Italic.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Robotomono';
+  src: url('../fonts/RobotoMono-Thin.ttf') format('truetype');
+  font-weight: 100;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Robotomono';
+  src: url('../fonts/RobotoMono-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Robotomono';
+  src: url('../fonts/RobotoMono-MediumItalic.ttf') format('truetype');
+  font-weight: 500;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Robotomono';
+  src: url('../fonts/RobotoMono-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Robotomono';
+  src: url('../fonts/RobotoMono-ThinItalic.ttf') format('truetype');
+  font-weight: 100;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Robotomono';
+  src: url('../fonts/RobotoMono-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Robotomono';
+  src: url('../fonts/RobotoMono-LightItalic.ttf') format('truetype');
+  font-weight: 300;
+  font-style: italic;
+}

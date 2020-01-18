@@ -1,6 +1,5 @@
 import React, { FunctionComponent } from 'react'
 import ErrorBoundary from 'react-error-boundary'
-import { element } from 'prop-types'
 import { Request, DappHeroConfig, RequestString, ModuleTypes } from '../types'
 import { EthStaticView } from './EthStaticView'
 import { EthContractParent } from './EthContractParent'
@@ -24,7 +23,7 @@ const errorHandlerEthStaticView = (error: Error, componentStack: string) => {
 }
 const errorHandlerEthContractParent = (
   error: Error,
-  componentStack: string
+  componentStack: string,
 ) => {
   // Do something with the error
   // E.g. log to an error logging client here
@@ -48,7 +47,7 @@ const errorHandlerEthEnable = (error: Error, componentStack: string) => {
 export const EthParent: FunctionComponent<EthParentProps> = ({
   request,
   request: { requestString },
-  config
+  config,
 }: EthParentProps) => (
   <EthereumContextConsumer>
     {({ connected, accounts, injected }) => {
