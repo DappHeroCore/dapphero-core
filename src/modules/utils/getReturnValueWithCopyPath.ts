@@ -1,3 +1,5 @@
+import { logger } from 'logger'
+
 export const getReturnValueWithCopyPath = (retVal: any, copyPath: string) => {
   if (!retVal || !copyPath) return retVal
 
@@ -8,9 +10,9 @@ export const getReturnValueWithCopyPath = (retVal: any, copyPath: string) => {
   while (pathIndex < path.length) {
     finalReturnValue = finalReturnValue[path[pathIndex]]
     if (finalReturnValue == null) {
-      console.log(`warning no return value, return object is malformed. Key doesnot exist or contains null. Original
+      logger.debug(`warning no return value, return object is malformed. Key doesnot exist or contains null. Original
       values: retVal: ${retVal} copyPath: ${copyPath}`)
-      console.log('Return value from retval: ')
+      logger.debug('Return value from retval: ')
       console.dir(retVal)
       break
     }
