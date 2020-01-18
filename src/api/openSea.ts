@@ -11,20 +11,25 @@ const ORDER_BY = 'current_price'
 const ORDER_DIRECTION = 'desc'
 const DEFAULT_RETRIES = 2
 
+const DEFAULT_API_CONFIG = {
+  networkName: 'main',
+  apiKey: 'd2a31702fd2b4d9abe2f54f656d29fd1',
+}
+
 export const retrieveAsset = (
   provider: web3Provider,
   networkName: Network,
   tokenAddress: string,
   tokenId: string | number,
   retries: number = DEFAULT_RETRIES,
-) => new OpenSeaPort(provider, { networkName }).api.getAsset(tokenAddress, tokenId, retries)
+) => new OpenSeaPort(provider, { ...DEFAULT_API_CONFIG, networkName }).api.getAsset(tokenAddress, tokenId, retries)
 
 export const retrieveAssetsByOwner = (
   provider: web3Provider,
   networkName: Network,
   { owner, limit = DEFAULT_LIMIT, orderBy = ORDER_BY, orderDirection = ORDER_DIRECTION },
   page: number = 1,
-) => new OpenSeaPort(provider, { networkName }).api.getAssets({
+) => new OpenSeaPort(provider, { ...DEFAULT_API_CONFIG, networkName }).api.getAssets({
   owner,
   limit,
   order_by: orderBy, // eslint-disable-line
@@ -36,7 +41,7 @@ export const retrieveAssetsByConract = (
   networkName: Network,
   { assetContractAddress, limit = DEFAULT_LIMIT, orderBy = ORDER_BY, orderDirection = ORDER_DIRECTION },
   page: number = 1,
-) => new OpenSeaPort(provider, { networkName }).api.getAssets({
+) => new OpenSeaPort(provider, { ...DEFAULT_API_CONFIG, networkName }).api.getAssets({
   asset_contract_address: assetContractAddress, // eslint-disable-line
   limit,
   order_by: orderBy, // eslint-disable-line
@@ -48,7 +53,7 @@ export const retrieveAssetsBySearch = (
   networkName: Network,
   { search, limit = DEFAULT_LIMIT, orderBy = ORDER_BY, orderDirection = ORDER_DIRECTION },
   page: number = 1,
-) => new OpenSeaPort(provider, { networkName }).api.getAssets({
+) => new OpenSeaPort(provider, { ...DEFAULT_API_CONFIG, networkName }).api.getAssets({
   search,
   limit,
   order_by: orderBy, // eslint-disable-line
@@ -59,7 +64,7 @@ export const retrieveAssetsBySearch = (
 export const openSeaApi = async (provider: any, func: string, args: string[]) => {
   // TODO: If not connected to Mainnet or Rinkeby, we need to bubble up error and inform User. jira
   const networkName = provider.networkVersion === '1' ? Network.Main : Network.Rinkeby
-  const seaport = new OpenSeaPort(provider, { networkName })
+  const seaport = new OpenSeaPort(provider, { ...DEFAULT_API_CONFIG, networkName })
 
   switch (func) {
   case OpenSeaFunctions.RETRIEVE_ASSET: {
