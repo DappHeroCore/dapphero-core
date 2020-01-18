@@ -38,7 +38,7 @@ export const OpenSeaAssetPage: FunctionComponent<OpenSeaViewProps> = ({
             el.innerHTML = ''
             el.style.display = 'block'
 
-            const node = el.cloneNode(true) as HTMLElement & {}
+            const node = el.cloneNode(true) as HTMLElement & { src: any}
             const copyPath = el.id.split('-')[1].slice(RequestString.SIGNIFIER_LENGTH)
             const returnVal = getReturnValueWithCopyPath(responseObj, copyPath)
             const unitAndDecimalFormatted = useUnitAndDecimalFormat(injected, returnVal, signifiers)
