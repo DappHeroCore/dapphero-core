@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useEffect, useState } from 'react'
-import { openSeaApi } from './api'
+import { openSeaApi } from '../../api/openSea'
 import { OpenSeaRequestString, OpenSeaViewProps } from './types'
 import { useUnitAndDecimalFormat, getReturnValueWithCopyPath } from '../utils'
 
@@ -10,7 +10,7 @@ export const OpenSeaViewArgs: FunctionComponent<OpenSeaViewProps> = ({
   provider,
   signifiers,
   element,
-  injected
+  injected,
 }) => {
   const [ value, setValue ] = useState(null)
 

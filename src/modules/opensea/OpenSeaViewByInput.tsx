@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useEffect, useState } from 'react'
-import { openSeaApi } from './api'
+import { openSeaApi } from '../../api/openSea'
 import { OpenSeaViewProps } from './types'
 import { renderList } from './renderList'
 import { useItemAndParentTags } from '../utils'
@@ -12,7 +12,7 @@ export const OpenSeaViewByInput: FunctionComponent<OpenSeaViewProps> = ({
   element,
   signifiers,
   signifiers: { childElement },
-  injected
+  injected,
 }) => {
   const { parentTag, itemTag, baseElements } = useItemAndParentTags(childElement)
   const [ searchValue, setSearchValue ] = useState('')

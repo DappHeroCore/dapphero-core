@@ -1,5 +1,3 @@
-import * as ethereum from './ethereum';
-import * as blockstack from './blockstack';
-
-export { ethereum };
-export { blockstack };
+export * as ethereum from './ethereum'
+export * as blockstack from './blockstack'
+export * as openSea from './openSea'

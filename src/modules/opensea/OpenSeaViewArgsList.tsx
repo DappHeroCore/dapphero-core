@@ -1,9 +1,9 @@
 import React, { FunctionComponent, useEffect, useState } from 'react'
-import { openSeaApi } from './api'
+import { openSeaApi } from '../../api/openSea'
 import {
   OpenSeaRequestString,
   OpenSeaViewProps,
-  OpenSeaFallbacks
+  OpenSeaFallbacks,
 } from './types'
 import { renderList } from './renderList'
 import { useItemAndParentTags } from '../utils'
@@ -16,7 +16,7 @@ export const OpenSeaViewArgsList: FunctionComponent<OpenSeaViewProps> = ({
   signifiers,
   signifiers: { childElement },
   element,
-  injected
+  injected,
 }) => {
   const { parentTag, itemTag, baseElements } = useItemAndParentTags(childElement)
 
