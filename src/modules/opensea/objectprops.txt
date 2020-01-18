@@ -1,0 +1,42 @@
+tokenId: "12"
+tokenAddress: "0x70d0c5f857c0c57190566d45aaf53234b65b8be9"
+name: "Building #0012"
+description: "#0012"
+owner: {user: null, profile_img_url: "https://storage.googleapis.com/opensea-static/opensea-profile/33.png", address: "0x64c971d7e3c0483fa97a7714ec55d1e1943731c7", config: "", discord_id: ""}
+assetContract: {name: "BlockCities", description: null, type: "non-fungible", schemaName: "ERC721", address: "0x70d0c5f857c0c57190566d45aaf53234b65b8be9", …}
+orders: null
+sellOrders: []
+buyOrders: null
+isPresale: false
+imageUrl: "https://rinkeby-storage.opensea.io/0x70d0c5f857c0c57190566d45aaf53234b65b8be9-preview/12-1567537363.png"
+imagePreviewUrl: "https://rinkeby-storage.opensea.io/0x70d0c5f857c0c57190566d45aaf53234b65b8be9-preview/12-1567537363.png"
+imageUrlOriginal: "https://us-central1-block-cities.cloudfunctions.net/api/network/4/token/image/12.png"
+imageUrlThumbnail: "https://rinkeby-storage.opensea.io/0x70d0c5f857c0c57190566d45aaf53234b65b8be9-thumbnail/12-1567537364.png"
+externalLink: ""
+openseaLink: "https://rinkeby.opensea.io/assets/0x70d0c5f857c0c57190566d45aaf53234b65b8be9/12"
+traits: Array(18)
+0: {trait_type: "bodyWindowColorway", value: "dark grey", display_type: null, max_value: null, trait_count: 8, …}
+1: {trait_type: "roofWindowColorway", value: "dark grey", display_type: null, max_value: null, trait_count: 8, …}
+2: {trait_type: "exteriorColorway", value: "light beige", display_type: null, max_value: null, trait_count: 4, …}
+3: {trait_type: "baseWindowColorway", value: "dark grey", display_type: null, max_value: null, trait_count: 10, …}
+4: {trait_type: "heightClass", value: "high rise", display_type: null, max_value: null, trait_count: 13, …}
+5: {trait_type: "coreType", value: "glass curtain", display_type: null, max_value: null, trait_count: 11, …}
+6: {trait_type: "groundFloorUse", value: "retail", display_type: null, max_value: null, trait_count: 6, …}
+7: {trait_type: "height", value: 463, display_type: null, max_value: null, trait_count: 0, …}
+8: {trait_type: "rooftopUse", value: "retail", display_type: null, max_value: null, trait_count: 1, …}
+9: {trait_type: "rooftopType", value: "725 5th ave", display_type: null, max_value: null, trait_count: 1, …}
+10: {trait_type: "groundFloorType", value: "725 5th ave", display_type: null, max_value: null, trait_count: 1, …}
+11: {trait_type: "coreUse", value: "business", display_type: null, max_value: null, trait_count: 15, …}
+12: {trait_type: "windowType", value: "glass curtain", display_type: null, max_value: null, trait_count: 13, …}
+13: {trait_type: "tokenId", value: "12", display_type: null, max_value: null, trait_count: 1, …}
+14: {trait_type: "backgroundColorway", value: "orange", display_type: null, max_value: null, trait_count: 6, …}
+15: {trait_type: "building", value: "725 5th ave", display_type: null, max_value: null, trait_count: 4, …}
+16: {trait_type: "city", value: "new york city", display_type: null, max_value: null, trait_count: 14, …}
+17: {trait_type: "architect", value: "0x64c971d7e3c0483fa97a7714ec55d1e1943731c7", display_type: null, max_value: null, trait_count: 18, …}
+length: 18
+__proto__: Array(0)
+numSales: 0
+lastSale: null
+backgroundColor: "#FCDBC8"
+transferFee: null
+transferFeePaymentToken: null
