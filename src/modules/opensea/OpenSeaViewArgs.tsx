@@ -1,3 +1,4 @@
+import { logger } from 'logger'
 import React, { FunctionComponent, useEffect, useState } from 'react'
 import { openSeaApi } from '../../api/openSea'
 import { OpenSeaRequestString, OpenSeaViewProps } from './types'
@@ -14,7 +15,7 @@ export const OpenSeaViewArgs: FunctionComponent<OpenSeaViewProps> = ({
 }) => {
   const [ value, setValue ] = useState(null)
 
-  console.log('here')
+  logger.debug('here')
   useEffect(() => {
     const queryOpenSea = async () => {
       const args = requestString.slice(OpenSeaRequestString.ARGUMENTS)

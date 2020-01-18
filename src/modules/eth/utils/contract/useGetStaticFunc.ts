@@ -1,3 +1,4 @@
+import { logger } from 'logger'
 import { useState, useEffect } from 'react'
 
 // retVal param needed in case of function w/ multiple possible return values
@@ -18,7 +19,7 @@ function useGetStaticFunc(instance: any, signature: any, identifiedReturnValue?:
         const returnedValued = identifiedReturnValue ? signatureValue[identifiedReturnValue] : signatureValue
         setValue(returnedValued)
       } catch (error) {
-        console.log('The Function View Static error: ', error)
+        logger.debug('The Function View Static error: ', error)
       }
     }
     getValue()

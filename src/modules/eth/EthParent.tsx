@@ -1,3 +1,4 @@
+import { logger } from 'logger'
 import React, { FunctionComponent } from 'react'
 import ErrorBoundary from 'react-error-boundary'
 import { Request, DappHeroConfig, RequestString, ModuleTypes } from '../types'
@@ -18,8 +19,8 @@ interface EthParentProps {
 const errorHandlerEthStaticView = (error: Error, componentStack: string) => {
   // Do something with the error
   // E.g. log to an error logging client here
-  console.log(`Error: ${error}`)
-  console.log(`StackTrace: ${componentStack}`)
+  logger.debug(`Error: ${error}`)
+  logger.debug(`StackTrace: ${componentStack}`)
 }
 const errorHandlerEthContractParent = (
   error: Error,
@@ -27,14 +28,14 @@ const errorHandlerEthContractParent = (
 ) => {
   // Do something with the error
   // E.g. log to an error logging client here
-  console.log(`Error: ${error}`)
-  console.log(`StackTrace: ${componentStack}`)
+  logger.debug(`Error: ${error}`)
+  logger.debug(`StackTrace: ${componentStack}`)
 }
 const errorHandlerEthEnable = (error: Error, componentStack: string) => {
   // Do something with the error
   // E.g. log to an error logging client here
-  console.log(`Error: ${error}`)
-  console.log(`StackTrace: ${componentStack}`)
+  logger.debug(`Error: ${error}`)
+  logger.debug(`StackTrace: ${componentStack}`)
 }
 
 /**

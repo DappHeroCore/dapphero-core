@@ -1,3 +1,4 @@
+import { logger } from 'logger'
 import React, { useEffect, FunctionComponent } from 'react' //eslint-disable-line
 import ErrorBoundary from 'react-error-boundary'
 import { EthContractProps, FunctionTypes } from '../types'
@@ -15,20 +16,20 @@ type EthContractParentProps = Pick<
 const errorEthContractViewStatic = (error: Error, componentStack: string) => {
   // Do something with the error
   // E.g. log to an error logging client here
-  console.log(`Error: ${error}`)
-  console.log(`StackTrace: ${componentStack}`)
+  logger.debug(`Error: ${error}`)
+  logger.debug(`StackTrace: ${componentStack}`)
 }
 const errorEthContractViewArgs = (error: Error, componentStack: string) => {
   // Do something with the error
   // E.g. log to an error logging client here
-  console.log(`Error: ${error}`)
-  console.log(`StackTrace: ${componentStack}`)
+  logger.debug(`Error: ${error}`)
+  logger.debug(`StackTrace: ${componentStack}`)
 }
 const errorEthContractSendTx = (error: Error, componentStack: string) => {
   // Do something with the error
   // E.g. log to an error logging client here
-  console.log(`Error: ${error}`)
-  console.log(`StackTrace: ${componentStack}`)
+  logger.debug(`Error: ${error}`)
+  logger.debug(`StackTrace: ${componentStack}`)
 }
 
 export const EthContractParent: FunctionComponent<EthContractParentProps> = ({
@@ -37,15 +38,15 @@ export const EthContractParent: FunctionComponent<EthContractParentProps> = ({
   injected,
   element,
   signifiers,
-  mock: { abi, contractAddress }
+  mock: { abi, contractAddress },
 }: EthContractParentProps) => {
   const { method, instance, methods } = getBaseContractData(
     requestString,
     abi,
     contractAddress,
-    injected.lib
+    injected.lib,
   )
-  // console.log('What are the signifiers: ', signifiers)
+  // logger.debug('What are the signifiers: ', signifiers)
   if (instance && methods) {
     try {
       // TODO: Set up method for differentiating between functions
@@ -108,7 +109,7 @@ export const EthContractParent: FunctionComponent<EthContractParentProps> = ({
       }
       }
     } catch (e) {
-      console.log(e)
+      logger.debug(e)
     }
   }
 

@@ -1,3 +1,4 @@
+import { logger } from 'logger'
 import React, { FunctionComponent } from 'react'
 import { EthContractProps } from '../types'
 
@@ -10,7 +11,7 @@ export const EthContractEvent: FunctionComponent<EthContractEventProps> = ({
   injected,
   method,
   element,
-  request
+  request,
 }) => {
   const { name } = method
 
@@ -20,7 +21,7 @@ export const EthContractEvent: FunctionComponent<EthContractEventProps> = ({
       element.innerText = 'Transaction Confirmed!'
     })
     .on('error', (error) => {
-      console.log('error', error)
+      logger.debug('error', error)
     })
 
   return null

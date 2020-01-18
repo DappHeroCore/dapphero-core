@@ -1,3 +1,4 @@
+import { logger } from 'logger'
 import React, { FunctionComponent, useEffect } from 'react'
 import { openSeaApi } from '../../api/openSea'
 import { OpenSeaViewProps, OpenSeaFunctions, OpenSeaFallbacks } from './types'
@@ -37,7 +38,7 @@ export const OpenSeaAssetPage: FunctionComponent<OpenSeaViewProps> = ({
             el.innerHTML = ''
             el.style.display = 'block'
 
-            const node = el.cloneNode(true)
+            const node = el.cloneNode(true) as HTMLElement & {}
             const copyPath = el.id.split('-')[1].slice(RequestString.SIGNIFIER_LENGTH)
             const returnVal = getReturnValueWithCopyPath(responseObj, copyPath)
             const unitAndDecimalFormatted = useUnitAndDecimalFormat(injected, returnVal, signifiers)
@@ -53,7 +54,7 @@ export const OpenSeaAssetPage: FunctionComponent<OpenSeaViewProps> = ({
         }
       } catch (err) {
         const newError = new Error(err)
-        console.log(newError)
+        logger.debug(newError)
         throw newError
       }
 
