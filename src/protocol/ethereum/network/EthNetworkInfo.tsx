@@ -13,7 +13,7 @@ interface EthNetworkInfoProps {
 
 export const EthNetworkInfo: FunctionComponent<EthNetworkInfoProps> = (props) => { // eslint-disable-line
   const { element, injected, infoType } = props
-
+console.log("injexted", injected)
   useEffect(() => {
     const getData = async () => {
       try {
