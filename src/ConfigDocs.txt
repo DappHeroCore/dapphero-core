@@ -23,7 +23,8 @@ dh-threebox-profile-{feature}
 dh-threebox-profile-name
 dh-threebox-profile-location
 dh-threebox-profile-website
-dh-threebox-profile-major
+dh-threebox-profile-emoji
+dh-threebox-profile-hover
 
 config Obj
 {

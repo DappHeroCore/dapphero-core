@@ -5,7 +5,7 @@ import { Request, DappHeroConfig, RequestString, ModuleTypes } from '../../types
 import { EthStaticView } from './EthStaticView'
 import { EthContractParent } from './EthContractParent'
 import { OpenSeaParent } from '../ethereum/openSea/OpenSeaParent'
-import { ThreeBoxParent } from '../ethereum/threeBox/ThreeBoxParent'
+import { Reducer as ThreeBoxParent } from '../ethereum/threeBox/Reducer'
 import { EthereumContextConsumer } from '../../context/ethereum'
 import { EthEnable } from './EthEnable'
 import { useSignifierParser } from './utils'

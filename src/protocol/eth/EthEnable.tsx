@@ -1,33 +1,25 @@
 import { logger } from 'logger/logger'
 import { useEffect, FunctionComponent } from 'react'
-import { Request } from '../../types/types'
+import { useWeb3Injected } from '@openzeppelin/network/react'
 
 interface EthEnableProps {
-  request: Request;
-  injected: {[key: string]: any}; // come back to type
-  accounts: string[]; // come back to type
+  element: HTMLElement
 }
 /**
  * This function attaches a click handler to any element that a user wants to be responsbile for
  * "enabling metamask".
  * @param props From props we use only injected and request.
  */
-export const EthEnable: FunctionComponent<EthEnableProps> = (props) => {
-  const { injected, request } = props
-
-  //TODO: [DEV-95] Be sure that we don't crash if there is no injected provider
-  const web3Enable = async () => {
-    await request.injected.requestAuth()
-  }
+export const EthEnable: FunctionComponent<EthEnableProps> = ({ element }) => {
+  const injected = useWeb3Injected()
 
   useEffect(() => {
     try {
-      const el = document.getElementById(request.element.id)
-      el.addEventListener('click', web3Enable, false)
+      element.addEventListener('click', () => { injected.requestAuth() }, false)
     } catch (e) {
       console.log(e)
     }
-  }, [ props ])
+  }, [ injected.connected ])
   return null
 }
 
