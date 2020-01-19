@@ -15,7 +15,6 @@ export const EthUserInfo: FunctionComponent<EthUserInfoProps> = (props) => { // 
   const { element, injected, infoType } = props
   const { accounts, lib } = injected
 
-  console.log("in EthUserInfo: ", props)
   useEffect(() => {
     const getData = async () => {
       try {

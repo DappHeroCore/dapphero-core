@@ -1,4 +1,6 @@
 import React from 'react'
+import { elementType } from 'prop-types'
+import { format } from 'path'
 import { Request, DappHeroConfig } from '../../types'
 import { mockConfig } from '../../eth/mocks/mockConfig'
 import { EthUserInfo } from './EthUserInfo'
@@ -13,10 +15,23 @@ export const Reducer = (request: Request, connected, element, accounts, injected
 
   const { requestString, requestStringIndex } = request
   const action = requestString[requestStringIndex]
+
+  // This returns an array of all the arguments after the "action"
   const formatOptions = requestString.slice(requestStringIndex + 1)
 
-  //const format = formatOptions.split("_")
-  console.log("Fromat Options: ", formatOptions)
+  const decimals = formatOptions.map((el) => {
+    const splitElement = el.split('_')
+    if (splitElement[0] === 'decimals') {
+      return splitElement[1]
+    }
+  })
+
+  const units = formatOptions.map((el) => {
+    const splitElement = el.split('_')
+    if (splitElement[0] === 'units') {
+      return splitElement
+    }
+  })
 
   switch (action) {
   case 'address': {
