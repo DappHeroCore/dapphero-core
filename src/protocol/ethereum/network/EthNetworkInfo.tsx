@@ -1,6 +1,6 @@
 import { logger } from 'logger'
 import { useEffect, FunctionComponent } from 'react'
-import { Request, RequestString } from '../../types'
+import { Request } from '../../types'
 import { NETWORK_IDS } from '../../../consts'
 
 interface EthNetworkInfoProps {
@@ -13,17 +13,16 @@ interface EthNetworkInfoProps {
 
 export const EthNetworkInfo: FunctionComponent<EthNetworkInfoProps> = (props) => { // eslint-disable-line
   const { element, injected, infoType } = props
-console.log("injexted", injected)
   useEffect(() => {
     const getData = async () => {
       try {
         if (infoType === 'id') {
           console.log('Inside ID')
-          const id = await injected.lib.givenProvider.networkVersion()
+          const id = injected.networkId
           element.innerHTML = id
         }
         if (infoType === 'name') {
-          const name = NETWORK_IDS[injected.lib.givenProvider.networkVersion]
+          const name = NETWORK_IDS[injected.networkId]
           element.innerHTML = name
         }
         if (infoType === 'provider') {
