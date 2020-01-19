@@ -12,15 +12,10 @@ const getConfig = (): DappHeroConfig => {
 const reactKeyIndex = 0
 
 export const featureReducer = (request: Request, element, connected, accounts, injected) => {
-  switch (request.arg) {
-  // case 'eth': {
-  //   const config = getConfig()
-  //   reactKeyIndex += 1
-  //   return (
-  //     <EthParent key={reactKeyIndex} request={request} config={config} />
+  
+  const action = request.requestString[request.index + 1]
 
-  //   )
-  // }
+  switch (request.feature) {
   case 'network': {
     return (
       <NetworkReducer
@@ -28,6 +23,7 @@ export const featureReducer = (request: Request, element, connected, accounts, i
         element={element}
         injected={injected}
         accounts={accounts}
+        action={action}
       />
     )
   }
@@ -56,14 +52,10 @@ export const featureReducer = (request: Request, element, connected, accounts, i
     )
   }
   case 'threebox': {
-    return (
-      <EthParent key={reactKeyIndex} request={request} config={config} />
-    )
+    return <EthParent key={reactKeyIndex} request={request} config={config} />
   }
   case 'nft': {
-    return (
-      <EthParent key={reactKeyIndex} request={request} config={config} />
-    )
+    return <EthParent key={reactKeyIndex} request={request} config={config} />
   }
   default:
     return null

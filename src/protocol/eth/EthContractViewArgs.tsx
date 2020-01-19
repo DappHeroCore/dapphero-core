@@ -1,7 +1,7 @@
 import React, { useState, FunctionComponent } from 'react'
 import { callPublicMethodWithArgs } from './utils'
 import { EthContractProps, RequestString } from '../types'
-import { useUnitAndDecimalFormat } from '../utils'
+import { useUnitAndDecimalFormat } from '../ethereum/utils'
 
 type EthContractViewArgsProps = EthContractProps
 

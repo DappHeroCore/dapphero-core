@@ -1,5 +1,5 @@
 import { logger } from 'logger'
-import React, { FunctionComponent } from '/modules/ethereum/openSea/node_modules/react'
+import React, { FunctionComponent } from 'react'
 import { OpenSeaViewArgs } from './OpenSeaViewArgs'
 import { OpenSeaViewArgsList } from './OpenSeaViewArgsList'
 import { OpenSeaViewByInput } from './OpenSeaViewByInput'

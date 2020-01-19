@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react'
 import { useGetStaticFunc } from './utils'
 import { EthContractProps } from '../types'
-import { useUnitAndDecimalFormat } from '../utils'
+import { useUnitAndDecimalFormat } from '../ethereum/utils'
 
 type EthContractViewStaticProps = Pick<
   EthContractProps,

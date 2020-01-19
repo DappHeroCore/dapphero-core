@@ -1,6 +1,6 @@
 import React from 'react'
 import { EthereumContextProvider, EthereumContext } from './context/ethereum'
-import { featureReducer } from './modules/ethereum/featureReducer'
+import { featureReducer } from './protocol/ethereum/featureReducer'
 
 const requests = Array.prototype.slice
   .call(document.querySelectorAll(`[id^=dh]`))
@@ -11,7 +11,7 @@ const requests = Array.prototype.slice
     return {
       requestString,
       element,
-      protocol: requestString[index],
+      feature: requestString[index],
       index,
     }
   })

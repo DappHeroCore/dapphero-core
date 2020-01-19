@@ -1,9 +1,9 @@
 import { logger } from 'logger'
-import React, { FunctionComponent, useEffect } from '/modules/ethereum/openSea/node_modules/react'
+import React, { FunctionComponent, useEffect } from 'react'
 import { openSeaApi } from '../../../api/openSea'
 import { OpenSeaViewProps, OpenSeaFunctions, OpenSeaFallbacks } from './types'
 import { RequestString } from '../../types'
-import { useItemAndParentTags, useUnitAndDecimalFormat, getReturnValueWithCopyPath } from '../../utils'
+import { useItemAndParentTags, useUnitAndDecimalFormat, getReturnValueWithCopyPath } from '../utils'
 
 /**
  * The purpose of this file is to hanle the common usecase where a user would like a single webpage to

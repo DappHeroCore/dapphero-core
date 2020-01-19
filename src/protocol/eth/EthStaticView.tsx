@@ -2,14 +2,13 @@ import { logger } from 'logger'
 import React, { useEffect, FunctionComponent } from 'react'
 import { Request, RequestString } from '../types'
 import { getBalance } from '../../api/ethereum'
-import { useUnitAndDecimalFormat } from '../utils'
+import { useUnitAndDecimalFormat } from '../ethereum/utils'
 
-interface EthNetworkInfoProps {
+interface EthStaticViewProps {
   request: Request;
   injected: {[key: string]: any};
   accounts: string[];
-  infoType: 'id' | 'name' | 'provider',
-  element: HTMLElement
+  signifiers: {[key: string]: string};
 }
 
 const NETWORK_MAPPING = {
@@ -27,30 +26,30 @@ const STATIC_GET_FUNCTION_MAPPING = {
   getNetworkId: ({ injected }) => injected.lib.givenProvider.networkVersion,
 }
 
-export const EthNetworkInfo: FunctionComponent<EthNetworkInfoProps> = (props) => { // eslint-disable-line
-  const { request, element, injected, infoType } = props
+export const EthStaticView: FunctionComponent<EthStaticViewProps> = (props) => { // eslint-disable-line
+  const { request, injected, signifiers: { unit, decimal } } = props
   const requestString = request.requestString[RequestString.ETH_PARENT_TYPE] // eslint-disable-line
 
   useEffect(() => {
-    const getData = async () => {
+    const getData = async () => { // TODO: Could we use more descriptive names or just invoke the anonymous function
       try {
-        if (infoType === 'id') {
-          const id = await injected.lib.givenProvider.networkVersion()
-          element.innerHTML = id
-        }
-        if (infoType === 'name') {
-          const name = NETWORK_MAPPING[injected.lib.givenProvider.networkVersion]
-          element.innerHTML = name
-        }
-        if (infoType === 'provider') {
-          const provider = injected.providerName
-          element.innerHTML = provider
-        }
+        const el = document.getElementById(props.request.element.id)
+        const func = STATIC_GET_FUNCTION_MAPPING[requestString]
+
+        const unformattedData = await func(props)
+        const formattedData = useUnitAndDecimalFormat(injected, unformattedData, props.signifiers)
+
+        el.innerHTML = formattedData
       } catch (e) {
         logger.debug(e)
       }
     }
-    getData()
+    const thisPoll = setInterval(getData, 4000)
+    // TODO: Polling shoudl be set by a configuration tool
+    const stopPolling = () => {
+      clearInterval(thisPoll)
+    }
+    return stopPolling
   }, [ props ])
 
   return null

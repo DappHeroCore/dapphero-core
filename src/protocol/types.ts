@@ -1,7 +1,7 @@
 export interface Request {
   requestString: string[];
   element: HTMLElement;
-  arg: string;
+  feature: string;
   index: number;
 }
 
