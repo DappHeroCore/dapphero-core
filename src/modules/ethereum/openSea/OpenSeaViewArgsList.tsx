@@ -1,13 +1,13 @@
 import { logger } from 'logger'
-import React, { FunctionComponent, useEffect, useState } from 'react'
-import { openSeaApi } from '../../api/openSea'
+import React, { FunctionComponent, useEffect, useState } from '/modules/ethereum/openSea/node_modules/react'
+import { openSeaApi } from '../../../api/openSea'
 import {
   OpenSeaRequestString,
   OpenSeaViewProps,
   OpenSeaFallbacks,
 } from './types'
 import { renderList } from './renderList'
-import { useItemAndParentTags } from '../utils'
+import { useItemAndParentTags } from '../../utils'
 
 export const OpenSeaViewArgsList: FunctionComponent<OpenSeaViewProps> = ({
   requestString,

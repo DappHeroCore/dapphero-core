@@ -1,10 +1,10 @@
 import { logger } from 'logger'
-import React, { FunctionComponent } from 'react'
+import React, { FunctionComponent } from '/modules/ethereum/openSea/node_modules/react'
 import { OpenSeaViewArgs } from './OpenSeaViewArgs'
 import { OpenSeaViewArgsList } from './OpenSeaViewArgsList'
 import { OpenSeaViewByInput } from './OpenSeaViewByInput'
 import { OpenSeaAssetPage } from './OpenSeaAssetPage'
-import { EthContractProps } from '../types'
+import { EthContractProps } from '../../types'
 import { OpenSeaFunctions, OpenSeaRequestString } from './types'
 
 type OpenSeaParentProps = Pick<EthContractProps, Exclude<keyof EthContractProps, 'method' | 'instance'>>

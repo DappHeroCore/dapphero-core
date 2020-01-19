@@ -1,6 +1,6 @@
 import { logger } from 'logger'
 import { OpenSeaPort, Network } from 'opensea-js'
-import { OpenSeaFunctions } from '../modules/opensea/types'
+import { OpenSeaFunctions } from '../modules/ethereum/openSea/types'
 
 type web3Provider = any
 

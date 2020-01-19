@@ -1,13 +1,13 @@
-import { RequestString } from '../types'
+import { RequestString } from '../../types'
 import { OpenSeaFallbacks } from './types'
-import { useUnitAndDecimalFormat, getReturnValueWithCopyPath } from '../utils'
+import { useUnitAndDecimalFormat, getReturnValueWithCopyPath } from '../../utils'
 
 export const renderList = (
   injected: any,
   assets: any[],
   parentTag: any,
   itemTag: any,
-  signifiers: any
+  signifiers: any,
 ) => {
   const { childElement } = signifiers
 
@@ -50,7 +50,7 @@ export const renderList = (
       const unitAndDecimalFormatted = useUnitAndDecimalFormat(
         injected,
         retVal,
-        signifiers
+        signifiers,
       )
 
       /* usually we will just be changing inner text of element, but in the case of img elements, we want to change src attribute */

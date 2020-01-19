@@ -5,9 +5,8 @@ import {
   getUserLoadedElements,
   addClickHandlerToTriggerElement,
   sendTransactionWrapper,
-  getUserCustomTxStateNotification
+  getUserCustomTxStateNotification,
 } from './utils'
-import { HTMLContextConsumer } from '../../context/html'
 
 // TODO: This should be explicit and clarified.
 type EthContractSendTxProps = EthContractProps & {
@@ -20,17 +19,18 @@ export const EthContractSendTx: FunctionComponent<EthContractSendTxProps> = ({
   request,
   injected,
   element,
-  signifiers
+  signifiers,
 }: EthContractSendTxProps) => {
   const defaultState = {
     transactionHash: null,
     confirmations: null,
     receipt: null,
-    error: null
+    error: null,
   }
   const [ txState, setTxState ] = useState(defaultState)
   const position = request.requestString.indexOf(method.name)
   const { txProcessingElement, txConfirmedElement } = getUserLoadedElements()
+  const inputNodes = document.querySelectorAll(`[id*=${method.name}]`)
 
   // In cases where a user has their own custom elements that they would like to show when
   // executing a transaction, this function will automatically find those custom elements
@@ -43,47 +43,47 @@ export const EthContractSendTx: FunctionComponent<EthContractSendTxProps> = ({
       defaultState,
       txProcessingElement,
       txConfirmedElement,
-      element
+      element,
     )
   }, [ txState ])
 
-  return (
-    <HTMLContextConsumer>
-      {({ requests }) => {
-        const { signature } = method
+  return null
+  // <HTMLContextConsumer>
+  //   {({ requests }) => {
+  //     const { signature } = method
 
-        // This function will initiate a transaction and subsequently clear any
-        // input field values.
-        // TODO: The action of clearing input field values should be seperated from
-        // sending a transaction.
-        const sendTransaction = () => {
-          sendTransactionWrapper(
-            requests,
-            position,
-            method,
-            injected,
-            instance,
-            signature,
-            setTxState,
-            signifiers
-          )
-        }
+  //     // This function will initiate a transaction and subsequently clear any
+  //     // input field values.
+  //     // TODO: The action of clearing input field values should be seperated from
+  //     // sending a transaction.
+  //     const sendTransaction = () => {
+  //       sendTransactionWrapper(
+  //         requests,
+  //         position,
+  //         method,
+  //         injected,
+  //         instance,
+  //         signature,
+  //         setTxState,
+  //         signifiers
+  //       )
+  //     }
 
-        // Find the user defined element which will serve as a trigger for an action
-        // IE: a button that will initiate a transaction to the blockchain.
-        const triggerElement = getTriggerElement(
-          requests,
-          method.name,
-          position
-        )
+  //     // Find the user defined element which will serve as a trigger for an action
+  //     // IE: a button that will initiate a transaction to the blockchain.
+  //     const triggerElement = getTriggerElement(
+  //       requests,
+  //       method.name,
+  //       position
+  //     )
 
-        // This function adds a click handler to the trigger element from above.
-        // This allows us to add interactivity to elements that a user identifies as
-        // a trigger element.
-        addClickHandlerToTriggerElement(triggerElement, sendTransaction)
+  //     // This function adds a click handler to the trigger element from above.
+  //     // This allows us to add interactivity to elements that a user identifies as
+  //     // a trigger element.
+  //     addClickHandlerToTriggerElement(triggerElement, sendTransaction)
 
-        return null
-      }}
-    </HTMLContextConsumer>
-  )
+  //     return null
+  //   }}
+  // </HTMLContextConsumer>
+
 }

@@ -1,28 +1,22 @@
-import React, { createContext, useState } from 'react'
+import React, { createContext } from 'react'
 import { useWeb3Injected } from '@openzeppelin/network/react'
-import PropTypes from 'prop-types'
-import { EventEmitter } from 'events'
+import * as consts from 'consts'
 
 const modules = [ 'eth', 'erc20' ] // deprecated?
 
-const EthereumContext = createContext({})
-const emitter = new EventEmitter()
+export const EthereumContext = createContext({})
 
-function EthereumContextProvider(props) {
+export function EthereumContextProvider(props) {
   const injected = useWeb3Injected()
   const { connected, accounts } = injected
   const initialContextValue = {
     injected,
     connected,
     accounts,
-    modules
+    modules,
   }
-
-  const { children, forceUpdate } = props
-
-  // TODO: determine if this is necessary...seems to work without it
-  // injected.on('NetworkIdChanged', forceUpdate)
-  // emitter.setMaxListeners(2)
+  // TODO: add polling here consts.global.POLLING_INTERVAL
+  const { children } = props
 
   return (
     <EthereumContext.Provider value={initialContextValue}>
@@ -31,9 +25,7 @@ function EthereumContextProvider(props) {
   )
 }
 
-function EthereumContextConsumer(props) {
+export function EthereumContextConsumer(props) {
   const { children } = props
   return <EthereumContext.Consumer>{children}</EthereumContext.Consumer>
 }
-
-export { EthereumContextConsumer, EthereumContextProvider }

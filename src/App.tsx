@@ -1,20 +1,27 @@
-import React, { useState } from 'react'
-import { EthereumContextProvider } from './context/ethereum'
-import { HTMLContextProvider, HTMLContextConsumer } from './context/html'
-import { reducer } from './modules/reducer'
+import React from 'react'
+import { EthereumContextProvider, EthereumContext } from './context/ethereum'
+import { featureReducer } from './modules/ethereum/featureReducer'
 
-const useForceUpdate = () => useState()[1]
-// TODO: Add globaleContextProvider here to wrap entire application
-export const App: React.FC = () => {
-  const forceUpdate = useForceUpdate()
+const requests = Array.prototype.slice
+  .call(document.querySelectorAll(`[id^=dh]`))
+  .map((element) => {
+    const domElementId = element.id
+    const requestString = domElementId.split('-')
+    const index = 1
+    return {
+      requestString,
+      element,
+      protocol: requestString[index],
+      index,
+    }
+  })
 
-  return (
-    <EthereumContextProvider forceUpdate={forceUpdate}>
-      <HTMLContextProvider>
-        <HTMLContextConsumer>
-          {({ requests }) => requests.map((request) => reducer(request))}
-        </HTMLContextConsumer>
-      </HTMLContextProvider>
-    </EthereumContextProvider>
-  )
-}
+export const App: React.FC = () => (
+  <EthereumContextProvider>
+    <EthereumContext.Consumer>
+      {({ connected, accounts, injected }: {[key:string]: any}) => (
+        requests.map((request) => featureReducer(request, request.element, connected, accounts, injected))
+      )}
+    </EthereumContext.Consumer>
+  </EthereumContextProvider>
+)

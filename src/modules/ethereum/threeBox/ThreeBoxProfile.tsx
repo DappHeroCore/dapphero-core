@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useEffect, useState } from 'react'
 import Box from '3box'
-import { getReturnValueWithCopyPath } from '../utils'
+import { getReturnValueWithCopyPath } from '../../utils'
 
 interface ThreeBoxProfileProps {
   account: string;
@@ -11,7 +11,7 @@ interface ThreeBoxProfileProps {
 export const ThreeBoxProfile: FunctionComponent<ThreeBoxProfileProps> = ({
   account,
   signifiers,
-  element
+  element,
 }) => {
   const [ value, setValue ] = useState('')
 

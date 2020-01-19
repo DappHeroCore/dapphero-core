@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useEffect, useState } from 'react'
-import { EthContractProps } from '../types'
+import { EthContractProps } from '../../types'
 import { ThreeBoxProfile } from './ThreeBoxProfile'
 import { ThreeBoxProfileHover } from './ThreeBoxProfileHover'
 import { ThreeBoxRequestString, ThreeBoxFeature } from './types'
@@ -16,7 +16,7 @@ export const ThreeBoxParent: FunctionComponent<ThreeBoxParentProps> = ({
   signifiers,
   request: { requestString },
   element,
-  injected
+  injected,
 }) => {
   const feature = requestString[ThreeBoxRequestString.FEATURE]
 

@@ -1,8 +1,8 @@
 import { logger } from 'logger'
-import React, { FunctionComponent, useEffect, useState } from 'react'
-import { openSeaApi } from '../../api/openSea'
+import React, { FunctionComponent, useEffect, useState } from '/modules/ethereum/openSea/node_modules/react'
+import { openSeaApi } from '../../../api/openSea'
 import { OpenSeaRequestString, OpenSeaViewProps } from './types'
-import { useUnitAndDecimalFormat, getReturnValueWithCopyPath } from '../utils'
+import { useUnitAndDecimalFormat, getReturnValueWithCopyPath } from '../../utils'
 
 export const OpenSeaViewArgs: FunctionComponent<OpenSeaViewProps> = ({
   requestString,
