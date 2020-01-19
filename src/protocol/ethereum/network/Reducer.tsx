@@ -1,15 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useWeb3Injected } from '@openzeppelin/network/react/useWeb3Hook'
-import { STATIC_CALL_DECENTRALAND_ESTATES_ADDRESS } from 'opensea-js/lib/utils'
-import { Request, DappHeroConfig } from '../../../types/types'
 import { EthEnable } from '../../eth'
-import { mockConfig } from '../../eth/mocks/mockConfig'
 import { EthNetworkInfo } from './EthNetworkInfo'
-
-const getConfig = (): DappHeroConfig => {
-  const config = mockConfig
-  return config
-}
 
 export const Reducer = ({ element }) => {
   const injected = useWeb3Injected()
@@ -20,8 +12,8 @@ export const Reducer = ({ element }) => {
 
   const defaultInfoObj = {
     networkId: 0,
-    providerName: "Unknown",
-    networkName: "Unknown",
+    providerName: 'Unknown',
+    networkName: 'Unknown',
   }
 
   const [ infoValue, setInfoValue ] = useState(defaultInfoObj)
@@ -29,8 +21,8 @@ export const Reducer = ({ element }) => {
   useEffect(() => {
     const infoValueObj = {
       networkId: networkId ?? 0,
-      providerName: providerName ?? "Unknown",
-      networkName: networkName ?? "Unknown",
+      providerName: providerName ?? 'Unknown',
+      networkName: networkName ?? 'Unknown',
     }
 
     setInfoValue(infoValueObj)
