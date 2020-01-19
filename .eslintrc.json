@@ -78,7 +78,7 @@
         "no-caller": "warn",
         "no-case-declarations": "warn",
         "no-cond-assign": ["warn", "except-parens"],
-        "no-console": "off", 
+        "no-console": "warn", 
         "no-constant-condition": "warn",
         "no-continue": "warn",
         "no-control-regex": "warn",
