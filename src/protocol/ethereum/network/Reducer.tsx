@@ -7,7 +7,6 @@ export const Reducer = ({ element }) => {
   const injected = useWeb3Injected()
 
   const { networkId, providerName, networkName } = injected
-  console.log(networkId, providerName, networkName)
   const [ ,, infoType ] = element.id.split('-')
 
   const defaultInfoObj = {
