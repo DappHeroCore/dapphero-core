@@ -1,0 +1,68 @@
+Base String
+dh-{featureName}
+
+Eth Network Info
+dh-network-{infoType/actions}
+dh-network-id
+dh-network-name
+dh-network-provider
+dh-network-enable
+
+Eth User Info
+dh-user-{}
+dh-user-address-display_{'full' | 'short'}
+dh-user-balance-units_{'wei' | 'ether'}-decimals_{ integer }
+
+Eth Contracts
+dh-customContract-name_{contractName}-methodName_{methodName}-input_{inputName}-type{'string | 'wei' | 'ether'}
+dh-customContract-name_{contractName}-methodName_{methodName}-output_{outputName}-display_{'string' | 'wei | 'ether}-decimals_{integer}
+dh-customContract-name_{contractName}-methodName_{methodName}-invoke
+
+3box
+dh-threebox-profile-{feature}
+dh-threebox-profile-name
+dh-threebox-profile-location
+dh-threebox-profile-website
+dh-threebox-profile-major
+
+config Obj
+{
+  protocol: 'ethereum',
+  feature: 'network' | user | customContract | threebox | nft
+}
+{
+  protocol: 'ethereum',
+  feature: 'network'
+  action: id | name | provider | enable
+}
+{
+  protocol: 'ethereum',
+  feature: 'user'
+  method: address | balance
+  display: full | short
+  units: wei | ether
+  decimals: integer
+}
+{
+  protocol: 'ethereum',
+  feature: 'customContract'
+  methodName:
+  type: input | output | invoke
+  input: {
+    name: string
+    type: 'string' | ether | wei
+  }
+  output: {
+    name: string
+    display: 'string' | 'wei' | 'ether'
+    decimals: number
+  }
+  
+}
+{
+  protocol: 'ethereum',
+  feature: 'threebox'
+  type: 'profile'
+  information: name | location | website | major
+}
+
