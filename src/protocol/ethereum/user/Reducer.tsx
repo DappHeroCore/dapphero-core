@@ -19,6 +19,9 @@ export const Reducer = (request: Request, connected, element, accounts, injected
   // This returns an array of all the arguments after the "action"
   const formatOptions = requestString.slice(requestStringIndex + 1)
 
+
+  // TODO: TWO QUESTIONS: 1) how to do the below filtering better,
+  // 2) Why does the request work in the way it does?
   const decimals = formatOptions.map((el) => {
     const splitElement = el.split('_')
     if (splitElement[0] === 'decimals') {
