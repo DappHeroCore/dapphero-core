@@ -1,3 +1,6 @@
+export type EthereumUnits = 'wei' | 'ether'
+
+
 export interface Request {
   requestString: string[];
   element: HTMLElement;

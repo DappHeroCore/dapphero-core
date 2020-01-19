@@ -1,7 +1,7 @@
-import { logger } from 'logger'
+import { logger } from 'logger/logger'
 import React, { useEffect, FunctionComponent } from 'react' //eslint-disable-line
 import ErrorBoundary from 'react-error-boundary'
-import { EthContractProps, FunctionTypes } from '../types'
+import { EthContractProps, FunctionTypes } from '../../types/types'
 import { EthContractViewStatic } from './EthContractViewStatic'
 import { EthContractViewArgs } from './EthContractViewArgs'
 import { EthContractSendTx } from './EthContractSendTx'
@@ -16,20 +16,20 @@ type EthContractParentProps = Pick<
 const errorEthContractViewStatic = (error: Error, componentStack: string) => {
   // Do something with the error
   // E.g. log to an error logging client here
-  logger.debug(`Error: ${error}`)
-  logger.debug(`StackTrace: ${componentStack}`)
+  console.log(`Error: ${error}`)
+  console.log(`StackTrace: ${componentStack}`)
 }
 const errorEthContractViewArgs = (error: Error, componentStack: string) => {
   // Do something with the error
   // E.g. log to an error logging client here
-  logger.debug(`Error: ${error}`)
-  logger.debug(`StackTrace: ${componentStack}`)
+  console.log(`Error: ${error}`)
+  console.log(`StackTrace: ${componentStack}`)
 }
 const errorEthContractSendTx = (error: Error, componentStack: string) => {
   // Do something with the error
   // E.g. log to an error logging client here
-  logger.debug(`Error: ${error}`)
-  logger.debug(`StackTrace: ${componentStack}`)
+  console.log(`Error: ${error}`)
+  console.log(`StackTrace: ${componentStack}`)
 }
 
 export const EthContractParent: FunctionComponent<EthContractParentProps> = ({
@@ -46,7 +46,7 @@ export const EthContractParent: FunctionComponent<EthContractParentProps> = ({
     contractAddress,
     injected.lib,
   )
-  // logger.debug('What are the signifiers: ', signifiers)
+  // console.log('What are the signifiers: ', signifiers)
   if (instance && methods) {
     try {
       // TODO: Set up method for differentiating between functions
@@ -109,7 +109,7 @@ export const EthContractParent: FunctionComponent<EthContractParentProps> = ({
       }
       }
     } catch (e) {
-      logger.debug(e)
+      console.log(e)
     }
   }
 

@@ -1,32 +1,26 @@
-import { logger } from 'logger'
+import { logger } from 'logger/logger'
+import { useWeb3Injected } from '@openzeppelin/network/react'
 import { useEffect, FunctionComponent } from 'react'
-import { Request } from '../../types'
-import { NETWORK_IDS } from '../../../consts'
 
-interface EthUserInfoProps {
-  request: Request;
-  injected: {[key: string]: any};
-  accounts: string[];
-  infoType: 'address' | 'balance';
+interface EthUserAddressProps {
   element: HTMLElement;
+  displayFormat: 'short' | 'full'
 }
 
-export const EthUserAddress: FunctionComponent<EthUserInfoProps> = (props) => { // eslint-disable-line
-  const { element, injected, infoType } = props
-  const { accounts} = injected
+export const EthUserAddress: FunctionComponent<EthUserAddressProps> = ({ element, displayFormat }) => {
+
+  const { accounts } = useWeb3Injected()
 
   useEffect(() => {
-    const getData = async () => {
-      try {
-        if (infoType === 'address') {
-          element.innerHTML = accounts[0]
-        }
-      } catch (e) {
-        // logger.debug(e)
+    try {
+      if (accounts?.[0]) {
+        const [ fullAccountNumber ] = accounts
+        element.innerHTML = displayFormat === 'short' ? `${fullAccountNumber.slice(0, 3)}...${fullAccountNumber.slice(fullAccountNumber.length - 3)}` : fullAccountNumber
       }
+    } catch (e) {
+      console.log(e)
     }
-    getData()
-  }, [ props ])
+  }, [ accounts ])
 
   return null
 }

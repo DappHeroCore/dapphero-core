@@ -1,6 +1,6 @@
-import { logger } from 'logger'
+import { logger } from 'logger/logger'
 import { useEffect, FunctionComponent } from 'react'
-import { Request } from '../types'
+import { Request } from '../../types/types'
 
 interface EthEnableProps {
   request: Request;
@@ -25,7 +25,7 @@ export const EthEnable: FunctionComponent<EthEnableProps> = (props) => {
       const el = document.getElementById(request.element.id)
       el.addEventListener('click', web3Enable, false)
     } catch (e) {
-      logger.debug(e)
+      console.log(e)
     }
   }, [ props ])
   return null

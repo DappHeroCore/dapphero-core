@@ -1,4 +1,4 @@
-import { FunctionTypes } from '../../../types' //eslint-disable-line
+import { FunctionTypes } from '../../../../types/types' //eslint-disable-line
 
 export const getTxFieldInputs = (requests: any[], position: number, methodName: any, method: any) => {
   const newObj = {}

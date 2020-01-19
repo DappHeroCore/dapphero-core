@@ -1,4 +1,4 @@
-import { logger } from 'logger'
+import { logger } from 'logger/logger'
 import { useEffect } from 'react'
 
 // TODO: Is this a custom hook and therefore should follow React hooks format?
@@ -31,7 +31,7 @@ export const callPublicMethodWithArgs = async (
         value = identifiedReturnValue ? value[identifiedReturnValue] : value
         callback(value)
       } catch (error) {
-        logger.debug('In Call Instance Error: ', error)
+        console.log('In Call Instance Error: ', error)
       }
     }
     run()

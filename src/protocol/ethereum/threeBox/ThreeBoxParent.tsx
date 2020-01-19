@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useEffect, useState } from 'react'
-import { EthContractProps } from '../../types'
+import { EthContractProps } from '../../../types/types'
 import { ThreeBoxProfile } from './ThreeBoxProfile'
 import { ThreeBoxProfileHover } from './ThreeBoxProfileHover'
 import { ThreeBoxRequestString, ThreeBoxFeature } from './types'

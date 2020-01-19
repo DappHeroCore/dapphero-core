@@ -1,9 +1,9 @@
-import { logger } from 'logger'
+import { logger } from 'logger/logger'
 import React, { FunctionComponent, useEffect } from 'react'
 import { openSeaApi } from '../../../api/openSea'
 import { OpenSeaViewProps, OpenSeaFunctions, OpenSeaFallbacks } from './types'
-import { RequestString } from '../../types'
-import { useItemAndParentTags, useUnitAndDecimalFormat, getReturnValueWithCopyPath } from '../utils'
+import { RequestString } from '../../../types/types'
+import { useItemAndParentTags, useUnitAndDecimalFormat, getReturnValueWithCopyPath } from '../../../utils'
 
 /**
  * The purpose of this file is to hanle the common usecase where a user would like a single webpage to
@@ -54,7 +54,7 @@ export const OpenSeaAssetPage: FunctionComponent<OpenSeaViewProps> = ({
         }
       } catch (err) {
         const newError = new Error(err)
-        logger.debug(newError)
+        console.log(newError)
         throw newError
       }
 

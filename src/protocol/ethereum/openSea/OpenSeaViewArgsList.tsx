@@ -1,4 +1,4 @@
-import { logger } from 'logger'
+import { logger } from 'logger/logger'
 import React, { FunctionComponent, useEffect, useState } from 'react'
 import { openSeaApi } from '../../../api/openSea'
 import {
@@ -7,7 +7,7 @@ import {
   OpenSeaFallbacks,
 } from './types'
 import { renderList } from './renderList'
-import { useItemAndParentTags } from '../utils'
+import { useItemAndParentTags } from '../../../utils'
 
 export const OpenSeaViewArgsList: FunctionComponent<OpenSeaViewProps> = ({
   requestString,
@@ -28,7 +28,7 @@ export const OpenSeaViewArgsList: FunctionComponent<OpenSeaViewProps> = ({
 
       if (!resultObj || !itemTag || !parentTag) return
       const { assets } = resultObj as any
-      logger.debug('assets', assets)
+      console.log('assets', assets)
 
       renderList(injected, assets, parentTag, itemTag, signifiers)
     }

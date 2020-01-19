@@ -1,6 +1,6 @@
-import { logger } from 'logger'
+import { logger } from 'logger/logger'
 import React, { FunctionComponent } from 'react'
-import { EthContractProps } from '../types'
+import { EthContractProps } from '../../types/types'
 
 type EthContractEventProps = EthContractProps & {
   //
@@ -21,7 +21,7 @@ export const EthContractEvent: FunctionComponent<EthContractEventProps> = ({
       element.innerText = 'Transaction Confirmed!'
     })
     .on('error', (error) => {
-      logger.debug('error', error)
+      console.log('error', error)
     })
 
   return null

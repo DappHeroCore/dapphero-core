@@ -1,5 +1,5 @@
 import React from 'react'
-import { Request, DappHeroConfig } from '../types'
+import { Request, DappHeroConfig } from '../../types/types'
 import { EthParent, EthStaticView, EthContractParent } from '../eth'
 import { mockConfig } from '../eth/mocks/mockConfig'
 import { Reducer as NetworkReducer } from './network/Reducer'
@@ -35,7 +35,6 @@ export const featureReducer = (request: Request, element, connected, accounts, i
         element={element}
         injected={injected}
         accounts={accounts}
-        requestStringIndex={request.index + 1}
       />
     )
   }

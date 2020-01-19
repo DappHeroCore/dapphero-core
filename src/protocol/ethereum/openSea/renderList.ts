@@ -1,6 +1,6 @@
-import { RequestString } from '../../types'
+import { RequestString } from '../../../types/types'
 import { OpenSeaFallbacks } from './types'
-import { useUnitAndDecimalFormat, getReturnValueWithCopyPath } from '../utils'
+import { useUnitAndDecimalFormat, getReturnValueWithCopyPath } from '../../../utils'
 
 export const renderList = (
   injected: any,

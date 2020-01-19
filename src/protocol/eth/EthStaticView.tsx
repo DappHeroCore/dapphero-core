@@ -1,8 +1,8 @@
-import { logger } from 'logger'
+import { logger } from 'logger/logger'
 import React, { useEffect, FunctionComponent } from 'react'
-import { Request, RequestString } from '../types'
+import { Request, RequestString } from '../../types/types'
 import { getBalance } from '../../api/ethereum'
-import { useUnitAndDecimalFormat } from '../ethereum/utils'
+import { useUnitAndDecimalFormat } from '../../utils'
 
 interface EthStaticViewProps {
   request: Request;
@@ -41,7 +41,7 @@ export const EthStaticView: FunctionComponent<EthStaticViewProps> = (props) => {
 
         el.innerHTML = formattedData
       } catch (e) {
-        logger.debug(e)
+        console.log(e)
       }
     }
     const thisPoll = setInterval(getData, 4000)

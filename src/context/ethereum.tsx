@@ -21,10 +21,10 @@ export function EthereumContextProvider(props) {
     modules,
   }
 
-  const [ , setIt ] = useState(false)
-  useEffect(() => {
-    setIt((it) => !it)
-  }, [ accounts, networkId, networkName])
+  // const [ , setIt ] = useState(false)
+  // useEffect(() => {
+  //   setIt((it) => !it)
+  // }, [ accounts, networkId, networkName])
 
   return (
     <EthereumContext.Provider value={initialContextValue}>

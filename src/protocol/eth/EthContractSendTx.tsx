@@ -1,5 +1,5 @@
 import React, { useEffect, useState, FunctionComponent } from 'react'; //eslint-disable-line
-import { EthContractProps } from '../types'
+import { EthContractProps } from '../../types/types'
 import {
   getTriggerElement,
   getUserLoadedElements,

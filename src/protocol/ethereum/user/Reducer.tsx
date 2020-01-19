@@ -1,61 +1,32 @@
 import React from 'react'
-import { elementType } from 'prop-types'
-import { format } from 'path'
-import { Request, DappHeroConfig } from '../../types'
-import { mockConfig } from '../../eth/mocks/mockConfig'
-import { EthUserInfo } from './EthUserInfo'
+import { EthUserBalance } from './EthUserBalance'
 import { EthUserAddress } from './EthUserAddress'
 
-const getConfig = (): DappHeroConfig => {
-  const config = mockConfig
-  return config
-}
+export const Reducer = ({ element }) => {
 
-export const Reducer = (request: Request, connected, element, accounts, injected) => {
+  const infoType = element.id.split('-')[2]
 
-  const { requestString, requestStringIndex } = request
-  const action = requestString[requestStringIndex]
+  const match = element.id.match(/-decimals_(\d+)/)?.[1] ?? null
+  const decimals = match ? parseInt(match) : null
 
-  // This returns an array of all the arguments after the "action"
-  const formatOptions = requestString.slice(requestStringIndex + 1)
+  const units = element.id.match(/-units_([a-z]+)/)?.[1] ?? null
+  const displayFormat = element.id.match(/-display_([a-z]+)/)?.[1] ?? null
 
-
-  // TODO: TWO QUESTIONS: 1) how to do the below filtering better,
-  // 2) Why does the request work in the way it does?
-  const decimals = formatOptions.map((el) => {
-    const splitElement = el.split('_')
-    if (splitElement[0] === 'decimals') {
-      return splitElement[1]
-    }
-  })
-
-  const units = formatOptions.map((el) => {
-    const splitElement = el.split('_')
-    if (splitElement[0] === 'units') {
-      return splitElement
-    }
-  })
-
-  switch (action) {
+  switch (infoType) {
   case 'address': {
     return (
       <EthUserAddress
-        request={request}
-        injected={request.injected}
-        element={request.element}
-        infoType={action}
-        accounts={request.accounts}
+        element={element}
+        displayFormat={displayFormat}
       />
     )
   }
   case 'balance': {
     return (
-      <EthUserInfo
-        request={request}
-        injected={request.injected}
-        element={request.element}
-        infoType={action}
-        accounts={request.accounts}
+      <EthUserBalance
+        element={element}
+        units={units}
+        decimals={decimals}
       />
     )
   }

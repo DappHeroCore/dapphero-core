@@ -1,10 +1,10 @@
-import { logger } from 'logger'
+import { logger } from 'logger/logger'
 import React, { FunctionComponent } from 'react'
 import { OpenSeaViewArgs } from './OpenSeaViewArgs'
 import { OpenSeaViewArgsList } from './OpenSeaViewArgsList'
 import { OpenSeaViewByInput } from './OpenSeaViewByInput'
 import { OpenSeaAssetPage } from './OpenSeaAssetPage'
-import { EthContractProps } from '../../types'
+import { EthContractProps } from '../../../types/types'
 import { OpenSeaFunctions, OpenSeaRequestString } from './types'
 
 type OpenSeaParentProps = Pick<EthContractProps, Exclude<keyof EthContractProps, 'method' | 'instance'>>
@@ -20,7 +20,7 @@ export const OpenSeaParent: FunctionComponent<OpenSeaParentProps> = ({
   if (!OPENSEA_SUPPORTED_NETWORKS.includes(injected.networkName)) return null
 
   const func = requestString[OpenSeaRequestString.FUNCTION]
-  logger.debug('func', func)
+  console.log('func', func)
 
   switch (func) {
   case OpenSeaFunctions.RETRIEVE_ASSET: {

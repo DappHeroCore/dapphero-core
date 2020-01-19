@@ -1,5 +1,5 @@
 import React from 'react'
-import { Request, DappHeroConfig } from '../../types'
+import { Request, DappHeroConfig } from '../../../types/types'
 import { EthEnable } from '../../eth'
 import { mockConfig } from '../../eth/mocks/mockConfig'
 import { EthNetworkInfo } from './EthNetworkInfo'

@@ -1,4 +1,4 @@
-import { Signifiers, RequestString } from '../../../types' //eslint-disable-line
+import { Signifiers, RequestString } from '../../../../types/types' //eslint-disable-line
 
 // TODO don't return an object with keys assigned to undefined (which is currently possible) if you want them to be empty set to null
 export const useSignifierParser = (requestString: string[]) => {

@@ -1,4 +1,4 @@
-import { logger } from 'logger'
+import { logger } from 'logger/logger'
 import { OpenSeaPort, Network } from 'opensea-js'
 import { OpenSeaFunctions } from '../protocol/ethereum/openSea/types'
 
@@ -23,7 +23,7 @@ export const retrieveAsset = (
   tokenAddress: string,
   tokenId: string | number,
   retries: number = DEFAULT_RETRIES,
-) => new OpenSeaPort(provider, { ...DEFAULT_API_CONFIG, networkName }).api.getAsset(tokenAddress, tokenId, retries).catch((error) => { logger.debug(error); return 'There was an error' })
+) => new OpenSeaPort(provider, { ...DEFAULT_API_CONFIG, networkName }).api.getAsset(tokenAddress, tokenId, retries).catch((error) => { console.log(error); return 'There was an error' })
 
 export const retrieveAssetsByOwner = (
   provider: web3Provider,
@@ -35,7 +35,7 @@ export const retrieveAssetsByOwner = (
   limit,
   order_by: orderBy, // eslint-disable-line
   order_direction: orderDirection, // eslint-disable-line
-}, page).catch((error) => { logger.debug(error); return 'There was an error' })
+}, page).catch((error) => { console.log(error); return 'There was an error' })
 
 export const retrieveAssetsByConract = (
   provider: web3Provider,
@@ -47,7 +47,7 @@ export const retrieveAssetsByConract = (
   limit,
   order_by: orderBy, // eslint-disable-line
   order_direction: orderDirection, // eslint-disable-line
-}, page).catch((error) => { logger.debug(error); return 'There was an error' })
+}, page).catch((error) => { console.log(error); return 'There was an error' })
 
 export const retrieveAssetsBySearch = (
   provider: web3Provider,
@@ -59,7 +59,7 @@ export const retrieveAssetsBySearch = (
   limit,
   order_by: orderBy, // eslint-disable-line
   order_direction: orderDirection, // eslint-disable-line
-}, page).catch((error) => { logger.debug(error); return 'There was an error' })
+}, page).catch((error) => { console.log(error); return 'There was an error' })
 
 // ! DEPRECATED
 export const openSeaApi = async (provider: any, func: string, args: string[]) => {
@@ -69,7 +69,7 @@ export const openSeaApi = async (provider: any, func: string, args: string[]) =>
 
   switch (func) {
   case OpenSeaFunctions.RETRIEVE_ASSET: {
-    return seaport.api.getAsset(args[0], args[1]).catch((error) => { logger.debug(error); return error })
+    return seaport.api.getAsset(args[0], args[1]).catch((error) => { console.log(error); return error })
   }
 
   case OpenSeaFunctions.RETRIEVE_ASSETS_BY_OWNER: {
@@ -78,7 +78,7 @@ export const openSeaApi = async (provider: any, func: string, args: string[]) =>
       limit: DEFAULT_LIMIT,
       order_by: ORDER_BY, // eslint-disable-line
       order_direction: ORDER_DIRECTION, // eslint-disable-line
-    }).catch((error) => { logger.debug(error); return error })
+    }).catch((error) => { console.log(error); return error })
   }
 
   case OpenSeaFunctions.RETRIEVE_ASSETS_BY_CONTRACT: {
@@ -87,7 +87,7 @@ export const openSeaApi = async (provider: any, func: string, args: string[]) =>
       limit: DEFAULT_LIMIT,
       order_by: ORDER_BY, // eslint-disable-line
       order_direction: ORDER_DIRECTION, // eslint-disable-line
-    }).catch((error) => { logger.debug(error); return error })
+    }).catch((error) => { console.log(error); return error })
   }
 
   case OpenSeaFunctions.RETRIEVE_ASSETS_BY_SEARCH:
@@ -98,7 +98,7 @@ export const openSeaApi = async (provider: any, func: string, args: string[]) =>
       limit: DEFAULT_LIMIT,
       order_by: ORDER_BY, // eslint-disable-line
       order_direction: ORDER_DIRECTION, // eslint-disable-line
-    }).catch((error) => { logger.debug(error); return error })
+    }).catch((error) => { console.log(error); return error })
   }
 
   default: {
