@@ -15,8 +15,9 @@ interface EthEnableProps {
 export const EthEnable: FunctionComponent<EthEnableProps> = (props) => {
   const { injected, request } = props
 
+  //TODO: [DEV-95] Be sure that we don't crash if there is no injected provider
   const web3Enable = async () => {
-    await injected.requestAuth()
+    await request.injected.requestAuth()
   }
 
   useEffect(() => {

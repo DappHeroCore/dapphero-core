@@ -3,6 +3,7 @@ import { Request, DappHeroConfig } from '../types'
 import { EthParent, EthStaticView, EthContractParent } from '../eth'
 import { mockConfig } from '../eth/mocks/mockConfig'
 import { Reducer as NetworkReducer } from './network/Reducer'
+import { Reducer as UserReducer } from './user/Reducer'
 
 const getConfig = (): DappHeroConfig => {
   const config = mockConfig
@@ -12,7 +13,6 @@ const getConfig = (): DappHeroConfig => {
 const reactKeyIndex = 0
 
 export const featureReducer = (request: Request, element, connected, accounts, injected) => {
-  
   const action = request.requestString[request.index + 1]
 
   switch (request.feature) {
@@ -30,12 +30,12 @@ export const featureReducer = (request: Request, element, connected, accounts, i
 
   case 'user': {
     return (
-      <EthStaticView
-        request={request}
+      <UserReducer
+        requestString={request.requestString}
         element={element}
         injected={injected}
         accounts={accounts}
-        signifiers={signifiers}
+        requestStringIndex={request.index + 1}
       />
     )
   }

@@ -28,7 +28,6 @@ export const Reducer = (request: Request, connected, element, accounts, injected
       <EthNetworkInfo
         request={request}
         injected={request.injected}
-        accounts={accounts}
         element={request.element}
         infoType={request.action}
       />

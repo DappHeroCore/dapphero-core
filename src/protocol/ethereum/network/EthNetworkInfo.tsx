@@ -6,27 +6,27 @@ import { NETWORK_IDS } from '../../../consts'
 interface EthNetworkInfoProps {
   request: Request;
   injected: {[key: string]: any};
-  accounts: string[];
   infoType: 'id' | 'name' | 'provider',
   element: HTMLElement
 }
 
 export const EthNetworkInfo: FunctionComponent<EthNetworkInfoProps> = (props) => { // eslint-disable-line
   const { element, injected, infoType } = props
+  const { networkId, providerName } = injected
+  
   useEffect(() => {
     const getData = async () => {
       try {
         if (infoType === 'id') {
-          console.log('Inside ID')
-          const id = injected.networkId
+          const id = networkId
           element.innerHTML = id
         }
         if (infoType === 'name') {
-          const name = NETWORK_IDS[injected.networkId]
+          const name = NETWORK_IDS[networkId]
           element.innerHTML = name
         }
         if (infoType === 'provider') {
-          const provider = injected.providerName
+          const provider = providerName
           element.innerHTML = provider
         }
       } catch (e) {
