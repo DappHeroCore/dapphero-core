@@ -88,6 +88,7 @@
     "start": "node scripts/start.js",
     "build": "node --max-old-space-size=4096 scripts/build.js",
     "test": "node scripts/test.js",
+    "deploy": "aws s3 cp ./build/js/main.18c491bb.js s3://arn:aws:s3:::internal-dev-dapphero/ --acl public-read",
     "serve": "serve -s build"
   },
   "eslintConfig": {
