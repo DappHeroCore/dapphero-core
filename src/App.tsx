@@ -1,5 +1,4 @@
 import React from 'react'
-import { EthereumContextProvider, EthereumContext } from './context/ethereum'
 import { featureReducer } from './protocol/ethereum/featureReducer'
 
 const requests = Array.prototype.slice
@@ -17,11 +16,5 @@ const requests = Array.prototype.slice
   })
 
 export const App: React.FC = () => (
-  <EthereumContextProvider>
-    <EthereumContext.Consumer>
-      {({ connected, accounts, injected }: {[key:string]: any}) => (
-        requests.map((request) => featureReducer(request, request.element, connected, accounts, injected))
-      )}
-    </EthereumContext.Consumer>
-  </EthereumContextProvider>
+  requests.map((request) => featureReducer(request, request.element))
 )

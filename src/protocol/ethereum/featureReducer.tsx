@@ -1,17 +1,10 @@
 import React from 'react'
-import { DappHeroConfig } from '../../types/types'
-import { mockConfig } from '../mocks/mockConfig'
 import { Reducer as NetworkReducer } from './network/Reducer'
 import { Reducer as UserReducer } from './user/Reducer'
 import { Reducer as ThreeBoxReducer } from './threeBox/Reducer'
 import { Reducer as NftReducer } from './nft/Reducer'
 
-const getConfig = (): DappHeroConfig => {
-  const config = mockConfig
-  return config
-}
-
-export const featureReducer = (request, element, connected, accounts, injected) => {
+export const featureReducer = (request, element) => {
 
   switch (request.feature) {
   case 'network': {
@@ -48,9 +41,6 @@ export const featureReducer = (request, element, connected, accounts, injected) 
   case 'nft': {
     return <NftReducer element={element} />
   }
-  // case 'nft': {
-  //   return <EthParent request={request} config={config} />
-  // }
   default:
     return null
   }
