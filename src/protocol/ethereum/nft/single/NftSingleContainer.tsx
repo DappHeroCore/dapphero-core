@@ -5,33 +5,32 @@ import get from 'lodash/get'
 import { NftSingleCustomField } from './NftSingleCustomField'
 
 interface NftSingleContainerProps {
-  element: HTMLElement
+  element: HTMLElement,
+  responseObj: {[key: string]: any}
 }
 
-export const NftSingleContainer: FunctionComponent<NftSingleContainerProps> = ({ element }): any[] => {
+export const NftSingleContainer: FunctionComponent<NftSingleContainerProps> = ({ element, responseObj }): any[] => {
   const contractMatch = element.id.match(/-contract_([a-zA-z0-9]+)/)
-  const contractAddress = contractMatch?.[1] ? contractMatch[1] : null
+  const contractAddress = contractMatch?.[1]
   const tokenMatch = element.id.match(/-tokenId_([a-zA-z0-9]+)/)
-  const tokenId = tokenMatch?.[1] ? tokenMatch[1] : null
+  const tokenId = tokenMatch?.[1]
   const { lib: { currentProvider }, networkName, connected } = useWeb3Injected()
 
   const [ children, setChildren ] = useState([])
 
   useEffect(() => {
     const getData = async () => {
-      if (contractAddress && tokenId) {
-        const response = await api.openSea.retrieveAsset({ contractAddress, tokenId })
-        const childComponentProps = Array.from(element.querySelectorAll('[id^=dh]'))
-          .map((node) => {
-            const match = node.id.match(/-customField_(.+)(-|$)/)
-            const fieldData = get(response, match[1])
-            return {
-              childElement: node,
-              fieldData,
-            }
-          })
-        setChildren(childComponentProps)
-      }
+      const response = responseObj ?? await api.openSea.retrieveAsset({ contractAddress, tokenId })
+      const childComponentProps = Array.from(element.querySelectorAll('[id^=dh]'))
+        .map((node) => {
+          const match = node.id.match(/-customField_(.+)(-|$)/)
+          const fieldData = get(response, match[1])
+          return {
+            childElement: node,
+            fieldData,
+          }
+        })
+      setChildren(childComponentProps)
     }
     if (connected) getData()
   }, [ connected, currentProvider, networkName ])

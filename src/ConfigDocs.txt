@@ -76,9 +76,9 @@ dh-nft-single-item-customField_{jsonPath}
 
 dh-nft-mult-{'search' | owner | contract}
 
-dh-nft-mult-search-input
-dh-nft-mult-search-invoke
-dh-nft-mult-search-parentContainer-limit_{limit}
+dh-nft-mult-search-input-id_{unique}
+dh-nft-mult-search-invoke-id_{unique}
+dh-nft-mult-search-parentContainer-id_{unique}-limit_{limit}
 dh-nft-mult-search-item-container
 dh-nft-mult-search-item-customField_{jsonPath}
 

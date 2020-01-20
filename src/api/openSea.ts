@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import * as Axios from 'axios'
+import Axios from 'axios'
 import { logger } from 'logger/logger'
 
 const DEFAULT_LIMIT = 12 // MAX 300
@@ -7,7 +7,7 @@ const ORDER_BY = 'current_price'
 const ORDER_DIRECTION = 'desc'
 
 const OPEN_SEA = {
-  baseUrl: 'https://api.opensea.io/api/v1',
+  baseUrl: 'https://rinkeby-api.opensea.io/api/v1',
   ApiKey: 'd2a31702fd2b4d9abe2f54f656d29fd1',
 }
 const axios = Axios.create({ headers: { 'X-API-KEY': OPEN_SEA.ApiKey } })
@@ -24,8 +24,8 @@ export const retrieveAssetsByOwner = async ({
   orderBy = ORDER_BY,
   orderDirection = ORDER_DIRECTION,
 }): Promise<any[]> => {
-  const query = { owner, order_by: orderBy, order_direction: orderDirection, limit }
-  const { data } = await axios.get(`${OPEN_SEA.baseUrl}/assets`, { query })
+  const params = { owner, order_by: orderBy, order_direction: orderDirection, limit }
+  const { data } = await axios.get(`${OPEN_SEA.baseUrl}/assets`, { params })
   return data
 }
 
@@ -35,13 +35,13 @@ export const retrieveAssetsByConract = async ({
   orderBy = ORDER_BY,
   orderDirection = ORDER_DIRECTION,
 }) => {
-  const query = {
+  const params = {
     limit,
     order_by: orderBy,
     order_direction: orderDirection,
     asset_contract_address: assetContractAddress,
   }
-  const { data } = await axios.get(`${OPEN_SEA.baseUrl}/assets`, { query })
+  const { data } = await axios.get(`${OPEN_SEA.baseUrl}/assets`, { params })
   return data
 }
 
@@ -51,8 +51,8 @@ export const retrieveAssetsBySearch = async ({
   orderBy = ORDER_BY,
   orderDirection = ORDER_DIRECTION,
 }) => {
-  const query = { limit, order_by: orderBy, order_direction: orderDirection, search }
-  const { data } = await axios.get(`${OPEN_SEA.baseUrl}/assets`, { query })
+  const params = { limit, order_by: orderBy, order_direction: orderDirection, search }
+  const { data } = await axios.get(`${OPEN_SEA.baseUrl}/assets`, { params })
   return data
 }
 
