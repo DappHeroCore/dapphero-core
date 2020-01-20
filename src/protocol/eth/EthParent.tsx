@@ -7,7 +7,7 @@ import { EthContractParent } from './EthContractParent'
 import { OpenSeaParent } from '../ethereum/openSea/OpenSeaParent'
 import { Reducer as ThreeBoxParent } from '../ethereum/threeBox/Reducer'
 import { EthereumContextConsumer } from '../../context/ethereum'
-import { EthEnable } from './EthEnable'
+import { EthEnable } from '../ethereum/network/EthEnable'
 import { useSignifierParser } from './utils'
 
 interface EthParentProps {
