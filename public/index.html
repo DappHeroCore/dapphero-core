@@ -1,350 +1,305 @@
 <!DOCTYPE html>
-<html lang="en">
+<!--  This site was created in Webflow. http://www.webflow.com  -->
+<!--  Last Published: Sat Jan 18 2020 14:45:04 GMT+0000 (Coordinated Universal Time)  -->
+<html>
 
 <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta name="description" content="Web site created using create-react-app" />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
+  <meta charset="utf-8" />
+  <title>DappHero: Components</title>
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <meta content="Webflow" name="generator" />
+  <!-- <link href="css/normalize.css" rel="stylesheet" type="text/css" />
+  <link href="css/webflow.css" rel="stylesheet" type="text/css" />
+  <link href="css/dapphero-components.webflow.css" rel="stylesheet" type="text/css" /> -->
 
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <title>React App</title>
+  <link href="css/normalize.css" rel="stylesheet" type="text/css">
+  <link href="css/webflow.css" rel="stylesheet" type="text/css">
+  <link href="css/blockcities-use-case.webflow.css" rel="stylesheet" type="text/css">
+  <!-- [if lt IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js" type="text/javascript"></script><![endif] -->
+  <script
+    type="text/javascript">!function (o, c) { var n = c.documentElement, t = " w-mod-"; n.className += t + "js", ("ontouchstart" in o || o.DocumentTouch && c instanceof DocumentTouch) && (n.className += t + "touch") }(window, document);</script>
+
+
+  <link href="images/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+  <link href="images/webclip.png" rel="apple-touch-icon" />
 </head>
 
-<body>
-    <style>
-        div {
-            margin: 10px;
-        }
-    </style>
-    <h4>Web3 funcs</h4>
-    <div>
-        Address of User:
-        <div id="dh-eth-address-zuabridged">0x</div>
-        Balance:
-        <div id="dh-eth-getBalance-user-zuether-zd4">balance goes here</div>
+<body class="body">
+
+  <div class="page-div">
+    <div class="headline">Web3 Provider:: dh-network-provider</div>
+    <div class="component-div">
+      <div id="dh-network-provider" class="body-text">*Web 3 Provider*</div>
+    </div>
+    <div class="headline">Web3 Network Name:: dh-network-name</div>
+    <div class="component-div">
+      <div id="dh-network-name" class="body-text">*Network Name*</div>
+    </div>
+    <div class="headline">Web3 Network ID:: dh-network-id</div>
+    <div class="component-div">
+      <div id="dh-network-id" class="body-text">*Network ID*</div>
+    </div>
+    <div class="headline">User - Address:: dh-user-address</div>
+    <div class="component-div">
+      <div id="dh-user-address" class="body-text">*user address*</div>
+    </div>
+    <div class="headline">User - Address:: dh-user-address-display_short</div>
+    <div class="component-div">
+      <div id="dh-user-address-display_short" class="body-text">*user address*</div>
+    </div>
+    <div class="headline">User - Balance:: dh-user-balance</div>
+    <div class="component-div">
+      <div id="dh-user-balance" class="body-text">*user balance*</div>
+    </div>
+    <div class="headline">User - Balance:: dh-user-balance-units_ether</div>
+    <div class="component-div">
+      <div id="dh-user-balance-units_ether" class="body-text">*user balance*</div>
+    </div>
+    <div class="headline">User - Balance:: dh-user-balance-units_ether-decimals_3</div>
+    <div class="component-div">
+      <div id="dh-user-balance-units_ether-decimals_3" class="body-text">*user balance*</div>
     </div>
 
-    <div id="dh-eth-3box-profile_hover">hover</div>
-    <div>
-        Web3 Provider Name:
-        <div id="dh-eth-getProvider">provider goes here</div>
+    <!-- ThreeBox-->
+    <div class="headline">3Box - Profile Name:: dh-threebox-profile-name</div>
+    <div class="component-div">
+      <div id="dh-threebox-profile-name" class="body-text">*3Box Profile Name*</div>
     </div>
 
-    <div>
-        Web3 Network Name:
-        <div id="dh-eth-getNetworkName">network name goes here</div>
+    <div class="headline">3Box - Profile Name:: dh-threebox-profile-Location</div>
+    <div class="component-div">
+      <div id="dh-threebox-profile-Location" class="body-text">*3Box Profile Location*</div>
     </div>
 
-    <div>
-        Web3 Network Id:
-        <div id="dh-eth-getNetworkId">network id goes here</div>
+    <div class="headline">3Box - Profile Name:: dh-threebox-profile-website</div>
+    <div class="component-div">
+      <div id="dh-threebox-profile-website" class="body-text">*3Box Profile website*</div>
     </div>
 
-    <div>
-        Web3 Metamask Enable Button:
-        <button id="dh-eth-enable">Enable MetaMask</button>
+    <div class="headline">3Box - Profile Name:: dh-threebox-profile-emoji</div>
+    <div class="component-div">
+      <div id="dh-threebox-profile-emoji" class="body-text">*3Box Profile emoji*</div>
     </div>
 
-    <h4>Web3 ERC20 Contract</h4>
-
-    <div>Public Methods</div>
-    <div>
-        Contract: Total Supply:
-        <div id="dh-eth-erc20-totalSupply">here goes data</div>
-    </div>
-
-    <div>
-        Contract: balanceOf (user):
-        <div id="dh-eth-erc20-balanceOf-user">here goes data</div>
-    </div>
-
-    <div>
-        Contract: name:
-        <div id="dh-eth-erc20-name">here goes data</div>
-    </div>
-
-    <div>
-        Contract: symbol:
-        <div id="dh-eth-erc20-symbol">here goes data</div>
-    </div>
-
-    <div>
-        Contract: decimals:
-        <div id="dh-eth-erc20-decimals">here goes data</div>
-    </div> -->
-
-    <h4>Web3: Non-ERC20 Contract edge cases</h4>
-
-    <div>
-        Contract: dappHeroTest: mult return
-        <div id="dh-eth-dappHeroTest-viewNoArgsMultipleReturn-zr_hello-zuascii">
-            here goes data
-        </div>
-    </div>
-
-    <div>
-        Contract: dappHeroTest: mult static args, single return
-        <div id="dh-eth-dappHeroTest-viewMultipleArgsSingleReturn-user-12-zuether">
-            here goes data
-        </div>
-    </div>
-
-    <div>
-        Contract: dappHeroTest: mult static args, mult return
-        <div id="dh-eth-dappHeroTest-viewMultipleArgsMultipleReturn-user-12-zr_balanceMultiplied-zuether-zd6">
-            here goes data
-        </div>
-    </div>
-
-    <h4>Contract: ERC20 Transfer Method Grouping</h4>
-    <div>
-        <div>
-            Transfer: transfer(recipient, amount)
-            <div>
-                Input: recipient:
-                <input type="text" id="dh-eth-erc20-transfer-recipient" />
-            </div>
-            <div>
-                Input: amount:
-                <input type="text" id="dh-eth-erc20-transfer-amount" />
-            </div>
-            <div>
-                Trigger: sendTx to transfer:
-                <button id="dh-eth-erc20-transfer">transfer!</button>
-            </div>
-        </div>
-    </div> -->
-
-    <h4>Contract: Tx Testing</h4>
-
-    <div>
-        <div>
-            TriggerEvent function triggerEvent(value)
-            <div>
-                Input: value
-                <input type="text" id="dh-eth-dappHeroTest-triggerEvent-value" />
-            </div>
-            <div>
-                Trigger: submit triggerEvent
-                <button id="dh-eth-dappHeroTest-triggerEvent">triggerEvent!</button>
-            </div>
-        </div>
-    </div>
-
-    <div>
-        <div>Send eth no args sendEthNoArgs() fixed payable (no user input)</div>
-        <div>
-            <div>
-                Send fixed payable in eth
-                <button id="dh-eth-dappHeroTest-sendEthNoArgs-zp0.01">send eth</button>
-            </div>
-        </div>
-    </div>
-
-    <div>
-        <div>Send eth with args sendEthWithArgs() fixed payable</div>
-        <div>
-            <div>
-                Input: message
-                <input type="text" id="dh-eth-dappHeroTest-sendEthWithArgs-message" />
-            </div>
-            <div>
-                Send fixed payable in eth
-                <button id="dh-eth-dappHeroTest-sendEthWithArgs-zp0.01">send eth</button>
-            </div>
-        </div>
-    </div>
-
-    <div>
-        <div>Send eth no args sendVariableEthNoArgs() variable payable</div>
-        <div>
-            How much eth?
-            <input id="dh-eth-dappHeroTest-sendVariableEthNoArgs-payable" />
-            <div>
-                Send variable payable in eth
-                <button id="dh-eth-dappHeroTest-sendVariableEthNoArgs">send eth</button>
-            </div>
-        </div>
-    </div>
-
-    <div>
-        <div>Send eth with args sendVariableEthWithArgs() variable payable</div>
-        <div>
-            <div>
-                Input: message
-                <input id="dh-eth-dappHeroTest-sendVariableEthWithArgs-message" />
-            </div>
-            How much eth?
-            <input id="dh-eth-dappHeroTest-sendVariableEthWithArgs-payable" />
-            <div>
-                Send variable payable in eth
-                <button id="dh-eth-dappHeroTest-sendVariableEthWithArgs">send eth</button>
-            </div>
-        </div>
-    </div> -->
-
-    <!-- Example calls are from Rinkeby -->
-    <h4>OpenSea</h4>
-
-    <div>
-        Grab an asset from OpenSea and show it's Owner: 
-        <div id="dh-eth-opensea-retrieveAsset-0x1276dce965ada590e42d62b3953ddc1ddceb0392-1-zrowner.address">--owner--</div>
-    </div>
-
-        <div>
-            Grab an asset from OpenSea and show it's Owner: 
-            <div id="dh-eth-opensea-retrieveAsset-0x9f8052dc99582d00a8d7b339cab52fb5409502fb-4242442-zrowner.address"></div>
-        </div>
-
-    <!-- <div>
-        Grab assets by owner Rinkeby: 0x8e966e75dab5fa5a22ea3ff1f6032851cb22c30d
-        <div id="dh-eth-opensea-retrieveAssetsByOwner-0x8e966e75dab5fa5a22ea3ff1f6032851cb22c30d-zcgroupid1">
-            <div id="groupid1-parent">
-                <div id="groupid1-item" style="border: 1px solid green; width: 200px; margin: 10px; display: none;">
-                    <div id="groupid1-zrtokenId">tokenId</div>
-                    <div>list item</div>
-                    <div id="groupid1-zrassetContract.name">asset contract name</div>
-                    <img id="groupid1-zrimageUrlThumbnail" src="" />
-                </div>
-            </div>
-        </div>
-        Grab Assets by Owner Mainnet: 0xE8D848debB3A3e12AA815b15900c8E020B863F31
-        <div id="dh-eth-opensea-retrieveAssetsByOwner-0xE8D848debB3A3e12AA815b15900c8E020B863F31-zcdennison">
-            <div id="dennison-parent">
-                <div id="dennison-item" style="border: 1px solid green; width: 200px; margin: 10px; display: none;">
-                    <div id="dennison-zrtokenId">tokenId</div>
-                    <div>list item</div>
-                    <div id="dennison-zrassetContract.name">asset contract name</div>
-                    <img id="dennison-zrimageUrlThumbnail" src="" />
-                </div>
-            </div>
-        </div>
-    </div> -->
-
-    <!-- TODO: troubleshoot duplicate tags 
-    this tag uses same id as list parent above. it is being removed from the page on render. figure out
-    why it's removed -->
-    <!-- <div id="dennison-zrassetContract.name">here</div> -->
-
-    <!-- <div>
-      Grab assets by asset contract address
-      <div id="dh-eth-opensea-retrieveAssetsByContract-0x9f8052dc99582d00a8d7b339cab52fb5409502fb-zcoscontract">
-        <div id="oscontract-zrowner.address">asset owner</div>
-        <div id="oscontract-zrdescription">asset description</div>
-      </div>
-    </div> -->
-    <!-- TODO: Get working for monday -->
-    <!-- <div>
-        Item page (should only work with activated url)
-        <div id="dh-eth-opensea-asset_page-zcosasset">
-            <div id="osasset-parent">
-                <div id="osasset-zrname">name</div>
-                <img id="osasset-zrimagePreviewUrl" />
-            </div>
-        </div>
-    </div> -->
-
-    <!-- <div>
-        Grab assets by preloaded search
-        <div id="dh-eth-opensea-retrieveAssetsBySearch-building-zcosbuilding">
-            <div id="osbuilding-parent">
-                <a href='/' id="osbuilding-item"
-                    style="width:200px; border: 1px solid blue; margin: 20px; display: none">
-                    <div id="osbuilding-zrname" style="display: none">asset name</div>
-                    <img id="osbuilding-zrimageUrl" style="display: none" />
-                </a>
-            </div>
-        </div>
-    </div> -->
-
-    <div>
-        Grab assets by user search
-        <input id="dh-eth-opensea-retrieveAssetsBySearchInput-zcusergensearch" />
-        <div id="usergensearch-parent">
-            <div id="usergensearch-item" style="border: 1px solid blue; width: 250px; margin: 12px; display: none" />
-            <div id="usergensearch-zrowner.address" style="color: orange">
-                asset owner
-            </div>
-            <div id="usergensearch-zrname">
-                name
-            </div>
-            <img id="usergensearch-zrimageUrl" />
-        </div>
-    </div>
-
-
-    <h4>3box</h4>
-
-    <div id="dh-eth-3box-profile-zrname">3box name</div>
-    <div id="dh-eth-3box-profile-zrlocation">3box location</div>
-    <div id="dh-eth-3box-profile-zrmajor">3box major</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <div id="dh-eth-dappHeroTest-^triggerEvent">
-    </div>
-
-    <div>
-        Config DiV:
-        <div>Configuration goes here: NOTE: When running it is hidden</div>
-        <div id="dh-config" style="display: none">
-            [{"contractName":"ERC20","description":"DWeth on
-            Mainnet","abi":[{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":true,"internalType":"address","name":"spender","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"constant":true,"inputs":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"address","name":"spender","type":"address"}],"name":"allowance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"approve","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"internalType":"uint8","name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"subtractedValue","type":"uint256"}],"name":"decreaseAllowance","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"addedValue","type":"uint256"}],"name":"increaseAllowance","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"string","name":"name","type":"string"},{"internalType":"string","name":"symbol","type":"string"},{"internalType":"uint8","name":"decimals","type":"uint8"}],"name":"initialize","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[],"name":"initialize","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"name","outputs":[{"internalType":"string","name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"internalType":"string","name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"recipient","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"transfer","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"sender","type":"address"},{"internalType":"address","name":"recipient","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"transferFrom","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"}],"contractAddress":"0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2","networkId":1},{"contractName":"ERC20","description":"Dai
-            on
-            ropsten","abi":[{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":true,"internalType":"address","name":"spender","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"constant":true,"inputs":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"address","name":"spender","type":"address"}],"name":"allowance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"approve","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"internalType":"uint8","name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"subtractedValue","type":"uint256"}],"name":"decreaseAllowance","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"addedValue","type":"uint256"}],"name":"increaseAllowance","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"string","name":"name","type":"string"},{"internalType":"string","name":"symbol","type":"string"},{"internalType":"uint8","name":"decimals","type":"uint8"}],"name":"initialize","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[],"name":"initialize","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"name","outputs":[{"internalType":"string","name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"internalType":"string","name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"recipient","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"transfer","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"sender","type":"address"},{"internalType":"address","name":"recipient","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"transferFrom","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"}],"contractAddress":"0xad6d458402f60fd3bd25163575031acdce07538d","networkId":3},{"contractName":"dappHeroTest","description":"DappHero
-            test
-            contract","abi":[{"constant":false,"inputs":[],"name":"sendEthNoArgs","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"constant":false,"inputs":[{"name":"message","type":"bytes32"}],"name":"sendEthWithArgs","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"constant":false,"inputs":[],"name":"sendVariableEthNoArgs","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"constant":false,"inputs":[{"name":"message","type":"bytes32"}],"name":"sendVariableEthWithArgs","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"constant":false,"inputs":[{"name":"value","type":"uint256"}],"name":"triggerEvent","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"anonymous":false,"inputs":[{"indexed":true,"name":"sender","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"EventTrigger","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"sender","type":"address"}],"name":"ValueSent","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"sender","type":"address"},{"indexed":false,"name":"message","type":"bytes32"}],"name":"ValueSentWithMessage","type":"event"},{"constant":true,"inputs":[{"name":"from","type":"address"},{"name":"multiplier","type":"uint256"}],"name":"viewMultipleArgsMultipleReturn","outputs":[{"name":"_balanceMultiplied","type":"uint256"},{"name":"_hello","type":"bytes32"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"from","type":"address"},{"name":"multiplier","type":"uint256"}],"name":"viewMultipleArgsSingleReturn","outputs":[{"name":"_balanceMultiplied","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"viewNoArgsMultipleReturn","outputs":[{"name":"_important","type":"uint256"},{"name":"_hello","type":"bytes32"}],"payable":false,"stateMutability":"view","type":"function"}],"contractAddress":"0x665605c40EECc83B51B56ad59bbEeaeF1aFE3330","networkId":3},{"contractName":"Dapphero
-            skale","description":"Dapphero test on
-            skale","abi":[{"constant":false,"inputs":[],"name":"sendEthNoArgs","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"constant":false,"inputs":[{"name":"message","type":"bytes32"}],"name":"sendEthWithArgs","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"constant":false,"inputs":[],"name":"sendVariableEthNoArgs","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"constant":false,"inputs":[{"name":"message","type":"bytes32"}],"name":"sendVariableEthWithArgs","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"constant":false,"inputs":[{"name":"value","type":"uint256"}],"name":"triggerEvent","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"anonymous":false,"inputs":[{"indexed":true,"name":"sender","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"EventTrigger","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"sender","type":"address"}],"name":"ValueSent","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"sender","type":"address"},{"indexed":false,"name":"message","type":"bytes32"}],"name":"ValueSentWithMessage","type":"event"},{"constant":true,"inputs":[{"name":"from","type":"address"},{"name":"multiplier","type":"uint256"}],"name":"viewMultipleArgsMultipleReturn","outputs":[{"name":"_balanceMultiplied","type":"uint256"},{"name":"_hello","type":"bytes32"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"from","type":"address"},{"name":"multiplier","type":"uint256"}],"name":"viewMultipleArgsSingleReturn","outputs":[{"name":"_balanceMultiplied","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"viewNoArgsMultipleReturn","outputs":[{"name":"_important","type":"uint256"},{"name":"_hello","type":"bytes32"}],"payable":false,"stateMutability":"view","type":"function"}],"contractAddress":"0x257406C8679a5e0cD6CE3D52052B902B30ac890E","networkId":5}]
-        </div>
-    </div>
-
-    <h4 style="display:hidden">Hidden user-loaded components</h4>
-
-    <div id="dh-eth-txProcessing"
-        style="display: none; color: yellowgreen; padding: 10px; border: 1px solid blue; width: 100px">Processing...
-    </div>
-
-    <div id="dh-eth-txConfirmed"
-        style="display: none; color: blue; padding: 10px; border: 1px solid green; width: 100px">Confirmed!.</div>
-
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="dh-root"></div>
     <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
-
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
+      IMAGE TAG
     -->
-</body>
 
-</html>
+
+      <div vending-screen="vending-screen" class="building---header---div">
+        <div class="w-layout-grid grid---3">
+         <img id="dh-threebox-profile-image"
+            src="https://d3e54v103j8qbb.cloudfront.net/plugins/Basic/assets/placeholder.60f9b1840c.svg" alt=""
+            class="building img w-node-b5f7d5f30df0-f542304d">
+          </div>
+      </div>
+
+
+      <!--
+        NFT
+      -->
+
+      <!-- Single Item-->
+      <div class="headline">NFT (opensea API) - Single Item: dh-nft-single-item-container-contract_{address}-tokenId_{tokenId}</div>
+    <div class="component-div">
+      <div id="dh-nft-single-item-container-contract_0x2f2d5aa0efdb9ca3c9bb789693d06bebea88792f-tokenId_2240">sample NFT (inviisible)</div>
+    </div>
+    <!-- Metamask Enable-->
+
+    <div class="headline">Web 3 Metamask Enable Button:: dh-network-enable</div>
+    <div class="component-div"><a id="dh-network-enable" href="#" class="button w-button">Enable Metamask</a></div>
+    
+    
+    
+    
+    
+    <!-- NFT SEARCH-->
+    <div class="div-block-106">
+      <div class="w-form">
+        <form id="email-form" name="email-form" data-name="Email Form"><label for="name">NFT Search</label>
+          <input type="text" class="w-input" maxlength="256" name="name" data-name="Name" id="dh-nft-mult-search-input-id_h677">
+          <input id="dh-nft-mult-search-invoke-id_h677" type="submit" value="Search" data-wait="Please wait..." class="w-button"></form>
+        <div class="success-message w-form-done"></div>
+        <div id="dh-nft-mult-search-parentContainer-id_h677-limit_20">
+          <div id="dh-nft-mult-search-item-container">
+            
+            <div class="collectible-div"><img
+              src="https://uploads-ssl.webflow.com/5ca25aa53ef88d7811fa6a49/5ca25aa53ef88d45c0fa6b1c_Group%20(12).svg"
+              id="dh-nft-mult-search-item-customField_image_url" alt="" class="nft-image"/>
+              
+                <div class="nft-name" id="dh-nft-mult-search-item-customField_name">NFT Name</div>
+                <div class="div-block-85">
+                  <div class="nft-city-name" id="dh-nft-mult-search-item-customField_owner.address">owner address</div>
+                </div>
+              
+            </div>
+
+
+
+          </div>
+        </div>
+        <div class="w-form-fail">
+          <div>Oops! Something went wrong while submitting the form.</div>
+        </div>
+      </div>
+    </div>  
+
+    <!--END NFT SEARCH-->
+
+
+    
+
+
+
+
+
+
+    <!--NFT-->
+    <div id="dh-eth-opensea-retrieveAssetsBySearch-building-zcosbuilding">
+      <div id="osbuilding-parent" class="your-collection-section">
+        <div class="collectible-div">
+          <div><a href="/building-profile" class="collectible-wrapper w-inline-block"><img
+            src="https://uploads-ssl.webflow.com/5ca25aa53ef88d7811fa6a49/5ca25aa53ef88d45c0fa6b1c_Group%20(12).svg"
+            id="osbuilding-zrimageUrl" alt="" class="nft-image"></a>
+            <a href="/building-profile" class="div-thumbnail w-inline-block">
+              <div id="osbuilding-zrname" class="nft-name">NFT Name</div>
+              <div class="div-block-85">
+                <div class="nft-city-name">city name</div>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="collectible-div"><a href="/building-profile" class="collectible-wrapper w-inline-block"><img
+          src="https://uploads-ssl.webflow.com/5ca25aa53ef88d7811fa6a49/5ca25aa53ef88d45c0fa6b1c_Group%20(12).svg"
+          id="nft-image" alt="" class="nft-image"></a>
+          <a href="/building-profile" class="div-thumbnail w-inline-block">
+            <div class="nft-name">NFT Name</div>
+            <div class="div-block-85">
+              <div class="nft-city-name">city name</div>
+            </div>
+          </a>
+        </div>
+        <div class="collectible-div"><a href="/building-profile" class="collectible-wrapper w-inline-block"><img
+          src="https://uploads-ssl.webflow.com/5ca25aa53ef88d7811fa6a49/5ca25aa53ef88d45c0fa6b1c_Group%20(12).svg"
+          id="nft-image" alt="" class="nft-image"></a>
+          <a href="/building-profile" class="div-thumbnail w-inline-block">
+            <div class="nft-name">NFT Name</div>
+            <div class="div-block-85">
+              <div class="nft-city-name">city name</div>
+            </div>
+          </a>
+        </div>
+        <div class="collectible-div"><a href="/building-profile" class="collectible-wrapper w-inline-block"><img
+          src="https://uploads-ssl.webflow.com/5ca25aa53ef88d7811fa6a49/5ca25aa53ef88d45c0fa6b1c_Group%20(12).svg"
+          id="nft-image" alt="" class="nft-image"></a>
+          <a href="/building-profile" class="div-thumbnail w-inline-block">
+            <div class="nft-name">NFT Name</div>
+            <div class="div-block-85">
+              <div class="nft-city-name">city name</div>
+            </div>
+          </a>
+        </div>
+      </div>
+      
+      <div>_</div>
+      
+      <div>
+        <div id="dh-nft-single-item-container-contract_0x2f2d5aa0efdb9ca3c9bb789693d06bebea88792f-tokenId_2239" class="building---header---section">
+          <div class="building---profile---left">
+            <div vending-screen="vending-screen" class="building---header---div">
+              <div class="w-layout-grid grid---3"><a id="w-node-b5f7d5f30de0-20b3f9e9" href="#" class="link-button w-inline-block"><img src="https://uploads-ssl.webflow.com/5ca25aa53ef88d7811fa6a49/5cedff4f6352fc73786efbf0_Group%20(1).svg" width="13" height="13" alt="" class="image-80 _2"></a>
+                <a id="w-node-b5f7d5f30deb-20b3f9e9" href="#" class="tweet-button w-inline-block">
+                  <div class="text-block-16">TWEET</div><img src="images/Twitter_Logo_Blue.svg" width="20" height="20" alt="" class="image-80"></a>
+                  <div id="w-node-b5f7d5f30def-20b3f9e9" class="building---profile---bottom"></div>
+                  <img id="dh-nft-single-item-customField_image_url" src="https://d3e54v103j8qbb.cloudfront.net/plugins/Basic/assets/placeholder.60f9b1840c.svg" alt="" class="building img w-node-b5f7d5f30df0-20b3f9e9"></div>
+                </div>
+              </div>
+              <div class="building-profile---right">
+                <div class="left-right"></div><a id="buy-3-building" href="#" class="building-3-buildings w-button">build 3 buildings</a><a id="buy-5-building" href="#" class="build-5-buildings w-button">build 5 buildings</a>
+                <div id="dh-nft-single-customField_ " class="building-name large">Default Name</div>
+                <div class="building-details-div">
+                  <div class="div-block-76">
+                    <div id="building-id" class="building-details large _2">Building #</div>
+                    <div id="building-id" class="building-details large no-space">000</div>
+                  </div>
+                  <div id="city-abbreviation" class="building-details large">AA</div>
+                  <div class="div-block-76">
+                    <div id="building-id" class="building-details large _2">ERA </div>
+                    <div id="building-id" class="building-details large no-space _2">0</div>
+                    <div id="building-id" class="building-details large no-space _2">1</div>
+                  </div>
+                </div>
+                <div class="owner"><img src="https://d3e54v103j8qbb.cloudfront.net/img/image-placeholder.svg" width="50" height="50" alt="" class="image-31" id="image_url">
+                  <div class="div-block-71">
+                    <div class="building-owner large time-left">Owner:</div>
+                    <div id="owner-name" class="owner-name">0x...000</div>
+                  </div>
+                  <div>
+                    <div class="building-owner large time-left small">Built By</div>
+                    <div class="built-by">0x...000</div>
+                  </div>
+                </div>
+                <div class="building---profile---details">
+                  <div class="building---profile---details-div _60">
+                    <div class="building-cost large time-left">Built<span class="owner-name"></span></div>
+                    <div class="div-block-70"><img src="https://uploads-ssl.webflow.com/5ca25aa53ef88d7811fa6a49/5d08f015277f0982305a46b8_1date.svg" alt="" class="image-78">
+                      <div id="built-date" class="building---profile---text">Mon. 0 0000</div>
+                    </div>
+                  </div>
+                  <div class="building---profile---details-div">
+                    <div class="building-cost large time-left">Height<span class="owner-name"></span></div>
+                    <div class="div-block-70"><img src="https://uploads-ssl.webflow.com/5ca25aa53ef88d7811fa6a49/5d08f017370a89c0abef6489_1height%20class.svg" alt="" class="image-78">
+                      <div id="height" class="building---profile---text">000</div>
+                      <div class="profile---details-text---label">ft<br><span class="owner-name"></span></div>
+                    </div>
+                  </div>
+                  <div class="building---profile---details-div _60">
+                    <div class="building-cost large time-left">Era Class<span class="owner-name"></span></div>
+                    <div class="div-block-70"><img src="https://uploads-ssl.webflow.com/5ca25aa53ef88d7811fa6a49/5d08f016370a891f15ef6483_1era.svg" alt="" class="image-78">
+                      <div id="era-name" class="building---profile---text">Era Name</div>
+                    </div>
+                  </div>
+                  <div class="building---profile---details-div">
+                    <div class="building-cost large time-left">Height Class<span class="owner-name"></span></div>
+                    <div class="div-block-70"><img src="https://uploads-ssl.webflow.com/5ca25aa53ef88d7811fa6a49/5d08f013277f092df25a46b4_1building%20height.svg" alt="" class="image-78">
+                      <div id="height-class" class="building---profile---text">High-Rise</div>
+                    </div>
+                  </div>
+                  <div class="building---profile---details-div _60">
+                    <div class="building-cost large time-left">City<span class="owner-name"></span></div>
+                    <div class="div-block-70"><img src="https://uploads-ssl.webflow.com/5ca25aa53ef88d7811fa6a49/5d08f014370a89fa43ef647c_1city.svg" alt="" class="image-78">
+                      <div id="city-name" class="building---profile---text">City Name</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="special-architecture"><img src="https://uploads-ssl.webflow.com/5ca25aa53ef88d7811fa6a49/5d08f016b1cfe2990a8a2dc9_1founder%20special%20edition.svg" width="60" height="60" alt="" class="special-arch-image">
+                  <div id="special-name" class="special-arch-text main">Founder Building<br><span class="owner-name"></span></div>
+                  <div id="special-rarity" class="special-arch-text-rarity">ED. 500</div>
+                </div>
+              </div>
+              <div class="w-embed"></div><a href="#" class="vending-main-button-5 w-button">build 5 mystery buildings</a><a href="#" class="vending-main-button-10 w-button">build 10 mystery buildings</a></div>
+              
+            </div>
+          </div>
+        </div>
+          
+          
+          
+          
+          <!-- Single NFT Item-->
+          
+          
+          
+          
+          
+          
+          
+          <!-- <script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.4.1.min.220afd743d.js" type="text/javascript" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+            <script src="js/webflow.js" type="text/javascript"></script> -->
+            <noscript>You need to enable JavaScript to run this app.</noscript>
+            <div id="dh-root"></div>
+            <script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.4.1.min.220afd743d.js" type="text/javascript"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+            <script src="js/webflow.js" type="text/javascript"></script>
+          </body>
+          <!-- [if lte IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/placeholders/3.0.2/placeholders.min.js"></script><![endif] -->

@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 
-const NEW_LINE_CONTENTS = `import { logger } from 'logger'`
+const NEW_LINE_CONTENTS = `import { logger } from 'logger/logger'`
 const readDir = (dirPath) => {
 
   for (const dirent of fs.readdirSync(dirPath, { withFileTypes: true })) {

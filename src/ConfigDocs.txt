@@ -1,4 +1,4 @@
-Base String
+ Base String
 dh-{featureName}
 
 Eth Network Info
@@ -23,7 +23,11 @@ dh-threebox-profile-{feature}
 dh-threebox-profile-name
 dh-threebox-profile-location
 dh-threebox-profile-website
-dh-threebox-profile-major
+dh-threebox-profile-emoji
+dh-threebox-profile-job
+dh-threebox-profile-description
+dh-threebox-profile-image
+dh-threebox-profile-hover
 
 config Obj
 {
@@ -65,4 +69,26 @@ config Obj
   type: 'profile'
   information: name | location | website | major
 }
+
+dh-nft-{ 'single' | 'mult' }-
+dh-nft-single-item-container-contract_{address}-tokenId_{tokenId}
+dh-nft-single-item-customField_{jsonPath}
+
+dh-nft-mult-{'search' | owner | contract}
+
+dh-nft-mult-search-input-id_{unique}
+dh-nft-mult-search-invoke-id_{unique}
+dh-nft-mult-search-parentContainer-id_{unique}-limit_{limit}
+dh-nft-mult-search-item-container
+dh-nft-mult-search-item-customField_{jsonPath}
+
+dh-nft-mult-owner-address_{ownerAddress}
+dh-nft-mult-owner-parentContainer-limit_{limit}
+dh-nft-mult-owner-item-container
+dh-nft-mult-owner-item-customField_{jsonPath} 
+
+dh-nft-mult-contract-address_{contractAddress}
+dh-nft-mult-contract-parentContainer-limit_{limit}
+dh-nft-mult-contract-item-container
+dh-nft-mult-contract-item-customField_{jsonPath} 
 
