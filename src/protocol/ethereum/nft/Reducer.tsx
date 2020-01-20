@@ -6,7 +6,7 @@ import { Reducer as SingleReducer } from './single/Reducer'
 export const Reducer = ({ element }) => {
   const injected = useWeb3Injected()
   const [ , , singleOrMult ] = element.id.split('-')
-  console.log('Are we even here yet?')
+
   useEffect(() => {}, [])
 
   switch (singleOrMult) {

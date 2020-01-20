@@ -23,7 +23,7 @@ export const NftSingleContainer: FunctionComponent<NftSingleContainerProps> = ({
         const response = await api.openSea.retrieveAsset({ contractAddress, tokenId })
         const childComponentProps = Array.from(element.querySelectorAll('[id^=dh]'))
           .map((node) => {
-            const match = node.id.match(/-customField_(.+)/)
+            const match = node.id.match(/-customField_(.+)(-|$)/)
             const fieldData = get(response, match[1])
             return {
               childElement: node,
