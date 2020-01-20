@@ -10,11 +10,11 @@ interface EthUserBalanceProps {
   decimals: number;
 }
 
-export const EthUserBalance: FunctionComponent<EthUserBalanceProps> = ({ element, units, decimals}) => {
+export const EthUserBalance: FunctionComponent<EthUserBalanceProps> = ({ element, units, decimals }) => {
   units = units ?? 'wei' //eslint-disable-line
   decimals = decimals ?? 0 //eslint-disable-line
 
-  const { accounts, lib } = useWeb3Injected()
+  const { accounts, networkId, lib } = useWeb3Injected()
 
   useEffect(() => {
     const getData = async () => {
@@ -29,7 +29,7 @@ export const EthUserBalance: FunctionComponent<EthUserBalanceProps> = ({ element
       }
     }
     getData()
-  }, [ accounts ])
+  }, [ accounts, networkId ])
 
   return null
 }

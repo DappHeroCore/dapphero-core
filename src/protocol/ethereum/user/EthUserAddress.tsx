@@ -9,7 +9,7 @@ interface EthUserAddressProps {
 
 export const EthUserAddress: FunctionComponent<EthUserAddressProps> = ({ element, displayFormat }) => {
 
-  const { accounts } = useWeb3Injected()
+  const { accounts, networkId } = useWeb3Injected()
 
   useEffect(() => {
     try {
@@ -20,7 +20,7 @@ export const EthUserAddress: FunctionComponent<EthUserAddressProps> = ({ element
     } catch (e) {
       console.log(e)
     }
-  }, [ accounts ])
+  }, [ accounts, networkId ])
 
   return null
 }
