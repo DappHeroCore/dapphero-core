@@ -1,5 +1,5 @@
-import ERC20 from '../../../abi/ERC20.json' //eslint-disable-line
-import DappHeroTest from '../../../abi/DappHeroTest.json'
+import ERC20 from '../../abi/ERC20.json' //eslint-disable-line
+import DappHeroTest from '../../abi/DappHeroTest.json'
 
 const mocks = [
   {

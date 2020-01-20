@@ -1,6 +1,6 @@
 import React from 'react'
 import { DappHeroConfig } from '../../types/types'
-import { mockConfig } from '../eth_DEP/mocks/mockConfig'
+import { mockConfig } from '../mocks/mockConfig'
 import { Reducer as NetworkReducer } from './network/Reducer'
 import { Reducer as UserReducer } from './user/Reducer'
 import { Reducer as ThreeBoxReducer } from './threeBox/Reducer'
