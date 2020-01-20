@@ -5,6 +5,7 @@ import { mockConfig } from '../eth/mocks/mockConfig'
 import { Reducer as NetworkReducer } from './network/Reducer'
 import { Reducer as UserReducer } from './user/Reducer'
 import { Reducer as ThreeBoxReducer } from './threeBox/Reducer'
+import { Reducer as NftReducer } from './nft/Reducer'
 
 const getConfig = (): DappHeroConfig => {
   const config = mockConfig
@@ -44,6 +45,9 @@ export const featureReducer = (request, element, connected, accounts, injected) 
   // }
   case 'threebox': {
     return <ThreeBoxReducer element={element} />
+  }
+  case 'nft': {
+    return <NftReducer element={element} />
   }
   // case 'nft': {
   //   return <EthParent request={request} config={config} />

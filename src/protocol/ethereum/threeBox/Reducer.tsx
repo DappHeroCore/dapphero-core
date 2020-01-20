@@ -16,10 +16,18 @@ interface ReducerProps {
 export const Reducer: FunctionComponent<ReducerProps> = ({ element }) => {
   const injected = useWeb3Injected()
   const { accounts } = injected
-  const [ threeBoxProfile, setThreeBoxProfile ] = useState({})
+  const [ threeBoxProfile, setThreeBoxProfile ] = useState({
+    name: '',
+    location: '',
+    emoji: '',
+    job: '',
+    description: '',
+    website: '',
+    image: [
+      { contentUrl: { '/': '' } },
+    ],
+  })
   const featureType = element.id.split('-')[3]
-
-  console.log(threeBoxProfile)
 
   useEffect(() => {
     const getProfile = async () => {
@@ -40,7 +48,7 @@ export const Reducer: FunctionComponent<ReducerProps> = ({ element }) => {
     if (imageHash) {
       const imgSrc = `${ipfsRoot}${threeBoxProfile.image[0].contentUrl['/']}`
       return <ThreeBoxProfileImgElement element={element} imgSrc={imgSrc} />
-    } 
+    }
     return null
   }
   case 'name': {

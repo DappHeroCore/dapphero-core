@@ -15,7 +15,9 @@ export const EthEnable: FunctionComponent<EthEnableProps> = ({ element }) => {
 
   useEffect(() => {
     try {
-      element.addEventListener('click', () => { injected.requestAuth() }, false)
+      const clickHandler = () => { injected.requestAuth() }
+      element.addEventListener('click', clickHandler, true)
+      return (() => element.removeEventListener('click', clickHandler, true))
     } catch (e) {
       console.log(e)
     }

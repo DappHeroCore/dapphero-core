@@ -1,108 +1,60 @@
+/* eslint-disable camelcase */
+import * as Axios from 'axios'
 import { logger } from 'logger/logger'
-import { OpenSeaPort, Network } from 'opensea-js'
-import { OpenSeaFunctions } from '../protocol/ethereum/openSea/types'
 
-type web3Provider = any
-
-const DEFAULT_LIMIT = 12
-// arbitrary limit...we can revisit this
-// opensea defaults to 20, but even that seems too high for our purposes
+const DEFAULT_LIMIT = 12 // MAX 300
 const ORDER_BY = 'current_price'
-// current_price may be best prop to surface highest quality assets
 const ORDER_DIRECTION = 'desc'
-const DEFAULT_RETRIES = 2
 
-const DEFAULT_API_CONFIG = {
-  networkName: 'main',
-  apiKey: 'd2a31702fd2b4d9abe2f54f656d29fd1',
+const OPEN_SEA = {
+  baseUrl: 'https://api.opensea.io/api/v1',
+  ApiKey: 'd2a31702fd2b4d9abe2f54f656d29fd1',
+}
+const axios = Axios.create({ headers: { 'X-API-KEY': OPEN_SEA.ApiKey } })
+
+export const retrieveAsset = async ({ contractAddress, tokenId }) => {
+  const url = `${OPEN_SEA.baseUrl}/asset/${contractAddress}/${tokenId}`
+  const { data } = await axios.get(url)
+  return data
 }
 
-export const retrieveAsset = (
-  provider: web3Provider,
-  networkName: Network,
-  tokenAddress: string,
-  tokenId: string | number,
-  retries: number = DEFAULT_RETRIES,
-) => new OpenSeaPort(provider, { ...DEFAULT_API_CONFIG, networkName }).api.getAsset(tokenAddress, tokenId, retries).catch((error) => { console.log(error); return 'There was an error' })
-
-export const retrieveAssetsByOwner = (
-  provider: web3Provider,
-  networkName: Network,
-  { owner, limit = DEFAULT_LIMIT, orderBy = ORDER_BY, orderDirection = ORDER_DIRECTION },
-  page: number = 1,
-) => new OpenSeaPort(provider, { ...DEFAULT_API_CONFIG, networkName }).api.getAssets({
+export const retrieveAssetsByOwner = async ({
   owner,
-  limit,
-  order_by: orderBy, // eslint-disable-line
-  order_direction: orderDirection, // eslint-disable-line
-}, page).catch((error) => { console.log(error); return 'There was an error' })
+  limit = DEFAULT_LIMIT,
+  orderBy = ORDER_BY,
+  orderDirection = ORDER_DIRECTION,
+}): Promise<any[]> => {
+  const query = { owner, order_by: orderBy, order_direction: orderDirection, limit }
+  const { data } = await axios.get(`${OPEN_SEA.baseUrl}/assets`, { query })
+  return data
+}
 
-export const retrieveAssetsByConract = (
-  provider: web3Provider,
-  networkName: Network,
-  { assetContractAddress, limit = DEFAULT_LIMIT, orderBy = ORDER_BY, orderDirection = ORDER_DIRECTION },
-  page: number = 1,
-) => new OpenSeaPort(provider, { ...DEFAULT_API_CONFIG, networkName }).api.getAssets({
-  asset_contract_address: assetContractAddress, // eslint-disable-line
-  limit,
-  order_by: orderBy, // eslint-disable-line
-  order_direction: orderDirection, // eslint-disable-line
-}, page).catch((error) => { console.log(error); return 'There was an error' })
+export const retrieveAssetsByConract = async ({
+  assetContractAddress,
+  limit = DEFAULT_LIMIT,
+  orderBy = ORDER_BY,
+  orderDirection = ORDER_DIRECTION,
+}) => {
+  const query = {
+    limit,
+    order_by: orderBy,
+    order_direction: orderDirection,
+    asset_contract_address: assetContractAddress,
+  }
+  const { data } = await axios.get(`${OPEN_SEA.baseUrl}/assets`, { query })
+  return data
+}
 
-export const retrieveAssetsBySearch = (
-  provider: web3Provider,
-  networkName: Network,
-  { search, limit = DEFAULT_LIMIT, orderBy = ORDER_BY, orderDirection = ORDER_DIRECTION },
-  page: number = 1,
-) => new OpenSeaPort(provider, { ...DEFAULT_API_CONFIG, networkName }).api.getAssets({
+export const retrieveAssetsBySearch = async ({
   search,
-  limit,
-  order_by: orderBy, // eslint-disable-line
-  order_direction: orderDirection, // eslint-disable-line
-}, page).catch((error) => { console.log(error); return 'There was an error' })
+  limit = DEFAULT_LIMIT,
+  orderBy = ORDER_BY,
+  orderDirection = ORDER_DIRECTION,
+}) => {
+  const query = { limit, order_by: orderBy, order_direction: orderDirection, search }
+  const { data } = await axios.get(`${OPEN_SEA.baseUrl}/assets`, { query })
+  return data
+}
 
 // ! DEPRECATED
-export const openSeaApi = async (provider: any, func: string, args: string[]) => {
-  // TODO: If not connected to Mainnet or Rinkeby, we need to bubble up error and inform User. jira
-  const networkName = provider.networkVersion === '1' ? Network.Main : Network.Rinkeby
-  const seaport = new OpenSeaPort(provider, { ...DEFAULT_API_CONFIG, networkName })
-
-  switch (func) {
-  case OpenSeaFunctions.RETRIEVE_ASSET: {
-    return seaport.api.getAsset(args[0], args[1]).catch((error) => { console.log(error); return error })
-  }
-
-  case OpenSeaFunctions.RETRIEVE_ASSETS_BY_OWNER: {
-    return seaport.api.getAssets({
-      owner: args[0],
-      limit: DEFAULT_LIMIT,
-      order_by: ORDER_BY, // eslint-disable-line
-      order_direction: ORDER_DIRECTION, // eslint-disable-line
-    }).catch((error) => { console.log(error); return error })
-  }
-
-  case OpenSeaFunctions.RETRIEVE_ASSETS_BY_CONTRACT: {
-    return seaport.api.getAssets({
-      asset_contract_address: args[0], // eslint-disable-line
-      limit: DEFAULT_LIMIT,
-      order_by: ORDER_BY, // eslint-disable-line
-      order_direction: ORDER_DIRECTION, // eslint-disable-line
-    }).catch((error) => { console.log(error); return error })
-  }
-
-  case OpenSeaFunctions.RETRIEVE_ASSETS_BY_SEARCH:
-  case OpenSeaFunctions.RETRIEVE_ASSETS_BY_SEARCH_INPUT: {
-    if (!args[0]) return null
-    return seaport.api.getAssets({
-      search: args[0],
-      limit: DEFAULT_LIMIT,
-      order_by: ORDER_BY, // eslint-disable-line
-      order_direction: ORDER_DIRECTION, // eslint-disable-line
-    }).catch((error) => { console.log(error); return error })
-  }
-
-  default: {
-    return null
-  }
-  }
-}
+export const openSeaApi = null
