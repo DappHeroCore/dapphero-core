@@ -16,7 +16,7 @@ export const ThreeBoxParent: FunctionComponent<ThreeBoxParentProps> = ({
   signifiers,
   request: { requestString },
   element,
-  injected
+  injected,
 }) => {
   const feature = requestString[ThreeBoxRequestString.FEATURE]
 

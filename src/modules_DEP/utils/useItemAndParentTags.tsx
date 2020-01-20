@@ -25,6 +25,6 @@ export function useItemAndParentTags(childElement) {
   return {
     parentTag,
     itemTag,
-    baseElements
+    baseElements,
   }
 }

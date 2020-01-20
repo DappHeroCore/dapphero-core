@@ -10,7 +10,7 @@ export const EthContractEvent: FunctionComponent<EthContractEventProps> = ({
   injected,
   method,
   element,
-  request
+  request,
 }) => {
   const { name } = method
 

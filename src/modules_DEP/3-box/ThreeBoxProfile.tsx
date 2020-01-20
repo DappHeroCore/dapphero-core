@@ -11,7 +11,7 @@ interface ThreeBoxProfileProps {
 export const ThreeBoxProfile: FunctionComponent<ThreeBoxProfileProps> = ({
   account,
   signifiers,
-  element
+  element,
 }) => {
   const [ value, setValue ] = useState('')
 

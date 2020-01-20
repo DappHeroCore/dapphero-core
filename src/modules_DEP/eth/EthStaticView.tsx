@@ -1,9 +1,10 @@
 import { logger } from 'logger'
 import React, { useEffect, FunctionComponent } from 'react'
+import BN from 'bn.js'
 import { Request, RequestString } from '../types'
 import { getBalance } from '../../api/ethereum'
 import { useUnitAndDecimalFormat } from '../utils'
-import BN from 'bn.js'
+
 interface EthStaticViewProps {
   request: Request;
   injected: {[key: string]: any};

@@ -5,13 +5,13 @@ import { useUnitFormatter } from './useUnitFormatter'
 export const useUnitAndDecimalFormat = (
   injected: any,
   retVal: any,
-  signifiers: { [key: string]: string }
+  signifiers: { [key: string]: string },
 ) => {
   const unitFormatted = useUnitFormatter(injected.lib, retVal, signifiers.unit)
 
   const decimalFormatted = useDecimalFormatter(
     unitFormatted,
-    signifiers.decimals
+    signifiers.decimals,
   )
 
   return decimalFormatted

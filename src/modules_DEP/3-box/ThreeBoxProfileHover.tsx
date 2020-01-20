@@ -12,6 +12,6 @@ export const ThreeBoxProfileHover: FunctionComponent<ThreeBoxProfileHoverProps> 
   element.innerHTML = ''
   return ReactDOM.createPortal(
     ProfileComponent,
-    element
+    element,
   )
 }

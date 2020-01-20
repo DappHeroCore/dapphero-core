@@ -10,7 +10,7 @@ export const OpenSeaViewArgs: FunctionComponent<OpenSeaViewProps> = ({
   provider,
   signifiers,
   element,
-  injected
+  injected,
 }) => {
   const [ value, setValue ] = useState(null)
 

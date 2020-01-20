@@ -16,7 +16,7 @@ export const EthContractViewStatic: FunctionComponent<
   element,
   signifiers,
   signifiers: { retVal, unit, decimal },
-  injected
+  injected,
 }) => {
   const { signature } = method
   const el = document.getElementById(element.id)
