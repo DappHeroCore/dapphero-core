@@ -19,8 +19,8 @@ export const useGetMethods = (abi: any[], web3: Web3) => {
       signature: web3.eth.abi.encodeFunctionSignature(method),
       arguments: method.inputs.map((input) => ({
         name: input.name,
-        type: input.type
-      }))
+        type: input.type,
+      })),
     }))
     setFunctions(newFunctions)
   }, [])

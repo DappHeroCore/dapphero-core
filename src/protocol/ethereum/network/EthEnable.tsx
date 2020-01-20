@@ -1,6 +1,6 @@
-import { logger } from 'logger/logger'
 import { useEffect, FunctionComponent } from 'react'
 import { useWeb3Injected } from '@openzeppelin/network/react'
+import { logger } from '../../eth_DEP/node_modules/logger/logger'
 
 interface EthEnableProps {
   element: HTMLElement

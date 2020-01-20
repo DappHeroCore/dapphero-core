@@ -14,7 +14,7 @@ export const EthContractViewArgs: FunctionComponent<
   request: { requestString },
   injected,
   signifiers,
-  signifiers: { retVal, unit, decimal }
+  signifiers: { retVal, unit, decimal },
 }) => {
   const { signature } = method
   const [ value, setValue ] = useState(null)
@@ -28,7 +28,7 @@ export const EthContractViewArgs: FunctionComponent<
     signature,
     sanitizedArgs,
     setValue,
-    retVal
+    retVal,
   )
 
   const sanitizedValue = useUnitAndDecimalFormat(injected, value, signifiers)

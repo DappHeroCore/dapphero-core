@@ -15,7 +15,7 @@ export const getBaseContractData = (
   requestString: string[],
   abi: any[],
   contractAddress: string,
-  injectedLib: any
+  injectedLib: any,
 ) => {
   const method = requestString[3] // TODO: We need to be explicit about the index of the request string. Just a number is unclase.
   const instance = useContractInstance(abi, contractAddress, injectedLib)

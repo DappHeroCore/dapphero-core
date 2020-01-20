@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useWeb3Injected } from '@openzeppelin/network/react/useWeb3Hook'
-import { EthEnable } from '../../eth'
+import { EthEnable } from './EthEnable'
 import { EthNetworkInfo } from './EthNetworkInfo'
 
 export const Reducer = ({ element }) => {

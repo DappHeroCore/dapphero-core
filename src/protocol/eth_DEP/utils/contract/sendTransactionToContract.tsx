@@ -37,14 +37,14 @@ export const sendTransactionToContract: any = (
   const sanitizedArgs = sanitizeTransactionArguments(args, method, injected)
   const notify = Notify({
     dappId: apiKey, // [String] The API key created by step one above
-    networkId // [Integer] The Ethereum network ID your Dapp uses.
+    networkId, // [Integer] The Ethereum network ID your Dapp uses.
   })
 
   // TODO: Keep track of transactions for website owners analytics
   instance.methods[signature](...sanitizedArgs)
     .send({
       from,
-      value: value ? toWei(injected, value) : null // TODO: I don't understand what is happeing here.
+      value: value ? toWei(injected, value) : null, // TODO: I don't understand what is happeing here.
     })
     .on('transactionHash', (hash) => {
       useBlockNative ? notify.hash(hash) : null // TODO: We should set this on the config tool, but enable by default, we can be opinionated.

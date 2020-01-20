@@ -16,7 +16,7 @@ enum MethodTypes {
 export const sanitizeTransactionArguments = (
   args: any[],
   method: any,
-  injected: Web3
+  injected: Web3,
 ) => {
   const sanitizedArgs = args.map((arg, i) => {
     if (

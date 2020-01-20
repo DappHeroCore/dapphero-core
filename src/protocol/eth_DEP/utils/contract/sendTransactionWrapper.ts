@@ -22,14 +22,14 @@ export const sendTransactionWrapper = async (
   instance,
   signature,
   setTxState,
-  signifiers
+  signifiers,
 ) => {
 
   const { inputFields, txArgArray, valueArg } = getTxFieldInputs(
     requests,
     position,
     method.name,
-    method
+    method,
   )
 
   await sendTransactionToContract(
