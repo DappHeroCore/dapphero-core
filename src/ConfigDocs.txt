@@ -14,7 +14,7 @@ dh-user-address-display_{'full' | 'short'}
 dh-user-balance-units_{'wei' | 'ether'}-decimals_{ integer }
 
 Eth Contracts
-dh-customContract-name_{contractName}-methodName_{methodName}-input_{inputName}-type{'string | 'wei' | 'ether'}
+dh-customContract-name_{contractName}-methodName_{methodName}-input_{inputName}-type_{'string | 'wei' | 'ether'}
 dh-customContract-name_{contractName}-methodName_{methodName}-output_{outputName}-display_{'string' | 'wei | 'ether}-decimals_{integer}
 dh-customContract-name_{contractName}-methodName_{methodName}-invoke
 

@@ -1,11 +1,8 @@
 import React, { FunctionComponent, useEffect, useState } from 'react'
 import { useWeb3Injected } from '@openzeppelin/network/react'
 import Box from '3box'
-import { EthContractProps } from '../../../types/types'
 import { ThreeBoxProfileDataElement } from './ThreeBoxProfileDataElement'
 import { ThreeBoxProfileImgElement } from './ThreeBoxProfileImgElement'
-import { ThreeBoxProfileHover } from './ThreeBoxProfileHover'
-import { ThreeBoxRequestString, ThreeBoxFeature } from './types'
 
 const ipfsRoot = 'https://cloudflare-ipfs.com/ipfs/'
 interface ReducerProps {

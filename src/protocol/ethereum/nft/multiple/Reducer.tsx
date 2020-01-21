@@ -18,16 +18,16 @@ export const Reducer: FunctionComponent<ReducerProps> = ({ element }) => {
     const uniqueIdentifier = element.id.match(/-id_([a-zA-Z0-9]+)/)?.[1] ?? null
     if (uniqueIdentifier == null) throw new Error('You did not provide a unique Identfiier on the mult nft id')
 
-    const siblingNodes = Array.from(document.querySelectorAll(`[id*=${uniqueIdentifier}`))
+    const siblingNodes = Array.from(document.querySelectorAll(`[id*=-id_${uniqueIdentifier}`))
     const inputNode = siblingNodes.filter((item) => item.id.split('-')[4] === 'input')[0]
     const invokeNode = siblingNodes.filter((item) => item.id.split('-')[4] === 'invoke')[0]
     return (
       <NftMultSearch element={element} invokeNode={invokeNode} inputNode={inputNode} childContainer={childContainer} />
-    )}
-  
+    ) }
+
   case 'owner': {
     return (
-      null  
+      null
     )
   }
   case 'contract': {

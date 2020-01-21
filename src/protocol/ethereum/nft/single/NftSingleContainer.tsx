@@ -10,9 +10,9 @@ interface NftSingleContainerProps {
 }
 
 export const NftSingleContainer: FunctionComponent<NftSingleContainerProps> = ({ element, responseObj }): any[] => {
-  const contractMatch = element.id.match(/-contract_([a-zA-z0-9]+)/)
+  const contractMatch = element.id.match(/-contract_([a-zA-Z0-9]+)/)
   const contractAddress = contractMatch?.[1]
-  const tokenMatch = element.id.match(/-tokenId_([a-zA-z0-9]+)/)
+  const tokenMatch = element.id.match(/-tokenId_([a-zA-Z0-9]+)/)
   const tokenId = tokenMatch?.[1]
   const { lib: { currentProvider }, networkName, connected } = useWeb3Injected()
 

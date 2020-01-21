@@ -17,7 +17,7 @@ export const NftMultSearch: FunctionComponent<NftMultSearchProps> = ({ element, 
 
     const eventHandler = async (event) => {
       if (event) { event.preventDefault() }
-      Array.from(element.children).forEach((item) => item.remove())
+      Array.from(element.querySelectorAll('[id*=item-container]')).forEach((item) => item.remove())
       setSearchResults([])
       const { assets: searchResultsResponse } = await api.openSea.retrieveAssetsBySearch({
         search: inputNode.value,
@@ -38,16 +38,13 @@ export const NftMultSearch: FunctionComponent<NftMultSearchProps> = ({ element, 
 
   }, [])
 
-  //   console.log('childContainer', childContainer)
+  // TODO: revisit original implementation, consider using replaceWith()
   // TODO: Progres State (fetcing, failed, success)
   return (
-    searchResults.reverse().map((item, index) => {
+    searchResults.reverse().map((item) => {
       const copyNode = (childContainer.cloneNode(true) as HTMLElement)
       copyNode.style.display = copyNode.style.display === 'none' ? 'block' : copyNode.style.display
       element.appendChild(copyNode)
-      if (index === searchResults.length - 1) {
-        childContainer.remove()
-      }
       return (
         <NftSingleContainer element={copyNode} responseObj={item} />
       )
