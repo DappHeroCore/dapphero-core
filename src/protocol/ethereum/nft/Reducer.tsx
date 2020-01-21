@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from 'react'
-import { useWeb3Injected } from '@openzeppelin/network/react/useWeb3Hook'
+import React, { useEffect } from 'react'
 import { Reducer as MultReducer } from './multiple/Reducer'
 import { Reducer as SingleReducer } from './single/Reducer'
 
 export const Reducer = ({ element }) => {
-  const injected = useWeb3Injected()
   const [ , , singleOrMult ] = element.id.split('-')
 
   useEffect(() => {}, [])
