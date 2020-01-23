@@ -16,5 +16,5 @@ const requests = Array.prototype.slice
   })
 
 export const App: React.FC = () => (
-  requests.map((request) => featureReducer(request, request.element))
+  requests.map((request, i) => featureReducer(request, request.element, i))
 )

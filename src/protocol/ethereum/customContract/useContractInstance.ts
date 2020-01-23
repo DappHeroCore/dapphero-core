@@ -8,15 +8,7 @@ import { useState, useEffect } from 'react'
  * @returns {object} this is the instance of the contract
  */
 function useContractInstance(abi, address, web3) {
-  const [ instance, setInstance ] = useState(null)
-
-  useEffect(() => {
-    (() => {
-      const contractInstance = new web3.eth.Contract(abi, address)
-      setInstance(contractInstance)
-    })()
-  }, [])
-  return instance
+  return new web3.eth.Contract(abi, address)
 }
 
 export { useContractInstance }

@@ -14,9 +14,15 @@ dh-user-address-display_{'full' | 'short'}
 dh-user-balance-units_{'wei' | 'ether'}-decimals_{ integer }
 
 Eth Contracts
-dh-customContract-name_{contractName}-methodName_{methodName}-input_{inputName}-type_{'string | 'wei' | 'ether'}
-dh-customContract-name_{contractName}-methodName_{methodName}-output_{outputName}-display_{'string' | 'wei | 'ether}-decimals_{integer}
-dh-customContract-name_{contractName}-methodName_{methodName}-invoke
+dh-customContract-{dynamic | static}-name:{contractName}-methodName:{methodName}-input-input:{inputName}-type:{'string | 'wei' | 'ether'}
+dh-customContract-{dynamic | static}-name:{contractName}-methodName:{methodName}-output-output:{outputName}-display:{'string' | 'wei | 'ether}-decimals:{integer}
+dh-customContract-{dynamic | static}-name:{contractName}-methodName:{methodName}-invoke
+
+// Static return values (use this format)
+dh-customContract-static-{contractName}-{methodName}-output-returnValue-arg:{firstArg}-arg:{secondArg}...
+dh-customContract-static-DappHeroTest-viewMultipleArgsMultipleReturn-output-returnValue:_balanceMultiplied-arg:0xeoee-arg:12
+output:{outputName}-input:{inputName=value}
+dh-customContract-static-name:DappHeroTest:methodName:viewMultipleArgsMultipleReturn-output-outputName__balanceMultiplied-inputfrom:0x688hhdhd-input:
 
 3box
 dh-threebox-profile-{feature}
