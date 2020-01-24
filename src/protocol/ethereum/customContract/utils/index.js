@@ -1,7 +1,6 @@
 export * from './contract/useContractInstance'
 export * from './contract/useGetMethods'
 export * from './contract/getUserCustomTxStateNotification'
-export * from './contract/sendTransactionWrapper'
 export * from './contract/sendTransactionToContract'
 export * from './contract/sanitizeTransactionArguments'
 export * from './element/parseIdTag'
