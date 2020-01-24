@@ -5,7 +5,8 @@ import { addClickHandlerToTriggerElement } from '../customContract/utils'
 interface EthTransferProps {
   element: HTMLElement
 }
-
+// TODO: [BS-16] Add feature for sending fixed amount of eth without any inputs
+// TODO: [DEV-109] add blocknative support for simple eth transfers
 // TODO: clean this up,
 // TODO: consider adding a required unique id for this functionality
 // and base DOM parsing off id

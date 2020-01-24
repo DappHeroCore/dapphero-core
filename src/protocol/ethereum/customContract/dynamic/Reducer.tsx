@@ -32,31 +32,16 @@ export const Reducer = ({
     error: null,
   }
   const [ txState, setTxState ] = useState(defaultState)
-  const { txProcessingElement, txConfirmedElement } = getUserLoadedElements()
+  // TODO: [BS-15] flesh out this feature in future iteration
   const inputNodes = document.querySelectorAll(`[id*=${methodName}]`)
 
   const methodObj = abi.reduce((acc, item) => (item.signature === signature ? item : acc), {})
-
-  useEffect(() => {
-    getUserCustomTxStateNotification(
-      txState,
-      setTxState,
-      defaultState,
-      txProcessingElement,
-      txConfirmedElement,
-      element,
-    )
-  }, [ txState ])
-
-  const getInputs = () => getTxFieldInputs(inputNodes, abi, methodObj)
 
   const sendTransaction = (e) => {
     e.preventDefault()
     const from = web3.givenProvider.selectedAddress
     const networkId = Number(web3.givenProvider.networkVersion)
-    const { inputArgs, payableValue } = getInputs()
-    console.log('inputargs', inputArgs)
-    console.log('payableValue', payableValue)
+    const { inputArgs, payableValue } = getTxFieldInputs(inputNodes, abi, methodObj)
 
     sendTransactionToContract(
       web3,
