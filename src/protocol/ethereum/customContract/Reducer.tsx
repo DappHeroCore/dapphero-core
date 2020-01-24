@@ -3,14 +3,15 @@ import * as api from 'api'
 import { useWeb3Injected } from '@openzeppelin/network/react'
 import { Reducer as StaticReducer } from './static/Reducer'
 import { Reducer as DynamicReducer } from './dynamic/Reducer'
+import { Reducer as ViewReducer } from './view/Reducer'
 import { useGetMethods, useContractInstance, parseIdTag } from './utils'
+import { CustomContractTypes } from './types'
 
 export const Reducer = ({ element }) => {
   const context = useWeb3Injected()
   const { lib } = context
 
   const type = element.id.split('-')[2]
-  console.log('element', element)
 
   const { contractName, methodName, returnValueName, argMatches, args, decimals, display } = parseIdTag(element.id)
   const { contractAddress, abi } = api.dappHero.getContractByName(contractName)
@@ -20,7 +21,7 @@ export const Reducer = ({ element }) => {
   const { signature } = methods.filter((m) => m.name === methodName)[0] // TODO: be explicit about this Zero.
 
   switch (type) {
-  case 'static': {
+  case CustomContractTypes.STATIC: {
     return (
       <StaticReducer
         element={element}
@@ -36,8 +37,24 @@ export const Reducer = ({ element }) => {
     )
   }
 
-  case 'dynamic': {
-    console.log('dynamic type', type)
+  case CustomContractTypes.VIEW: {
+    if (element.id.includes('-invoke')) {
+      return (
+        <ViewReducer
+          element={element}
+          abi={abi}
+          signature={signature}
+          contractInstance={contractInstance}
+          contractName={contractName}
+          web3={lib}
+          methodName={methodName}
+        />
+      )
+    }
+    return null
+  }
+
+  case CustomContractTypes.DYNAMIC: {
     if (element.id.includes('-invoke')) {
       // only running 'invoke' element through reducer
       // on submit tx, other elements are gathered

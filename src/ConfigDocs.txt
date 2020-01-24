@@ -14,9 +14,9 @@ dh-user-address-display_{'full' | 'short'}
 dh-user-balance-units_{'wei' | 'ether'}-decimals_{ integer }
 
 Eth Contracts
-dh-customContract-{dynamic | static}-name:{contractName}-methodName:{methodName}-input-input:{inputName}-type:{'string | 'wei' | 'ether'}
-dh-customContract-{dynamic | static}-name:{contractName}-methodName:{methodName}-output-output:{outputName}-display:{'string' | 'wei | 'ether}-decimals:{integer}
-dh-customContract-{dynamic | static}-name:{contractName}-methodName:{methodName}-invoke
+dh-customContract-{dynamic | static | view}-name:{contractName}-methodName:{methodName}-input-input:{inputName}-type:{'string | 'wei' | 'ether'}
+dh-customContract-{dynamic | static | view}-name:{contractName}-methodName:{methodName}-output-output:{outputName}-display:{'string' | 'wei | 'ether}-decimals:{integer}
+dh-customContract-{dynamic | static | view}-name:{contractName}-methodName:{methodName}-invoke
 
 // Static return values (use this format)
 dh-customContract-static-{contractName}-{methodName}-output-returnValue-arg:{firstArg}-arg:{secondArg}...
