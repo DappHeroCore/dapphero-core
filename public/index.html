@@ -48,6 +48,40 @@
         </div>
       </div>
 
+      <div class="headline">
+        Custom Contract: DappHeroTest - viewMultipleArgsSingleReturn (view tx with dynamic inputs)
+      </div>
+      <form id="email-form" name="email-form" data-name="Email Form">
+        <label for="name">View Function, Dynamic Args</label>
+        <input
+          type="text"
+          class="w-input"
+          maxlength="256"
+          placeholder="Address"
+          id="dh-customContract-view-name:DappHeroTest-methodName:viewMultipleArgsSingleReturn-input-input:from"
+        />
+        <input
+          type="text"
+          class="w-input"
+          maxlength="256"
+          placeholder="Uint"
+          id="dh-customContract-view-name:DappHeroTest-methodName:viewMultipleArgsSingleReturn-input-input:multiplier"
+        />
+        <input
+          id="dh-customContract-view-name:DappHeroTest-methodName:viewMultipleArgsSingleReturn-invoke"
+          type="submit"
+          value="Submit"
+          class="w-button"
+        />
+        <div class="component-div">
+          <div
+            id="dh-customContract-view-name:DappHeroTest-methodName:viewMultipleArgsSingleReturn-output-returnValue:_balanceMultiplied-display:ether-decimals:1"
+          >
+            *Return value on submit: _balanceMultiplied*
+          </div>
+        </div>
+      </form>
+
       <div class="headline">Custom Contract: DappHeroTest - triggerEvent</div>
       <form id="email-form" name="email-form" data-name="Email Form">
         <label for="name">Trigger Event</label>
@@ -55,10 +89,29 @@
           type="text"
           class="w-input"
           maxlength="256"
+          placeholder="Uint"
           id="dh-customContract-dynamic-name:DappHeroTest-methodName:triggerEvent-input-input:value"
         />
         <input
           id="dh-customContract-dynamic-name:DappHeroTest-methodName:triggerEvent-invoke"
+          type="submit"
+          value="Submit"
+          class="w-button"
+        />
+      </form>
+
+      <div class="headline">Custom Contract: DappHeroTest - sendEthNoArgs</div>
+      <form id="email-form" name="email-form" data-name="Email Form">
+        <label for="name">Send ETH to Contract</label>
+        <input
+          type="text"
+          class="w-input"
+          maxlength="256"
+          placeholder="Msg.value in ether (send 0.01)"
+          id="dh-customContract-dynamic-name:DappHeroTest-methodName:sendEthNoArgs-input-input:payable-display:ether"
+        />
+        <input
+          id="dh-customContract-dynamic-name:DappHeroTest-methodName:sendEthNoArgs-invoke"
           type="submit"
           value="Submit"
           class="w-button"
