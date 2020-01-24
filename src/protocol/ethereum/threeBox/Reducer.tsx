@@ -1,8 +1,9 @@
 import React, { FunctionComponent, useEffect, useState } from 'react'
 import { useWeb3Injected } from '@openzeppelin/network/react'
-import Box from '3box'
 import { ThreeBoxProfileDataElement } from './ThreeBoxProfileDataElement'
 import { ThreeBoxProfileImgElement } from './ThreeBoxProfileImgElement'
+
+const { getProfile: get3boxProfile } = require('3box/lib/api')
 
 const ipfsRoot = 'https://cloudflare-ipfs.com/ipfs/'
 interface ReducerProps {
@@ -30,7 +31,7 @@ export const Reducer: FunctionComponent<ReducerProps> = ({ element }) => {
     const getProfile = async () => {
       try {
         // TODO: [DEV-97] How to we check the status of a request? When no Profile this 404's
-        const profile = await Box.getProfile(accounts[0])
+        const profile = await get3boxProfile(accounts[0])
         setThreeBoxProfile(profile)
       } catch (error) {
         console.log('You have no profile. ', error)

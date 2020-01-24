@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { useWeb3Injected } from '@openzeppelin/network/react/useWeb3Hook'
 import { EthEnable } from './EthEnable'
 import { EthNetworkInfo } from './EthNetworkInfo'
+import { EthTransfer } from './EthTransfer'
+import { NetworkFeatureTypes } from './types'
 
 export const Reducer = ({ element }) => {
   const injected = useWeb3Injected()
@@ -28,14 +30,14 @@ export const Reducer = ({ element }) => {
   }, [ networkId, providerName, networkName ])
 
   switch (infoType) {
-  case 'enable': {
+  case NetworkFeatureTypes.ENABLE: {
     return (
       <EthEnable
         element={element}
       />
     )
   }
-  case 'id': {
+  case NetworkFeatureTypes.ID: {
     return (
       <EthNetworkInfo
         element={element}
@@ -43,7 +45,7 @@ export const Reducer = ({ element }) => {
       />
     )
   }
-  case 'name': {
+  case NetworkFeatureTypes.NAME: {
     return (
       <EthNetworkInfo
         element={element}
@@ -51,13 +53,21 @@ export const Reducer = ({ element }) => {
       />
     )
   }
-  case 'provider': {
+  case NetworkFeatureTypes.PROVIDER: {
     return (
       <EthNetworkInfo
         element={element}
         infoValue={infoValue.providerName}
       />
     )
+  }
+  case NetworkFeatureTypes.TRANSFER: {
+    if (element.id.includes('-invoke')) {
+      return (
+        <EthTransfer element={element} />
+      )
+    }
+    return null
   }
   default:
     return null

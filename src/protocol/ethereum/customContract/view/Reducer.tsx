@@ -24,11 +24,12 @@ export const Reducer = ({
   const returnElement = getReturnElement(contractName, methodObj.name) // invoke element isn't same as return element
 
   const { returnValueName, decimals, display } = parseIdTag(returnElement.id)
-  const inputArgs = () => getTxFieldInputs(inputNodes, abi, methodObj)
+  const inputArguments = () => getTxFieldInputs(inputNodes, abi, methodObj)
 
   const callContract = (e) => {
     e.preventDefault()
-    callPublicMethodWithArgs(web3, contractInstance, signature, inputArgs(), setReturnValue, returnValueName)
+    const { inputArgs } = inputArguments()
+    callPublicMethodWithArgs(web3, contractInstance, signature, inputArgs, setReturnValue, returnValueName)
   }
 
   addClickHandlerToTriggerElement(element, callContract)
