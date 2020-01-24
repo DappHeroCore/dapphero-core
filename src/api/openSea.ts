@@ -29,7 +29,7 @@ export const retrieveAssetsByOwner = async ({
   return data
 }
 
-export const retrieveAssetsByConract = async ({
+export const retrieveAssetsByContract = async ({
   assetContractAddress,
   limit = DEFAULT_LIMIT,
   orderBy = ORDER_BY,
