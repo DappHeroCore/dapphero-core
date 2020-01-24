@@ -21,7 +21,6 @@ dh-customContract-{dynamic | static}-name:{contractName}-methodName:{methodName}
 // Static return values (use this format)
 dh-customContract-static-{contractName}-{methodName}-output-returnValue-arg:{firstArg}-arg:{secondArg}...
 dh-customContract-static-DappHeroTest-viewMultipleArgsMultipleReturn-output-returnValue:_balanceMultiplied-arg:0xeoee-arg:12
-output:{outputName}-input:{inputName=value}
 dh-customContract-static-name:DappHeroTest:methodName:viewMultipleArgsMultipleReturn-output-outputName__balanceMultiplied-inputfrom:0x688hhdhd-input:
 
 3box
