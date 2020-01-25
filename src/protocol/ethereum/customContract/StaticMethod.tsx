@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDecimalAndDisplayFormat } from './utils'
 
 export const StaticMethod = ({ element, returnValueName, args, decimals, display, contractInstance, signature, abi, web3 }) => {
@@ -15,7 +15,7 @@ export const StaticMethod = ({ element, returnValueName, args, decimals, display
         }
 
         const newReturnValue = value?.[returnValueName] ?? value
-        const formattedValue = useDecimalAndDisplayFormat(web3, newReturnValue, decimals, display)
+        const formattedValue = useDecimalAndDisplayFormat(newReturnValue, decimals, display)
 
         setReturnValue(formattedValue)
       } catch (error) {

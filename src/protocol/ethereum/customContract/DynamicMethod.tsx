@@ -1,5 +1,4 @@
-import React, { useState } from 'react'
-import Web3 from 'web3'
+import { useState } from 'react'
 import {
   sendTransactionToContract,
   getTxFieldInputs,
@@ -10,7 +9,7 @@ interface DynamicCustomContractProps {
   element: HTMLElement
   signature: string
   abi: any[]
-  web3: Web3
+  lib: any
   methodName: string
   contractInstance: any
 }
@@ -19,7 +18,7 @@ export const DynamicMethod = ({
   element,
   signature,
   abi,
-  web3,
+  lib,
   methodName,
   contractInstance,
 }: DynamicCustomContractProps) => {
@@ -29,7 +28,7 @@ export const DynamicMethod = ({
     receipt: null,
     error: null,
   }
-  const [ txState, setTxState ] = useState(defaultState)
+  const [ , setTxState ] = useState(defaultState)
   // TODO: [BS-15] flesh out this feature in future iteration
   const inputNodes = document.querySelectorAll(`[id*=${methodName}]`)
 
@@ -37,12 +36,11 @@ export const DynamicMethod = ({
 
   const sendTransaction = (e) => {
     e.preventDefault()
-    const from = web3.givenProvider.selectedAddress
-    const networkId = Number(web3.givenProvider.networkVersion)
+    const from = lib.givenProvider.selectedAddress
+    const networkId = Number(lib.givenProvider.networkVersion)
     const { inputArgs, payableValue } = getTxFieldInputs(inputNodes, abi, methodObj)
 
     sendTransactionToContract(
-      web3,
       contractInstance,
       signature,
       inputArgs,

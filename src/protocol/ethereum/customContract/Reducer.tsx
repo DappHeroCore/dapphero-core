@@ -64,7 +64,7 @@ export const Reducer = ({ element }) => {
           abi={abi}
           contractInstance={contractInstance}
           signature={signature}
-          web3={lib}
+          lib={lib}
           methodName={methodName}
         />
       )
