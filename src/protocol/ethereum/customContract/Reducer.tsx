@@ -4,7 +4,7 @@ import { useWeb3Injected } from '@openzeppelin/network/react'
 import { StaticMethod } from './StaticMethod'
 import { DynamicMethod } from './DynamicMethod'
 import { ViewMethod } from './ViewMethod'
-import { useGetMethods, useContractInstance, parseIdTag } from './utils'
+import { useGetMethods, parseIdTag } from './utils'
 import { CustomContractTypes } from './types'
 
 export const Reducer = ({ element }) => {
@@ -16,7 +16,10 @@ export const Reducer = ({ element }) => {
   const { contractName, methodName, returnValueName, argMatches, args, decimals, display } = parseIdTag(element.id)
   const { contractAddress, abi } = api.dappHero.getContractByName(contractName)
 
-  const contractInstance = useContractInstance(abi, contractAddress, lib)
+  const contractInstance = new lib.eth.Contract(abi, contractAddress)
+
+  //  eth.Contract(abi, address)
+
   const methods = useGetMethods(abi, lib)
   const { signature } = methods.filter((m) => m.name === methodName)[0] // TODO: be explicit about this Zero.
 

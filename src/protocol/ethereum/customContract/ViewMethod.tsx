@@ -34,7 +34,7 @@ export const ViewMethod = ({
   addClickHandlerToTriggerElement(element, callContract)
 
   if (returnValue) {
-    returnElement.innerHTML = useDecimalAndDisplayFormat(web3, returnValue, decimals, display)
+    returnElement.innerHTML = useDecimalAndDisplayFormat(returnValue, decimals, display)
   }
 
   return null

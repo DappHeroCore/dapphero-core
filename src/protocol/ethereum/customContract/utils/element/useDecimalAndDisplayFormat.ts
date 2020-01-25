@@ -15,7 +15,7 @@ export const useDecimalAndDisplayFormat = (
   display: any,
 ) => {
 
-  const displayFormatted = (injected, retVal, display) => {
+  const displayFormatted = (retVal, display) => {
     if (!display || !retVal) return retVal
 
     const func = FORMAT_MAPPING[display]

@@ -2,7 +2,7 @@ import React from 'react'
 import { Reducer as NetworkReducer } from './network/Reducer'
 import { Reducer as UserReducer } from './user/Reducer'
 import { Reducer as ThreeBoxReducer } from './threeBox/Reducer'
-import { Reducer as NftReducer } from './nft/Reducer'
+// import { Reducer as NftReducer } from './nft/Reducer'
 import { Reducer as CustomContractReducer } from './customContract/Reducer'
 
 export const featureReducer = (request, element, index) => {
@@ -42,9 +42,9 @@ export const featureReducer = (request, element, index) => {
   case 'threebox': {
     return <ThreeBoxReducer element={element} key={index} />
   }
-  case 'nft': {
-    return <NftReducer element={element} key={index} />
-  }
+  // case 'nft': {
+  //   return <NftReducer element={element} key={index} />
+  // }
   default:
     return null
   }
