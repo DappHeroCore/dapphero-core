@@ -33,7 +33,7 @@ export const sendTransactionToContract: any = (
   value?: string,
 
 ) => {
-  const from = toChecksumAddress(injected, account)
+  const from = toChecksumAddress(account)
   const sanitizedArgs = sanitizeTransactionArguments(args, method, injected)
   const notify = Notify({
     dappId: apiKey, // [String] The API key created by step one above
@@ -44,7 +44,7 @@ export const sendTransactionToContract: any = (
   instance.methods[signature](...sanitizedArgs)
     .send({
       from,
-      value: value ? toWei(injected, value) : null, // if value? arg, convert to wei. if no arg => send null
+      value: value ? toWei(value) : null, // if value? arg, convert to wei. if no arg => send null
     })
     .on('transactionHash', (hash) => {
       useBlockNative ? notify.hash(hash) : null // TODO: We should set this on the config tool, but enable by default, we can be opinionated.

@@ -2,7 +2,7 @@ import { logger } from 'logger/logger'
 import { useEffect, FunctionComponent } from 'react'
 import { EthereumUnits } from 'types/types'
 import { useWeb3Injected } from '@openzeppelin/network/react'
-import { convertEthereumUnits } from 'utils/convertEthereumUnits'
+import { convertEthereumUnits } from '../../../api/ethereum/convertEthereumUnits'
 
 interface EthUserBalanceProps {
   element: HTMLElement;

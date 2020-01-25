@@ -5,10 +5,9 @@ import {
   getTxFieldInputs,
   addClickHandlerToTriggerElement,
   parseIdTag,
-} from '../utils'
-import { getReturnElement } from './getReturnElement'
+} from './utils'
 
-export const Reducer = ({
+export const ViewMethod = ({
   element,
   abi,
   signature,
@@ -21,7 +20,7 @@ export const Reducer = ({
   const inputNodes = document.querySelectorAll(`[id*=${methodName}]`)
 
   const methodObj = abi.reduce((acc, item) => (item.signature === signature ? item : acc), {})
-  const returnElement = getReturnElement(contractName, methodObj.name) // invoke element isn't same as return element
+  const returnElement = document.querySelector(`[id*="view-name:${contractName}-methodName:${methodObj.name}-output"]`) // invoke element isn't same as return element
 
   const { returnValueName, decimals, display } = parseIdTag(returnElement.id)
   const inputArguments = () => getTxFieldInputs(inputNodes, abi, methodObj)

@@ -1,12 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import Web3 from 'web3'
 import {
-  getUserLoadedElements,
-  getUserCustomTxStateNotification,
   sendTransactionToContract,
   getTxFieldInputs,
   addClickHandlerToTriggerElement,
-} from '../utils'
+} from './utils'
 
 interface DynamicCustomContractProps {
   element: HTMLElement
@@ -17,7 +15,7 @@ interface DynamicCustomContractProps {
   contractInstance: any
 }
 
-export const Reducer = ({
+export const DynamicMethod = ({
   element,
   signature,
   abi,

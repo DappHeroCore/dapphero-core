@@ -1,9 +1,9 @@
 import React from 'react'
 import * as api from 'api'
 import { useWeb3Injected } from '@openzeppelin/network/react'
-import { Reducer as StaticReducer } from './static/Reducer'
-import { Reducer as DynamicReducer } from './dynamic/Reducer'
-import { Reducer as ViewReducer } from './view/Reducer'
+import { StaticMethod } from './StaticMethod'
+import { DynamicMethod } from './DynamicMethod'
+import { ViewMethod } from './ViewMethod'
 import { useGetMethods, useContractInstance, parseIdTag } from './utils'
 import { CustomContractTypes } from './types'
 
@@ -23,7 +23,7 @@ export const Reducer = ({ element }) => {
   switch (type) {
   case CustomContractTypes.STATIC: {
     return (
-      <StaticReducer
+      <StaticMethod
         element={element}
         returnValueName={returnValueName}
         args={args}
@@ -40,7 +40,7 @@ export const Reducer = ({ element }) => {
   case CustomContractTypes.VIEW: {
     if (element.id.includes('-invoke')) {
       return (
-        <ViewReducer
+        <ViewMethod
           element={element}
           abi={abi}
           signature={signature}
@@ -59,7 +59,7 @@ export const Reducer = ({ element }) => {
       // only running 'invoke' element through reducer
       // on submit tx, other elements are gathered
       return (
-        <DynamicReducer
+        <DynamicMethod
           element={element}
           abi={abi}
           contractInstance={contractInstance}
