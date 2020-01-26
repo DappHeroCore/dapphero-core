@@ -1,4 +1,5 @@
 import React from 'react'
+import { useWeb3React } from '@web3-react/core'
 import { Reducer as NetworkReducer } from './network/Reducer'
 import { Reducer as UserReducer } from './user/Reducer'
 import { Reducer as ThreeBoxReducer } from './threeBox/Reducer'
@@ -7,6 +8,7 @@ import { Reducer as CustomContractReducer } from './customContract/Reducer'
 
 export const featureReducer = (element, configuration, index) => {
   const featureType = element.id.split('-')[1]
+  const web3React = useWeb3React()
 
   switch (featureType) {
   case 'network': {

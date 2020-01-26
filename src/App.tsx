@@ -1,23 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import * as api from 'api'
-import { featureReducer } from './protocol/ethereum/featureReducer'
 
-const elements = Array.from(document.querySelectorAll(`[id^=dh]`))
+import { Web3ReactProvider } from '@web3-react/core'
+import { ethers } from 'ethers'
+import { Activator } from './Activator'
 
-export const App: React.FC = () => {
-  const [ configuration, setConfig ] = useState(null)
-
-  useEffect(() => {
-    (async () => {
-      const newConfig = { contracts: await api.dappHero.getContractsByProjectUrl('test.com/dev') }
-      setConfig(newConfig)
-    })()
-
-  }, [])
-  if (configuration) {
-    return (
-      elements.map((element, index) => featureReducer(element, configuration, index))
-    )
-  }
-  return null
+function getLibrary(provider) {
+  return new ethers.providers.Web3Provider(provider) // this will vary according to whether you use e.g. ethers or web3.js
 }
+
+export const App: React.FC = () => (
+  <Web3ReactProvider getLibrary={getLibrary}>
+    <Activator />
+  </Web3ReactProvider>
+)
