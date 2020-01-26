@@ -1,4 +1,3 @@
-export * from './contract/useContractInstance'
 export * from './contract/useGetMethods'
 export * from './contract/getUserCustomTxStateNotification'
 export * from './contract/sendTransactionToContract'

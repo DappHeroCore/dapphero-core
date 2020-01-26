@@ -1,22 +1,51 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import * as api from 'api'
 import { useWeb3Injected } from '@openzeppelin/network/react'
 import { Reducer as StaticReducer } from './static/Reducer'
 import { Reducer as DynamicReducer } from './dynamic/Reducer'
 import { Reducer as ViewReducer } from './view/Reducer'
-import { useGetMethods, useContractInstance, parseIdTag } from './utils'
+import { useGetMethods, parseIdTag } from './utils'
 import { CustomContractTypes } from './types'
 
 export const Reducer = ({ element, configuration }) => {
-  const context = useWeb3Injected()
-  const { lib } = context
+  const injectedContext = useWeb3Injected()
+  const [ context, setcontext ] = useState(injectedContext)
+
+  useEffect(() => {
+    setcontext(injectedContext)
+
+  }, [ injectedContext.networkId ])
+
+  const { lib, networkId } = context
   const type = element.id.split('-')[2]
 
   const { contractName, methodName, returnValueName, argMatches, args, decimals, display } = parseIdTag(element.id)
-  const { contractAddress, abi } = api.dappHero.getContractByName(contractName)
+  const contractData = configuration.contracts.reduce((acc, contract) => {
+    if (
+      contract.contractName === contractName
+      && networkId === contract.networkId
+    ) {
+      return contract
+    }
+    return acc
+  }, null)
 
-  const contractInstance = useContractInstance(abi, contractAddress, lib)
-  const methods = useGetMethods(abi, lib)
+  // TODO: [DEV-117] convert networkId matches to return networkName matches
+  if (contractData == null) {
+    const networkIdsWithContractNameMatches = configuration.contracts
+      .filter((contract) => contract.contractName === contractName)
+      .map((contract) => contract.networkId)
+
+    if (networkIdsWithContractNameMatches.length > 0) {
+      console.warn(`Contract with Name: ${contractName} does not exist on the currently connected network.  It does exist on these network Ids: ${networkIdsWithContractNameMatches.join(', ')} `)
+    }
+  }
+
+  if (contractData == null) return null
+
+  const { contractAbi, contractAddress } = contractData
+  const contractInstance = new lib.eth.Contract(contractAbi, contractAddress)
+  const methods = useGetMethods(contractAbi, lib)
   const { signature } = methods.filter((m) => m.name === methodName)[0] // TODO: be explicit about this Zero.
 
   switch (type) {
@@ -29,7 +58,6 @@ export const Reducer = ({ element, configuration }) => {
         decimals={decimals}
         display={display}
         contractInstance={contractInstance}
-        abi={abi}
         signature={signature}
         web3={lib}
       />
@@ -41,7 +69,7 @@ export const Reducer = ({ element, configuration }) => {
       return (
         <ViewReducer
           element={element}
-          abi={abi}
+          abi={contractAbi}
           signature={signature}
           contractInstance={contractInstance}
           contractName={contractName}
@@ -60,7 +88,7 @@ export const Reducer = ({ element, configuration }) => {
       return (
         <DynamicReducer
           element={element}
-          abi={abi}
+          abi={contractAbi}
           contractInstance={contractInstance}
           signature={signature}
           web3={lib}

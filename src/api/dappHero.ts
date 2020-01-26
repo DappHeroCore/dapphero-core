@@ -25,7 +25,16 @@ export const getContractsByProjectUrl = async (projectURL) => {
     }))
     const responseData = axiosResponse.data.response.data
     const output = JSON.parse(responseData)
-    return output
+    const formattedOutput = output.map((contract) => {
+      const { contractABI, networkid, projectid, ...rest } = contract
+      return {
+        ...rest,
+        contractAbi: JSON.parse(contractABI),
+        networkId: networkid,
+        projectId: projectid,
+      }
+    })
+    return formattedOutput
   } catch (err) {
     // log something here in the future
     throw new Error(err)
