@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import * as api from 'api'
 import { featureReducer } from './protocol/ethereum/featureReducer'
 
 const requests = Array.prototype.slice
@@ -15,6 +16,15 @@ const requests = Array.prototype.slice
     }
   })
 
-export const App: React.FC = () => (
-  requests.map((request, i) => featureReducer(request, request.element, i))
-)
+export const App: React.FC = () => {
+  useEffect(() => {
+    (async () => {
+      const contracts = await api.dappHero.getContractsByProjectUrl('test.com/dev')
+      console.log(contracts)
+    }
+    )()
+  }, [])
+  return (
+    requests.map((request, i) => featureReducer(request, request.element, i))
+  )
+}
