@@ -5,13 +5,15 @@ import { Reducer as ThreeBoxReducer } from './threeBox/Reducer'
 import { Reducer as NftReducer } from './nft/Reducer'
 import { Reducer as CustomContractReducer } from './customContract/Reducer'
 
-export const featureReducer = (request, element, index) => {
+export const featureReducer = (element, configuration, index) => {
+  const featureType = element.id.split('-')[1]
 
-  switch (request.feature) {
+  switch (featureType) {
   case 'network': {
     return (
       <NetworkReducer
         element={element}
+        configuration={configuration}
         key={index}
       />
     )
@@ -21,6 +23,7 @@ export const featureReducer = (request, element, index) => {
     return (
       <UserReducer
         element={element}
+        configuration={configuration}
         key={index}
       />
     )
@@ -29,6 +32,7 @@ export const featureReducer = (request, element, index) => {
     return (
       <CustomContractReducer
         element={element}
+        configuration={configuration}
         // request={request}
         // element={element}
         // injected={injected}
@@ -40,10 +44,10 @@ export const featureReducer = (request, element, index) => {
     )
   }
   case 'threebox': {
-    return <ThreeBoxReducer element={element} key={index} />
+    return <ThreeBoxReducer element={element} configuration={configuration} key={index} />
   }
   case 'nft': {
-    return <NftReducer element={element} key={index} />
+    return <NftReducer element={element} configuration={configuration} key={index} />
   }
   default:
     return null

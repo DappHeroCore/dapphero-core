@@ -1,30 +1,23 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import * as api from 'api'
 import { featureReducer } from './protocol/ethereum/featureReducer'
 
-const requests = Array.prototype.slice
-  .call(document.querySelectorAll(`[id^=dh]`))
-  .map((element) => {
-    const domElementId = element.id
-    const requestString = domElementId.split('-')
-    const index = 1
-    return {
-      requestString,
-      element,
-      feature: requestString[index],
-      index,
-    }
-  })
+const elements = Array.from(document.querySelectorAll(`[id^=dh]`))
 
 export const App: React.FC = () => {
+  const [ configuration, setConfig ] = useState(null)
+
   useEffect(() => {
     (async () => {
-      const contracts = await api.dappHero.getContractsByProjectUrl('test.com/dev')
-      console.log(contracts)
-    }
-    )()
+      const newConfig = { contracts: await api.dappHero.getContractsByProjectUrl('test.com/dev') }
+      setConfig(newConfig)
+    })()
+
   }, [])
-  return (
-    requests.map((request, i) => featureReducer(request, request.element, i))
-  )
+  if (configuration) {
+    return (
+      elements.map((element, index) => featureReducer(element, configuration, index))
+    )
+  }
+  return null
 }

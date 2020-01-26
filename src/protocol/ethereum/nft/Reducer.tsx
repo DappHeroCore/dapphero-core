@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { Reducer as MultReducer } from './multiple/Reducer'
 import { Reducer as SingleReducer } from './single/Reducer'
 
-export const Reducer = ({ element }) => {
+export const Reducer = ({ element, configuration }) => {
   const [ , , singleOrMult ] = element.id.split('-')
 
   useEffect(() => {}, [])

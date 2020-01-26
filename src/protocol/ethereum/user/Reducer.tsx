@@ -2,7 +2,7 @@ import React from 'react'
 import { EthUserBalance } from './EthUserBalance'
 import { EthUserAddress } from './EthUserAddress'
 
-export const Reducer = ({ element }) => {
+export const Reducer = ({ element, configuration }) => {
 
   const infoType = element.id.split('-')[2]
 

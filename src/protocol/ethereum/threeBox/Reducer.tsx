@@ -1,5 +1,6 @@
 import React, { FunctionComponent, useEffect, useState } from 'react'
 import { useWeb3Injected } from '@openzeppelin/network/react'
+import { DappHeroConfiguration } from 'types/types'
 import { ThreeBoxProfileDataElement } from './ThreeBoxProfileDataElement'
 import { ThreeBoxProfileImgElement } from './ThreeBoxProfileImgElement'
 
@@ -8,10 +9,11 @@ const { getProfile: get3boxProfile } = require('3box/lib/api')
 const ipfsRoot = 'https://cloudflare-ipfs.com/ipfs/'
 interface ReducerProps {
   element: HTMLElement
+  configuration: DappHeroConfiguration
   // featureType: 'name' | 'location' | 'website' | 'hover' | 'emoji'
 }
 
-export const Reducer: FunctionComponent<ReducerProps> = ({ element }) => {
+export const Reducer: FunctionComponent<ReducerProps> = ({ element, configuration }) => {
   const injected = useWeb3Injected()
   const { accounts } = injected
   const [ threeBoxProfile, setThreeBoxProfile ] = useState({

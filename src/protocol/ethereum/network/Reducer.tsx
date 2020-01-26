@@ -5,7 +5,7 @@ import { EthNetworkInfo } from './EthNetworkInfo'
 import { EthTransfer } from './EthTransfer'
 import { NetworkFeatureTypes } from './types'
 
-export const Reducer = ({ element }) => {
+export const Reducer = ({ element, configuration }) => {
   const injected = useWeb3Injected()
 
   const { networkId, providerName, networkName } = injected

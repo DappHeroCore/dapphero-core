@@ -7,10 +7,9 @@ import { Reducer as ViewReducer } from './view/Reducer'
 import { useGetMethods, useContractInstance, parseIdTag } from './utils'
 import { CustomContractTypes } from './types'
 
-export const Reducer = ({ element }) => {
+export const Reducer = ({ element, configuration }) => {
   const context = useWeb3Injected()
   const { lib } = context
-
   const type = element.id.split('-')[2]
 
   const { contractName, methodName, returnValueName, argMatches, args, decimals, display } = parseIdTag(element.id)

@@ -1,5 +1,8 @@
 export type EthereumUnits = 'wei' | 'ether'
 
+export interface DappHeroConfiguration {
+  contracts: {[key: string]: any}[]
+}
 
 export interface Request {
   requestString: string[];
