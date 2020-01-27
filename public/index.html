@@ -26,10 +26,42 @@
 
     <link href="images/favicon.ico" rel="shortcut icon" type="image/x-icon" />
     <link href="images/webclip.png" rel="apple-touch-icon" />
+    <script src="https://dapphero-dom.now.sh"></script>
   </head>
 
   <body class="body">
     <div class="page-div">
+      <!-- Custom Contract with DOM integration -->
+      <div class="headline">Custom Contract: DappHeroTest</div>
+
+      <div
+        id="dh"
+        data-dh-feature="customContract"
+        data-dh-property-contract-name="erc20"
+        data-dh-property-method-name="transfer"
+      >
+        <input
+          data-dh-property-contract-name="erc20"
+          data-dh-property-input-name="dst"
+          class="w-input"
+          placeholder="To address:"
+        />
+        <input
+          data-dh-property-contract-name="erc20"
+          data-dh-property-input-name="wad"
+          class="w-input"
+          placeholder="Value to send:"
+        />
+
+        <button data-dh-property-contract-name="erc20" data-dh-property-invoke class="w-button">
+          Submit
+        </button>
+
+        <div data-dh-property-contract-name="erc20" data-dh-property-outputs class="component-div">
+          *Return value: -*
+        </div>
+      </div>
+
       <!-- Custom Contract -->
       <div class="headline">Custom Contract: DappHeroTest - viewNoArgsMultipleReturn</div>
       <div class="component-div">
@@ -54,11 +86,11 @@
       <form >
         <label for="name">View Function, Dynamic Args</label>
         <input
-        type="text"
-        class="w-input"
-        maxlength="256"
-        placeholder="Address"
-        id="dh-customContract-view-name:DappHeroTest-methodName:viewMultipleArgsSingleReturn-input-input:from"
+          type="text"
+          class="w-input"
+          maxlength="256"
+          placeholder="Address"
+          id="dh-customContract-view-name:DappHeroTest-methodName:viewMultipleArgsSingleReturn-input-input:from"
         />
         <input
           type="text"
@@ -165,19 +197,8 @@
           placeholder="Msg.value in ether"
           id="dh-network-transfer-input-value"
         />
-        <input
-          type="text"
-          class="w-input"
-          maxlength="256"
-          placeholder="To address"
-          id="dh-network-transfer-input-to"
-        />
-        <input
-          id="dh-network-transfer-invoke"
-          type="submit"
-          value="Submit"
-          class="w-button"
-        />
+        <input type="text" class="w-input" maxlength="256" placeholder="To address" id="dh-network-transfer-input-to" />
+        <input id="dh-network-transfer-invoke" type="submit" value="Submit" class="w-button" />
       </div>
       <div class="headline">User - Address:: dh-user-address</div>
       <div class="component-div">

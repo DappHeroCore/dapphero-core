@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { logger } from 'logger/customLogger'
 import * as api from 'api'
 import * as hooks from 'hooks'
-import { useWeb3React } from '@web3-react/core'
 import { FeatureReducer } from './protocol/ethereum/featureReducer'
 
 // <script src="https://internal-dev-dapphero.s3.amazonaws.com/main.js" id="dh-apiKey" data-api="1580240829051x132613881547456510"></script>
@@ -17,8 +16,11 @@ logger.debug('ScriptAPI: ', apiKey)
 export const Activator = () => {
   const { active, error, activate, ...rest } = useWeb3React()
   logger.debug('web3ReactContext: ', { active, error, activate, ...rest })
-  const [ configuration, setConfig ] = useState(null)
   // hooks.useEagerConnect()
+  const [ domElements, setDomElements ] = useState(null)
+  const [ configuration, setConfig ] = useState(null)
+
+  // console.log('web3ReactContext: ', { active, error, activate, ...rest })
 
   useEffect(() => {
     (async () => {
@@ -26,10 +28,41 @@ export const Activator = () => {
       setConfig(newConfig)
     })()
   }, [])
-  if (configuration) {
-    return (
-      elements.map((element, index) => (<FeatureReducer key={element.id + index.toString()} element={element} configuration={configuration} index={index} />))
-    )
-  }
-  return null
+
+  useEffect(() => {
+    const API_URL = 'http://www.mocky.io/v2/5e2f4a4b310000750071070b'
+    window.dappHeroDom.getDomElements(API_URL).then(setDomElements)
+  }, [])
+
+  console.log('TCL: domElements', domElements)
+
+  return (
+    <>
+      {domElements
+        && domElements.map((domElement) => (
+          <FeatureReducer
+            key={domElement.id}
+            element={domElement.element}
+            feature={domElement.feature}
+            configuration={configuration}
+            info={domElement}
+          />
+        ))}
+
+      {configuration
+        && elements.map((element, index) => {
+          /* Avoid running customContract feature */
+          if (element.getAttribute('id').includes('customContract')) return null
+
+          return (
+            <FeatureReducer
+              element={element}
+              index={index + 1}
+              configuration={configuration}
+              key={element.id + index.toString()}
+            />
+          )
+        })}
+    </>
+  )
 }

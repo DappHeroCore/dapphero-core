@@ -1,33 +1,38 @@
 import React from 'react'
+
+// Reducers
 import { Reducer as NetworkReducer } from './network/Reducer'
 import { Reducer as UserReducer } from './user/Reducer'
 import { Reducer as ThreeBoxReducer } from './threeBox/Reducer'
 import { Reducer as NftReducer } from './nft/Reducer'
-import { Reducer as CustomContractReducer } from './customContract/Reducer'
+import { Reducer as CustomContractReducer } from './customContract-/Reducer'
+// import { Reducer as CustomContractReducer } from './customContract/Reducer'
 
-export const FeatureReducer = ({ element, configuration, index }) => {
-  const featureType = element.id.split('-')[1]
-  switch (featureType) {
-  case 'network': {
-    return (
-      <NetworkReducer
-        element={element}
-        configuration={configuration}
-        key={index}
-      />
-    )
-  }
+// Types
+import { FeatureReducerProps } from './types'
 
-  case 'user': {
-    return (
-      <UserReducer
-        element={element}
-        configuration={configuration}
-        key={index}
-      />
-    )
-  }
+// Constants
+const FEATURES_COMPONENTS = {
+  nft: NftReducer,
+  user: UserReducer,
+  network: NetworkReducer,
+  threebox: ThreeBoxReducer,
+  customContract: CustomContractReducer,
+}
 
+export const FeatureReducer = ({ feature, element, configuration, key = '', index, info }: FeatureReducerProps) => {
+  /* TODO: Remove element.id.split when all features are integrated */
+  const featureType = feature || element.id.split('-')[1]
+
+  // Get Component Reducer from available features
+  const Component = FEATURES_COMPONENTS[featureType]
+
+  if (!Component) return null
+
+  /* FIXME: We shouldn't use index as keys. Remove it when all features are integrated */
+  return <Component key={key || index} element={element} configuration={configuration} info={info} />
+
+  /* TODO: Remove this comment later on */
   // case 'customContract': {
   //   return (
   //     <CustomContractReducer
@@ -43,13 +48,4 @@ export const FeatureReducer = ({ element, configuration, index }) => {
   //     />
   //   )
   // }
-  case 'threebox': {
-    return <ThreeBoxReducer element={element} configuration={configuration} key={index} />
-  }
-  // case 'nft': {
-  //   return <NftReducer element={element} configuration={configuration} key={index} />
-  // }
-  default:
-    return null
-  }
 }
