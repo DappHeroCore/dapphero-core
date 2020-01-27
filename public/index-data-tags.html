@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<!--  This site was created in Webflow. http://www.webflow.com  -->
+<!--  Last Published: Sat Jan 18 2020 14:45:04 GMT+0000 (Coordinated Universal Time)  -->
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>DappHero: Components</title>
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <meta content="Webflow" name="generator" />
+    <!-- <link href="css/normalize.css" rel="stylesheet" type="text/css" />
+  <link href="css/webflow.css" rel="stylesheet" type="text/css" />
+  <link href="css/dapphero-components.webflow.css" rel="stylesheet" type="text/css" /> -->
+
+    <link href="css/normalize.css" rel="stylesheet" type="text/css" />
+    <link href="css/webflow.css" rel="stylesheet" type="text/css" />
+    <link href="css/blockcities-use-case.webflow.css" rel="stylesheet" type="text/css" />
+    <!-- [if lt IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js" type="text/javascript"></script><![endif] -->
+    <script type="text/javascript">
+      !(function(o, c) {
+        var n = c.documentElement,
+          t = ' w-mod-'
+        ;(n.className += t + 'js'),
+          ('ontouchstart' in o || (o.DocumentTouch && c instanceof DocumentTouch)) && (n.className += t + 'touch')
+      })(window, document)
+    </script>
+
+    <link href="images/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <link href="images/webclip.png" rel="apple-touch-icon" />
+  </head>
+
+  <body class="body">
+    <div class="page-div">
+      <!-- Custom Contract -->
+
+      <!-- Contract not working yet -->
+      <!-- <div class="headline">Custom Contract: DappHeroTest - viewNoArgsMultipleReturn</div>
+      <div class="component-div">
+        <div
+          id="dh-customContract-static-name:DappHeroTest-methodName:viewNoArgsMultipleReturn-output-returnValue:_hello-display:ascii"
+        >
+          *Return value: _hello*
+        </div>
+      </div>
+      <div class="headline">Custom Contract: DappHeroTest - viewMultipleArgsSingleReturn</div>
+      <div class="component-div">
+        <div
+          id="dh-customContract-static-name:DappHeroTest-methodName:viewMultipleArgsSingleReturn-output-returnValue:_balanceMultiplied-arg:0x803428e38DBFDf2EB25D94B538A1CFc395E66615-arg:8-display:ether-decimals:3"
+        >
+          *Return value: _balanceMultiplied*
+        </div>
+      </div> -->
+
+      <!-- <div class="headline">
+        Custom Contract: DappHeroTest - viewMultipleArgsSingleReturn (view tx with dynamic inputs)
+      </div>
+      <form id="email-form" name="email-form" data-name="Email Form">
+        <label for="name">View Function, Dynamic Args</label>
+        <input
+        type="text"
+        class="w-input"
+        maxlength="256"
+        placeholder="Address"
+        id="dh-customContract-view-name:DappHeroTest-methodName:viewMultipleArgsSingleReturn-input-input:from"
+        />
+        <input
+          type="text"
+          class="w-input"
+          maxlength="256"
+          placeholder="Uint"
+          id="dh-customContract-view-name:DappHeroTest-methodName:viewMultipleArgsSingleReturn-input-input:multiplier"
+        />
+        <input
+          id="dh-customContract-view-name:DappHeroTest-methodName:viewMultipleArgsSingleReturn-invoke"
+          type="submit"
+          value="Submit"
+          class="w-button"
+        />
+        <div class="component-div">
+          <div
+            id="dh-customContract-view-name:DappHeroTest-methodName:viewMultipleArgsSingleReturn-output-returnValue:_balanceMultiplied-display:ether-decimals:1"
+          >
+            *Return value on submit: _balanceMultiplied*
+          </div>
+        </div>
+      </form> -->
+
+      <!-- <div class="headline">Custom Contract: DappHeroTest - triggerEvent</div>
+      <form id="email-form" name="email-form" data-name="Email Form">
+        <label for="name">Trigger Event</label>
+        <input
+          type="text"
+          class="w-input"
+          maxlength="256"
+          placeholder="Uint"
+          id="dh-customContract-dynamic-name:DappHeroTest-methodName:triggerEvent-input-input:value"
+        />
+        <input
+          id="dh-customContract-dynamic-name:DappHeroTest-methodName:triggerEvent-invoke"
+          type="submit"
+          value="Submit"
+          class="w-button"
+        />
+      </form>
+
+      <div class="headline">Custom Contract: DappHeroTest - sendVariableEthNoArgs</div>
+      <form id="email-form" name="email-form" data-name="Email Form">
+        <label for="name">Send ETH to Contract</label>
+        <input
+          type="text"
+          class="w-input"
+          maxlength="256"
+          placeholder="Msg.value in ether (send more than 0.001)"
+          id="dh-customContract-dynamic-name:DappHeroTest-methodName:sendVariableEthNoArgs-input-input:payable"
+        />
+        <input
+          id="dh-customContract-dynamic-name:DappHeroTest-methodName:sendVariableEthNoArgs-invoke"
+          type="submit"
+          value="Submit"
+          class="w-button"
+        />
+      </form> -->
+
+      <!-- <div class="headline">Custom Contract: DappHeroTest - sendVariableEthWithArgs</div>
+      <form id="email-form" name="email-form" data-name="Email Form">
+        <label for="name">Send ETH to Contract w/ a Message</label>
+        <input
+          type="text"
+          class="w-input"
+          maxlength="256"
+          placeholder="Msg.value in ether (send more than 0.001)"
+          id="dh-customContract-dynamic-name:DappHeroTest-methodName:sendVariableEthWithArgs-input-input:payable"
+        />
+        <input
+          type="text"
+          class="w-input"
+          maxlength="256"
+          placeholder="Message: string will be automatically converted to bytes32 if func demands it"
+          id="dh-customContract-dynamic-name:DappHeroTest-methodName:sendVariableEthWithArgs-input-input:message"
+        />
+        <input
+          id="dh-customContract-dynamic-name:DappHeroTest-methodName:sendVariableEthWithArgs-invoke"
+          type="submit"
+          value="Submit"
+          class="w-button"
+        />
+      </form> -->
+
+      <div class="headline">Web3 Provider:: dh-network-provider</div>
+      <div class="component-div">
+       <div id="dh" data-dh-feature="network" data-dh-property-provider>*Web 3 Provider*</div>
+      </div>
+      <div class="headline">Web3 Network Name:: dh-network-name</div>
+      <div class="component-div">
+        <div id="dh" data-dh-feature="network" data-dh-property-name class="body-text">*Network Name*</div>
+      </div>
+      <div class="headline">Web3 Network ID:: dh-network-id</div>
+      <div class="component-div">
+        <div id="dh" data-dh-enabled="true" data-dh-feature="network" data-dh-property-id class="body-text">*Network ID*</div>
+      </div>
+
+      <div class="headline">Web3 Network Transfer Ether:: dh-network-transfer</div>
+      <div class="component-div">
+        <input
+          type="text"
+          class="w-input"
+          maxlength="256"
+          placeholder="Msg.value in ether"
+          id="dh-network-transfer-input-value"
+        />
+        <input
+          type="text"
+          class="w-input"
+          maxlength="256"
+          placeholder="To address"
+          id="dh-network-transfer-input-to"
+        />
+        <input
+          id="dh-network-transfer-invoke"
+          type="submit"
+          value="Submit"
+          class="w-button"
+        />
+      </div>
+      <div class="headline">User - Address:: dh-user-address</div>
+      <div class="component-div">
+        <div id="dh" data-dh-feature="user" data-dh-property-address class="body-text">*user address*</div>
+      </div>
+      <div class="headline">User - Address:: dh-user-address-display_short</div>
+      <div class="component-div">
+        <div id="dh" data-dh-feature="user" data-dh-modifier-display="short" data-dh-property-address class="body-text">*user address*</div id="dh" data-dh-feature="user" data-dh-property-address>
+      </div>
+      <div class="headline">User - Balance:: dh-user-balance</div>
+      <div class="component-div">
+        <div id="dh" data-dh-feature="user" data-dh-property-balance class="body-text">*user balance*</div>
+      </div>
+      <div class="headline">User - Balance:: dh-user-balance-units_ether</div>
+      <div class="component-div">
+        <div id="dh-user-balance-units_ether" class="body-text">*user balance*</div>
+      </div>
+      <div class="headline">User - Balance:: dh-user-balance-units_ether-decimals_3</div>
+      <div class="component-div">
+        <div id="dh-user-balance-units_ether-decimals_3" class="body-text">*user balance*</div>
+      </div>
+
+      <!-- ThreeBox-->
+      <div class="headline">3Box - Profile Name:: dh-threebox-profile-name</div>
+      <div class="component-div">
+        <div id="dh" data-dh-feature="threebox" data-dh-property-name" class="body-text">*3Box Profile Name*</div>
+      </div>
+
+      <div class="headline">3Box - Profile Name:: dh-threebox-profile-Location</div>
+      <div class="component-div">
+        <div id="dh" data-dh-feature="threebox" data-dh-property-location class="body-text">*3Box Profile Location*</div>
+      </div>
+
+      <div class="headline">3Box - Profile Name:: dh-threebox-profile-website</div>
+      <div class="component-div">
+        <div id="dh" data-dh-feature="threebox" data-dh-property-website class="body-text">*3Box Profile website*</div>
+      </div>
+
+      <div class="headline">3Box - Profile Name:: dh-threebox-profile-emoji</div>
+      <div class="component-div">
+        <div id="dh" data-dh-feature="threebox" data-dh-property-emoji class="body-text">*3Box Profile emoji*</div>
+      </div>
+
+      <!--
+      IMAGE TAG
+    -->
+
+      <div vending-screen="vending-screen" class="building---header---div">
+        <div class="w-layout-grid grid---3">
+          <img
+            id="dh" data-dh-feature="threebox" data-dh-property-image
+            src="https://d3e54v103j8qbb.cloudfront.net/plugins/Basic/assets/placeholder.60f9b1840c.svg"
+            alt=""
+            class="building img w-node-b5f7d5f30df0-f542304d"
+          />
+        </div>
+      </div>
+
+      <!--
+        NFT
+      -->
+
+      <!-- Single Item-->
+      <!-- <div class="headline">
+        NFT (opensea API) - Single Item: dh-nft-single-item-container-contract_{address}-tokenId_{tokenId}
+      </div>
+      <div class="component-div">
+        <div id="dh-nft-single-item-container-contract_0x2f2d5aa0efdb9ca3c9bb789693d06bebea88792f-tokenId_2240">
+          sample NFT (inviisible)
+        </div>
+      </div> -->
+      <!-- Metamask Enable-->
+
+      <div class="headline">Web 3 Metamask Enable Button:: dh-network-enable !!TODO!!</div>
+      <div class="component-div"><a id="dh-network-enable" href="#" class="button w-button">Enable Metamask</a></div>
+
+      <!-- NFT SEARCH-->
+      <!-- <div class="div-block-106">
+        <div class="w-form">
+          <form id="email-form" name="email-form" data-name="Email Form">
+            <label for="name">NFT Search</label>
+            <input
+              type="text"
+              class="w-input"
+              maxlength="256"
+              name="name"
+              data-name="Name"
+              id="dh-nft-mult-search-input-id_h677"
+            />
+            <input
+              id="dh-nft-mult-search-invoke-id_h677"
+              type="submit"
+              value="Search"
+              data-wait="Please wait..."
+              class="w-button"
+            />
+          </form>
+
+          <div class="success-message w-form-done"></div>
+          <div id="dh-nft-mult-search-parentContainer-id_h677-limit_20">
+            <div id="dh-nft-mult-search-item-container">
+              <div class="collectible-div">
+                <img
+                  src="https://uploads-ssl.webflow.com/5ca25aa53ef88d7811fa6a49/5ca25aa53ef88d45c0fa6b1c_Group%20(12).svg"
+                  id="dh-nft-mult-search-item-customField_image_url"
+                  alt=""
+                  class="nft-image"
+                />
+
+                <div class="nft-name" id="dh-nft-mult-search-item-customField_name">NFT Name</div>
+                <div class="div-block-85">
+                  <div class="nft-city-name" id="dh-nft-mult-search-item-customField_owner.address">owner address</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="w-form-fail">
+            <div>Oops! Something went wrong while submitting the form.</div>
+          </div>
+        </div>
+      </div> -->
+
+      <!--END NFT SEARCH-->
+
+      <!--NFT-->
+      <!-- <div id="dh-eth-opensea-retrieveAssetsBySearch-building-zcosbuilding">
+        <div id="osbuilding-parent" class="your-collection-section">
+          <div class="collectible-div">
+            <div>
+              <a href="/building-profile" class="collectible-wrapper w-inline-block"
+                ><img
+                  src="https://uploads-ssl.webflow.com/5ca25aa53ef88d7811fa6a49/5ca25aa53ef88d45c0fa6b1c_Group%20(12).svg"
+                  id="osbuilding-zrimageUrl"
+                  alt=""
+                  class="nft-image"
+              /></a>
+
+              <a href="/building-profile" class="div-thumbnail w-inline-block">
+                <div id="osbuilding-zrname" class="nft-name">NFT Name</div>
+                <div class="div-block-85">
+                  <div class="nft-city-name">city name</div>
+                </div>
+              </a>
+            </div>
+          </div>
+          <div class="collectible-div">
+            <a href="/building-profile" class="collectible-wrapper w-inline-block"
+              ><img
+                src="https://uploads-ssl.webflow.com/5ca25aa53ef88d7811fa6a49/5ca25aa53ef88d45c0fa6b1c_Group%20(12).svg"
+                id="nft-image"
+                alt=""
+                class="nft-image"
+            /></a>
+
+            <a href="/building-profile" class="div-thumbnail w-inline-block">
+              <div class="nft-name">NFT Name</div>
+              <div class="div-block-85">
+                <div class="nft-city-name">city name</div>
+              </div>
+            </a>
+          </div>
+          <div class="collectible-div">
+            <a href="/building-profile" class="collectible-wrapper w-inline-block"
+              ><img
+                src="https://uploads-ssl.webflow.com/5ca25aa53ef88d7811fa6a49/5ca25aa53ef88d45c0fa6b1c_Group%20(12).svg"
+                id="nft-image"
+                alt=""
+                class="nft-image"
+            /></a>
+
+            <a href="/building-profile" class="div-thumbnail w-inline-block">
+              <div class="nft-name">NFT Name</div>
+              <div class="div-block-85">
+                <div class="nft-city-name">city name</div>
+              </div>
+            </a>
+          </div>
+          <div class="collectible-div">
+            <a href="/building-profile" class="collectible-wrapper w-inline-block"
+              ><img
+                src="https://uploads-ssl.webflow.com/5ca25aa53ef88d7811fa6a49/5ca25aa53ef88d45c0fa6b1c_Group%20(12).svg"
+                id="nft-image"
+                alt=""
+                class="nft-image"
+            /></a>
+
+            <a href="/building-profile" class="div-thumbnail w-inline-block">
+              <div class="nft-name">NFT Name</div>
+              <div class="div-block-85">
+                <div class="nft-city-name">city name</div>
+              </div>
+            </a>
+          </div>
+        </div> -->
+
+        <!-- <div>_</div>
+
+        <div>
+          <div
+            id="dh-nft-single-item-container-contract_0x2f2d5aa0efdb9ca3c9bb789693d06bebea88792f-tokenId_2239"
+            class="building---header---section"
+          >
+            <div class="building---profile---left">
+              <div vending-screen="vending-screen" class="building---header---div">
+                <div class="w-layout-grid grid---3">
+                  <a id="w-node-b5f7d5f30de0-20b3f9e9" href="#" class="link-button w-inline-block"
+                    ><img
+                      src="https://uploads-ssl.webflow.com/5ca25aa53ef88d7811fa6a49/5cedff4f6352fc73786efbf0_Group%20(1).svg"
+                      width="13"
+                      height="13"
+                      alt=""
+                      class="image-80 _2"
+                  /></a>
+                  <a id="w-node-b5f7d5f30deb-20b3f9e9" href="#" class="tweet-button w-inline-block">
+                    <div class="text-block-16">TWEET</div>
+                    <img src="images/Twitter_Logo_Blue.svg" width="20" height="20" alt="" class="image-80"
+                  /></a>
+
+                  <div id="w-node-b5f7d5f30def-20b3f9e9" class="building---profile---bottom"></div>
+                  <img
+                    id="dh-nft-single-item-customField_image_url"
+                    src="https://d3e54v103j8qbb.cloudfront.net/plugins/Basic/assets/placeholder.60f9b1840c.svg"
+                    alt=""
+                    class="building img w-node-b5f7d5f30df0-20b3f9e9"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="building-profile---right">
+              <div class="left-right"></div>
+              <a id="buy-3-building" href="#" class="building-3-buildings w-button">build 3 buildings</a
+              ><a id="buy-5-building" href="#" class="build-5-buildings w-button">build 5 buildings</a>
+              <div id="dh-nft-single-customField_ " class="building-name large">Default Name</div>
+              <div class="building-details-div">
+                <div class="div-block-76">
+                  <div id="building-id" class="building-details large _2">Building #</div>
+                  <div id="building-id" class="building-details large no-space">000</div>
+                </div>
+                <div id="city-abbreviation" class="building-details large">AA</div>
+                <div class="div-block-76">
+                  <div id="building-id" class="building-details large _2">ERA</div>
+                  <div id="building-id" class="building-details large no-space _2">0</div>
+                  <div id="building-id" class="building-details large no-space _2">1</div>
+                </div>
+              </div>
+              <div class="owner">
+                <img
+                  src="https://d3e54v103j8qbb.cloudfront.net/img/image-placeholder.svg"
+                  width="50"
+                  height="50"
+                  alt=""
+                  class="image-31"
+                  id="image_url"
+                />
+                <div class="div-block-71">
+                  <div class="building-owner large time-left">Owner:</div>
+                  <div id="owner-name" class="owner-name">0x...000</div>
+                </div>
+                <div>
+                  <div class="building-owner large time-left small">Built By</div>
+                  <div class="built-by">0x...000</div>
+                </div>
+              </div>
+              <div class="building---profile---details">
+                <div class="building---profile---details-div _60">
+                  <div class="building-cost large time-left">Built<span class="owner-name"></span></div>
+                  <div class="div-block-70">
+                    <img
+                      src="https://uploads-ssl.webflow.com/5ca25aa53ef88d7811fa6a49/5d08f015277f0982305a46b8_1date.svg"
+                      alt=""
+                      class="image-78"
+                    />
+                    <div id="built-date" class="building---profile---text">Mon. 0 0000</div>
+                  </div>
+                </div>
+                <div class="building---profile---details-div">
+                  <div class="building-cost large time-left">Height<span class="owner-name"></span></div>
+                  <div class="div-block-70">
+                    <img
+                      src="https://uploads-ssl.webflow.com/5ca25aa53ef88d7811fa6a49/5d08f017370a89c0abef6489_1height%20class.svg"
+                      alt=""
+                      class="image-78"
+                    />
+                    <div id="height" class="building---profile---text">000</div>
+                    <div class="profile---details-text---label">ft<br /><span class="owner-name"></span></div>
+                  </div>
+                </div>
+                <div class="building---profile---details-div _60">
+                  <div class="building-cost large time-left">Era Class<span class="owner-name"></span></div>
+                  <div class="div-block-70">
+                    <img
+                      src="https://uploads-ssl.webflow.com/5ca25aa53ef88d7811fa6a49/5d08f016370a891f15ef6483_1era.svg"
+                      alt=""
+                      class="image-78"
+                    />
+                    <div id="era-name" class="building---profile---text">Era Name</div>
+                  </div>
+                </div>
+                <div class="building---profile---details-div">
+                  <div class="building-cost large time-left">Height Class<span class="owner-name"></span></div>
+                  <div class="div-block-70">
+                    <img
+                      src="https://uploads-ssl.webflow.com/5ca25aa53ef88d7811fa6a49/5d08f013277f092df25a46b4_1building%20height.svg"
+                      alt=""
+                      class="image-78"
+                    />
+                    <div id="height-class" class="building---profile---text">High-Rise</div>
+                  </div>
+                </div>
+                <div class="building---profile---details-div _60">
+                  <div class="building-cost large time-left">City<span class="owner-name"></span></div>
+                  <div class="div-block-70">
+                    <img
+                      src="https://uploads-ssl.webflow.com/5ca25aa53ef88d7811fa6a49/5d08f014370a89fa43ef647c_1city.svg"
+                      alt=""
+                      class="image-78"
+                    />
+                    <div id="city-name" class="building---profile---text">City Name</div>
+                  </div>
+                </div>
+              </div>
+              <div class="special-architecture">
+                <img
+                  src="https://uploads-ssl.webflow.com/5ca25aa53ef88d7811fa6a49/5d08f016b1cfe2990a8a2dc9_1founder%20special%20edition.svg"
+                  width="60"
+                  height="60"
+                  alt=""
+                  class="special-arch-image"
+                />
+                <div id="special-name" class="special-arch-text main">
+                  Founder Building<br /><span class="owner-name"></span>
+                </div>
+                <div id="special-rarity" class="special-arch-text-rarity">ED. 500</div>
+              </div>
+            </div>
+            <div class="w-embed"></div>
+            <a href="#" class="vending-main-button-5 w-button">build 5 mystery buildings</a
+            ><a href="#" class="vending-main-button-10 w-button">build 10 mystery buildings</a>
+          </div>
+        </div>
+      </div>
+    </div> -->
+
+    <!-- Single NFT Item-->
+
+    <!-- <script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.4.1.min.220afd743d.js" type="text/javascript" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+            <script src="js/webflow.js" type="text/javascript"></script> -->
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="dh-root"></div>
+    <script
+      src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.4.1.min.220afd743d.js"
+      type="text/javascript"
+      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+      crossorigin="anonymous"
+    ></script>
+    <script src="js/webflow.js" type="text/javascript"></script>
+  </body>
+  <!-- [if lte IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/placeholders/3.0.2/placeholders.min.js"></script><![endif] -->
+</html>
