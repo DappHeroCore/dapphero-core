@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import * as api from 'api'
-import { useWeb3Injected } from '@openzeppelin/network/react'
+import * as hooks from 'hooks'
 import { Reducer as StaticReducer } from './static/Reducer'
 import { Reducer as DynamicReducer } from './dynamic/Reducer'
 import { Reducer as ViewReducer } from './view/Reducer'
-import { useGetMethods, parseIdTag } from './utils'
+import { useGetMethods, parseIdTag } from '../../../utils'
 import { CustomContractTypes } from './types'
 
 export const Reducer = ({ element, configuration }) => {
-  const injectedContext = useWeb3Injected()
+  const injectedContext = hooks.useDappHeroWeb3()
   const [ context, setcontext ] = useState(injectedContext)
 
   useEffect(() => {

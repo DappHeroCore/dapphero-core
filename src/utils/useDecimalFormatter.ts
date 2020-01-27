@@ -1,6 +1,6 @@
 export const useDecimalFormatter = (
   value: any,
-  decimal: string
+  decimal: string,
 ) => {
   if (!decimal) return value
 

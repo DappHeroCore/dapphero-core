@@ -1,6 +1,6 @@
 import { FunctionComponent } from 'react'
-import { useWeb3Injected } from '@openzeppelin/network/react'
-import { addClickHandlerToTriggerElement } from '../customContract/utils'
+import * as hooks from 'hooks'
+import { addClickHandlerToTriggerElement } from '../../../utils'
 
 interface EthTransferProps {
   element: HTMLElement
@@ -12,7 +12,7 @@ interface EthTransferProps {
 // and base DOM parsing off id
 export const EthTransfer: FunctionComponent<EthTransferProps> = ({ element }) => {
   const inputNodes = document.querySelectorAll(`[id^=dh-network-transfer]`)
-  const { lib } = useWeb3Injected()
+  const { lib } = hooks.useDappHeroWeb3()
 
   const transferEther = (e) => {
     e.preventDefault()

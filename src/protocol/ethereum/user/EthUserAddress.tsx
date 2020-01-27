@@ -1,5 +1,5 @@
 import { logger } from 'logger/logger'
-import { useWeb3Injected } from '@openzeppelin/network/react'
+import * as hooks from 'hooks'
 import { useEffect, FunctionComponent } from 'react'
 
 interface EthUserAddressProps {
@@ -9,8 +9,7 @@ interface EthUserAddressProps {
 
 export const EthUserAddress: FunctionComponent<EthUserAddressProps> = ({ element, displayFormat }) => {
 
-  const { accounts, networkId } = useWeb3Injected()
-
+  const { accounts, networkId } = hooks.useDappHeroWeb3()
   useEffect(() => {
     try {
       if (accounts?.[0]) {

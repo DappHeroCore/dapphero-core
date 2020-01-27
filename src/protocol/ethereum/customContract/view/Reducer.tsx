@@ -5,7 +5,7 @@ import {
   getTxFieldInputs,
   addClickHandlerToTriggerElement,
   parseIdTag,
-} from '../utils'
+} from '../../../../utils'
 import { getReturnElement } from './getReturnElement'
 
 export const Reducer = ({

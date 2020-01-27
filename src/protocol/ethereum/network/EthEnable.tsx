@@ -1,6 +1,6 @@
 import { useEffect, FunctionComponent } from 'react'
-import { useWeb3Injected } from '@openzeppelin/network/react'
-import { logger } from '../../eth_DEP/node_modules/logger/logger'
+import * as hooks from 'hooks'
+import { Web3ReactContextInterface } from '@web3-react/core/dist/types'
 
 interface EthEnableProps {
   element: HTMLElement
@@ -11,17 +11,17 @@ interface EthEnableProps {
  * @param props From props we use only injected and request.
  */
 export const EthEnable: FunctionComponent<EthEnableProps> = ({ element }) => {
-  const injected = useWeb3Injected()
+  const injected = hooks.useDappHeroWeb3()
 
   useEffect(() => {
     try {
-      const clickHandler = () => { injected.requestAuth() }
+      const clickHandler = () => { injected.activate() }
       element.addEventListener('click', clickHandler, true)
       return (() => element.removeEventListener('click', clickHandler, true))
     } catch (e) {
       console.log(e)
     }
-  }, [ injected.connected ])
+  }, [ injected.active ])
   return null
 }
 

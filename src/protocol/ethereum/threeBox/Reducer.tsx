@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useEffect, useState } from 'react'
-import { useWeb3Injected } from '@openzeppelin/network/react'
+import * as hooks from 'hooks'
 import { DappHeroConfiguration } from 'types/types'
 import { ThreeBoxProfileDataElement } from './ThreeBoxProfileDataElement'
 import { ThreeBoxProfileImgElement } from './ThreeBoxProfileImgElement'
@@ -14,7 +14,7 @@ interface ReducerProps {
 }
 
 export const Reducer: FunctionComponent<ReducerProps> = ({ element, configuration }) => {
-  const injected = useWeb3Injected()
+  const injected = hooks.useDappHeroWeb3()
   const { accounts } = injected
   const [ threeBoxProfile, setThreeBoxProfile ] = useState({
     name: '',

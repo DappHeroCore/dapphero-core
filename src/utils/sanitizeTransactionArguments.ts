@@ -1,5 +1,5 @@
 import Web3 from 'web3' //eslint-disable-line
-import { asciiToHex } from '../../../../../api/ethereum'
+import { asciiToHex } from '../api/ethereum'
 
 enum MethodTypes {
   STRING = 'string',

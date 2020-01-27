@@ -6,7 +6,7 @@ import {
   sendTransactionToContract,
   getTxFieldInputs,
   addClickHandlerToTriggerElement,
-} from '../utils'
+} from '../../../../utils'
 
 interface DynamicCustomContractProps {
   element: HTMLElement

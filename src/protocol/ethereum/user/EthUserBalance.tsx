@@ -1,8 +1,8 @@
 import { logger } from 'logger/logger'
 import { useEffect, FunctionComponent } from 'react'
 import { EthereumUnits } from 'types/types'
-import { useWeb3Injected } from '@openzeppelin/network/react'
-import { convertEthereumUnits } from 'utils/convertEthereumUnits'
+import * as hooks from 'hooks'
+import * as utils from 'utils'
 
 interface EthUserBalanceProps {
   element: HTMLElement;
@@ -14,14 +14,14 @@ export const EthUserBalance: FunctionComponent<EthUserBalanceProps> = ({ element
   units = units ?? 'wei' //eslint-disable-line
   decimals = decimals ?? 0 //eslint-disable-line
 
-  const { accounts, networkId, lib } = useWeb3Injected()
+  const { accounts, networkId, lib } = hooks.useDappHeroWeb3()
 
   useEffect(() => {
     const getData = async () => {
       try {
         if (accounts?.[0]) {
-          const unformatedBalance = await lib.eth.getBalance(accounts[0])
-          const formatedBalanced = Number(convertEthereumUnits(lib, unformatedBalance, 'wei', units)).toFixed(decimals)
+          const unformatedBalance = await lib.getBalance(accounts[0])
+          const formatedBalanced = Number(utils.convertUnits('wei', units, unformatedBalance)).toFixed(decimals)
           element.innerHTML = formatedBalanced
         }
       } catch (e) {

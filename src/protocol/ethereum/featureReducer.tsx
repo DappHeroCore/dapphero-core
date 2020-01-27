@@ -7,7 +7,6 @@ import { Reducer as CustomContractReducer } from './customContract/Reducer'
 
 export const FeatureReducer = ({ element, configuration, index }) => {
   const featureType = element.id.split('-')[1]
-
   switch (featureType) {
   case 'network': {
     return (
@@ -28,6 +27,7 @@ export const FeatureReducer = ({ element, configuration, index }) => {
       />
     )
   }
+
   case 'customContract': {
     return (
       <CustomContractReducer

@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react'
-import { useWeb3Injected } from '@openzeppelin/network/react/useWeb3Hook'
+import { useWeb3React } from '@web3-react/core'
+import * as hooks from 'hooks'
 import { EthEnable } from './EthEnable'
 import { EthNetworkInfo } from './EthNetworkInfo'
 import { EthTransfer } from './EthTransfer'
 import { NetworkFeatureTypes } from './types'
 
 export const Reducer = ({ element, configuration }) => {
-  const injected = useWeb3Injected()
+  const injected = hooks.useDappHeroWeb3()
 
-  const { networkId, providerName, networkName } = injected
+  const { networkName, networkId } = injected
   const [ ,, infoType ] = element.id.split('-')
 
   const defaultInfoObj = {
     networkId: 0,
-    providerName: 'Unknown',
     networkName: 'Unknown',
   }
 
@@ -22,12 +22,11 @@ export const Reducer = ({ element, configuration }) => {
   useEffect(() => {
     const infoValueObj = {
       networkId: networkId ?? 0,
-      providerName: providerName ?? 'Unknown',
       networkName: networkName ?? 'Unknown',
     }
 
     setInfoValue(infoValueObj)
-  }, [ networkId, providerName, networkName ])
+  }, [ networkId, networkName ])
 
   switch (infoType) {
   case NetworkFeatureTypes.ENABLE: {
@@ -53,14 +52,15 @@ export const Reducer = ({ element, configuration }) => {
       />
     )
   }
-  case NetworkFeatureTypes.PROVIDER: {
-    return (
-      <EthNetworkInfo
-        element={element}
-        infoValue={infoValue.providerName}
-      />
-    )
-  }
+  // TODO:  Deprecated
+  // case NetworkFeatureTypes.PROVIDER: {
+  //   return (
+  //     <EthNetworkInfo
+  //       element={element}
+  //       infoValue={infoValue.providerName}
+  //     />
+  //   )
+  // }
   case NetworkFeatureTypes.TRANSFER: {
     if (element.id.includes('-invoke')) {
       return (

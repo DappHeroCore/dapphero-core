@@ -5,14 +5,15 @@ const FORMAT_MAPPING = {
   ether: fromWei,
   wei: toWei,
   ascii: hexToAscii,
-  abridged: abridgedAddress
+  abridged: abridgedAddress,
+  string: (injected, value) => value.toString(), // fixed?
 }
 
 // value is either a return value from a call or an input value for a call
-export const useUnitFormatter = (
+export const useDisplayFormatter = (
   injected: Web3,
   value: any,
-  format?: string
+  format?: string,
 ) => {
   if (!format || !value) return value
 

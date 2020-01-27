@@ -1,7 +1,7 @@
 import Web3 from 'web3' // eslint-disable-line
 import Notify from 'bnc-notify'
-import { sanitizeTransactionArguments } from './sanitizeTransactionArguments'
-import { toChecksumAddress, toWei } from '../../../../../api/ethereum'
+import { sanitizeTransactionArguments } from '../sanitizeTransactionArguments'
+import { toChecksumAddress, toWei } from '../../api/ethereum'
 
 const apiKey = process.env.REACT_APP_BLOCKNATIVE_API
 const useBlockNative = true

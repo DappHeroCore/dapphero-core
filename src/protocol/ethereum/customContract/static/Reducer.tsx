@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useDecimalAndDisplayFormat } from '../utils'
+import { useDecimalAndDisplayFormat } from '../../../../utils'
 
 export const Reducer = ({ element, returnValueName, args, decimals, display, contractInstance, signature, web3 }) => {
   const [ returnValue, setReturnValue ] = useState(null)
