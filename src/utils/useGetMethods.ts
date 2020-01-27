@@ -1,4 +1,5 @@
 import Web3 from 'web3'
+import { ethers } from 'ethers'
 
 /**
  * This function, (a react custom hook) takes in the abi of a contract, parses it for all

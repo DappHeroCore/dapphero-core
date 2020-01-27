@@ -9,7 +9,7 @@ interface NftSingleContainerProps {
   responseObj: {[key: string]: any}
 }
 
-export const NftSingleContainer: FunctionComponent<NftSingleContainerProps> = ({ element, responseObj }): any[] => {
+export const NftSingleContainer = ({ element, responseObj }): any[] => {
   const contractMatch = element.id.match(/-contract_([a-zA-Z0-9]+)/)
   const contractAddress = contractMatch?.[1]
   const tokenMatch = element.id.match(/-tokenId_([a-zA-Z0-9]+)/)

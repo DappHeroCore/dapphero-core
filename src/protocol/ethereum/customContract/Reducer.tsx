@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import * as api from 'api'
 import * as hooks from 'hooks'
+import { ethers } from 'ethers'
 import { Reducer as StaticReducer } from './static/Reducer'
 import { Reducer as DynamicReducer } from './dynamic/Reducer'
 import { Reducer as ViewReducer } from './view/Reducer'
@@ -44,7 +45,8 @@ export const Reducer = ({ element, configuration }) => {
   if (contractData == null) return null
 
   const { contractAbi, contractAddress } = contractData
-  const contractInstance = new lib.eth.Contract(contractAbi, contractAddress)
+  // const contractInstance = new lib.eth.Contract(contractAbi, contractAddress)
+  const contractInstance = new ethers.Contract(contractAddress, contractAbi, lib)
   const methods = useGetMethods(contractAbi, lib)
   const { signature } = methods.filter((m) => m.name === methodName)[0] // TODO: be explicit about this Zero.
 

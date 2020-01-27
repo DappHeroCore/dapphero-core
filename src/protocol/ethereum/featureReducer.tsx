@@ -28,21 +28,21 @@ export const FeatureReducer = ({ element, configuration, index }) => {
     )
   }
 
-  case 'customContract': {
-    return (
-      <CustomContractReducer
-        element={element}
-        configuration={configuration}
-        // request={request}
-        // element={element}
-        // injected={injected}
-        // element={request.element}
-        // signifiers={signifiers}
-        // mock={mock}
-        key={index}
-      />
-    )
-  }
+  // case 'customContract': {
+  //   return (
+  //     <CustomContractReducer
+  //       element={element}
+  //       configuration={configuration}
+  //       // request={request}
+  //       // element={element}
+  //       // injected={injected}
+  //       // element={request.element}
+  //       // signifiers={signifiers}
+  //       // mock={mock}
+  //       key={index}
+  //     />
+  //   )
+  // }
   case 'threebox': {
     return <ThreeBoxReducer element={element} configuration={configuration} key={index} />
   }

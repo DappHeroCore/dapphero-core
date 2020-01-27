@@ -1,6 +1,6 @@
 import { useEffect, FunctionComponent } from 'react'
 import * as hooks from 'hooks'
-import { Web3ReactContextInterface } from '@web3-react/core/dist/types'
+import * as connectors from 'connectors'
 
 interface EthEnableProps {
   element: HTMLElement
@@ -15,13 +15,13 @@ export const EthEnable: FunctionComponent<EthEnableProps> = ({ element }) => {
 
   useEffect(() => {
     try {
-      const clickHandler = () => { injected.activate() }
+      const clickHandler = () => { injected.web3ReactContext.activate(connectors.injected) }
       element.addEventListener('click', clickHandler, true)
       return (() => element.removeEventListener('click', clickHandler, true))
     } catch (e) {
       console.log(e)
     }
-  }, [ injected.active ])
+  }, [ injected.web3ReactContext.active ])
   return null
 }
 
