@@ -23,7 +23,8 @@
     },
     "plugins": [
         "react",
-        "@typescript-eslint"
+        "@typescript-eslint",
+        "eslint-plugin-react-hooks"
     ],
     "rules": {
         "@typescript-eslint/no-unused-vars": ["warn", { "args": "all", "varsIgnorePattern": "React", "argsIgnorePattern": "event" } ],
