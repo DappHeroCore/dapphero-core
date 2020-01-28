@@ -13,14 +13,14 @@ export class DappHeroLogger {
 
   debug = (...params) => {
     console.log(...params) // eslint-disable-line
-    const stingifiedParams = params.map((item) => {
-      try {
-        return JSON.stringify(item, null, 2)
-      } catch {
-        return item.toString()
-      }
-    })
-    this.winstonLogger.debug(stingifiedParams.join(' '))
+    // const stingifiedParams = params.map((item) => {
+    //   try {
+    //     return JSON.stringify(item, null, 2)
+    //   } catch {
+    //     return item.toString()
+    //   }
+    // })
+    // this.winstonLogger.debug(stingifiedParams.join(' '))
   }
 
   log = (first, message, callback) => this.winstonLogger.log(first, message, callback)
