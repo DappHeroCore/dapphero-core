@@ -15,12 +15,12 @@ export const getContractByName = (contractName) => ({
   networkId: 3,
 })
 
-export const getContractsByProjectUrl = async (projectURL = window.location.host) => {
+export const getContractsByProjectKey = async (projectId) => {
 
   // For Development, on localhost the project URL is empty.
-  console.log('PROJECTURL:', projectURL)
+  console.log('projectId:', projectId)
 
-  const body = { projectURL }
+  const body = { projectId }
   try {
     const axiosResponse = (await axios({
       method: 'post',

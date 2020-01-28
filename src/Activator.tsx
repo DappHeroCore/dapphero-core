@@ -4,11 +4,12 @@ import * as hooks from 'hooks'
 import { useWeb3React } from '@web3-react/core'
 import { FeatureReducer } from './protocol/ethereum/featureReducer'
 
+// <script src="https://internal-dev-dapphero.s3.amazonaws.com/main.js" id="dh-apiKey" data-api="1580240829051x132613881547456510"></script>
 const elements = Array.from(document.querySelectorAll(`[id^=dh]`))
-const scriptApi = document.getElementById('webflowTag')
+const apiKeyElement = document.getElementById('dh-apiKey')
+const apiKey = apiKeyElement.getAttribute('data-api')
 
-console.log('ScriptAPI: ', scriptApi)
-console.log('get Attribute: ', scriptApi.getAttribute('data-api'))
+// TODO: if no apiKey then toast notification missing API key
 
 export const Activator = () => {
   const { active, error, activate, ...rest } = useWeb3React()
@@ -18,7 +19,7 @@ export const Activator = () => {
 
   useEffect(() => {
     (async () => {
-      const newConfig = { contracts: await api.dappHero.getContractsByProjectUrl() }
+      const newConfig = { contracts: await api.dappHero.getContractsByProjectKey(apiKey) }
       setConfig(newConfig)
     })()
   }, [])
