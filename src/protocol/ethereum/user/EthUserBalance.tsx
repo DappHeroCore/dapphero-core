@@ -1,4 +1,4 @@
-import { logger } from 'logger/logger'
+import { logger } from 'logger/customLogger'
 import { useEffect, FunctionComponent } from 'react'
 import { EthereumUnits } from 'types/types'
 import * as hooks from 'hooks'
@@ -25,7 +25,7 @@ export const EthUserBalance: FunctionComponent<EthUserBalanceProps> = ({ element
           element.innerHTML = formatedBalanced
         }
       } catch (e) {
-        console.log(e)
+        logger.debug(e)
       }
     }
     getData()

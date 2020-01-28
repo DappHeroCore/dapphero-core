@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { logger } from 'logger/customLogger'
 import * as api from 'api'
 import * as hooks from 'hooks'
 import { useWeb3React } from '@web3-react/core'
@@ -10,10 +11,12 @@ const apiKeyElement = document.getElementById('dh-apiKey')
 const apiKey = apiKeyElement.getAttribute('data-api')
 
 // TODO: if no apiKey then toast notification missing API key
+logger.debug('logger', logger)
+logger.debug('ScriptAPI: ', apiKey)
 
 export const Activator = () => {
   const { active, error, activate, ...rest } = useWeb3React()
-  console.log('web3ReactContext: ', { active, error, activate, ...rest })
+  logger.debug('web3ReactContext: ', { active, error, activate, ...rest })
   const [ configuration, setConfig ] = useState(null)
   // hooks.useEagerConnect()
 

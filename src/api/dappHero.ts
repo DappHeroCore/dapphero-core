@@ -1,6 +1,6 @@
 import Axios from 'axios'
+import { logger } from 'logger/customLogger'
 import abi from '../abi/DappHeroTest.json' // eslint-disable-line
-
 const axios = Axios.create()
 
 // Refactor when this is more fleshed out
@@ -18,7 +18,7 @@ export const getContractByName = (contractName) => ({
 export const getContractsByProjectKey = async (projectId) => {
 
   // For Development, on localhost the project URL is empty.
-  console.log('projectId:', projectId)
+  logger.debug('projectId:', projectId)
 
   const body = { projectId }
   try {
@@ -38,7 +38,7 @@ export const getContractsByProjectKey = async (projectId) => {
         projectId: projectid,
       }
     })
-    console.log('Formatted Output: ', formattedOutput)
+    logger.debug('Formatted Output: ', formattedOutput)
     return formattedOutput
   } catch (err) {
     // log something here in the future

@@ -1,4 +1,5 @@
 import React, { FunctionComponent, useEffect, useState } from 'react'
+import { logger } from 'logger/customLogger'
 import * as hooks from 'hooks'
 import { DappHeroConfiguration } from 'types/types'
 import { ThreeBoxProfileDataElement } from './ThreeBoxProfileDataElement'
@@ -36,7 +37,7 @@ export const Reducer: FunctionComponent<ReducerProps> = ({ element, configuratio
         const profile = await get3boxProfile(accounts[0])
         setThreeBoxProfile(profile)
       } catch (error) {
-        console.log('You have no profile. ', error)
+        logger.debug('You have no profile. ', error)
       }
     }
     getProfile()

@@ -1,4 +1,4 @@
-import { logger } from 'logger/logger'
+import { logger } from 'logger/customLogger'
 import * as hooks from 'hooks'
 import { useEffect, FunctionComponent } from 'react'
 
@@ -17,7 +17,7 @@ export const EthUserAddress: FunctionComponent<EthUserAddressProps> = ({ element
         element.innerHTML = displayFormat === 'short' ? `${fullAccountNumber.slice(0, 3)}...${fullAccountNumber.slice(fullAccountNumber.length - 3)}` : fullAccountNumber
       }
     } catch (e) {
-      console.log(e)
+      logger.debug(e)
     }
   }, [ accounts, networkId ])
 
