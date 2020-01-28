@@ -17,7 +17,7 @@ export const useWeb3Test = () => {
     // lib: null,
     // accounts: [],
     networkId: null,
-    // networkName: { network: null },
+    networkName: null,
     // connected: false,
   })
 
@@ -26,7 +26,8 @@ export const useWeb3Test = () => {
       // web3ReactContext: {},
       // lib: {},
       // accounts: [ account ],
-      networkId: 'dappherotest',
+      networkId: 123,
+      networkName: 'dappherotest',
       // networkName: library?.network?.name ?? null,
       // connected: active,
     })
