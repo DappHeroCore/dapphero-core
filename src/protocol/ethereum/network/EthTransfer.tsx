@@ -1,5 +1,6 @@
 import { FunctionComponent, useEffect } from 'react'
 import Notify from 'bnc-notify'
+import { logger } from 'logger/customLogger'
 import * as hooks from 'hooks'
 import * as utils from 'utils'
 
@@ -19,7 +20,7 @@ export const EthTransfer: FunctionComponent<EthTransferProps> = ({ element }) =>
   console.log('THE LIB COMING IN: ', lib)
 
   useEffect(() => {
-    console.log('ETHTRANSFER PROVIDER', lib)
+    logger.debug('ETHTRANSFER PROVIDER', lib)
     const transferEther = (e) => {
       e.preventDefault()
 

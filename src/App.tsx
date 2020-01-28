@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import * as api from 'api'
 
 import { Web3ReactProvider } from '@web3-react/core'
-import { Web3Provider } from '@ethersproject/providers'
 import { ethers } from 'ethers'
 import { Activator } from './Activator'
 

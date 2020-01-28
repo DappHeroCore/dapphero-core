@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { logger } from 'logger/customLogger'
 import { useDecimalAndDisplayFormat } from '../../../../utils'
 
 export const Reducer = ({ element, returnValueName, args, decimals, display, contractInstance, signature, web3 }) => {
@@ -19,7 +20,7 @@ export const Reducer = ({ element, returnValueName, args, decimals, display, con
 
         setReturnValue(formattedValue)
       } catch (error) {
-        console.log('In Call Instance Error: ', error)
+        logger.debug('In Call Instance Error: ', error)
       }
     })()
   }, [])

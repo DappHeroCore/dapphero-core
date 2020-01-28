@@ -1,4 +1,5 @@
 import { useEffect, FunctionComponent } from 'react'
+import { logger } from 'logger/customLogger'
 import * as hooks from 'hooks'
 import * as connectors from 'connectors'
 
@@ -19,7 +20,7 @@ export const EthEnable: FunctionComponent<EthEnableProps> = ({ element }) => {
       element.addEventListener('click', clickHandler, true)
       return (() => element.removeEventListener('click', clickHandler, true))
     } catch (e) {
-      console.log(e)
+      logger.debug(e)
     }
   }, [ injected.web3ReactContext.active ])
   return null

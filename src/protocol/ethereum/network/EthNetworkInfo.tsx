@@ -1,4 +1,4 @@
-import { logger } from 'logger/logger'
+import { logger } from 'logger/customLogger'
 import { FunctionComponent } from 'react'
 
 interface EthNetworkInfoProps {
@@ -10,7 +10,7 @@ export const EthNetworkInfo: FunctionComponent<EthNetworkInfoProps> = ({ element
   try {
     element.innerHTML = infoValue
   } catch (e) {
-    console.log(e)
+    logger.debug(e)
   }
   return null
 }

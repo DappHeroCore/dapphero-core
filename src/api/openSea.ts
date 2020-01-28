@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import Axios from 'axios'
-import { logger } from 'logger/logger'
+import { logger } from '../logger/customLogger'
 
 const DEFAULT_LIMIT = 12 // MAX 300
 const ORDER_BY = 'current_price'
