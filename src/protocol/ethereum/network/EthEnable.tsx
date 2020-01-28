@@ -26,7 +26,9 @@ export const EthEnable: FunctionComponent<EthEnableProps> = ({ element }) => {
   const [ buttonStatus, setButtonStatus ] = useState(element.innerText || 'Enable MetaMask')
 
   useEffect(() => {
-    if (injected.connected) setButtonStatus('Connected')
+    if (injected.connected) {
+      setButtonStatus('Connected')
+    }
   }, [ injected.web3ReactContext.active ])
 
   useEffect(() => {
