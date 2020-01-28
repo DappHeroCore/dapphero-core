@@ -5,6 +5,10 @@ import { useWeb3React } from '@web3-react/core'
 import { FeatureReducer } from './protocol/ethereum/featureReducer'
 
 const elements = Array.from(document.querySelectorAll(`[id^=dh]`))
+const scriptApi = document.getElementById('webflowTag')
+
+console.log('ScriptAPI: ', scriptApi)
+console.log('get Attribute: ', scriptApi.getAttribute('data-api'))
 
 export const Activator = () => {
   const { active, error, activate, ...rest } = useWeb3React()

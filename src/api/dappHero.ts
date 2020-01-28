@@ -4,10 +4,10 @@ import abi from '../abi/DappHeroTest.json' // eslint-disable-line
 const axios = Axios.create()
 
 // Refactor when this is more fleshed out
-const DEV_URL = 'https://dapphero-admin.bubbleapps.io/version-test/api/1.1/wf/contracts'
-const PROD_URL = 'https://dapphero-admin.bubbleapps.io/version-test/api/1.1/wf/contracts'
+const DEV_URL = 'https://dapphero-admin.bubbleapps.io/api/1.1/wf/contracts'
+const PROD_URL = 'https://dapphero-admin.bubbleapps.io/api/1.1/wf/contracts'
 
-const BASE_URL = process.env.NODE_ENV === 'development' ? DEV_URL : PROD_URL
+const BASE_URL = process.env.NODE_ENV === 'production' ? PROD_URL : DEV_URL
 
 export const getContractByName = (contractName) => ({
   abi,
@@ -16,6 +16,10 @@ export const getContractByName = (contractName) => ({
 })
 
 export const getContractsByProjectUrl = async (projectURL = window.location.host) => {
+
+  // For Development, on localhost the project URL is empty.
+  console.log('PROJECTURL:', projectURL)
+
   const body = { projectURL }
   try {
     const axiosResponse = (await axios({
@@ -34,6 +38,7 @@ export const getContractsByProjectUrl = async (projectURL = window.location.host
         projectId: projectid,
       }
     })
+    console.log('Formatted Output: ', formattedOutput)
     return formattedOutput
   } catch (err) {
     // log something here in the future

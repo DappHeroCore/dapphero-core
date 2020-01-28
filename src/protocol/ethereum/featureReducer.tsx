@@ -46,9 +46,9 @@ export const FeatureReducer = ({ element, configuration, index }) => {
   case 'threebox': {
     return <ThreeBoxReducer element={element} configuration={configuration} key={index} />
   }
-  case 'nft': {
-    return <NftReducer element={element} configuration={configuration} key={index} />
-  }
+  // case 'nft': {
+  //   return <NftReducer element={element} configuration={configuration} key={index} />
+  // }
   default:
     return null
   }

@@ -1,6 +1,6 @@
-import { FunctionComponent } from 'react'
+import { FunctionComponent, useEffect } from 'react'
 import * as hooks from 'hooks'
-import { addClickHandlerToTriggerElement } from '../../../utils'
+import * as utils from 'utils'
 
 interface EthTransferProps {
   element: HTMLElement
@@ -14,23 +14,26 @@ export const EthTransfer: FunctionComponent<EthTransferProps> = ({ element }) =>
   const inputNodes = document.querySelectorAll(`[id^=dh-network-transfer]`)
   const { lib } = hooks.useDappHeroWeb3()
 
-  const transferEther = (e) => {
-    e.preventDefault()
+  useEffect(() => {
+    console.log('ETHTRANSFER PROVIDER', lib)
+    const transferEther = (e) => {
+      e.preventDefault()
 
-    let toAddress
-    let value
-    const from = lib.givenProvider.selectedAddress
+      let toAddress
+      let value
+      const from = lib.provider.selectedAddress
 
-    inputNodes.forEach((input) => {
-      const inputSplit = input.id.split('-')
-      if (inputSplit[4] === 'value') value = (input as HTMLInputElement).value
-      if (inputSplit[4] === 'to') toAddress = (input as HTMLInputElement).value
-    })
+      inputNodes.forEach((input) => {
+        const inputSplit = input.id.split('-')
+        if (inputSplit[4] === 'value') value = (input as HTMLInputElement).value
+        if (inputSplit[4] === 'to') toAddress = (input as HTMLInputElement).value
+      })
 
-    lib.eth.sendTransaction({ to: toAddress, from, value: lib.utils.toWei(value, 'ether') })
-  }
+      lib.sendTransaction({ to: toAddress, from, value: utils.convertUnits('ether', 'wei', value) }).catch((e) => console.log(e))
+    }
 
-  addClickHandlerToTriggerElement(element, transferEther)
+    if (lib) utils.addClickHandlerToTriggerElement(element, transferEther)
+  }, [ lib ])
 
   return null
 }

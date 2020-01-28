@@ -11,7 +11,7 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "spender",
+        "name": "spender",  
         "type": "address"
       },
       {
@@ -22,7 +22,7 @@
       }
     ],
     "name": "Approval",
-    "type": "event"
+    "type": "event" 
   },
   {
     "anonymous": false,
