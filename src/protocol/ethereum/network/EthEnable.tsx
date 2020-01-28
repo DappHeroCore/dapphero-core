@@ -1,4 +1,4 @@
-import React, { useEffect, FunctionComponent } from 'react'
+import React, { useEffect, useState, FunctionComponent } from 'react'
 import { logger } from 'logger/customLogger'
 import * as hooks from 'hooks'
 import * as connectors from 'connectors'
@@ -14,9 +14,20 @@ interface EthEnableProps {
  */
 export const EthEnable: FunctionComponent<EthEnableProps> = ({ element }) => {
   const injected = hooks.useDappHeroWeb3()
+  console.log('Injected: ', injected)
 
   const message = injected.connected ? 'Succesfully Connected' : 'Click Connect to MetaMask'
   element.setAttribute('data-tip', message)
+
+  const toggleButtonStatus = () => {
+
+  }
+
+  const [ buttonStatus, setButtonStatus ] = useState(element.innerText || 'Enable MetaMask')
+
+  useEffect(() => {
+    if (injected.connected) setButtonStatus('Connected')
+  }, [ injected.web3ReactContext.active ])
 
   useEffect(() => {
     try {
@@ -28,6 +39,9 @@ export const EthEnable: FunctionComponent<EthEnableProps> = ({ element }) => {
       logger.debug(e)
     }
   }, [ injected.web3ReactContext.active ])
+
+  element.innerText = buttonStatus
+
   return (<ReactTooltip />)
 }
 
