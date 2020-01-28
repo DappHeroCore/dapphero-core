@@ -15,7 +15,7 @@ export const getContractByName = (contractName) => ({
   networkId: 3,
 })
 
-export const getContractsByProjectUrl = async (projectURL) => {
+export const getContractsByProjectUrl = async (projectURL = window.location.host) => {
   const body = { projectURL }
   try {
     const axiosResponse = (await axios({

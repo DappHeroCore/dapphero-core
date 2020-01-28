@@ -14,7 +14,7 @@ export const Activator = () => {
 
   useEffect(() => {
     (async () => {
-      const newConfig = { contracts: await api.dappHero.getContractsByProjectUrl('test.com/dev') }
+      const newConfig = { contracts: await api.dappHero.getContractsByProjectUrl() }
       setConfig(newConfig)
     })()
   }, [])
