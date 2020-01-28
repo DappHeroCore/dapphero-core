@@ -14,7 +14,7 @@ export const Activator = () => {
   const { active, error, activate, ...rest } = useWeb3React()
   console.log('web3ReactContext: ', { active, error, activate, ...rest })
   const [ configuration, setConfig ] = useState(null)
-  hooks.useEagerConnect()
+  // hooks.useEagerConnect()
 
   useEffect(() => {
     (async () => {
