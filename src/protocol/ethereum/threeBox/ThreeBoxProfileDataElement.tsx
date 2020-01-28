@@ -5,7 +5,7 @@ interface ThreeBoxProfileDataElementProps {
   profileData: string;
 }
 
-export const ThreeBoxProfileDataElement: FunctionComponent<ThreeBoxProfileDataElementProps> = ({ element, profileData}) => {
+export const ThreeBoxProfileDataElement: FunctionComponent<ThreeBoxProfileDataElementProps> = ({ element, profileData }) => {
 
   element.innerText = profileData
   return null
