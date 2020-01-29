@@ -1,8 +1,6 @@
 import * as consts from 'consts'
 import Axios from 'axios'
 
-const axios = Axios.create({ headers: { 'content-type': 'application/json' } })
-
 export class DappHeroLogger {
   private axios = Axios.create({ headers: { 'content-type': 'application/json' } })
 
@@ -22,15 +20,15 @@ export class DappHeroLogger {
   debug = (...params) => {
     console.log(...params) // eslint-disable-line
     const json = {
+      level: 'debug',
+      timestamp: new Date().toString(),
       message: params.length === 1 ? params[0] : this.stringifyParams(params),
-      // message: "hello"
     }
-    // console.log(JSON.stringify(json))
     this.axios({
       method: 'post',
       url: `http://logs-01.loggly.com/inputs/${this.token}/tag/http/`,
       data: JSON.stringify(json),
-    })
+    }).catch((e) => {})
   }
 
   log = (level, ...rest) => {
@@ -39,14 +37,47 @@ export class DappHeroLogger {
       timeStamp: new Date().toString(),
       message: rest.length === 1 ? rest[0] : this.stringifyParams(rest),
     }
-    this.axios.post(`http://logs-01.loggly.com/inputs/${this.token}/tag/http/`, json)
+    this.axios.post(`http://logs-01.loggly.com/inputs/${this.token}/tag/http/`, json).catch((e) => {})
   }
 
-  info = (first, ...rest) => {}
+  info = (...params) => {
+    const json = {
+      level: 'info',
+      timestamp: new Date().toString(),
+      message: params.length === 1 ? params[0] : this.stringifyParams(params),
+    }
+    this.axios({
+      method: 'post',
+      url: `http://logs-01.loggly.com/inputs/${this.token}/tag/http/`,
+      data: JSON.stringify(json),
+    }).catch((e) => {})
+  }
 
-  warn = (first, ...rest) => {}
+  warn = (...params) => {
+    const json = {
+      level: 'warn',
+      timestamp: new Date().toString(),
+      message: params.length === 1 ? params[0] : this.stringifyParams(params),
+    }
+    this.axios({
+      method: 'post',
+      url: `http://logs-01.loggly.com/inputs/${this.token}/tag/http/`,
+      data: JSON.stringify(json),
+    }).catch((e) => {})
+  }
 
-  error = (first, ...rest) => {}
+  error = (...params) => {
+    const json = {
+      level: 'error',
+      timestamp: new Date().toString(),
+      message: params.length === 1 ? params[0] : this.stringifyParams(params),
+    }
+    this.axios({
+      method: 'post',
+      url: `http://logs-01.loggly.com/inputs/${this.token}/tag/http/`,
+      data: JSON.stringify(json),
+    }).catch((e) => {})
+  }
 
 }
 
