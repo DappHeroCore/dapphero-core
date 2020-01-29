@@ -4,9 +4,11 @@ import { Reducer as UserReducer } from './user/Reducer'
 import { Reducer as ThreeBoxReducer } from './threeBox/Reducer'
 import { Reducer as NftReducer } from './nft/Reducer'
 import { Reducer as CustomContractReducer } from './customContract/Reducer'
+import { Reducer as PortalReducer } from './portal/Reducer'
 
 export const FeatureReducer = ({ element, configuration, index }) => {
   const featureType = element.id.split('-')[1]
+  console.log('featureType:', featureType)
   switch (featureType) {
   case 'network': {
     return (
@@ -49,6 +51,10 @@ export const FeatureReducer = ({ element, configuration, index }) => {
   // case 'nft': {
   //   return <NftReducer element={element} configuration={configuration} key={index} />
   // }
+  case 'portal': {
+    return <PortalReducer element={element} />
+  }
+
   default:
     return null
   }
