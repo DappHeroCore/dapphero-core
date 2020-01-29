@@ -5,6 +5,18 @@ import * as hooks from 'hooks'
 import { useWeb3React } from '@web3-react/core'
 import { FeatureReducer } from './protocol/ethereum/featureReducer'
 
+const winston = require('winston')
+const { Loggly } = require('winston-loggly-bulk')
+
+winston.add(new Loggly({
+  token: '0c02fa85-a311-4c99-9b0b-102b79ef16c2',
+  subdomain: 'dapphero',
+  tags: [ 'Winston-NodeJS' ],
+  json: true,
+}))
+
+winston.log('info', 'Hello World from Node.js!')
+console.log('we running')
 // <script src="https://internal-dev-dapphero.s3.amazonaws.com/main.js" id="dh-apiKey" data-api="1580240829051x132613881547456510"></script>
 const elements = Array.from(document.querySelectorAll(`[id^=dh]`))
 const apiKeyElement = document.getElementById('dh-apiKey')

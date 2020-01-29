@@ -22,11 +22,7 @@ export const getContractsByProjectKey = async (projectId) => {
 
   const body = { projectId }
   try {
-    const axiosResponse = (await axios({
-      method: 'post',
-      url: BASE_URL,
-      data: body,
-    }))
+    const axiosResponse = (await axios())
     const responseData = axiosResponse.data.response.data
     const output = JSON.parse(responseData)
     const formattedOutput = output.map((contract) => {
