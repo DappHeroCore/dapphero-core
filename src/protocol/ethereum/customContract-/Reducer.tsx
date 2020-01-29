@@ -13,7 +13,7 @@ const getAbiMethodInputs = (abi, methodName) => {
 
 // Reducer Component
 export const Reducer = ({ info }) => {
-  const { contract, childrenElements, properties, isTransaction, hasParameters } = info
+  const { contract, childrenElements, properties, hasParameters } = info
   const { address, abi } = contract
 
   const contractKey = properties.find(({ key }) => key === 'contractName')
@@ -23,12 +23,15 @@ export const Reducer = ({ info }) => {
   const { value: methodName } = methodKey
 
   // Custom Hooks
-  const { addToast } = useToasts()
   const injectedContext = hooks.useDappHeroWeb3()
+
+  const { addToast } = useToasts()
+  const displayToast = ({ message }: Error) => addToast(message, { appearance: 'error' })
 
   // States
   const [ context, setcontext ] = useState(injectedContext)
   const [ runMethod, setRunMethod ] = useState(null)
+  const [ getGasLimit, setGetGasLimit ] = useState(null)
   const [ parameters, setParameters ] = useState(getAbiMethodInputs(info.contract.abi, methodName))
 
   // -> Handlers
@@ -45,17 +48,16 @@ export const Reducer = ({ info }) => {
     try {
       const methodParams = [ ...(hasParameters ? parametersValues : []) ]
 
-      // TODO: Use isTransaction key to trigger transaction
-      const result = await runMethod(...methodParams)
-
-      console.log('TCL: handleRunMethod -> result', result.toString())
+      // TODO: Get gas limit through ethers, and remove MAX_LIMIT
+      // const gasLimit = await getGasLimit(...methodParams)
+      const result = await runMethod(...methodParams, { gasLimit: 9000000 })
 
       // TODO: Check if result is an object and check if there's an output-name with one of those key names
       // Insert result in all output elements
       const outputs = childrenElements.filter(({ id }) => id.includes('output'))
       outputs.forEach(({ element }) => Object.assign(element, { textContent: result }))
     } catch (error) {
-      console.error('TCL: handleRunMethod -> error', error)
+      displayToast(error)
     }
   }
 
@@ -68,11 +70,15 @@ export const Reducer = ({ info }) => {
   // Create contract and new method to trigger in button
   useEffect(() => {
     if (lib) {
-      const contractInstance = new ethers.Contract(address, abi, lib)
+      const signer = (new ethers.providers.Web3Provider(window.ethereum)).getSigner()
+      const contractInstance = new ethers.Contract(address, abi, signer)
 
       if (contractInstance[methodName]) {
-        const methodToRun = () => contractInstance[methodName]
+        const methodToRun = () => contractInstance.functions[methodName]
+        const getterGasLimit = () => contractInstance.estimate[methodName]
+
         setRunMethod(methodToRun)
+        setGetGasLimit(getterGasLimit)
       } else {
         console.error(`Method "${methodName}" does not exists on contract "${contractName}"`)
       }
@@ -101,7 +107,7 @@ export const Reducer = ({ info }) => {
     if (invokeButtons) {
       invokeButtons.forEach(({ element }) => element.addEventListener('click', handleRunMethod))
     }
-  }, [ childrenElements, handleRunMethod ])
+  }, [ childrenElements, handleRunMethod, parameters ])
 
   return null
 }

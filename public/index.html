@@ -26,13 +26,14 @@
 
     <link href="images/favicon.ico" rel="shortcut icon" type="image/x-icon" />
     <link href="images/webclip.png" rel="apple-touch-icon" />
+
     <script src="https://dapphero-dom.now.sh"></script>
   </head>
 
   <body class="body">
     <div class="page-div">
       <!-- Custom Contract with DOM integration -->
-      <div class="headline">Custom Contract: DappHeroTest</div>
+      <!-- <div class="headline">Custom Contract: DappHeroTest</div>
 
       <div
         id="dh"
@@ -51,6 +52,32 @@
           data-dh-property-input-name="wad"
           class="w-input"
           placeholder="Value to send:"
+        />
+
+        <button data-dh-property-contract-name="erc20" data-dh-property-invoke class="w-button">
+          Submit
+        </button>
+
+        <div data-dh-property-contract-name="erc20" data-dh-property-outputs class="component-div">
+          *Return value: -*
+        </div>
+      </div> -->
+
+      <!-- Custom Contract with DOM integration -->
+      <div class="headline">Custom Contract</div>
+      <div class="headline">Contract: "DAI" -> Method: "deny" -> Inputs: "guy"</div>
+
+      <div
+        id="dh"
+        data-dh-feature="customContract"
+        data-dh-property-contract-name="erc20"
+        data-dh-property-method-name="deny"
+      >
+        <input
+          data-dh-property-contract-name="erc20"
+          data-dh-property-input-name="guy"
+          class="w-input"
+          placeholder="Guy:"
         />
 
         <button data-dh-property-contract-name="erc20" data-dh-property-invoke class="w-button">
