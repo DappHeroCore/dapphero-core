@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { logger } from 'logger/customLogger'
+import { useWeb3React } from '@web3-react/core'
+import { getDomElements } from '@dapphero/dapphero-dom'
+
 import * as api from 'api'
 import * as hooks from 'hooks'
 import { FeatureReducer } from './protocol/ethereum/featureReducer'
@@ -31,10 +34,8 @@ export const Activator = () => {
 
   useEffect(() => {
     const API_URL = 'http://www.mocky.io/v2/5e2f4a4b310000750071070b'
-    window.dappHeroDom.getDomElements(API_URL).then(setDomElements)
+    getDomElements(API_URL).then(setDomElements)
   }, [])
-
-  console.log('TCL: domElements', domElements)
 
   return (
     <>
