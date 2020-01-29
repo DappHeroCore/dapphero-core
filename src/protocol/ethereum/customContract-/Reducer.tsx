@@ -14,7 +14,7 @@ const getAbiMethodInputs = (abi, methodName) => {
 // Reducer Component
 export const Reducer = ({ info }) => {
   const { contract, childrenElements, properties, hasParameters } = info
-  const { address, abi } = contract
+  const { contractAddress, contractAbi } = contract
 
   const contractKey = properties.find(({ key }) => key === 'contractName')
   const methodKey = properties.find(({ key }) => key === 'methodName')
@@ -23,6 +23,7 @@ export const Reducer = ({ info }) => {
   const { value: methodName } = methodKey
 
   // Custom Hooks
+  hooks.useEagerConnect()
   const injectedContext = hooks.useDappHeroWeb3()
 
   const { addToast } = useToasts()
@@ -32,7 +33,7 @@ export const Reducer = ({ info }) => {
   const [ context, setcontext ] = useState(injectedContext)
   const [ runMethod, setRunMethod ] = useState(null)
   const [ getGasLimit, setGetGasLimit ] = useState(null)
-  const [ parameters, setParameters ] = useState(getAbiMethodInputs(info.contract.abi, methodName))
+  const [ parameters, setParameters ] = useState(getAbiMethodInputs(info.contract.contractAbi, methodName))
 
   // -> Handlers
   const handleRunMethod = async () => {
@@ -50,7 +51,7 @@ export const Reducer = ({ info }) => {
 
       // TODO: Get gas limit through ethers, and remove MAX_LIMIT
       // const gasLimit = await getGasLimit(...methodParams)
-      const result = await runMethod(...methodParams, { gasLimit: 9000000 })
+      const result = await runMethod(...methodParams)
 
       // TODO: Check if result is an object and check if there's an output-name with one of those key names
       // Insert result in all output elements
@@ -70,8 +71,8 @@ export const Reducer = ({ info }) => {
   // Create contract and new method to trigger in button
   useEffect(() => {
     if (lib) {
-      const signer = (new ethers.providers.Web3Provider(window.ethereum)).getSigner()
-      const contractInstance = new ethers.Contract(address, abi, signer)
+      const signer = new ethers.providers.Web3Provider(window.ethereum).getSigner()
+      const contractInstance = new ethers.Contract(contractAddress, contractAbi, signer)
 
       if (contractInstance[methodName]) {
         const methodToRun = () => contractInstance.functions[methodName]

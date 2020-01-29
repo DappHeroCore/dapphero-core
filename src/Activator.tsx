@@ -4,7 +4,6 @@ import { useWeb3React } from '@web3-react/core'
 import { getDomElements } from '@dapphero/dapphero-dom'
 
 import * as api from 'api'
-import * as hooks from 'hooks'
 import { FeatureReducer } from './protocol/ethereum/featureReducer'
 
 // <script src="https://internal-dev-dapphero.s3.amazonaws.com/main.js" id="dh-apiKey" data-api="1580240829051x132613881547456510"></script>
@@ -19,11 +18,9 @@ logger.debug('ScriptAPI: ', apiKey)
 export const Activator = () => {
   const { active, error, activate, ...rest } = useWeb3React()
   logger.debug('web3ReactContext: ', { active, error, activate, ...rest })
-  // hooks.useEagerConnect()
+
   const [ domElements, setDomElements ] = useState(null)
   const [ configuration, setConfig ] = useState(null)
-
-  // console.log('web3ReactContext: ', { active, error, activate, ...rest })
 
   useEffect(() => {
     (async () => {
@@ -33,9 +30,8 @@ export const Activator = () => {
   }, [])
 
   useEffect(() => {
-    const API_URL = 'http://www.mocky.io/v2/5e2f4a4b310000750071070b'
-    getDomElements(API_URL).then(setDomElements)
-  }, [])
+    if (configuration) getDomElements(configuration).then(setDomElements)
+  }, [ configuration ])
 
   return (
     <>
