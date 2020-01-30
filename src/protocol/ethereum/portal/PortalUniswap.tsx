@@ -28,7 +28,6 @@ function IFrameElement({ outputCurrency }) {
 }
 
 export const PortalUniswap: FunctionComponent<PortalUniswapProps> = ({ element }) => {
-//   const injected = hooks.useDappHeroWeb3()
   const [ , , , outputCurrency ] = element.id.split('-')
 
   return ReactDOM.createPortal(
