@@ -29,6 +29,7 @@ function PayableElement({ text, element }) {
     ? injected.web3ReactContext.activate(connectors.injected)
     : () => donateWithWeb3(injected.lib, toAddress, value)
 
+  const buttonText = text === 'Connect' ? 'Connect' : `${text} ${value} ETH`
   return (
     <button // eslint-disable-line
       style={{
@@ -44,7 +45,7 @@ function PayableElement({ text, element }) {
       }}
       onClick={onClick}
     >
-      {text}
+      {buttonText}
     </button>
   )
 }
