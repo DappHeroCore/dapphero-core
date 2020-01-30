@@ -68,7 +68,7 @@ export const Reducer = ({ info }) => {
   }, [ injectedContext.networkId ])
   const { lib } = context
 
-  // Create contract and new method to trigger in button
+  // Create contract instance and set new method to trigger afterward in button
   useEffect(() => {
     if (lib) {
       const signer = new ethers.providers.Web3Provider(window.ethereum).getSigner()

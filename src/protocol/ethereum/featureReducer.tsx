@@ -25,12 +25,12 @@ export const FeatureReducer = ({ feature, element, configuration, key = '', inde
   const featureType = feature || element.id.split('-')[1]
 
   // Get Component Reducer from available features
-  const Component = FEATURES_COMPONENTS[featureType]
+  const FeatureComponent = FEATURES_COMPONENTS[featureType]
 
-  if (!Component) return null
+  if (!FeatureComponent) return null
 
   /* FIXME: We shouldn't use index as keys. Remove it when all features are integrated */
-  return <Component key={key || index} element={element} configuration={configuration} info={info} />
+  return <FeatureComponent key={key || index} element={element} configuration={configuration} info={info} />
 
   /* TODO: Remove this comment later on */
   // case 'customContract': {
