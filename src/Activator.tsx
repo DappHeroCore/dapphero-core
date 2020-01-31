@@ -30,7 +30,7 @@ export const Activator = () => {
   }, [])
 
   useEffect(() => {
-    if (configuration) getDomElements(configuration).then(setDomElements)
+    if (configuration) setDomElements(getDomElements(configuration))
   }, [ configuration ])
 
   return (

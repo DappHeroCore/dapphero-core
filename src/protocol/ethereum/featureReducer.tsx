@@ -20,7 +20,7 @@ const FEATURES_COMPONENTS = {
   customContract: CustomContractReducer,
 }
 
-export const FeatureReducer = ({ feature, element, configuration, key = '', index, info }: FeatureReducerProps) => {
+export const FeatureReducer = ({ feature, element, configuration, info }: FeatureReducerProps) => {
   /* TODO: Remove element.id.split when all features are integrated */
   const featureType = feature || element.id.split('-')[1]
 
@@ -30,7 +30,7 @@ export const FeatureReducer = ({ feature, element, configuration, key = '', inde
   if (!FeatureComponent) return null
 
   /* FIXME: We shouldn't use index as keys. Remove it when all features are integrated */
-  return <FeatureComponent key={key || index} element={element} configuration={configuration} info={info} />
+  return <FeatureComponent element={element} configuration={configuration} info={info} />
 
   /* TODO: Remove this comment later on */
   // case 'customContract': {
