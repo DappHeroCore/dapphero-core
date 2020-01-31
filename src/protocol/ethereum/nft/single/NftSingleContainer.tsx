@@ -14,13 +14,13 @@ export const NftSingleContainer = ({ element, responseObj }): any[] => {
   const contractAddress = contractMatch?.[1]
   const tokenMatch = element.id.match(/-tokenId_([a-zA-Z0-9]+)/)
   const tokenId = tokenMatch?.[1]
-  const { networkName, connected } = hooks.useDappHeroWeb3()
+  const { networkName, connected, networkId } = hooks.useDappHeroWeb3()
 
   const [ children, setChildren ] = useState([])
 
   useEffect(() => {
     const getData = async () => {
-      const response = responseObj ?? await api.openSea.retrieveAsset({ contractAddress, tokenId })
+      const response = responseObj ?? await api.openSea.retrieveAsset({ contractAddress, tokenId, networkId })
       const childComponentProps = Array.from(element.querySelectorAll('[id^=dh]'))
         .map((node) => {
           const match = node.id.match(/-customField_(.+)(-|$)/)

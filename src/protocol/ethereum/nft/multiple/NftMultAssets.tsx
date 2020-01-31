@@ -12,7 +12,7 @@ interface NftMultAssetsProps {
 
 export const NftMultAssets: FunctionComponent<NftMultAssetsProps> = ({ element, invokeNode, inputNode, childContainer }) => {
   const [ searchResults, setSearchResults ] = useState([])
-  const { connected } = hooks.useDappHeroWeb3()
+  const { connected, networkId } = hooks.useDappHeroWeb3()
 
   useEffect(() => {
     const limit = element.id.match(/-limit_(\d+)/)?.[1]
@@ -24,8 +24,10 @@ export const NftMultAssets: FunctionComponent<NftMultAssetsProps> = ({ element, 
       setSearchResults([])
       const { assets: searchResultsResponse } = await api.openSea.retrieveAssetsByOwner({
         owner,
+        networkId,
         limit: limit ? Number.parseInt(limit) : undefined,
       })
+      console.log('assets', searchResultsResponse)
       setSearchResults(searchResultsResponse)
     }
 
