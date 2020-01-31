@@ -6,6 +6,7 @@
     <meta charset="utf-8" />
     <title>DappHero: Components</title>
     <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <meta content="Webflow" name="generator" />
     <!-- <link href="css/normalize.css" rel="stylesheet" type="text/css" />
   <link href="css/webflow.css" rel="stylesheet" type="text/css" />
   <link href="css/dapphero-components.webflow.css" rel="stylesheet" type="text/css" /> -->
@@ -29,6 +30,155 @@
 
   <body class="body">
     <div class="page-div">
+      <!-- Custom Contract -->
+      <div class="headline">Custom Contract: DappHeroTest - viewNoArgsMultipleReturn</div>
+      <div class="component-div">
+        <div
+          id="dh-customContract-static-name:DappHeroTest-methodName:viewNoArgsMultipleReturn-output-returnValue:_hello-display:ascii"
+        >
+          *Return value: _hello*
+        </div>
+      </div>
+      <div class="headline">Custom Contract: DappHeroTest - viewMultipleArgsSingleReturn</div>
+      <div class="component-div">
+        <div
+          id="dh-customContract-static-name:DappHeroTest-methodName:viewMultipleArgsSingleReturn-output-returnValue:_balanceMultiplied-arg:0x803428e38DBFDf2EB25D94B538A1CFc395E66615-arg:8-display:ether-decimals:3"
+        >
+          *Return value: _balanceMultiplied*
+        </div>
+      </div>
+
+      <div class="headline">
+        Custom Contract: DappHeroTest - viewMultipleArgsSingleReturn (view tx with dynamic inputs)
+      </div>
+      <form >
+        <label for="name">View Function, Dynamic Args</label>
+        <input
+        type="text"
+        class="w-input"
+        maxlength="256"
+        placeholder="Address"
+        id="dh-customContract-view-name:DappHeroTest-methodName:viewMultipleArgsSingleReturn-input-input:from"
+        />
+        <input
+          type="text"
+          class="w-input"
+          maxlength="256"
+          placeholder="Uint"
+          id="dh-customContract-view-name:DappHeroTest-methodName:viewMultipleArgsSingleReturn-input-input:multiplier"
+        />
+        <input
+          id="dh-customContract-view-name:DappHeroTest-methodName:viewMultipleArgsSingleReturn-invoke"
+          type="submit"
+          value="Submit"
+          class="w-button"
+        />
+        <div class="component-div">
+          <div
+            id="dh-customContract-view-name:DappHeroTest-methodName:viewMultipleArgsSingleReturn-output-returnValue:_balanceMultiplied-display:ether-decimals:1"
+          >
+            *Return value on submit: _balanceMultiplied*
+          </div>
+        </div>
+      </form>
+
+      <div class="headline">Custom Contract: DappHeroTest - triggerEvent</div>
+      <form >
+        <label for="name">Trigger Event</label>
+        <input
+          type="text"
+          class="w-input"
+          maxlength="256"
+          placeholder="Uint"
+          id="dh-customContract-dynamic-name:DappHeroTest-methodName:triggerEvent-input-input:value"
+        />
+        <input
+          id="dh-customContract-dynamic-name:DappHeroTest-methodName:triggerEvent-invoke"
+          type="submit"
+          value="Submit"
+          class="w-button"
+        />
+      </form>
+
+      <div class="headline">Custom Contract: DappHeroTest - sendVariableEthNoArgs</div>
+      <form >
+        <label for="name">Send ETH to Contract</label>
+        <input
+          type="text"
+          class="w-input"
+          maxlength="256"
+          placeholder="Msg.value in ether (send more than 0.001)"
+          id="dh-customContract-dynamic-name:DappHeroTest-methodName:sendVariableEthNoArgs-input-input:payable"
+        />
+        <input
+          id="dh-customContract-dynamic-name:DappHeroTest-methodName:sendVariableEthNoArgs-invoke"
+          type="submit"
+          value="Submit"
+          class="w-button"
+        />
+      </form>
+
+      <div class="headline">Custom Contract: DappHeroTest - sendVariableEthWithArgs</div>
+      <form >
+        <label for="name">Send ETH to Contract w/ a Message</label>
+        <input
+          type="text"
+          class="w-input"
+          maxlength="256"
+          placeholder="Msg.value in ether (send more than 0.001)"
+          id="dh-customContract-dynamic-name:DappHeroTest-methodName:sendVariableEthWithArgs-input-input:payable"
+        />
+        <input
+          type="text"
+          class="w-input"
+          maxlength="256"
+          placeholder="Message: string will be automatically converted to bytes32 if func demands it"
+          id="dh-customContract-dynamic-name:DappHeroTest-methodName:sendVariableEthWithArgs-input-input:message"
+        />
+        <input
+          id="dh-customContract-dynamic-name:DappHeroTest-methodName:sendVariableEthWithArgs-invoke"
+          type="submit"
+          value="Submit"
+          class="w-button"
+        />
+      </form>
+
+      <div class="headline">Web3 Provider:: dh-network-provider</div>
+      <div class="component-div">
+        <div id="dh-network-provider" class="body-text">*Web 3 Provider*</div>
+      </div>
+      <div class="headline">Web3 Network Name:: dh-network-name</div>
+      <div class="component-div">
+        <div id="dh-network-name" class="body-text">*Network Name*</div>
+      </div>
+      <div class="headline">Web3 Network ID:: dh-network-id</div>
+      <div class="component-div">
+        <div id="dh-network-id" class="body-text">*Network ID*</div>
+      </div>
+
+      <div class="headline">Web3 Network Transfer Ether:: dh-network-transfer</div>
+      <div class="component-div">
+        <input
+          type="text"
+          class="w-input"
+          maxlength="256"
+          placeholder="Msg.value in ether"
+          id="dh-network-transfer-input-value"
+        />
+        <input
+          type="text"
+          class="w-input"
+          maxlength="256"
+          placeholder="To address"
+          id="dh-network-transfer-input-to"
+        />
+        <input
+          id="dh-network-transfer-invoke"
+          type="submit"
+          value="Submit"
+          class="w-button"
+        />
+      </div>
       <div class="headline">User - Address:: dh-user-address</div>
       <div class="component-div">
         <div id="dh-user-address" class="body-text">*user address*</div>
@@ -37,7 +187,10 @@
       <div class="component-div">
         <div id="dh-user-address-display_short" class="body-text">*user address*</div>
       </div>
-
+      <div class="headline">User - Balance:: dh-user-balance</div>
+      <div class="component-div">
+        <div id="dh-user-balance" class="body-text">*user balance*</div>
+      </div>
       <div class="headline">User - Balance:: dh-user-balance-units_ether</div>
       <div class="component-div">
         <div id="dh-user-balance-units_ether" class="body-text">*user balance*</div>
@@ -47,24 +200,78 @@
         <div id="dh-user-balance-units_ether-decimals_3" class="body-text">*user balance*</div>
       </div>
 
+      <!-- ThreeBox-->
+      <div class="headline">3Box - Profile Name:: dh-threebox-profile-name</div>
+      <div class="component-div">
+        <div id="dh-threebox-profile-name" class="body-text">*3Box Profile Name*</div>
+      </div>
 
-      <!-- Portal -->
-      <div class="headline">Payable Button via Portal</div>
-      <!-- "Tip Me" button -->
-      <!-- dh-portal-payable-{sendToAddress}-{etherValue} -->
-      <a id="dh-portal-payable-0x885583955F14970CbC0046B91297e9915f4DE6E4-0.01"></a>
-      
-      <div class="headline">Uniswap iFrame via Portal</div>
-      <!-- Renders Uniswap exchange for ETH => outputCurrency -->
-      <!-- dh-portal-uniswap-{outputCurrency}  -->
-      <div id="dh-portal-uniswap-0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359"></div>
+      <div class="headline">3Box - Profile Name:: dh-threebox-profile-Location</div>
+      <div class="component-div">
+        <div id="dh-threebox-profile-Location" class="body-text">*3Box Profile Location*</div>
+      </div>
+
+      <div class="headline">3Box - Profile Name:: dh-threebox-profile-website</div>
+      <div class="component-div">
+        <div id="dh-threebox-profile-website" class="body-text">*3Box Profile website*</div>
+      </div>
+
+      <div class="headline">3Box - Profile Name:: dh-threebox-profile-emoji</div>
+      <div class="component-div">
+        <div id="dh-threebox-profile-emoji" class="body-text">*3Box Profile emoji*</div>
+      </div>
+
+      <!--
+      IMAGE TAG
+    -->
+
+      <div vending-screen="vending-screen" class="building---header---div">
+        <div class="w-layout-grid grid---3">
+          <img
+            id="dh-threebox-profile-image"
+            src="https://d3e54v103j8qbb.cloudfront.net/plugins/Basic/assets/placeholder.60f9b1840c.svg"
+            alt=""
+            class="building img w-node-b5f7d5f30df0-f542304d"
+          />
+        </div>
+      </div>
 
       <!-- Metamask Enable-->
 
       <div class="headline">Web 3 Metamask Enable Button:: dh-network-enable</div>
       <div class="component-div"><a id="dh-network-enable" href="#" class="button w-button">Enable Metamask</a></div>
+     
+      <!--
+        NFT
+      -->
 
-      <!--NFT-->
+      <!-- Single Item-->
+      <div class="headline">
+        NFT (opensea API) - Single Item: dh-nft-single-item-container-contract_{address}-tokenId_{tokenId}
+      </div>
+      <div id="dh-nft-single-item-container-contract_0x2e7e41115841eed75888c217cd6ade1939d8d626-tokenId_79">
+        <div class="component-div" id="dh-nft-single-item-customField_owner.address">
+          sample NFT - owner address
+        </div>
+        <img src="" id="dh-nft-single-item-customField_image_url" />
+      </div>
+      
+      <!-- Search on-load -->
+      <div class="headline">
+        NFT (opensea API) - Single Item: dh-nft-single-item-container-contract_{address}-tokenId_{tokenId}
+      </div>
+      <div id="dh-nft-mult-search-parentContainer-id_block1-owner_0xe6e78765e8f9cd0e691450a6cb77546c1cbdf2d6-limit_10">
+        <div id="dh-nft-mult-search-item-container">
+          <div id="dh-nft-mult-search-item-customField_asset_contract.symbol">
+            Owner address
+          </div>
+          <img id="dh-nft-mult-search-item-customField_image_url" height="100px" width="auto" />
+        </div>
+      </div>
+
+
+
+ 
     </div>
 
     <!-- Single NFT Item-->
@@ -79,13 +286,8 @@
       integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
       crossorigin="anonymous"
     ></script>
-
-    <script
-      src="js/webflow.js"
-      type="text/javascript"
-      id="dh-apiKey"
-      data-api="1580240829051x132613881547456510"
-    ></script>
+    
+    <script src="js/webflow.js" type="text/javascript" id="dh-apiKey" data-api="1580240829051x132613881547456510"></script>
   </body>
   <!-- [if lte IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/placeholders/3.0.2/placeholders.min.js"></script><![endif] -->
 </html>

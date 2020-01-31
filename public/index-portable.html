@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<!--  This site was created in Webflow. http://www.webflow.com  -->
+<!--  Last Published: Sat Jan 18 2020 14:45:04 GMT+0000 (Coordinated Universal Time)  -->
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>DappHero: Components</title>
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <!-- <link href="css/normalize.css" rel="stylesheet" type="text/css" />
+  <link href="css/webflow.css" rel="stylesheet" type="text/css" />
+  <link href="css/dapphero-components.webflow.css" rel="stylesheet" type="text/css" /> -->
+
+    <link href="css/normalize.css" rel="stylesheet" type="text/css" />
+    <link href="css/webflow.css" rel="stylesheet" type="text/css" />
+    <link href="css/blockcities-use-case.webflow.css" rel="stylesheet" type="text/css" />
+    <!-- [if lt IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js" type="text/javascript"></script><![endif] -->
+    <script type="text/javascript">
+      !(function(o, c) {
+        var n = c.documentElement,
+          t = ' w-mod-'
+        ;(n.className += t + 'js'),
+          ('ontouchstart' in o || (o.DocumentTouch && c instanceof DocumentTouch)) && (n.className += t + 'touch')
+      })(window, document)
+    </script>
+
+    <link href="images/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <link href="images/webclip.png" rel="apple-touch-icon" />
+  </head>
+
+  <body class="body">
+    <div class="page-div">
+      <div class="headline">User - Address:: dh-user-address</div>
+      <div class="component-div">
+        <div id="dh-user-address" class="body-text">*user address*</div>
+      </div>
+      <div class="headline">User - Address:: dh-user-address-display_short</div>
+      <div class="component-div">
+        <div id="dh-user-address-display_short" class="body-text">*user address*</div>
+      </div>
+
+      <div class="headline">User - Balance:: dh-user-balance-units_ether</div>
+      <div class="component-div">
+        <div id="dh-user-balance-units_ether" class="body-text">*user balance*</div>
+      </div>
+      <div class="headline">User - Balance:: dh-user-balance-units_ether-decimals_3</div>
+      <div class="component-div">
+        <div id="dh-user-balance-units_ether-decimals_3" class="body-text">*user balance*</div>
+      </div>
+
+
+      <!-- Portal -->
+      <div class="headline">Payable Button via Portal</div>
+      <!-- "Tip Me" button -->
+      <!-- dh-portal-payable-{sendToAddress}-{etherValue} -->
+      <a id="dh-portal-payable-0x885583955F14970CbC0046B91297e9915f4DE6E4-0.01"></a>
+      
+      <div class="headline">Uniswap iFrame via Portal</div>
+      <!-- Renders Uniswap exchange for ETH => outputCurrency -->
+      <!-- dh-portal-uniswap-{outputCurrency}  -->
+      <div id="dh-portal-uniswap-0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359"></div>
+
+      <!-- Metamask Enable-->
+
+      <div class="headline">Web 3 Metamask Enable Button:: dh-network-enable</div>
+      <div class="component-div"><a id="dh-network-enable" href="#" class="button w-button">Enable Metamask</a></div>
+
+      <!--NFT-->
+    </div>
+
+    <!-- Single NFT Item-->
+
+    <!-- <script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.4.1.min.220afd743d.js" type="text/javascript" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+            <script src="js/webflow.js" type="text/javascript"></script> -->
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <!-- <div id="dh-root"></div> -->
+    <script
+      src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.4.1.min.220afd743d.js"
+      type="text/javascript"
+      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+      crossorigin="anonymous"
+    ></script>
+
+    <script
+      src="js/webflow.js"
+      type="text/javascript"
+      id="dh-apiKey"
+      data-api="1580240829051x132613881547456510"
+    ></script>
+  </body>
+  <!-- [if lte IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/placeholders/3.0.2/placeholders.min.js"></script><![endif] -->
+</html>

@@ -8,7 +8,6 @@ import { Reducer as PortalReducer } from './portal/Reducer'
 
 export const FeatureReducer = ({ element, configuration, index }) => {
   const featureType = element.id.split('-')[1]
-  console.log('featureType:', featureType)
   switch (featureType) {
   case 'network': {
     return (
@@ -48,9 +47,9 @@ export const FeatureReducer = ({ element, configuration, index }) => {
   case 'threebox': {
     return <ThreeBoxReducer element={element} configuration={configuration} key={index} />
   }
-  // case 'nft': {
-  //   return <NftReducer element={element} configuration={configuration} key={index} />
-  // }
+  case 'nft': {
+    return <NftReducer element={element} configuration={configuration} key={index} />
+  }
   case 'portal': {
     return <PortalReducer element={element} />
   }

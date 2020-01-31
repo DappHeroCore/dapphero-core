@@ -51,6 +51,7 @@ export const retrieveAssetsBySearch = async ({
   orderBy = ORDER_BY,
   orderDirection = ORDER_DIRECTION,
 }) => {
+  console.log('search:', search)
   const params = { limit, order_by: orderBy, order_direction: orderDirection, search }
   const { data } = await axios.get(`${OPEN_SEA.baseUrl}/assets`, { params })
   return data

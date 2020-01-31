@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react'
-import { NftMultSearch } from './NftMultSearch'
+import { NftMultAssets } from './NftMultAssets'
 
 interface ReducerProps {
   element: HTMLElement
@@ -22,7 +22,7 @@ export const Reducer: FunctionComponent<ReducerProps> = ({ element }) => {
     const inputNode = siblingNodes.filter((item) => item.id.split('-')[4] === 'input')[0]
     const invokeNode = siblingNodes.filter((item) => item.id.split('-')[4] === 'invoke')[0]
     return (
-      <NftMultSearch element={element} invokeNode={invokeNode} inputNode={inputNode} childContainer={childContainer} />
+      <NftMultAssets element={element} invokeNode={invokeNode} inputNode={inputNode} childContainer={childContainer} />
     ) }
 
   case 'owner': {
