@@ -17,7 +17,6 @@ logger.debug('ScriptAPI: ', apiKey)
 
 export const Activator = () => {
   const { active, error, activate, ...rest } = useWeb3React()
-  logger.debug('web3ReactContext: ', { active, error, activate, ...rest })
 
   const [ domElements, setDomElements ] = useState(null)
   const [ configuration, setConfig ] = useState(null)
@@ -33,6 +32,7 @@ export const Activator = () => {
     if (configuration) getDomElements(configuration).then(setDomElements)
   }, [ configuration ])
 
+  if (domElements) console.log('domElements', domElements)
   return (
     <>
       {domElements

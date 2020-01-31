@@ -17,10 +17,7 @@ export const EthTransfer: FunctionComponent<EthTransferProps> = ({ element }) =>
   const inputNodes = document.querySelectorAll(`[id^=dh-network-transfer]`)
   const { lib } = hooks.useDappHeroWeb3()
 
-  console.log('THE LIB COMING IN: ', lib)
-
   useEffect(() => {
-    logger.debug('ETHTRANSFER PROVIDER', lib)
     const transferEther = (e) => {
       e.preventDefault()
 
@@ -38,7 +35,6 @@ export const EthTransfer: FunctionComponent<EthTransferProps> = ({ element }) =>
         if (inputSplit[4] === 'value') value = (input as HTMLInputElement).value
         if (inputSplit[4] === 'to') toAddress = (input as HTMLInputElement).value
       })
-      console.log('The Value: ', utils.convertUnits('ether', 'wei', value).toHexString())
 
       const params = [ {
         from,

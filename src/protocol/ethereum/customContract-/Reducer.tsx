@@ -12,7 +12,9 @@ const getAbiMethodInputs = (abi, methodName) => {
 }
 
 // Reducer Component
-export const Reducer = ({ info }) => {
+export const Reducer = ({ info, configuration }) => {
+  console.log('info obj inside feature reducer', info)
+
   const { contract, childrenElements, properties, hasParameters } = info
   const { contractAddress, contractAbi } = contract
 
@@ -56,6 +58,7 @@ export const Reducer = ({ info }) => {
       // TODO: Check if result is an object and check if there's an output-name with one of those key names
       // Insert result in all output elements
       const outputs = childrenElements.filter(({ id }) => id.includes('output'))
+      console.log('TCL: handleRunMethod -> output', outputs)
       outputs.forEach(({ element }) => Object.assign(element, { textContent: result }))
     } catch (error) {
       displayToast(error)

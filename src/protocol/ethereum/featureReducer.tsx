@@ -19,7 +19,6 @@ const FEATURES_COMPONENTS = {
   threebox: ThreeBoxReducer,
   customContract: CustomContractReducer,
 }
-
 export const FeatureReducer = ({ feature, element, configuration, key = '', index, info }: FeatureReducerProps) => {
   /* TODO: Remove element.id.split when all features are integrated */
   const featureType = feature || element.id.split('-')[1]

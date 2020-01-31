@@ -30,14 +30,16 @@
 
   <body class="body">
     <div class="page-div">
+      <!-- --------------------------------------------------- -->
       <!-- Custom Contract with DOM integration -->
+      <!-- --------------------------------------------------- -->
       <div class="headline">Custom Contract: DappHeroTest</div>
 
       <div
         id="dh"
         data-dh-feature="customContract"
         data-dh-property-contract-name="erc20"
-        data-dh-property-method-name="totalSupply"
+        data-dh-property-method-name="important"
       >
         <input
           data-dh-property-contract-name="erc20"
@@ -50,18 +52,77 @@
           data-dh-property-input-name="wad"
           class="w-input"
           placeholder="Value to send:"
-        />
-
-        <button data-dh-property-contract-name="erc20" data-dh-property-invoke class="w-button">
-          Submit
-        </button>
-
-        <div data-dh-property-contract-name="erc20" data-dh-property-outputs class="component-div">
-          *Return value: -*
+          />
+          
+          <button data-dh-property-contract-name="erc20" data-dh-property-invoke class="w-button">
+            Submit
+          </button>
+          
+          <div data-dh-property-contract-name="erc20" data-dh-property-outputs class="component-div">
+            *Return value: -*
+          </div>
+        </div>
+        
+        <!-- --------------------------------------------------- -->
+        <!-- Custom Contract view with no arguments -->
+        <!-- --------------------------------------------------- -->
+        <div
+        id="dh"
+        data-dh-feature="customContract"
+        data-dh-property-contract-name="Drakes 1st Contract"
+        data-dh-property-method-name="important"
+        >
+        
+        <button class="w-button" data-dh-property-contract-name="Drakes 1st Contract" data-dh-property-invoke>Click Here</button>
+        
+        <div class="component-div" data-dh-property-contract-name="Drakes 1st Contract" data-dh-property-outputs>
+          important value placeholder
         </div>
       </div>
 
+
+
+
+
+      <!-- --------------------------------------------------- -->
+      <!-- Custom Contract view with arguments -->
+      <!-- --------------------------------------------------- -->
+      <div
+        class="component-div"
+        id="dh"
+        data-dh-feature="customContract"
+        data-dh-property-contract-name="Drakes 1st Contract"
+        data-dh-property-method-name="viewMultipleArgsSingleReturn"
+      >
+    
+      <input
+        data-dh-property-contract-name="Drakes 1st Contract"
+        data-dh-property-input-name="from"
+      > *from placeholder</input>
+      <input
+        data-dh-property-contract-name="Drakes 1st Contract"
+        data-dh-property-input-name="multiplier"
+      >
+      multiplier placeholder
+      </input>
+
+      <button 
+        class="w-button" 
+        data-dh-property-contract-name="Drakes 1st Contract"
+        data-dh-property-invoke>Click Here
+      </button>
+
+
+    </div>
+
+      
+
+
+
+
+      <!-- --------------------------------------------------- -->
       <!-- Custom Contract with DOM integration -->
+      <!-- --------------------------------------------------- -->
       <!-- div class="headline">Custom Contract</div>
       <div class="headline">Contract: "DAI" -> Method: "deny" -> Inputs: "guy"</div>
 
@@ -580,7 +641,7 @@
       crossorigin="anonymous"
     ></script>
 
-    <script src="js/webflow.js" type="text/javascript" id="dh-apiKey" data-api="1580332137841x358412652384354300"></script>
+    <script id="dh-apiKey" data-api="1580475431800x113655698330484740"></script>
   </body>
   <!-- [if lte IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/placeholders/3.0.2/placeholders.min.js"></script><![endif] -->
 </html>
