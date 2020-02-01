@@ -14,7 +14,9 @@ interface ReducerProps {
   // featureType: 'name' | 'location' | 'website' | 'hover' | 'emoji'
 }
 
-export const Reducer: FunctionComponent<ReducerProps> = ({ element, configuration }) => {
+export const Reducer: FunctionComponent<ReducerProps> = ({ element, info }) => {
+  console.log('TCL: element, info', element, info)
+
   const injected = hooks.useDappHeroWeb3()
   const { accounts } = injected
   const [ threeBoxProfile, setThreeBoxProfile ] = useState({
@@ -43,7 +45,7 @@ export const Reducer: FunctionComponent<ReducerProps> = ({ element, configuratio
     getProfile()
   }, [ accounts ])
 
-  switch (featureType) {
+  switch (info?.properties[0]?.key) {
   case 'image': {
     const imageHash = threeBoxProfile?.image?.[0]?.contentUrl?.['/'] ?? null
     if (imageHash) {

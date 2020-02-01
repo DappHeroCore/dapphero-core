@@ -7,12 +7,8 @@ import { EthTransfer } from './EthTransfer'
 import { NetworkFeatureTypes } from './types'
 
 export const Reducer = ({ element, info }) => {
-
   const injected = hooks.useDappHeroWeb3()
-
   const { networkName, networkId } = injected
-  // const [ ,, infoType ] = element.id.split('-')
-
   const defaultInfoObj = {
     networkId: 0,
     networkName: 'Unknown',
@@ -25,13 +21,11 @@ export const Reducer = ({ element, info }) => {
       networkId: networkId ?? 0,
       networkName: networkName ?? 'Unknown',
     }
-
     setInfoValue(infoValueObj)
   }, [ networkId, networkName ])
 
   switch (info?.properties[0]?.key) {
-
-  case NetworkFeatureTypes.ENABLE: {
+  case NetworkFeatureTypes.ENABLE: { // TODO: Drake- we need to settle on if we are going to use this style or not so we can be consistent
     return (
       <EthEnable
         element={element}
@@ -54,15 +48,6 @@ export const Reducer = ({ element, info }) => {
       />
     )
   }
-  // TODO:  Deprecated
-  // case NetworkFeatureTypes.PROVIDER: {
-  //   return (
-  //     <EthNetworkInfo
-  //       element={element}
-  //       infoValue={infoValue.providerName}
-  //     />
-  //   )
-  // }
   case NetworkFeatureTypes.TRANSFER: {
     if (element.id.includes('-invoke')) {
       return (

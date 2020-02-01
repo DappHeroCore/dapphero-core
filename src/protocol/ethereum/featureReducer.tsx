@@ -37,11 +37,11 @@ export const FeatureReducer = ({ feature, element, configuration, info }: Featur
   case 'nft':
     return <NftReducer element={element} configuration={configuration} info={info} />
   case 'user':
-    return <UserReducer element={element} configuration={configuration} info={info} />
+    return <UserReducer element={element} info={info} />
   case 'network':
     return <NetworkReducer element={element} configuration={configuration} info={info} />
   case 'threebox':
-    return <ThreeBoxReducer element={element} configuration={configuration} info={info} />
+    return <ThreeBoxReducer element={element} info={info} />
   case 'customContract':
     return <CustomContractReducer element={element} configuration={configuration} info={info} />
   default:
