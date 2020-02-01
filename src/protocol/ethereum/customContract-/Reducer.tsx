@@ -113,7 +113,7 @@ export const Reducer = ({ info }) => {
   useEffect(() => {
     if (autoInvokeKey) {
       const { value } = autoInvokeKey
-      if (value === 'true') handleRunMethod()
+      if (value === 'true' && !hasInputs && !isTransaction) handleRunMethod()
     }
   }, [ autoInvokeKey, handleRunMethod ])
 
