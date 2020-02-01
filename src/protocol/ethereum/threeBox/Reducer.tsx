@@ -1,7 +1,6 @@
 import React, { FunctionComponent, useEffect, useState } from 'react'
 import { logger } from 'logger/customLogger'
 import * as hooks from 'hooks'
-import { DappHeroConfiguration } from 'types/types'
 import { ThreeBoxProfileDataElement } from './ThreeBoxProfileDataElement'
 import { ThreeBoxProfileImgElement } from './ThreeBoxProfileImgElement'
 
@@ -10,13 +9,10 @@ const { getProfile: get3boxProfile } = require('3box/lib/api')
 const ipfsRoot = 'https://cloudflare-ipfs.com/ipfs/'
 interface ReducerProps {
   element: HTMLElement
-  configuration: DappHeroConfiguration
-  // featureType: 'name' | 'location' | 'website' | 'hover' | 'emoji'
+  info: any
 }
 
 export const Reducer: FunctionComponent<ReducerProps> = ({ element, info }) => {
-  console.log('TCL: element, info', element, info)
-
   const injected = hooks.useDappHeroWeb3()
   const { accounts } = injected
   const [ threeBoxProfile, setThreeBoxProfile ] = useState({
@@ -30,7 +26,6 @@ export const Reducer: FunctionComponent<ReducerProps> = ({ element, info }) => {
       { contentUrl: { '/': '' } },
     ],
   })
-  const featureType = element.id.split('-')[3]
 
   useEffect(() => {
     const getProfile = async () => {
