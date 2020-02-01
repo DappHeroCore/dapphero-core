@@ -8,6 +8,7 @@ interface EthUserAddressProps {
 }
 
 export const EthUserAddress: FunctionComponent<EthUserAddressProps> = ({ element, displayFormat }) => {
+  console.log('TCL: displayFormat', displayFormat)
 
   const { accounts, networkId } = hooks.useDappHeroWeb3()
   useEffect(() => {

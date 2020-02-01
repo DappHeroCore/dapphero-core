@@ -6,11 +6,12 @@ import { EthNetworkInfo } from './EthNetworkInfo'
 import { EthTransfer } from './EthTransfer'
 import { NetworkFeatureTypes } from './types'
 
-export const Reducer = ({ element, configuration }) => {
+export const Reducer = ({ element, info }) => {
+
   const injected = hooks.useDappHeroWeb3()
 
   const { networkName, networkId } = injected
-  const [ ,, infoType ] = element.id.split('-')
+  // const [ ,, infoType ] = element.id.split('-')
 
   const defaultInfoObj = {
     networkId: 0,
@@ -28,7 +29,8 @@ export const Reducer = ({ element, configuration }) => {
     setInfoValue(infoValueObj)
   }, [ networkId, networkName ])
 
-  switch (infoType) {
+  switch (info?.properties[0]?.key) {
+
   case NetworkFeatureTypes.ENABLE: {
     return (
       <EthEnable

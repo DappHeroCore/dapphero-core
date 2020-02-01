@@ -7,7 +7,7 @@ import * as api from 'api'
 import { FeatureReducer } from './protocol/ethereum/featureReducer'
 
 // <script src="https://internal-dev-dapphero.s3.amazonaws.com/main.js" id="dh-apiKey" data-api="1580240829051x132613881547456510"></script>
-const elements = Array.from(document.querySelectorAll(`[id^=dh]`))
+// const elements = Array.from(document.querySelectorAll(`[id^=dh]`))
 const apiKeyElement = document.getElementById('dh-apiKey')
 const apiKey = apiKeyElement.getAttribute('data-api')
 
@@ -46,20 +46,21 @@ export const Activator = () => {
           />
         ))}
 
-      {configuration
-        && elements.map((element, index) => {
-          /* Avoid running customContract feature */
-          if (element.getAttribute('id').includes('customContract')) return null
-
-          return (
-            <FeatureReducer
-              element={element}
-              index={index + 1}
-              configuration={configuration}
-              key={element.id + index.toString()}
-            />
-          )
-        })}
     </>
   )
 }
+
+// {configuration
+//   && elements.map((element, index) => {
+//     /* Avoid running customContract feature */
+//     if (element.getAttribute('id').includes('customContract')) return null
+
+//     return (
+//       <FeatureReducer
+//         element={element}
+//         index={index + 1}
+//         configuration={configuration}
+//         key={element.id + index.toString()}
+//       />
+//     )
+//   })}

@@ -10,7 +10,7 @@ export const useDappHeroWeb3 = () => {
     lib: null,
     accounts: [],
     networkId: null,
-    networkName: { network: null },
+    networkName: null,
     connected: false,
   })
 
@@ -20,7 +20,7 @@ export const useDappHeroWeb3 = () => {
       lib: library,
       accounts: [ account ],
       networkId: chainId,
-      networkName: library?.network?.name ?? null,
+      networkName: library?.network?.name || "This dog don't hunt. Line 25 of useDappHeroWeb3.ts",
       connected: active,
     })
   }, [ library, chainId, account ]) // intentionally only running on mount (make sure it's only mounted once :))
