@@ -12,14 +12,19 @@ export const Reducer = ({ element, info }) => {
   const defaultInfoObj = {
     networkId: 0,
     networkName: 'Unknown',
+    providerName: 'Unknown',
   }
 
   const [ infoValue, setInfoValue ] = useState(defaultInfoObj)
 
   useEffect(() => {
+
+    const isMetamask = (typeof window.ethereum !== 'undefined' && window.ethereum.isMetaMask) ? 'metamask' : null
+
     const infoValueObj = {
       networkId: networkId ?? 0,
       networkName: networkName ?? 'Unknown',
+      providerName: isMetamask ?? 'Unknown',
     }
     setInfoValue(infoValueObj)
   }, [ networkId, networkName ])
@@ -45,6 +50,14 @@ export const Reducer = ({ element, info }) => {
       <EthNetworkInfo
         element={element}
         infoValue={infoValue.networkName}
+      />
+    )
+  }
+  case NetworkFeatureTypes.PROVIDER: {
+    return (
+      <EthNetworkInfo
+        element={element}
+        infoValue={infoValue.providerName}
       />
     )
   }
