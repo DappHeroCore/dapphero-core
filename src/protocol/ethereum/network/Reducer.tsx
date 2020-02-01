@@ -8,6 +8,7 @@ import { NetworkFeatureTypes } from './types'
 
 export const Reducer = ({ element, info }) => {
   const injected = hooks.useDappHeroWeb3()
+
   const { networkName, networkId } = injected
   const defaultInfoObj = {
     networkId: 0,

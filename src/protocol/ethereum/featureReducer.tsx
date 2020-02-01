@@ -11,15 +11,6 @@ import { Reducer as CustomContractReducer } from './customContract-/Reducer'
 // Types
 import { FeatureReducerProps } from './types'
 
-// Constants
-const FEATURES_COMPONENTS = {
-  nft: NftReducer,
-  user: UserReducer,
-  network: NetworkReducer,
-  threebox: ThreeBoxReducer,
-  customContract: CustomContractReducer,
-}
-
 export const FeatureReducer = ({ feature, element, configuration, info }: FeatureReducerProps) => {
 
   /* TODO: Remove element.id.split when all features are integrated */
