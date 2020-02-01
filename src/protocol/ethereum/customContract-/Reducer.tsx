@@ -17,6 +17,7 @@ export const Reducer = ({ info }) => {
   const { contract, childrenElements, properties, hasInputs, hasOutputs, isTransaction, modifiers } = info
   const { contractAddress, contractAbi } = contract
 
+  const autoInvokeKey = properties.find(({ key }) => key === 'autoInvoke')
   const methodNameKey = properties.find(({ key }) => key === 'methodName')
   const ethValueKey = properties.find((property) => property.key === 'ethValue')
 
@@ -43,7 +44,6 @@ export const Reducer = ({ info }) => {
     if (hasInputs) {
       const isParametersFilled = Boolean(parametersValues.filter(Boolean).join(''))
       if (!isParametersFilled) console.error(`You must define your parameters first`)
-
     }
 
     try {
@@ -108,6 +108,14 @@ export const Reducer = ({ info }) => {
 
     return () => invokeButtons.forEach(({ element }) => element.removeEventListener('click', handleRunMethod))
   }, [ childrenElements, handleRunMethod ])
+
+  // Auto invoke method
+  useEffect(() => {
+    if (autoInvokeKey) {
+      const { value } = autoInvokeKey
+      if (value === 'true') handleRunMethod()
+    }
+  }, [ autoInvokeKey, handleRunMethod ])
 
   // Display new results in the UI
   useEffect(() => {
