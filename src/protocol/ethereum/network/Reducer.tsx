@@ -1,42 +1,43 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import * as hooks from 'hooks'
 import { EthEnable } from './EthEnable'
 import { EthNetworkInfo } from './EthNetworkInfo'
 import { EthTransfer } from './EthTransfer'
-import { NetworkFeatureTypes } from './types'
 
-export const Reducer = ({ element, configuration }) => {
+export const Reducer = ({ element, info }) => {
   const injected = hooks.useDappHeroWeb3()
-
+  const domElements = hooks.useDomElements()
   const { networkName, networkId } = injected
-  const [ ,, infoType ] = element.id.split('-')
-
   const defaultInfoObj = {
     networkId: 0,
     networkName: 'Unknown',
+    providerName: 'Unknown',
   }
 
   const [ infoValue, setInfoValue ] = useState(defaultInfoObj)
 
   useEffect(() => {
+
+    const isMetamask = (typeof window.ethereum !== 'undefined' && window.ethereum.isMetaMask) ? 'metamask' : null
+
     const infoValueObj = {
       networkId: networkId ?? 0,
       networkName: networkName ?? 'Unknown',
+      providerName: isMetamask ?? 'Unknown',
     }
-
     setInfoValue(infoValueObj)
   }, [ networkId, networkName ])
 
-  switch (infoType) {
-  case NetworkFeatureTypes.ENABLE: {
+  switch (info?.properties[0]?.key) {
+  case ('enable'): { // TODO: Drake- we need to settle on if we are going to use this style or not so we can be consistent
     return (
       <EthEnable
         element={element}
       />
     )
   }
-  case NetworkFeatureTypes.ID: {
+  case ('id'): {
     return (
       <EthNetworkInfo
         element={element}
@@ -44,7 +45,7 @@ export const Reducer = ({ element, configuration }) => {
       />
     )
   }
-  case NetworkFeatureTypes.NAME: {
+  case ('name'): {
     return (
       <EthNetworkInfo
         element={element}
@@ -52,19 +53,22 @@ export const Reducer = ({ element, configuration }) => {
       />
     )
   }
-  // TODO:  Deprecated
-  // case NetworkFeatureTypes.PROVIDER: {
-  //   return (
-  //     <EthNetworkInfo
-  //       element={element}
-  //       infoValue={infoValue.providerName}
-  //     />
-  //   )
-  // }
-  case NetworkFeatureTypes.TRANSFER: {
-    if (element.id.includes('-invoke')) {
+  case ('provider'): {
+    return (
+      <EthNetworkInfo
+        element={element}
+        infoValue={infoValue.providerName}
+      />
+    )
+  }
+  case ('transfer'): {
+    if (info.feature === 'network' && info.properties_?.transfer === 'invoke') {
+      const relatedNodes = domElements.filter((item) => item.feature === 'network' && item.properties_.transfer)
+      const amountObj = relatedNodes.find(({ properties_: { transfer, input_name } }) => transfer === 'input' && input_name === 'amount')
+      const addressObj = relatedNodes.find(({ properties_: { transfer, input_name } }) => transfer === 'input' && input_name === 'address')
+      const outputObj = relatedNodes.find(({ properties_: { transfer } }) => transfer === 'output')
       return (
-        <EthTransfer element={element} />
+        <EthTransfer element={element} amountObj={amountObj} addressObj={addressObj} outputObj={outputObj} info={info} />
       )
     }
     return null
