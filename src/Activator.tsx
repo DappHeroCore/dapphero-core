@@ -1,37 +1,18 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { logger } from 'logger/customLogger'
 import { useWeb3React } from '@web3-react/core'
-import { getDomElements } from '@dapphero/dapphero-dom'
+import * as contexts from 'contexts'
 
 import * as api from 'api'
 import { FeatureReducer } from './protocol/ethereum/featureReducer'
 
 // <script src="https://internal-dev-dapphero.s3.amazonaws.com/main.js" id="dh-apiKey" data-api="1580240829051x132613881547456510"></script>
 // const elements = Array.from(document.querySelectorAll(`[id^=dh]`))
-const apiKeyElement = document.getElementById('dh-apiKey')
-const apiKey = apiKeyElement.getAttribute('data-api')
 
-// TODO: if no apiKey then toast notification missing API key
-logger.debug('logger', logger)
-logger.debug('ScriptAPI: ', apiKey)
-
-export const Activator = () => {
+export const Activator = ({ configuration }) => {
   const { active, error, activate, ...rest } = useWeb3React()
   logger.debug('web3ReactContext: ', { active, error, activate, ...rest })
-
-  const [ domElements, setDomElements ] = useState(null)
-  const [ configuration, setConfig ] = useState(null)
-
-  useEffect(() => {
-    (async () => {
-      const newConfig = { contracts: await api.dappHero.getContractsByProjectKey(apiKey) }
-      setConfig(newConfig)
-    })()
-  }, [])
-
-  useEffect(() => {
-    if (configuration) setDomElements(getDomElements(configuration))
-  }, [ configuration ])
+  const domElements = useContext(contexts.DomElementsContext)
 
   return (
     <>

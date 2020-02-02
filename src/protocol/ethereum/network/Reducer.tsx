@@ -62,9 +62,13 @@ export const Reducer = ({ element, info }) => {
     )
   }
   case ('transfer'): {
-    if (element.id.includes('-invoke')) {
+    if (info.properties.find((property) => property.key === 'transfer').value === 'invoke') {
+      const relatedNodes = Array.from(document.querySelectorAll('[data-dh-feature=network]'))
+      const amountNode = relatedNodes.filter((networkNode) => networkNode.getAttribute('data-dh-property-transfer') === 'input').find((inputNode) => inputNode.getAttribute('data-dh-property-inputName') === 'amount')
+      const addressNode = relatedNodes.filter((networkNode) => networkNode.getAttribute('data-dh-property-transfer') === 'input').find((inputNode) => inputNode.getAttribute('data-dh-property-inputName') === 'address')
+      const outputNode = relatedNodes.find((networkNode) => networkNode.getAttribute('data-dh-property-transfer') === 'output')
       return (
-        <EthTransfer element={element} />
+        <EthTransfer element={element} amountNode={amountNode} addressNode={addressNode} outputNode={outputNode} info={info} />
       )
     }
     return null
