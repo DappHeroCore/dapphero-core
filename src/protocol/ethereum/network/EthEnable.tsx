@@ -13,15 +13,11 @@ interface EthEnableProps {
  * @param props From props we use only injected and request.
  */
 export const EthEnable: FunctionComponent<EthEnableProps> = ({ element }) => {
+  console.log('TCL: element', element)
   const injected = hooks.useDappHeroWeb3()
-  console.log('Injected: ', injected)
 
   const message = injected.connected ? 'Succesfully Connected' : 'Click Connect to MetaMask'
   element.setAttribute('data-tip', message)
-
-  const toggleButtonStatus = () => {
-
-  }
 
   const [ buttonStatus, setButtonStatus ] = useState(element.innerText || 'Enable MetaMask')
 
