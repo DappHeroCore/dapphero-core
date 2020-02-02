@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useToasts } from 'react-toast-notifications'
 import { ethers } from 'ethers'
+import { logger } from 'logger/customLogger'
 import omit from 'lodash.omit'
 
 // Hooks
@@ -71,7 +72,9 @@ export const Reducer = ({ info }) => {
         setResult(methodResult)
       }
     } catch (error) {
-      displayToast(error)
+
+      displayToast({ message: 'Error. Check the Console.' })
+      logger.debug(error)
     }
   }
 
