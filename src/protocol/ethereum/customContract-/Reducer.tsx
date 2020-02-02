@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { useToasts } from 'react-toast-notifications'
+import Notify from 'bnc-notify'
 import { ethers } from 'ethers'
 import { logger } from 'logger/customLogger'
 import omit from 'lodash.omit'
 
 // Hooks
 import * as hooks from 'hooks'
+
+const blockNativeApiKey = process.env.REACT_APP_BLOCKNATIVE_API
 
 // Utils
 const getAbiMethodInputs = (abi, methodName) => {
@@ -60,12 +63,38 @@ export const Reducer = ({ info }) => {
       // const gasLimit = await getGasLimit(...methodParams)
 
       const signer = new ethers.providers.Web3Provider(window.ethereum).getSigner()
+      console.log('TCL: handleRunMethod -> signer', signer)
+
       const contractInstance = new ethers.Contract(contractAddress, contractAbi, signer)
 
       if (isTransaction) {
-        const options = { to: '', value: ethers.utils.parseEther(value) }
-        const tx = await signer.sendTransaction(options)
-        setResult(tx)
+
+        const currentNetwork = await signer.provider.getNetwork()
+        const notify = Notify({
+          dappId: blockNativeApiKey, // [String] The API key created by step one above
+          networkId: currentNetwork.chainId, // [Integer] The Ethereum network ID your Dapp uses.
+        })
+
+        // const options = { to: '', value: ethers.utils.parseEther(value) }
+        // const tx = await signer.sendTransaction(options)
+        const overrides = {
+          gasLimit: 23000,
+          gasPrice: ethers.utils.parseUnits('9.0', 'gwei'),
+          value: ethers.utils.parseEther(value),
+        }
+
+        console.log('Falue of ETH sent: ', ethers.utils.parseEther(value))
+        const method = contractInstance.functions[methodName]
+        const methodResult = await method(...methodParams, overrides)
+
+        // BlockNative Toaster to track tx
+        notify.hash(methodResult.hash)
+
+        // Log transaction to Database
+        logger.debug(methodResult)
+
+        // Set Result on State
+        setResult(methodResult.hash)
       } else {
         const method = contractInstance.functions[methodName]
         const methodResult = await method(...methodParams)
