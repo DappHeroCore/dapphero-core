@@ -62,9 +62,8 @@ export const Reducer = ({ info }) => {
       // TODO: Get gas limit through ethers, and remove MAX_LIMIT
       // const gasLimit = await getGasLimit(...methodParams)
 
-      const signer = new ethers.providers.Web3Provider(window.ethereum).getSigner()
-      console.log('TCL: handleRunMethod -> signer', signer)
-
+      const provider = new ethers.providers.Web3Provider(window.ethereum)
+      const signer = provider.getSigner()
       const contractInstance = new ethers.Contract(contractAddress, contractAbi, signer)
 
       if (isTransaction) {
@@ -75,16 +74,30 @@ export const Reducer = ({ info }) => {
           networkId: currentNetwork.chainId, // [Integer] The Ethereum network ID your Dapp uses.
         })
 
-        // const options = { to: '', value: ethers.utils.parseEther(value) }
-        // const tx = await signer.sendTransaction(options)
+        const tempOverride = { value: ethers.utils.parseEther('10') }
+
+        const method = contractInstance.functions[methodName]
+
+        const gasPrice = await provider.getGasPrice()
+        console.log('TCL: handleRunMethod -> gasPrice', gasPrice)
+
+        const estimateMethod = contractInstance.estimate[methodName]
+
+        let estimatedGas
+        try {
+          estimatedGas = await estimateMethod(...methodParams, tempOverride)
+          console.log('TCL: handleRunMethod -> estimatedGas', estimatedGas)
+        } catch (err) {
+          console.log('THE ERROR: ', err)
+        }
+
         const overrides = {
-          gasLimit: 23000,
-          gasPrice: ethers.utils.parseUnits('9.0', 'gwei'),
+          gasLimit: estimatedGas,
+          gasPrice,
           value: ethers.utils.parseEther(value),
         }
 
-        console.log('Falue of ETH sent: ', ethers.utils.parseEther(value))
-        const method = contractInstance.functions[methodName]
+        // console.log("ESTIMATE GAS: ", estimateGas)
         const methodResult = await method(...methodParams, overrides)
 
         // BlockNative Toaster to track tx
