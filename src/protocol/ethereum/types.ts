@@ -30,3 +30,7 @@ export type FeatureReducerProps = {
   index?: number
   info?: any
 }
+
+declare global {
+  interface Window { ethereum: any; }
+}
