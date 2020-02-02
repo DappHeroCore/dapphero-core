@@ -25,7 +25,6 @@ export const Reducer = ({ info }) => {
   const autoInvokeKey = properties.find(({ key }) => key === 'autoInvoke')
   const methodNameKey = properties.find(({ key }) => key === 'methodName')
   const ethValueKey = properties.find((property) => property.key === 'ethValue')
-  console.log('TCL: Reducer -> ethValueKey', ethValueKey)
 
   const { value: methodName } = methodNameKey
 
