@@ -21,7 +21,7 @@ interface EthTransferProps {
 // TODO: consider adding a required unique id for this functionality
 // and base DOM parsing off id
 export const EthTransfer: FunctionComponent<EthTransferProps> = ({ element, amountNode, addressNode, outputNode, info, amountUnits }) => {
-  console.log('TCL: info', info)
+
   const { lib } = hooks.useDappHeroWeb3()
   // const DomElementContext = useContext(DomElementsContext)
 

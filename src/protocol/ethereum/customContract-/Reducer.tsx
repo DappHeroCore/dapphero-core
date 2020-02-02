@@ -21,9 +21,11 @@ export const Reducer = ({ info }) => {
   const { contract, childrenElements, properties, hasInputs, hasOutputs, isTransaction, modifiers } = info
   const { contractAddress, contractAbi } = contract
 
+  // TODO Check for Overloaded Functions
   const autoInvokeKey = properties.find(({ key }) => key === 'autoInvoke')
   const methodNameKey = properties.find(({ key }) => key === 'methodName')
   const ethValueKey = properties.find((property) => property.key === 'ethValue')
+  console.log('TCL: Reducer -> ethValueKey', ethValueKey)
 
   const { value: methodName } = methodNameKey
 
@@ -42,6 +44,7 @@ export const Reducer = ({ info }) => {
   // -> Handlers
   const handleRunMethod = async () => {
     const ethValue = parameters?.EthValue
+    console.log('TCL: handleRunMethod -> ethValue', ethValue)
     const parsedParameters = omit(parameters, 'EthValue')
     const parametersValues = Object.values(parsedParameters)
 
@@ -79,14 +82,12 @@ export const Reducer = ({ info }) => {
         const method = contractInstance.functions[methodName]
 
         const gasPrice = await provider.getGasPrice()
-        console.log('TCL: handleRunMethod -> gasPrice', gasPrice)
 
         const estimateMethod = contractInstance.estimate[methodName]
 
         let estimatedGas
         try {
           estimatedGas = await estimateMethod(...methodParams, tempOverride)
-          console.log('TCL: handleRunMethod -> estimatedGas', estimatedGas)
         } catch (err) {
           console.log('THE ERROR: ', err)
         }

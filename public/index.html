@@ -156,6 +156,7 @@
       <!-- Method "sendEthWithArgs" -->
       <div class="headline">Method: "sendEthWithArgs"</div>
       <div class="headline">Payable: true - StateMutability: "payable"</div>
+      <div class="headline">No ETH Sent</div>
       <div class="headline">
         <p>Inputs</p>
         <ul>
@@ -178,7 +179,7 @@
         <input
           data-dh-property-method-id="001"
           data-dh-property-contract-name="dappherotest"
-          data-dh-property-input-name="message"
+          data-dh-property-input-name="simpleMessage"
           class="w-input"
           placeholder="Message:"
         />
@@ -193,6 +194,111 @@
       </div>
 
       <hr style="margin-bottom: 65px" />
+
+
+
+      <!-- Method "sendEthWithArgs: VALUE HARDCODED" -->
+      <div class="headline">Method: "sendEthWithArgs"</div>
+      <div class="headline">Payable: true - StateMutability: "payable"</div>
+      <div class="headline">ETH Value: HardCoded: .15ETH</div>
+      <div class="headline">
+        <p>Inputs</p>
+        <ul>
+          <li>message - bytes32</li>
+        </ul>
+
+        <p>Outputs</p>
+        <ul>
+          <li>none</li>
+        </ul>
+      </div>
+
+      <div
+        id="dh"
+        data-dh-feature="customContract"
+        data-dh-property-contract-name="dappherotest"
+        data-dh-property-method-name="sendEthWithArgs"
+        data-dh-property-method-id="001a"
+        data-dh-property-eth-value=".15"
+      >
+        <input
+          data-dh-property-method-id="001a"
+          data-dh-property-contract-name="dappherotest"
+          data-dh-property-input-name="simpleMessage"
+          class="w-input"
+          placeholder="Message:"
+        />
+
+        <button data-dh-property-method-id="001a" data-dh-property-invoke class="w-button">
+          Submit
+        </button>
+
+        <div data-dh-property-method-id="001a" data-dh-property-outputs class="component-div">
+          *Return value: -*
+        </div>
+      </div>
+
+      <hr style="margin-bottom: 65px" />
+
+
+
+
+      <!-- Method "sendEthWithArgs: VALUE HARDCODED" -->
+      <div class="headline">Method: "sendEthWithArgs"</div>
+      <div class="headline">Payable: true - StateMutability: "payable"</div>
+      <div class="headline">ETH Value: User Input</div>
+      <div class="headline">
+        <p>Inputs</p>
+        <ul>
+          <li>message - bytes32</li>
+        </ul>
+
+        <p>Outputs</p>
+        <ul>
+          <li>none</li>
+        </ul>
+      </div>
+
+      <div
+        id="dh"
+        data-dh-feature="customContract"
+        data-dh-property-contract-name="dappherotest"
+        data-dh-property-method-name="sendEthWithArgs"
+        data-dh-property-method-id="001b"
+      >
+        <input
+          data-dh-property-method-id="001b"
+          data-dh-property-contract-name="dappherotest"
+          data-dh-property-input-name="simpleMessage"
+          class="w-input"
+          placeholder="Message:"
+        />
+
+        <input
+        data-dh-property-method-id="001b"
+        data-dh-property-contract-name="dappherotest"
+        data-dh-property-eth-value
+        class="w-input"
+        placeholder="Amount of ETH to Send"
+        />
+
+
+        <button data-dh-property-method-id="001b" data-dh-property-invoke class="w-button">
+          Submit
+        </button>
+
+        <div data-dh-property-method-id="001b" data-dh-property-outputs class="component-div">
+          *Return value: -*
+        </div>
+      </div>
+
+      <hr style="margin-bottom: 65px" />
+
+
+
+
+
+
 
       <!-- Method "viewMultipleArgsMultipleReturn" -->
       <div class="headline">Method: "viewMultipleArgsMultipleReturn"</div>
