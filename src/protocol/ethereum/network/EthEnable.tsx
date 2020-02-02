@@ -13,7 +13,6 @@ interface EthEnableProps {
  * @param props From props we use only injected and request.
  */
 export const EthEnable: FunctionComponent<EthEnableProps> = ({ element }) => {
-
   const injected = hooks.useDappHeroWeb3()
 
   const message = injected.connected ? 'Succesfully Connected' : 'Click Connect to MetaMask'
