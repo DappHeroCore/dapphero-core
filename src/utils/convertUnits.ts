@@ -8,7 +8,7 @@ export const convertUnits = (inputValueType, outputValueType, value) => {
     break
   }
   case ('ether'): {
-    if (outputValueType === 'wei') return ethers.utils.parseEther(value)
+    if (outputValueType === 'wei') return ethers.utils.parseEther(value).toString()
     if (outputValueType === 'ether') return value
     break
   }

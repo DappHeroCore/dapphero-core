@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import * as hooks from 'hooks'
 import { EthEnable } from './EthEnable'
@@ -7,7 +7,7 @@ import { EthTransfer } from './EthTransfer'
 
 export const Reducer = ({ element, info }) => {
   const injected = hooks.useDappHeroWeb3()
-
+  const domElements = hooks.useDomElements()
   const { networkName, networkId } = injected
   const defaultInfoObj = {
     networkId: 0,
@@ -62,13 +62,13 @@ export const Reducer = ({ element, info }) => {
     )
   }
   case ('transfer'): {
-    if (info.properties.find((property) => property.key === 'transfer').value === 'invoke') {
-      const relatedNodes = Array.from(document.querySelectorAll('[data-dh-feature=network]'))
-      const amountNode = relatedNodes.filter((networkNode) => networkNode.getAttribute('data-dh-property-transfer') === 'input').find((inputNode) => inputNode.getAttribute('data-dh-property-inputName') === 'amount')
-      const addressNode = relatedNodes.filter((networkNode) => networkNode.getAttribute('data-dh-property-transfer') === 'input').find((inputNode) => inputNode.getAttribute('data-dh-property-inputName') === 'address')
-      const outputNode = relatedNodes.find((networkNode) => networkNode.getAttribute('data-dh-property-transfer') === 'output')
+    if (info.feature === 'network' && info.properties_?.transfer === 'invoke') {
+      const relatedNodes = domElements.filter((item) => item.feature === 'network' && item.properties_.transfer)
+      const amountObj = relatedNodes.find(({ properties_: { transfer, input_name } }) => transfer === 'input' && input_name === 'amount')
+      const addressObj = relatedNodes.find(({ properties_: { transfer, input_name } }) => transfer === 'input' && input_name === 'address')
+      const outputObj = relatedNodes.find(({ properties_: { transfer } }) => transfer === 'output')
       return (
-        <EthTransfer element={element} amountNode={amountNode} addressNode={addressNode} outputNode={outputNode} info={info} />
+        <EthTransfer element={element} amountObj={amountObj} addressObj={addressObj} outputObj={outputObj} info={info} />
       )
     }
     return null
