@@ -15,14 +15,22 @@ export const useDappHeroWeb3 = () => {
   })
 
   useEffect(() => {
-    setContext({
-      web3ReactContext,
-      lib: library,
-      accounts: [ account ],
-      networkId: chainId,
-      networkName: library?.network?.name || "This dog don't hunt. Line 25 of useDappHeroWeb3.ts",
-      connected: active,
-    })
+    if (
+      library == null
+      || chainId == null
+      || account == null
+    ) return
+    (async () => {
+      await library.ready
+      setContext({
+        web3ReactContext,
+        lib: library,
+        accounts: [ account ],
+        networkId: chainId,
+        networkName: library?.network?.name,
+        connected: active,
+      })
+    })()
   }, [ library, chainId, account ]) // intentionally only running on mount (make sure it's only mounted once :))
 
   // if the connection worked, wait until we get confirmation of that to flip the flag
