@@ -19,6 +19,7 @@ const getAbiMethodInputs = (abi, methodName) => {
 // Reducer Component
 export const Reducer = ({ info }) => {
   const { contract, childrenElements, properties, hasInputs, hasOutputs, isTransaction, modifiers } = info
+
   const { contractAddress, contractAbi } = contract
 
   // TODO Check for Overloaded Functions
@@ -43,7 +44,7 @@ export const Reducer = ({ info }) => {
   // -> Handlers
   const handleRunMethod = async () => {
     const ethValue = parameters?.EthValue
-    console.log('TCL: handleRunMethod -> ethValue', ethValue)
+
     const parsedParameters = omit(parameters, 'EthValue')
     const parametersValues = Object.values(parsedParameters)
 
@@ -97,7 +98,6 @@ export const Reducer = ({ info }) => {
           value: ethers.utils.parseEther(value),
         }
 
-        // console.log("ESTIMATE GAS: ", estimateGas)
         const methodResult = await method(...methodParams, overrides)
 
         // BlockNative Toaster to track tx
@@ -182,6 +182,8 @@ export const Reducer = ({ info }) => {
       // TODO: Check if result is an object and check if there's an output-name with one of those key names
       // Insert result in all output elements
       const outputs = childrenElements.filter(({ id }) => id.includes('output'))
+      console.log('TCL: outputs', outputs)
+
       outputs.forEach(({ element }) => Object.assign(element, { textContent: parsedValue }))
     }
   }, [ result ])
