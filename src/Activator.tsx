@@ -11,7 +11,6 @@ import { FeatureReducer } from './protocol/ethereum/featureReducer'
 
 export const Activator = ({ configuration }) => {
   const { active, error, activate, ...rest } = useWeb3React()
-  logger.debug('web3ReactContext: ', { active, error, activate, ...rest })
   const domElements = useContext(contexts.DomElementsContext)
 
   return (

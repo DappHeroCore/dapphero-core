@@ -1,4 +1,5 @@
 import { createLogger, format, transports } from 'winston'
+import axios from 'axios'
 
 export const winstonLogger = createLogger({
   format: format.combine(
@@ -13,13 +14,15 @@ export class DappHeroLogger {
 
   debug = (...params) => {
     console.log(...params) // eslint-disable-line
-    // const stingifiedParams = params.map((item) => {
-    //   try {
-    //     return JSON.stringify(item, null, 2)
-    //   } catch {
-    //     return item.toString()
-    //   }
-    // })
+    const stringifiedParams = params.map((item) => {
+      if (typeof item === 'string') return item
+      try {
+        return JSON.stringify(item, null, 2)
+      } catch {
+        return item.toString()
+      }
+    })
+    axios.post('http://dh-logging-dev.cfhmrmuygw.us-east-1.elasticbeanstalk.com/log', { level: 'debug', message: stringifiedParams })
     // this.winstonLogger.debug(stingifiedParams.join(' '))
   }
 

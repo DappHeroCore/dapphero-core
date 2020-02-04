@@ -38,7 +38,6 @@ export const getContractsByProjectKey = async (projectId) => {
         projectId: projectid,
       }
     })
-    logger.debug('Formatted Output: ', formattedOutput)
     return formattedOutput
   } catch (err) {
     // log something here in the future

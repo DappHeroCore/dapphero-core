@@ -30,7 +30,7 @@ export const FeatureReducer = ({ feature, element, configuration, info }: Featur
   case 'user':
     return <UserReducer element={element} info={info} />
   case 'network':
-    return <NetworkReducer element={element} configuration={configuration} info={info} />
+    return <NetworkReducer element={element} info={info} />
   case 'threebox':
     return <ThreeBoxReducer element={element} info={info} />
   case 'customContract':
