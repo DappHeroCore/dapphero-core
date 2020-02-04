@@ -19,8 +19,10 @@ const getAbiMethodInputs = (abi, methodName) => {
 // Reducer Component
 export const Reducer = ({ info }) => {
   const { contract, childrenElements, properties, hasInputs, hasOutputs, isTransaction, modifiers } = info
+
   const { contractAddress, contractAbi } = contract
 
+  // TODO Check for Overloaded Functions
   const autoInvokeKey = properties.find(({ key }) => key === 'autoInvoke')
   const methodNameKey = properties.find(({ key }) => key === 'methodName')
   const ethValueKey = properties.find((property) => property.key === 'ethValue')
@@ -42,6 +44,7 @@ export const Reducer = ({ info }) => {
   // -> Handlers
   const handleRunMethod = async () => {
     const ethValue = parameters?.EthValue
+
     const parsedParameters = omit(parameters, 'EthValue')
     const parametersValues = Object.values(parsedParameters)
 
@@ -62,9 +65,8 @@ export const Reducer = ({ info }) => {
       // TODO: Get gas limit through ethers, and remove MAX_LIMIT
       // const gasLimit = await getGasLimit(...methodParams)
 
-      const signer = new ethers.providers.Web3Provider(window.ethereum).getSigner()
-      console.log('TCL: handleRunMethod -> signer', signer)
-
+      const provider = new ethers.providers.Web3Provider(window.ethereum)
+      const signer = provider.getSigner()
       const contractInstance = new ethers.Contract(contractAddress, contractAbi, signer)
 
       if (isTransaction) {
@@ -75,16 +77,27 @@ export const Reducer = ({ info }) => {
           networkId: currentNetwork.chainId, // [Integer] The Ethereum network ID your Dapp uses.
         })
 
-        // const options = { to: '', value: ethers.utils.parseEther(value) }
-        // const tx = await signer.sendTransaction(options)
+        const tempOverride = { value: ethers.utils.parseEther('10') }
+
+        const method = contractInstance.functions[methodName]
+
+        const gasPrice = await provider.getGasPrice()
+
+        const estimateMethod = contractInstance.estimate[methodName]
+
+        let estimatedGas
+        try {
+          estimatedGas = await estimateMethod(...methodParams, tempOverride)
+        } catch (err) {
+          console.log('THE ERROR: ', err)
+        }
+
         const overrides = {
-          gasLimit: 23000,
-          gasPrice: ethers.utils.parseUnits('9.0', 'gwei'),
+          gasLimit: estimatedGas,
+          gasPrice,
           value: ethers.utils.parseEther(value),
         }
 
-        console.log('Falue of ETH sent: ', ethers.utils.parseEther(value))
-        const method = contractInstance.functions[methodName]
         const methodResult = await method(...methodParams, overrides)
 
         // BlockNative Toaster to track tx
@@ -169,6 +182,8 @@ export const Reducer = ({ info }) => {
       // TODO: Check if result is an object and check if there's an output-name with one of those key names
       // Insert result in all output elements
       const outputs = childrenElements.filter(({ id }) => id.includes('output'))
+      console.log('TCL: outputs', outputs)
+
       outputs.forEach(({ element }) => Object.assign(element, { textContent: parsedValue }))
     }
   }, [ result ])

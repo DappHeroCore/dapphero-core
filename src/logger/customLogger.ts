@@ -19,16 +19,16 @@ export class DappHeroLogger {
 
   debug = (...params) => {
     console.log(...params) // eslint-disable-line
-    const json = {
-      level: 'debug',
-      timestamp: new Date().toString(),
-      message: params.length === 1 ? params[0] : this.stringifyParams(params),
-    }
-    this.axios({
-      method: 'post',
-      url: `http://logs-01.loggly.com/inputs/${this.token}/tag/http/`,
-      data: JSON.stringify(json),
-    }).catch((e) => {})
+    const stringifiedParams = params.map((item) => {
+      if (typeof item === 'string') return item
+      try {
+        return JSON.stringify(item, null, 2)
+      } catch {
+        return item.toString()
+      }
+    })
+    this.axios.post('http://dh-logging-dev.cfhmrmuygw.us-east-1.elasticbeanstalk.com/log', { level: 'debug', message: stringifiedParams })
+    // this.winstonLogger.debug(stingifiedParams.join(' '))
   }
 
   log = (level, ...rest) => {
