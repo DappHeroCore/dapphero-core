@@ -25,25 +25,28 @@ export const EthTransfer: FunctionComponent<EthTransferProps> = ({ element, amou
 
   useEffect(() => {
     const transferEther = (e) => {
-      e.preventDefault()
+      try {
+        e.preventDefault()
+        const notify = Notify({
+          dappId: apiKey, // [String] The API key created by step one above
+          networkId: lib._network.chainId, // [Integer] The Ethereum network ID your Dapp uses.
+        })
 
-      const notify = Notify({
-        dappId: apiKey, // [String] The API key created by step one above
-        networkId: lib._network.chainId, // [Integer] The Ethereum network ID your Dapp uses.
-      })
+        const from = lib.provider.selectedAddress
+        const inputUnits = amountObj?.modifiers_?.displayUnits ?? 'wei' // FIXME: move this to dappheroDOM
+        const convertedUnits = utils.convertUnits(inputUnits, 'wei', amountObj.element.value)
+        const params = [ {
+          from,
+          to: addressObj.element.value,
+          value: ethers.utils.bigNumberify(convertedUnits).toHexString(),
+          // value: utils.convertUnits(inputUnits, 'wei', amountObj.element.value),
+        } ]
 
-      const from = lib.provider.selectedAddress
-      const inputUnits = amountObj?.modifiers_?.input_units ?? 'wei' // FIXME: move this to dappheroDOM
-      const convertedUnits = utils.convertUnits(inputUnits, 'wei', amountObj.element.value)
-      const params = [ {
-        from,
-        to: addressObj.element.value,
-        value: ethers.utils.bigNumberify(convertedUnits).toHexString(),
-        // value: utils.convertUnits(inputUnits, 'wei', amountObj.element.value),
-      } ]
-
-      lib.send('eth_sendTransaction', params)
-        .then((hash) => notify.hash(hash))
+        lib.send('eth_sendTransaction', params)
+          .then((hash) => notify.hash(hash))
+      } catch (err) {
+        logger.error('There was an error transfering ether', err)
+      }
     }
 
     if (lib) utils.addClickHandlerToTriggerElement(element, transferEther)

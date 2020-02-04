@@ -64,8 +64,8 @@ export const Reducer = ({ element, info }) => {
   case ('transfer'): {
     if (info.feature === 'network' && info.properties_?.transfer === 'invoke') {
       const relatedNodes = domElements.filter((item) => item.feature === 'network' && item.properties_.transfer)
-      const amountObj = relatedNodes.find(({ properties_: { transfer, input_name } }) => transfer === 'input' && input_name === 'amount')
-      const addressObj = relatedNodes.find(({ properties_: { transfer, input_name } }) => transfer === 'input' && input_name === 'address')
+      const amountObj = relatedNodes.find(({ properties_: { transfer, inputName } }) => transfer === 'input' && inputName === 'amount')
+      const addressObj = relatedNodes.find(({ properties_: { transfer, inputName } }) => transfer === 'input' && inputName === 'address')
       const outputObj = relatedNodes.find(({ properties_: { transfer } }) => transfer === 'output')
       return (
         <EthTransfer element={element} amountObj={amountObj} addressObj={addressObj} outputObj={outputObj} info={info} />

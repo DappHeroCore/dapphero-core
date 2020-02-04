@@ -1,5 +1,6 @@
 import * as consts from 'consts'
 import Axios from 'axios'
+import cuid from 'cuid'
 
 export class DappHeroLogger {
   private axios = Axios.create({ headers: { 'content-type': 'application/json' } })
@@ -18,10 +19,12 @@ export class DappHeroLogger {
     return stringifiedParams
   }
 
-  private post = (level, ...params) => {
+  private post = (level, id, ...params) => {
+    params.unshift(`dappHeroLogId: ${id}`)
     const timestamp = new Date().toString()
     const json = {
       level,
+      idTest: id,
       timestamp,
       message: params.length === 1 ? params[0] : this.stringifyParams(params),
     }
@@ -32,32 +35,36 @@ export class DappHeroLogger {
     }).catch((e) => {})
   }
 
-  debug = (...params) => {
-    console.log(...params) // eslint-disable-line
-    this.post('debug', ...params)
-  }
-
-  log = (level, ...rest) => {
-    if ([ 'debug', 'info', 'warn', 'error' ].includes(level)) {
-      this[level](...rest)
-    } else {
-      this.info(...rest)
+    log = (level, ...rest) => {
+      if ([ 'debug', 'info', 'warn', 'error' ].includes(level)) {
+        this[level](...rest)
+      } else {
+        this.info(...rest)
+      }
     }
+
+  debug = (...params) => {
+    const id = cuid()
+    console.log(`dappHeroLogId: ${id}\n`, ...params) // eslint-disable-line
+    this.post('debug', id, ...params)
   }
 
   info = (...params) => {
-    console.info(...params)
-    this.post('info', ...params)
+    const id = cuid()
+    console.info(`dappHeroLogId: ${id}\n`, ...params)
+    this.post('info', id, ...params)
   }
 
   warn = (...params) => {
-    console.warn(...params)
-    this.post('warn', ...params)
+    const id = cuid()
+    console.warn(`dappHeroLogId: ${id}\n`, ...params)
+    this.post('warn', id, ...params)
   }
 
   error = (...params) => {
-    console.error(...params)
-    this.post('error', ...params)
+    const id = cuid()
+    console.error(`dappHeroLogId: ${id}\n`, ...params)
+    this.post('error', id, ...params)
   }
 }
 
