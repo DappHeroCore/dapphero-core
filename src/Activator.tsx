@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { logger } from 'logger/customLogger'
-import * as api from 'api'
-import * as hooks from 'hooks'
 import { useWeb3React } from '@web3-react/core'
+import * as contexts from 'contexts'
+
+import * as api from 'api'
 import { FeatureReducer } from './protocol/ethereum/featureReducer'
 
 const winston = require('winston')
@@ -18,30 +19,41 @@ winston.add(new Loggly({
 winston.log('info', 'Hello World from Node.js!')
 console.log('we running')
 // <script src="https://internal-dev-dapphero.s3.amazonaws.com/main.js" id="dh-apiKey" data-api="1580240829051x132613881547456510"></script>
-const elements = Array.from(document.querySelectorAll(`[id^=dh]`))
-const apiKeyElement = document.getElementById('dh-apiKey')
-const apiKey = apiKeyElement.getAttribute('data-api')
+// const elements = Array.from(document.querySelectorAll(`[id^=dh]`))
 
-// TODO: if no apiKey then toast notification missing API key
-logger.debug('logger', logger)
-logger.debug('ScriptAPI: ', apiKey)
-
-export const Activator = () => {
+export const Activator = ({ configuration }) => {
   const { active, error, activate, ...rest } = useWeb3React()
   logger.debug('web3ReactContext: ', { active, error, activate, ...rest })
-  const [ configuration, setConfig ] = useState(null)
-  // hooks.useEagerConnect()
+  const domElements = useContext(contexts.DomElementsContext)
 
-  useEffect(() => {
-    (async () => {
-      const newConfig = { contracts: await api.dappHero.getContractsByProjectKey(apiKey) }
-      setConfig(newConfig)
-    })()
-  }, [])
-  if (configuration) {
-    return (
-      elements.map((element, index) => (<FeatureReducer key={element.id + index.toString()} element={element} configuration={configuration} index={index} />))
-    )
-  }
-  return null
+  return (
+    <>
+      {domElements
+        && domElements.map((domElement) => (
+          <FeatureReducer
+            key={domElement.id}
+            element={domElement.element}
+            feature={domElement.feature}
+            configuration={configuration}
+            info={domElement}
+          />
+        ))}
+
+    </>
+  )
 }
+
+// {configuration
+//   && elements.map((element, index) => {
+//     /* Avoid running customContract feature */
+//     if (element.getAttribute('id').includes('customContract')) return null
+
+//     return (
+//       <FeatureReducer
+//         element={element}
+//         index={index + 1}
+//         configuration={configuration}
+//         key={element.id + index.toString()}
+//       />
+//     )
+//   })}

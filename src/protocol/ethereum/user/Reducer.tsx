@@ -2,22 +2,18 @@ import React from 'react'
 import { EthUserBalance } from './EthUserBalance'
 import { EthUserAddress } from './EthUserAddress'
 
-export const Reducer = ({ element, configuration }) => {
+export const Reducer = ({ element, info }) => {
 
-  const infoType = element.id.split('-')[2]
+  const [ units ] = info?.modifiers?.filter((modifier) => modifier.key === 'units') ?? null
+  const [ decimals ] = info?.modifiers?.filter((modifier) => modifier.key === 'decimals') ?? null
+  const [ displayFormat ] = info?.modifiers?.filter((modifier) => modifier.key === 'display') ?? null
 
-  const match = element.id.match(/-decimals_(\d+)/)?.[1] ?? null
-  const decimals = match ? parseInt(match) : null
-
-  const units = element.id.match(/-units_([a-z]+)/)?.[1] ?? null
-  const displayFormat = element.id.match(/-display_([a-z]+)/)?.[1] ?? null
-
-  switch (infoType) {
+  switch (info?.properties[0]?.key) {
   case 'address': {
     return (
       <EthUserAddress
         element={element}
-        displayFormat={displayFormat}
+        displayFormat={displayFormat?.value}
       />
     )
   }
@@ -25,8 +21,8 @@ export const Reducer = ({ element, configuration }) => {
     return (
       <EthUserBalance
         element={element}
-        units={units}
-        decimals={decimals}
+        units={units?.value}
+        decimals={decimals?.value}
       />
     )
   }

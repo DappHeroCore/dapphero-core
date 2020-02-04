@@ -14,7 +14,7 @@ export const EthUserAddress: FunctionComponent<EthUserAddressProps> = ({ element
     try {
       if (accounts?.[0]) {
         const [ fullAccountNumber ] = accounts
-        element.innerHTML = displayFormat === 'short' ? `${fullAccountNumber.slice(0, 3)}...${fullAccountNumber.slice(fullAccountNumber.length - 3)}` : fullAccountNumber
+        element.innerHTML = displayFormat === 'short' ? `${fullAccountNumber.slice(0, 4)}...${fullAccountNumber.slice(fullAccountNumber.length - 5)}` : fullAccountNumber
       }
     } catch (e) {
       logger.debug(e)
