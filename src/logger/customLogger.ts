@@ -8,77 +8,57 @@ export class DappHeroLogger {
 
   private stringifyParams = (params) => {
     const stringifiedParams = params.map((item) => {
-      try {
-        return JSON.stringify(item, null, 2)
-      } catch {
-        return item.toString()
-      }
-    })
-    return stringifiedParams
-  }
-
-  debug = (...params) => {
-    console.log(...params) // eslint-disable-line
-    const stringifiedParams = params.map((item) => {
       if (typeof item === 'string') return item
       try {
         return JSON.stringify(item, null, 2)
       } catch {
         return item.toString()
       }
-    })
-    this.axios.post('http://dh-logging-dev.cfhmrmuygw.us-east-1.elasticbeanstalk.com/log', { level: 'debug', message: stringifiedParams })
-    // this.winstonLogger.debug(stingifiedParams.join(' '))
+    }).join(' ')
+    return stringifiedParams
+  }
+
+  private post = (level, ...params) => {
+    const timestamp = new Date().toString()
+    const json = {
+      level,
+      timestamp,
+      message: params.length === 1 ? params[0] : this.stringifyParams(params),
+    }
+    return this.axios({
+      method: 'post',
+      url: `http://dh-logging-dev.cfhmrmuygw.us-east-1.elasticbeanstalk.com/log`,
+      data: JSON.stringify(json),
+    }).catch((e) => {})
+  }
+
+  debug = (...params) => {
+    console.log(...params) // eslint-disable-line
+    this.post('debug', ...params)
   }
 
   log = (level, ...rest) => {
-    const json = {
-      level,
-      timeStamp: new Date().toString(),
-      message: rest.length === 1 ? rest[0] : this.stringifyParams(rest),
+    if ([ 'debug', 'info', 'warn', 'error' ].includes(level)) {
+      this[level](...rest)
+    } else {
+      this.info(...rest)
     }
-    this.axios.post(`http://logs-01.loggly.com/inputs/${this.token}/tag/http/`, json).catch((e) => {})
   }
 
   info = (...params) => {
-    const json = {
-      level: 'info',
-      timestamp: new Date().toString(),
-      message: params.length === 1 ? params[0] : this.stringifyParams(params),
-    }
-    this.axios({
-      method: 'post',
-      url: `http://logs-01.loggly.com/inputs/${this.token}/tag/http/`,
-      data: JSON.stringify(json),
-    }).catch((e) => {})
+    console.info(...params)
+    this.post('info', ...params)
   }
 
   warn = (...params) => {
-    const json = {
-      level: 'warn',
-      timestamp: new Date().toString(),
-      message: params.length === 1 ? params[0] : this.stringifyParams(params),
-    }
-    this.axios({
-      method: 'post',
-      url: `http://logs-01.loggly.com/inputs/${this.token}/tag/http/`,
-      data: JSON.stringify(json),
-    }).catch((e) => {})
+    console.warn(...params)
+    this.post('warn', ...params)
   }
 
   error = (...params) => {
-    const json = {
-      level: 'error',
-      timestamp: new Date().toString(),
-      message: params.length === 1 ? params[0] : this.stringifyParams(params),
-    }
-    this.axios({
-      method: 'post',
-      url: `http://logs-01.loggly.com/inputs/${this.token}/tag/http/`,
-      data: JSON.stringify(json),
-    }).catch((e) => {})
+    console.error(...params)
+    this.post('error', ...params)
   }
-
 }
 
 export const logger = new DappHeroLogger()
