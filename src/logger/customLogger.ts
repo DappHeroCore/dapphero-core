@@ -19,20 +19,23 @@ export class DappHeroLogger {
     return stringifiedParams
   }
 
-  private post = (level, id, ...params) => {
+  private post = async (level, id, ...params) => {
     params.unshift(`dappHeroLogId: ${id}`)
     const timestamp = new Date().toString()
     const json = {
       level,
-      idTest: id,
+      id,
+      projectId: consts.global.apiKey,
       timestamp,
       message: params.length === 1 ? params[0] : this.stringifyParams(params),
     }
     return this.axios({
       method: 'post',
-      url: `http://dh-logging-dev.cfhmrmuygw.us-east-1.elasticbeanstalk.com/log`,
+      url: `https://api.dapphero.io/log`,
       data: JSON.stringify(json),
-    }).catch((e) => {})
+    }).catch((e) => {
+      console.log(e)
+    })
   }
 
     log = (level, ...rest) => {

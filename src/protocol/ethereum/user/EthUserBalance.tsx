@@ -25,7 +25,7 @@ export const EthUserBalance: FunctionComponent<EthUserBalanceProps> = ({ element
           element.innerHTML = formatedBalanced
         }
       } catch (e) {
-        logger.debug(e)
+        logger.debug('Get Balance Failed', e)
       }
     }
     getData()

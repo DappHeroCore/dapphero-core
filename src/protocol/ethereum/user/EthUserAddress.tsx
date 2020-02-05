@@ -17,7 +17,7 @@ export const EthUserAddress: FunctionComponent<EthUserAddressProps> = ({ element
         element.innerHTML = displayFormat === 'short' ? `${fullAccountNumber.slice(0, 4)}...${fullAccountNumber.slice(fullAccountNumber.length - 5)}` : fullAccountNumber
       }
     } catch (e) {
-      logger.debug(e)
+      logger.debug('Getting account address failed', e)
     }
   }, [ accounts, networkId ])
 

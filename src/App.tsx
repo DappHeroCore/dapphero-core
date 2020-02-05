@@ -7,10 +7,8 @@ import * as api from 'api'
 
 import { Web3ReactProvider } from '@web3-react/core'
 import { ethers } from 'ethers'
+import * as consts from 'consts'
 import { Activator } from './Activator'
-
-const apiKeyElement = document.getElementById('dh-apiKey')
-const apiKey = apiKeyElement.getAttribute('data-api')
 
 const getLibrary = (provider) => new ethers.providers.Web3Provider(provider) // this will vary according to whether you use e.g. ethers or web3.js
 
@@ -20,7 +18,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     (async () => {
-      const newConfig = { contracts: await api.dappHero.getContractsByProjectKey(apiKey) }
+      const newConfig = { contracts: await api.dappHero.getContractsByProjectKey(consts.global.apiKey) }
       setConfig(newConfig)
     })()
   }, [])

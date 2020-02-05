@@ -40,7 +40,7 @@ export const getContractsByProjectKey = async (projectId) => {
     })
     return formattedOutput
   } catch (err) {
-    // log something here in the future
+    logger.error('Error in dappHero api, getContractsByProjectKey', err)
     throw new Error(err)
   }
 }

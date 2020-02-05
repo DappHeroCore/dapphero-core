@@ -89,7 +89,7 @@ export const Reducer = ({ info }) => {
         try {
           estimatedGas = await estimateMethod(...methodParams, tempOverride)
         } catch (err) {
-          console.log('THE ERROR: ', err)
+          logger.error('estimateGasMethod failed', err)
         }
 
         const overrides = {
@@ -113,10 +113,9 @@ export const Reducer = ({ info }) => {
         const methodResult = await method(...methodParams)
         setResult(methodResult)
       }
-    } catch (error) {
-
+    } catch (err) {
+      logger.error('Custom Contract handeRun method failed', err)
       displayToast({ message: 'Error. Check the Console.' })
-      logger.debug(error)
     }
   }
 

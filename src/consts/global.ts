@@ -10,3 +10,5 @@ export const NETWORK_IDS = {
   99: 'core',
   100: 'xdai',
 }
+const apiKeyElement = document.getElementById('dh-apiKey')
+export const apiKey = apiKeyElement.getAttribute('data-api')

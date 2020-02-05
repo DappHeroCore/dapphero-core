@@ -13,19 +13,22 @@ export const useEagerConnect = () => {
     connectors.injected.isAuthorized().then((isAuthorized) => {
       if (isAuthorized) {
         activate(connectors.injected, (err) => { logger.debug('isAuthorize', err) }, true).catch(() => {
+          logger.info('User was already logged in')
           setTried(true)
         })
       } else if (
         isMobile && window.ethereum
       ) {
         activate(connectors.injected, (err) => { logger.debug('isAuthorize', err) }, true).catch(() => {
+          logger.info('User was already logged in to a mobile device')
           setTried(true)
         })
       } else {
-        // TODO: remove this line
-        activate(connectors.injected, (err) => { logger.debug('isAuthorize', err) }, true).catch(() => {
-          setTried(true)
-        })
+        // TODO: add/remove this line
+        // activate(connectors.injected, (err) => { logger.debug('isAuthorize', err) }, true).catch(() => {
+        logger.info('User was not already logged in')
+        setTried(true)
+        // })
       }
     })
   }, [ activate ]) // intentionally only running on mount (make sure it's only mounted once :))

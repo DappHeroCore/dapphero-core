@@ -32,6 +32,6 @@ export const callPublicMethodWithArgs = async (
       callback(value)
     }
   } catch (e) {
-    logger.debug('In Call Instance Error: ', e)
+    logger.debug('Calling a contract instance method: ', e)
   }
 }
