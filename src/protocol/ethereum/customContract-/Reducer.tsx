@@ -129,7 +129,6 @@ export const Reducer = ({ info }) => {
       }
     } catch (err) {
       logger.error('Custom Contract handeRun method failed', err)
-      console.error(err)
       displayToast({ message: 'Error. Check the Console.' })
     }
   }
@@ -146,7 +145,6 @@ export const Reducer = ({ info }) => {
     if (inputChildrens.length > 0) {
       const [ inputs ] = inputChildrens
       inputs.element.forEach(({ element, argumentName }) => {
-
         element.addEventListener('input', ({ target: { value } }) => {
           const displayUnits = element.getAttribute('data-dh-modifier-display-units')
           const contractUnits = element.getAttribute('data-dh-modifier-contract-units')
@@ -193,7 +191,6 @@ export const Reducer = ({ info }) => {
           }
         }
         if (key === 'decimals') parsedValue = Number(parsedValue).toFixed(value)
-        // if (key === 'display') {}  Handle short and full values
       })
 
       // TODO: Check if result is an object and check if there's an output-name with one of those key names
@@ -201,25 +198,29 @@ export const Reducer = ({ info }) => {
       const outputsChildrenElements = childrenElements.find(({ id }) => id.includes('output'))
       const outputNamedChildrenElements = childrenElements.find(({ id }) => id.includes('outputName'))
 
-      outputsChildrenElements.element.forEach(({ element }) => {
-        Object.assign(element, { textContent: parsedValue })
-      })
+      if (outputsChildrenElements?.element) {
+        outputsChildrenElements.element.forEach(({ element }) => {
+          Object.assign(element, { textContent: parsedValue })
+        })
+      }
 
-      outputNamedChildrenElements.element.forEach(({ element }) => {
+      if (outputNamedChildrenElements?.element) {
+        outputNamedChildrenElements.element.forEach(({ element }) => {
 
-        const outputName = element.getAttribute('data-dh-property-output-name')
-        const displayUnits = element.getAttribute('data-dh-modifier-display-units')
-        const contractUnits = element.getAttribute('data-dh-modifier-contract-units')
-        const decimals = ( element.getAttribute('data-dh-modifier-decimal-units') || element.getAttribute('data-dh-modifier-decimals') ) ?? null
-        const convertedValue = (displayUnits || contractUnits) ? utils.convertUnits(contractUnits, displayUnits, parsedValue[outputName]) : parsedValue[outputName]
-        const isNumber = !Number.isNaN(Number(convertedValue))
-        if (decimals && isNumber) {
-          const decimalConvertedValue = Number(convertedValue).toFixed(decimals).toString()
-          element.innerText = decimalConvertedValue
-        } else {
-          Object.assign( element, { textContent: convertedValue } )
-        }
-      })
+          const outputName = element.getAttribute('data-dh-property-output-name')
+          const displayUnits = element.getAttribute('data-dh-modifier-display-units')
+          const contractUnits = element.getAttribute('data-dh-modifier-contract-units')
+          const decimals = ( element.getAttribute('data-dh-modifier-decimal-units') || element.getAttribute('data-dh-modifier-decimals') ) ?? null
+          const convertedValue = (displayUnits || contractUnits) ? utils.convertUnits(contractUnits, displayUnits, parsedValue[outputName]) : parsedValue[outputName]
+          const isNumber = !Number.isNaN(Number(convertedValue))
+          if (decimals && isNumber) {
+            const decimalConvertedValue = Number(convertedValue).toFixed(decimals).toString()
+            element.innerText = decimalConvertedValue
+          } else {
+            Object.assign( element, { textContent: convertedValue } )
+          }
+        })
+      }
     }
   }, [ result ])
 
