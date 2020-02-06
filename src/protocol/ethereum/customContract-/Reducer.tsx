@@ -42,8 +42,10 @@ export const Reducer = ({ info }) => {
   const [ parameters, setParameters ] = useState(getAbiMethodInputs(info.contract.contractAbi, methodName))
 
   // -> Handlers
-  const handleRunMethod = async (event) => {
-    event.preventDefault()
+  const handleRunMethod = async (event = null) => {
+    if (event) {
+      event.preventDefault()
+    }
     const ethValue = parameters?.EthValue
 
     const parsedParameters = omit(parameters, 'EthValue')
@@ -78,8 +80,6 @@ export const Reducer = ({ info }) => {
           networkId: currentNetwork.chainId, // [Integer] The Ethereum network ID your Dapp uses.
         })
 
-        const tempOverride = { value: ethers.utils.parseEther('10') }
-
         const method = contractInstance.functions[methodName]
 
         const gasPrice = await provider.getGasPrice()
@@ -87,6 +87,7 @@ export const Reducer = ({ info }) => {
         const estimateMethod = contractInstance.estimate[methodName]
 
         let estimatedGas
+        const tempOverride = { value: ethers.utils.parseEther(value) }
         try {
           estimatedGas = await estimateMethod(...methodParams, tempOverride)
         } catch (err) {
@@ -98,24 +99,35 @@ export const Reducer = ({ info }) => {
           gasPrice,
           value: ethers.utils.parseEther(value),
         }
+        let methodResult
+        try {
+          methodResult = await method(...methodParams, overrides)
+          // BlockNative Toaster to track tx
+          notify.hash(methodResult.hash)
 
-        const methodResult = await method(...methodParams, overrides)
+          // Log transaction to Database
+          logger.debug(methodResult)
 
-        // BlockNative Toaster to track tx
-        notify.hash(methodResult.hash)
+          // Set Result on State
+          setResult(methodResult.hash)
+        } catch (err) {
+          logger.info('invoking method failed', err)
+        }
 
-        // Log transaction to Database
-        logger.debug(methodResult)
-
-        // Set Result on State
-        setResult(methodResult.hash)
       } else {
         const method = contractInstance.functions[methodName]
         const methodResult = await method(...methodParams)
         setResult(methodResult)
       }
+      const [ input ] = childrenElements.filter(({ id }) => id.includes('input'))
+      if (input?.element) {
+        input.element.forEach(({ element }) => {
+          element.value = ''
+        })
+      }
     } catch (err) {
       logger.error('Custom Contract handeRun method failed', err)
+      console.error(err)
       displayToast({ message: 'Error. Check the Console.' })
     }
   }
@@ -128,6 +140,7 @@ export const Reducer = ({ info }) => {
   // Add triggers to input elements
   useEffect(() => {
     const inputChildrens = childrenElements.filter(({ id }) => id.includes('input'))
+    console.log('TCL: Reducer -> childrenElements', childrenElements)
 
     if (inputChildrens.length > 0) {
       const [ inputs ] = inputChildrens

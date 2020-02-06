@@ -43,9 +43,18 @@ export const EthTransfer: FunctionComponent<EthTransferProps> = ({ element, amou
         } ]
 
         lib.send('eth_sendTransaction', params)
-          .then((hash) => notify.hash(hash))
+          .then((hash) => {
+            notify.hash(hash)
+            amountObj.element.value = ''
+            addressObj.element.value = ''
+          })
+          .catch((err) => {
+            amountObj.element.value = ''
+            addressObj.element.value = ''
+            logger.info('There was an error sending ether with metaMask', err)
+          })
       } catch (err) {
-        logger.error('There was an error transfering ether', err)
+        logger.warn('There was an error transfering ether', err)
       }
     }
 
