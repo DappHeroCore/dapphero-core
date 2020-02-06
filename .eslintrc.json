@@ -184,7 +184,7 @@
         "sort-vars": "off", // variables should be initialized in the order they are used
         "space-before-blocks": ["warn", "always"],
         "space-before-function-paren": ["warn", { "anonymous": "always", "named": "never", "asyncArrow": "always" } ],
-        "space-in-parens": ["warn", "never"],
+        "space-in-parens": ["off", "always", {"exceptions": [ "empty" ]}],
         "space-infix-ops": "warn",
         "space-unary-ops": "warn",
         "spaced-comment": ["warn", "always"],

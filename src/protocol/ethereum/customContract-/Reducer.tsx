@@ -199,19 +199,26 @@ export const Reducer = ({ info }) => {
       // TODO: Check if result is an object and check if there's an output-name with one of those key names
       // Insert result in all output elements
       const outputsChildrenElements = childrenElements.find(({ id }) => id.includes('output'))
-      const outputNameChildrenElements = childrenElements.find(({ id }) => id.includes('outputName'))
+      const outputNamedChildrenElements = childrenElements.find(({ id }) => id.includes('outputName'))
 
       outputsChildrenElements.element.forEach(({ element }) => {
         Object.assign(element, { textContent: parsedValue })
       })
 
-      outputNameChildrenElements.element.forEach(({ element }) => {
+      outputNamedChildrenElements.element.forEach(({ element }) => {
 
         const outputName = element.getAttribute('data-dh-property-output-name')
         const displayUnits = element.getAttribute('data-dh-modifier-display-units')
         const contractUnits = element.getAttribute('data-dh-modifier-contract-units')
+        const decimals = ( element.getAttribute('data-dh-modifier-decimal-units') || element.getAttribute('data-dh-modifier-decimals') ) ?? null
         const convertedValue = (displayUnits || contractUnits) ? utils.convertUnits(contractUnits, displayUnits, parsedValue[outputName]) : parsedValue[outputName]
-        Object.assign(element, { textContent: convertedValue })
+        const isNumber = !Number.isNaN(Number(convertedValue))
+        if (decimals && isNumber) {
+          const decimalConvertedValue = Number(convertedValue).toFixed(decimals).toString()
+          element.innerText = decimalConvertedValue
+        } else {
+          Object.assign( element, { textContent: convertedValue } )
+        }
       })
     }
   }, [ result ])
