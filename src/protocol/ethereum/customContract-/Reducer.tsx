@@ -145,7 +145,7 @@ export const Reducer = ({ info }) => {
     if (inputChildrens.length > 0) {
       const [ inputs ] = inputChildrens
       inputs.element.forEach(({ element, argumentName }) => {
-        element.addEventListener('input', ({ target: { value } }) => {
+        const clickHandlerFunction = (value) => {
           const displayUnits = element.getAttribute('data-dh-modifier-display-units')
           const contractUnits = element.getAttribute('data-dh-modifier-contract-units')
           const convertedValue = (displayUnits || contractUnits) ? utils.convertUnits(displayUnits, contractUnits, value) : value
@@ -153,6 +153,10 @@ export const Reducer = ({ info }) => {
             ...prevParameters,
             [argumentName]: convertedValue,
           }))
+        }
+        clickHandlerFunction(element.value)
+        element.addEventListener('input', ({ target: { value } }) => {
+          clickHandlerFunction(value)
         })
       })
     }
@@ -173,7 +177,7 @@ export const Reducer = ({ info }) => {
   useEffect(() => {
     if (autoInvokeKey) {
       const { value } = autoInvokeKey
-      if (value === 'true' && !hasInputs && !isTransaction) handleRunMethod()
+      if (value === 'true' && !isTransaction) handleRunMethod()
     }
   }, [ autoInvokeKey, handleRunMethod ])
 
