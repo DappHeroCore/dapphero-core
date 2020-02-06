@@ -16,14 +16,14 @@ export const Reducer: FunctionComponent<ReducerProps> = ({ element, info }) => {
   const injected = hooks.useDappHeroWeb3()
   const { accounts } = injected
   const [ threeBoxProfile, setThreeBoxProfile ] = useState({
-    name: '',
-    location: '',
-    emoji: '',
-    job: '',
-    description: '',
-    website: '',
+    name: null,
+    location: null,
+    emoji: null,
+    job: null,
+    description: null,
+    website: null,
     image: [
-      { contentUrl: { '/': '' } },
+      { contentUrl: { '/': null } },
     ],
   })
 
