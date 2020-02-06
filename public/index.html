@@ -123,7 +123,7 @@
 
       <h2 style="margin-bottom: 25px">Custom Contract</h2>
       <!-- Method "hello" -->
-      <!-- <div class="headline">Method: "hello"</div>
+      <div class="headline">Method: "hello"</div>
       <div class="headline">Payable: false - StateMutability: "view"</div>
       <div class="headline">
         <p>Inputs</p>
@@ -148,12 +148,15 @@
           Submit
         </button>
 
-        <div data-dh-property-method-id="000" data-dh-property-outputs class="component-div">
+        <div data-dh-property-method-id="000" data-dh-property-outputs data-dh-modifier-contract-units="bytes32" data-dh-modifier-display-units="ascii" class="component-div">
+          *Return value: -*
+        </div>
+        <div data-dh-property-method-id="000" data-dh-property-outputs data-dh-modifier-contract-units="bytes32" data-dh-modifier-display-units="ascii" class="component-div">
           *Return value: -*
         </div>
       </div>
 
-      <hr style="margin-bottom: 65px" /> -->
+      <hr style="margin-bottom: 65px" />
 
       <!-- Method "sendEthWithArgs" -->
       <!-- <div class="headline">Method: "sendEthWithArgs"</div>
@@ -246,7 +249,7 @@
 
 
       <!-- Method "sendEthWithArgs: VALUE HARDCODED" -->
-      <!-- <div class="headline">Method: "sendEthWithArgs"</div>
+      <div class="headline">Method: "sendEthWithArgs"</div>
       <div class="headline">Payable: true - StateMutability: "payable"</div>
       <div class="headline">ETH Value: User Input</div>
       <div class="headline">
@@ -292,7 +295,7 @@
         </div>
       </div>
 
-      <hr style="margin-bottom: 65px" /> -->
+      <hr style="margin-bottom: 65px" />
 
 
 
@@ -339,15 +342,14 @@
 
         <button data-dh-property-method-id="002" data-dh-property-invoke class="w-button">
           Submit
-        </button> -->
+        </button>
 
-        <!-- All the outputs are going here rather than respective output. -->
-        <!-- <div data-dh-property-method-id="002" data-dh-property-outputs class="component-div">
+        <div data-dh-property-method-id="002" data-dh-property-outputs class="component-div" data-dh-modifier-displayDecimals="3">
           *Return value: -*
         </div>
-      </div>
+      </div> -->
 
-      <hr style="margin-bottom: 65px" /> -->
+      <!-- <hr style="margin-bottom: 65px" /> -->
 
       <!-- Method "sendVariableEthNoArgs" -->
       <!-- NOTE: TODO: This needs to have ETH attached. -->
@@ -433,7 +435,7 @@
       <hr style="margin-bottom: 65px" /> -->
 
       <!-- Method "viewNoArgsMultipleReturn" -->
-      <!-- <div class="headline">Method: "viewNoArgsMultipleReturn"</div>
+      <div class="headline">Method: "viewNoArgsMultipleReturn"</div>
       <div class="headline">Payable: false - StateMutability: "view"</div>
       <div class="headline">
         <p>Inputs</p>
@@ -459,17 +461,34 @@
           Submit
         </button> -->
 
-          <!-- All the args are returned in one, rather than their respective output
-          <div data-dh-property-method-id="005" data-dh-property-output-name="hello">A greeting here in bytes32</div>
-         -->
-          <!-- <div data-dh-property-method-id="005" data-dh-property-output-name="importantNumber">Important Number here</div>
+          All the args are returned in one, and in their respective output
+          <div
+            class="component-div"
+            data-dh-property-method-id="005"
+            data-dh-modifier-contract-units="bytes32"
+            data-dh-modifier-display-units="ascii"
+            data-dh-property-output-name="sayHello"
+          >
+            A greeting here in bytes32
+          </div>
+          <div
+            class="component-div"
+            data-dh-property-method-id="005"
+            data-dh-modifier-contract-units="bytes32"
+            data-dh-modifier-display-units="ascii"
+            data-dh-property-output-name="sayHello"
+          >
+            A greeting here in bytes32
+          </div>
+         
+          <div class="component-div"data-dh-property-method-id="005" data-dh-property-output-name="importantNumber">Important Number here</div>
 
           <div data-dh-property-method-id="005" data-dh-property-outputs class="component-div">
           *Return value: -*
         </div>
       </div>
 
-      <hr style="margin-bottom: 65px" /> -->
+      <hr style="margin-bottom: 65px" />
 
       <!-- Method "important" -->
       <!-- <div class="headline">Method: "important"</div>
@@ -606,6 +625,8 @@
           data-dh-property-method-id="011"
           data-dh-property-contract-name="dappherotest"
           data-dh-property-input-name="simpleMessage"
+          data-dh-modifier-contract-units="bytes32"
+          data-dh-modifier-display-units="ascii"
           class="w-input"
           placeholder="Message:"
         />
@@ -622,7 +643,7 @@
       <hr style="margin-bottom: 65px" /> -->
 
       <!-- Method "sendEthWithArgs"  with property-eth-value in input -->
-      <div class="headline">Method: "sendEthWithArgs"</div>
+      <!-- <div class="headline">Method: "sendEthWithArgs"</div>
       <div class="headline">Payable: true - StateMutability: "payable"</div>
       <div>with property-eth-value in input</div>
       <div class="headline">
@@ -636,37 +657,41 @@
           <li>none</li>
         </ul>
       </div>
-
+        
       <div
         data-dh-feature="customContract"
         data-dh-property-contract-name="dappherotest"
         data-dh-property-method-name="sendEthWithArgs"
         data-dh-property-method-id="012"
-
-      >
+        >
+        
         <input
           data-dh-property-method-id="012"
           data-dh-property-input-name="simpleMessage"
           class="w-input"
           placeholder="Message:"
-          />
+          data-dh-modifier-display-units="ascii"
+          data-dh-modifier-contract-units="bytes32"
+        />
 
           <input
           data-dh-property-method-id="012"
           data-dh-property-input-name="EthValue"
           class="w-input"
           placeholder="Eth:"
-        />
+          />
 
         <button data-dh-property-method-id="012" data-dh-property-invoke class="w-button">
           Submit
         </button>
-
+        
         <div data-dh-property-method-id="012" data-dh-property-outputs class="component-div">
           *Return value: -*
         </div>
-      </div>
 
+      </div> -->
+
+    <div>
       <hr style="margin-bottom: 65px" />
     </div>
 

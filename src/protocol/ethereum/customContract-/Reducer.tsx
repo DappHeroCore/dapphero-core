@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useToasts } from 'react-toast-notifications'
 import Notify from 'bnc-notify'
 import { ethers } from 'ethers'
+import * as utils from 'utils'
 import { logger } from 'logger/customLogger'
 import omit from 'lodash.omit'
 
@@ -13,12 +14,13 @@ const blockNativeApiKey = process.env.REACT_APP_BLOCKNATIVE_API
 // Utils
 const getAbiMethodInputs = (abi, methodName) => {
   const method = abi.find(({ name }) => name === methodName)
-  return method.inputs.reduce((acc, { name }) => ({ ...acc, [name]: '' }), [])
+  const output = method.inputs.reduce((acc, { name }) => ({ ...acc, [name]: '' }), [])
+  return output
 }
 
 // Reducer Component
 export const Reducer = ({ info }) => {
-  const { contract, childrenElements, properties, hasInputs, hasOutputs, isTransaction, modifiers } = info
+  const { contract, childrenElements, properties, properties_, hasInputs, hasOutputs, isTransaction, modifiers, modifiers_ } = info
 
   const { contractAddress, contractAbi } = contract
 
@@ -140,16 +142,18 @@ export const Reducer = ({ info }) => {
   // Add triggers to input elements
   useEffect(() => {
     const inputChildrens = childrenElements.filter(({ id }) => id.includes('input'))
-    console.log('TCL: Reducer -> childrenElements', childrenElements)
 
     if (inputChildrens.length > 0) {
       const [ inputs ] = inputChildrens
-
       inputs.element.forEach(({ element, argumentName }) => {
+
         element.addEventListener('input', ({ target: { value } }) => {
+          const displayUnits = element.getAttribute('data-dh-modifier-display-units')
+          const contractUnits = element.getAttribute('data-dh-modifier-contract-units')
+          const convertedValue = (displayUnits || contractUnits) ? utils.convertUnits(displayUnits, contractUnits, value) : value
           setParameters((prevParameters) => ({
             ...prevParameters,
-            [argumentName]: value,
+            [argumentName]: convertedValue,
           }))
         })
       })
@@ -194,10 +198,21 @@ export const Reducer = ({ info }) => {
 
       // TODO: Check if result is an object and check if there's an output-name with one of those key names
       // Insert result in all output elements
-      const outputs = childrenElements.filter(({ id }) => id.includes('output'))
-      console.log('TCL: outputs', outputs)
+      const outputsChildrenElements = childrenElements.find(({ id }) => id.includes('output'))
+      const outputNameChildrenElements = childrenElements.find(({ id }) => id.includes('outputName'))
 
-      outputs.forEach(({ element }) => Object.assign(element, { textContent: parsedValue }))
+      outputsChildrenElements.element.forEach(({ element }) => {
+        Object.assign(element, { textContent: parsedValue })
+      })
+
+      outputNameChildrenElements.element.forEach(({ element }) => {
+
+        const outputName = element.getAttribute('data-dh-property-output-name')
+        const displayUnits = element.getAttribute('data-dh-modifier-display-units')
+        const contractUnits = element.getAttribute('data-dh-modifier-contract-units')
+        const convertedValue = (displayUnits || contractUnits) ? utils.convertUnits(contractUnits, displayUnits, parsedValue[outputName]) : parsedValue[outputName]
+        Object.assign(element, { textContent: convertedValue })
+      })
     }
   }, [ result ])
 
