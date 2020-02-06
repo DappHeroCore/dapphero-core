@@ -5,6 +5,7 @@ import { ethers } from 'ethers'
 import * as utils from 'utils'
 import { logger } from 'logger/customLogger'
 import omit from 'lodash.omit'
+import * as consts from 'consts'
 
 // Hooks
 import * as hooks from 'hooks'
@@ -145,7 +146,10 @@ export const Reducer = ({ info }) => {
     if (inputChildrens.length > 0) {
       const [ inputs ] = inputChildrens
       inputs.element.forEach(({ element, argumentName }) => {
-        const clickHandlerFunction = (value) => {
+        const clickHandlerFunction = (rawValue: string) => {
+          const value = injectedContext?.accounts?.[0]
+            ? rawValue.replace(consts.clientSide.currentUser, injectedContext.accounts[0]) ?? rawValue
+            : rawValue
           const displayUnits = element.getAttribute('data-dh-modifier-display-units')
           const contractUnits = element.getAttribute('data-dh-modifier-contract-units')
           const convertedValue = (displayUnits || contractUnits) ? utils.convertUnits(displayUnits, contractUnits, value) : value
@@ -153,6 +157,7 @@ export const Reducer = ({ info }) => {
             ...prevParameters,
             [argumentName]: convertedValue,
           }))
+          element.value = value
         }
         clickHandlerFunction(element.value)
         element.addEventListener('input', ({ target: { value } }) => {
@@ -160,7 +165,7 @@ export const Reducer = ({ info }) => {
         })
       })
     }
-  }, [ childrenElements ])
+  }, [ childrenElements, injectedContext.accounts ])
 
   // Add trigger to invoke buttons
   useEffect(() => {
