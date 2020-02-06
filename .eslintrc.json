@@ -60,7 +60,7 @@
         "import/order": "warn",
         "import/no-default-export": "warn", // named exports are better and make aliasing explicit
         "import/prefer-default-export": "off", // named exports are better and make aliasing explicit
-        "indent": ["warn", 2],
+        "indent": ["warn", 2, { "SwitchCase": 1 }],
         "key-spacing": ["warn", { "beforeColon": false, "afterColon": true }],
         "keyword-spacing": "warn",
         "linebreak-style": "off",
