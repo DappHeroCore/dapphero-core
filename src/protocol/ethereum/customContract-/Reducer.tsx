@@ -42,7 +42,8 @@ export const Reducer = ({ info }) => {
   const [ parameters, setParameters ] = useState(getAbiMethodInputs(info.contract.contractAbi, methodName))
 
   // -> Handlers
-  const handleRunMethod = async () => {
+  const handleRunMethod = async (event) => {
+    event.preventDefault()
     const ethValue = parameters?.EthValue
 
     const parsedParameters = omit(parameters, 'EthValue')
