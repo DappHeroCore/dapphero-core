@@ -1,5 +1,5 @@
 export * from './useGetMethods'
-export * from './getUserCustomTxStateNotification'
+
 export * from './sendTransactionToContract'
 export * from './sanitizeTransactionArguments'
 export * from './callPublicMethodWithArgs'
@@ -7,7 +7,7 @@ export * from './parseIdTag'
 export * from './useDecimalAndDisplayFormat'
 export * from './useDecimalFormatter'
 export * from './useDisplayFormatter'
-export * from './getUserLoadedElements'
+
 export * from './getTxFieldInputs'
 export * from './clearInputFields'
 export * from './addClickHandlerToTriggerElement'
