@@ -1,3 +1,4 @@
+/* eslint-disable-no-console */
 import * as consts from 'consts'
 import Axios from 'axios'
 import cuid from 'cuid'
@@ -5,7 +6,17 @@ import cuid from 'cuid'
 export class DappHeroLogger {
   private axios = Axios.create({ headers: { 'content-type': 'application/json' } })
 
+  private isPrivate: boolean
+
+  private: DappHeroLogger
+
   private token = consts.loggly.token
+
+  constructor(isPrivate = false) {
+    this.isPrivate = isPrivate
+
+    this.private = isPrivate ? null : new DappHeroLogger(true)
+  }
 
   private stringifyParams = (params) => {
     const stringifiedParams = params.map((item) => {
@@ -38,37 +49,38 @@ export class DappHeroLogger {
     })
   }
 
-    log = (level, ...rest) => {
-      if ([ 'debug', 'info', 'warn', 'error' ].includes(level)) {
-        this[level](...rest)
-      } else {
-        this.info(...rest)
-      }
+  log = (level, ...rest) => {
+    if ([ 'debug', 'info', 'warn', 'error' ].includes(level)) {
+      this[level](...rest)
+    } else {
+      this.info(...rest)
     }
+  }
 
   debug = (...params) => {
     const id = cuid()
-    console.log(`dappHeroLogId: ${id}\n`, ...params) // eslint-disable-line
+    if (!this.isPrivate) console.log(`dappHeroLogId: ${id}\n`, ...params)
     this.post('debug', id, ...params)
   }
 
   info = (...params) => {
     const id = cuid()
-    console.info(`dappHeroLogId: ${id}\n`, ...params)
+    if (!this.isPrivate) console.info(`dappHeroLogId: ${id}\n`, ...params)
     this.post('info', id, ...params)
   }
 
   warn = (...params) => {
     const id = cuid()
-    console.warn(`dappHeroLogId: ${id}\n`, ...params)
+    if (!this.isPrivate) console.warn(`dappHeroLogId: ${id}\n`, ...params)
     this.post('warn', id, ...params)
   }
 
   error = (...params) => {
     const id = cuid()
-    console.error(`dappHeroLogId: ${id}\n`, ...params)
+    if (!this.isPrivate) console.error(`dappHeroLogId: ${id}\n`, ...params)
     this.post('error', id, ...params)
   }
+
 }
 
 export const logger = new DappHeroLogger()
