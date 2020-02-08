@@ -1,9 +1,9 @@
 import { FunctionComponent, useEffect, useContext } from 'react'
 import Notify from 'bnc-notify'
 import { logger } from 'logger/customLogger'
-import * as hooks from 'hooks'
 import * as utils from 'utils'
 import { ethers } from 'ethers'
+import { useWeb3React } from '@web3-react/core'
 
 const apiKey = process.env.REACT_APP_BLOCKNATIVE_API
 interface EthTransferProps {
@@ -20,19 +20,17 @@ interface EthTransferProps {
 // TODO: consider adding a required unique id for this functionality
 // and base DOM parsing off id
 export const EthTransfer: FunctionComponent<EthTransferProps> = ({ element, amountObj, addressObj, outputObj, info }) => {
-  const { lib } = hooks.useDappHeroWeb3()
-  // const DomElementContext = useContext(DomElementsContext)
-
+  const { library } = useWeb3React()
   useEffect(() => {
     const transferEther = (e) => {
       try {
         e.preventDefault()
         const notify = Notify({
           dappId: apiKey, // [String] The API key created by step one above
-          networkId: lib._network.chainId, // [Integer] The Ethereum network ID your Dapp uses.
+          networkId: library._network.chainId, // [Integer] The Ethereum network ID your Dapp uses.
         })
 
-        const from = lib.provider.selectedAddress
+        const from = library.provider.selectedAddress
         const inputUnits = amountObj?.modifiers_?.displayUnits ?? 'wei' // FIXME: move this to dappheroDOM
         const convertedUnits = utils.convertUnits(inputUnits, 'wei', amountObj.element.value)
         const params = [ {
@@ -42,7 +40,7 @@ export const EthTransfer: FunctionComponent<EthTransferProps> = ({ element, amou
           // value: utils.convertUnits(inputUnits, 'wei', amountObj.element.value),
         } ]
 
-        lib.send('eth_sendTransaction', params)
+        library.send('eth_sendTransaction', params)
           .then((hash) => {
             notify.hash(hash)
             amountObj.element.value = ''
@@ -58,8 +56,8 @@ export const EthTransfer: FunctionComponent<EthTransferProps> = ({ element, amou
       }
     }
 
-    if (lib) utils.addClickHandlerToTriggerElement(element, transferEther)
-  }, [ lib ])
+    if (library) utils.addClickHandlerToTriggerElement(element, transferEther)
+  }, [ library ])
 
   return null
 }

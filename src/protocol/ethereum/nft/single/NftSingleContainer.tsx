@@ -1,7 +1,8 @@
 import React, { FunctionComponent, useEffect, useState } from 'react'
 import * as api from 'api'
-import * as hooks from 'hooks'
+import { useWeb3React } from '@web3-react/core'
 import get from 'lodash/get'
+import * as consts from 'consts'
 import { NftSingleCustomField } from './NftSingleCustomField'
 
 interface NftSingleContainerProps {
@@ -14,7 +15,8 @@ export const NftSingleContainer = ({ element, responseObj }): any[] => {
   const contractAddress = contractMatch?.[1]
   const tokenMatch = element.id.match(/-tokenId_([a-zA-Z0-9]+)/)
   const tokenId = tokenMatch?.[1]
-  const { networkName, connected } = hooks.useDappHeroWeb3()
+  const { active, chainId } = useWeb3React()
+  const networkName = consts.global.ethNetworkName[chainId]
 
   const [ children, setChildren ] = useState([])
 
@@ -32,8 +34,8 @@ export const NftSingleContainer = ({ element, responseObj }): any[] => {
         })
       setChildren(childComponentProps)
     }
-    if (connected) getData()
-  }, [ connected, networkName ])
+    if (active) getData()
+  }, [ active, networkName ])
 
   // Do we collect all the tags under this container
   // like documetnSelectAll- when ID's are children of this element?

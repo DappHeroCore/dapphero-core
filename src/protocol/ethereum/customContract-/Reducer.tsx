@@ -6,9 +6,7 @@ import * as utils from 'utils'
 import { logger } from 'logger/customLogger'
 import omit from 'lodash.omit'
 import * as consts from 'consts'
-
-// Hooks
-import * as hooks from 'hooks'
+import { useWeb3React } from '@web3-react/core'
 
 const blockNativeApiKey = process.env.REACT_APP_BLOCKNATIVE_API
 
@@ -33,8 +31,8 @@ export const Reducer = ({ info, configuration }) => {
   const { value: methodName } = methodNameKey
 
   // Custom Hooks
-  hooks.useEagerConnect()
-  const injectedContext = hooks.useDappHeroWeb3()
+
+  const injectedContext = useWeb3React()
 
   const { addToast } = useToasts()
   const errorToast = ({ message }) => addToast(message, { appearance: 'error' })
@@ -145,7 +143,7 @@ export const Reducer = ({ info, configuration }) => {
   // -> Effects
   useEffect(() => {
     setcontext(injectedContext)
-  }, [ injectedContext.networkId ])
+  }, [ injectedContext.chainId ])
 
   // Add triggers to input elements
   useEffect(() => {
@@ -155,8 +153,8 @@ export const Reducer = ({ info, configuration }) => {
       const [ inputs ] = inputChildrens
       const tearDowns = inputs.element.map(({ element, argumentName }) => {
         const clickHandlerFunction = (rawValue: string) => {
-          const value = injectedContext?.accounts?.[0]
-            ? rawValue.replace(consts.clientSide.currentUser, injectedContext.accounts[0]) ?? rawValue
+          const value = injectedContext?.account
+            ? rawValue.replace(consts.clientSide.currentUser, injectedContext.account) ?? rawValue
             : rawValue
           const displayUnits = element.getAttribute('data-dh-modifier-display-units')
           const contractUnits = element.getAttribute('data-dh-modifier-contract-units')
@@ -169,9 +167,7 @@ export const Reducer = ({ info, configuration }) => {
         }
         clickHandlerFunction(element.value)
         const clickHandler = (event) => {
-          (({ target: { value } }) => {
-            clickHandlerFunction(value)
-          })()
+          clickHandlerFunction(event.target.value)
         }
         element.addEventListener('input', clickHandler)
         return () => {
@@ -182,7 +178,7 @@ export const Reducer = ({ info, configuration }) => {
         tearDowns.forEach((cb) => cb())
       }
     }
-  }, [ childrenElements, injectedContext.accounts ])
+  }, [ childrenElements, injectedContext.account ])
 
   // Add trigger to invoke buttons
   useEffect(() => {
@@ -197,10 +193,14 @@ export const Reducer = ({ info, configuration }) => {
 
   // Auto invoke method
   useEffect(() => {
-    if (autoInvokeKey) {
+    if (
+      autoInvokeKey
+      && (injectedContext.chainId === info?.contract?.networkId
+      )) {
       const { value } = autoInvokeKey
-      console.log('autoinvoking', injectedContext)
-      if (value === 'true' && !isTransaction) handleRunMethod()
+      if (value === 'true' && !isTransaction) {
+        handleRunMethod()
+      }
     }
   }, [ autoInvokeKey, handleRunMethod ])
 

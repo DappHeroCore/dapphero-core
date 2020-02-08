@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useEffect, useState } from 'react'
+import { useWeb3React } from '@web3-react/core'
 import { logger } from 'logger/customLogger'
-import * as hooks from 'hooks'
 import { ThreeBoxProfileDataElement } from './ThreeBoxProfileDataElement'
 import { ThreeBoxProfileImgElement } from './ThreeBoxProfileImgElement'
 
@@ -13,8 +13,8 @@ interface ReducerProps {
 }
 
 export const Reducer: FunctionComponent<ReducerProps> = ({ element, info }) => {
-  const injected = hooks.useDappHeroWeb3()
-  const { accounts } = injected
+  const injectedContext = useWeb3React()
+  const { account } = injectedContext
   const [ threeBoxProfile, setThreeBoxProfile ] = useState({
     name: null,
     location: null,
@@ -31,47 +31,47 @@ export const Reducer: FunctionComponent<ReducerProps> = ({ element, info }) => {
     const getProfile = async () => {
       try {
         // TODO: [DEV-97] How to we check the status of a request? When no Profile this 404's
-        const profile = await get3boxProfile(accounts[0])
+        const profile = await get3boxProfile(account)
         setThreeBoxProfile(profile)
       } catch (error) {
         logger.debug('You have no profile. ', error)
       }
     }
     getProfile()
-  }, [ accounts ])
+  }, [ account ])
 
   switch (info?.properties[0]?.key) {
-  case 'image': {
-    const imageHash = threeBoxProfile?.image?.[0]?.contentUrl?.['/'] ?? null
-    if (imageHash) {
-      const imgSrc = `${ipfsRoot}${threeBoxProfile.image[0].contentUrl['/']}`
-      return <ThreeBoxProfileImgElement element={element} imgSrc={imgSrc} />
+    case 'image': {
+      const imageHash = threeBoxProfile?.image?.[0]?.contentUrl?.['/'] ?? null
+      if (imageHash) {
+        const imgSrc = `${ipfsRoot}${threeBoxProfile.image[0].contentUrl['/']}`
+        return <ThreeBoxProfileImgElement element={element} imgSrc={imgSrc} />
+      }
+      return null
     }
-    return null
-  }
-  case 'name': {
-    return <ThreeBoxProfileDataElement element={element} profileData={threeBoxProfile.name} />
-  }
-  case 'location': {
-    return <ThreeBoxProfileDataElement element={element} profileData={threeBoxProfile.location} />
-  }
-  case 'emoji': {
-    return <ThreeBoxProfileDataElement element={element} profileData={threeBoxProfile.emoji} />
-  }
-  case 'job': {
-    return <ThreeBoxProfileDataElement element={element} profileData={threeBoxProfile.job} />
-  }
-  case 'description': {
-    return <ThreeBoxProfileDataElement element={element} profileData={threeBoxProfile.description} />
-  }
-  case 'website': {
-    return <ThreeBoxProfileDataElement element={element} profileData={threeBoxProfile.website} />
-  }
+    case 'name': {
+      return <ThreeBoxProfileDataElement element={element} profileData={threeBoxProfile.name} />
+    }
+    case 'location': {
+      return <ThreeBoxProfileDataElement element={element} profileData={threeBoxProfile.location} />
+    }
+    case 'emoji': {
+      return <ThreeBoxProfileDataElement element={element} profileData={threeBoxProfile.emoji} />
+    }
+    case 'job': {
+      return <ThreeBoxProfileDataElement element={element} profileData={threeBoxProfile.job} />
+    }
+    case 'description': {
+      return <ThreeBoxProfileDataElement element={element} profileData={threeBoxProfile.description} />
+    }
+    case 'website': {
+      return <ThreeBoxProfileDataElement element={element} profileData={threeBoxProfile.website} />
+    }
 
-  // TODO: [DEV-98] Build custom 3box profile ToolTip for Profiles
-  // TODO: [DEV-99] Build element which swaps out Addresses for ThreeBox profile names
-  default: {
-    return null
-  }
+    // TODO: [DEV-98] Build custom 3box profile ToolTip for Profiles
+    // TODO: [DEV-99] Build element which swaps out Addresses for ThreeBox profile names
+    default: {
+      return null
+    }
   }
 }
