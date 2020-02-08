@@ -3,13 +3,20 @@ import * as hooks from 'hooks'
 import { logger } from 'logger/customLogger'
 import { loggerTest } from 'logger/loggerTest'
 import * as contexts from 'contexts'
+import * as consts from 'consts'
 import { FeatureReducer } from './protocol/ethereum/featureReducer'
 
 // Log tests and Startup Logs
 loggerTest()
 
-export const Activator = ({ configuration }) => {
+export const Activator = ({ configuration }, apiKey) => {
   const domElements = useContext(contexts.DomElementsContext)
+  window.dappHero = {
+    enabled: true,
+    domElements,
+    configuration,
+    projectId: consts.global.apiKey,
+  }
   hooks.useEagerConnect()
   return (
     <>
