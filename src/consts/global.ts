@@ -1,14 +1,14 @@
 export const POLLING_INTERVAL = 4000
-export const NETWORK_IDS = {
-  1: 'mainnet',
-  3: 'ropsten',
-  4: 'rinkeby',
-  5: 'goerli',
-  42: 'kovan',
-  60: 'goChain',
-  77: 'sokol',
-  99: 'core',
-  100: 'xdai',
+export const ethNetworkName = {
+  1: 'Mainnet',
+  3: 'Ropsten',
+  4: 'Rinkeby',
+  5: 'Goerli',
+  42: 'Kovan',
+  60: 'GoChain',
+  77: 'Sokol',
+  99: 'Core',
+  100: 'Xdai',
 }
 const apiKeyElement = document.getElementById('dh-apiKey')
 export const apiKey = apiKeyElement.getAttribute('data-api')

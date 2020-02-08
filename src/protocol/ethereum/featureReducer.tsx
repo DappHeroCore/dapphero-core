@@ -1,6 +1,6 @@
 import React from 'react'
 import * as hooks from 'hooks'
-
+import { useWeb3React } from '@web3-react/core'
 // Reducers
 import { Reducer as NetworkReducer } from './network/Reducer'
 import { Reducer as UserReducer } from './user/Reducer'
@@ -12,7 +12,8 @@ import { Reducer as CustomContractReducer } from './customContract-/Reducer'
 import { FeatureReducerProps } from './types'
 
 export const FeatureReducer = ({ feature, element, configuration, info }: FeatureReducerProps) => {
-  const injectedContext = hooks.useDappHeroWeb3()
+  // const injectedContext = hooks.useDappHeroWeb3()
+  const injectedContext = useWeb3React()
   const featureType = feature
 
   switch (featureType) {
@@ -26,9 +27,9 @@ export const FeatureReducer = ({ feature, element, configuration, info }: Featur
       return <ThreeBoxReducer element={element} info={info} />
     case 'customContract': {
       if (
-        injectedContext?.networkId
+        injectedContext?.chainId
         && info?.contract.networkId
-        && injectedContext.networkId === info.contract.networkId
+        && injectedContext.chainId === info.contract.networkId
       ) {
         return <CustomContractReducer element={element} configuration={configuration} info={info} />
       }

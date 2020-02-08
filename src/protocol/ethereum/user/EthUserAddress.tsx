@@ -1,6 +1,8 @@
-import { logger } from 'logger/customLogger'
+
+import React, { useEffect, FunctionComponent } from 'react'
 import * as hooks from 'hooks'
-import { useEffect, FunctionComponent } from 'react'
+import { useWeb3React } from '@web3-react/core'
+import { logger } from 'logger/customLogger'
 
 interface EthUserAddressProps {
   element: HTMLElement;
@@ -9,17 +11,17 @@ interface EthUserAddressProps {
 
 export const EthUserAddress: FunctionComponent<EthUserAddressProps> = ({ element, displayFormat }) => {
 
-  const { accounts, networkId } = hooks.useDappHeroWeb3()
+  // const { accounts, networkId } = hooks.useDappHeroWeb3()
+  const { account } = useWeb3React()
   useEffect(() => {
     try {
-      if (accounts?.[0]) {
-        const [ fullAccountNumber ] = accounts
-        element.innerHTML = displayFormat === 'short' ? `${fullAccountNumber.slice(0, 4)}...${fullAccountNumber.slice(fullAccountNumber.length - 5)}` : fullAccountNumber
+      if (account) {
+        element.innerHTML = displayFormat === 'short' ? `${account.slice(0, 4)}...${account.slice(account.length - 5)}` : account
       }
     } catch (e) {
       logger.debug('Getting account address failed', e)
     }
-  }, [ accounts, networkId ])
+  }, [ account ])
 
   return null
 }

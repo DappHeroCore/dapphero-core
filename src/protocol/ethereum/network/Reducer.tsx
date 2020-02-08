@@ -1,14 +1,17 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import * as hooks from 'hooks'
+import * as consts from 'consts'
 import { EthEnable } from './EthEnable'
 import { EthNetworkInfo } from './EthNetworkInfo'
 import { EthTransfer } from './EthTransfer'
 
 export const Reducer = ({ element, info }) => {
-  const injected = hooks.useDappHeroWeb3()
+  // const injected = hooks.useDappHeroWeb3()
+  const injectedContext = useWeb3React()
   const domElements = hooks.useDomElements()
-  const { networkName, networkId } = injected
+  const { chainId } = injectedContext
+  const networkName = consts.global.ethNetworkName[chainId]
   const defaultInfoObj = {
     networkId: 0,
     networkName: 'Unknown',
@@ -22,58 +25,58 @@ export const Reducer = ({ element, info }) => {
     const isMetamask = (typeof window.ethereum !== 'undefined' && window.ethereum.isMetaMask) ? 'metamask' : null
 
     const infoValueObj = {
-      networkId: networkId ?? 0,
+      networkId: chainId ?? 0,
       networkName: networkName ?? 'Unknown',
       providerName: isMetamask ?? 'Unknown',
     }
     setInfoValue(infoValueObj)
-  }, [ networkId, networkName ])
+  }, [ chainId, networkName ])
 
   switch (info?.properties[0]?.key) {
-  case ('enable'): { // TODO: Drake- we need to settle on if we are going to use this style or not so we can be consistent
-    return (
-      <EthEnable
-        element={element}
-      />
-    )
-  }
-  case ('id'): {
-    return (
-      <EthNetworkInfo
-        element={element}
-        infoValue={infoValue.networkId.toString()}
-      />
-    )
-  }
-  case ('name'): {
-    return (
-      <EthNetworkInfo
-        element={element}
-        infoValue={infoValue.networkName}
-      />
-    )
-  }
-  case ('provider'): {
-    return (
-      <EthNetworkInfo
-        element={element}
-        infoValue={infoValue.providerName}
-      />
-    )
-  }
-  case ('transfer'): {
-    if (info.feature === 'network' && info.properties_?.transfer === 'invoke') {
-      const relatedNodes = domElements.filter((item) => item.feature === 'network' && item.properties_.transfer)
-      const amountObj = relatedNodes.find(({ properties_: { transfer, inputName } }) => transfer === 'input' && inputName === 'amount')
-      const addressObj = relatedNodes.find(({ properties_: { transfer, inputName } }) => transfer === 'input' && inputName === 'address')
-      const outputObj = relatedNodes.find(({ properties_: { transfer } }) => transfer === 'output')
+    case ('enable'): { // TODO: Drake- we need to settle on if we are going to use this style or not so we can be consistent
       return (
-        <EthTransfer element={element} amountObj={amountObj} addressObj={addressObj} outputObj={outputObj} info={info} />
+        <EthEnable
+          element={element}
+        />
       )
     }
-    return null
-  }
-  default:
-    return null
+    case ('id'): {
+      return (
+        <EthNetworkInfo
+          element={element}
+          infoValue={infoValue.networkId.toString()}
+        />
+      )
+    }
+    case ('name'): {
+      return (
+        <EthNetworkInfo
+          element={element}
+          infoValue={infoValue.networkName}
+        />
+      )
+    }
+    case ('provider'): {
+      return (
+        <EthNetworkInfo
+          element={element}
+          infoValue={infoValue.providerName}
+        />
+      )
+    }
+    case ('transfer'): {
+      if (info.feature === 'network' && info.properties_?.transfer === 'invoke') {
+        const relatedNodes = domElements.filter((item) => item.feature === 'network' && item.properties_.transfer)
+        const amountObj = relatedNodes.find(({ properties_: { transfer, inputName } }) => transfer === 'input' && inputName === 'amount')
+        const addressObj = relatedNodes.find(({ properties_: { transfer, inputName } }) => transfer === 'input' && inputName === 'address')
+        const outputObj = relatedNodes.find(({ properties_: { transfer } }) => transfer === 'output')
+        return (
+          <EthTransfer element={element} amountObj={amountObj} addressObj={addressObj} outputObj={outputObj} info={info} />
+        )
+      }
+      return null
+    }
+    default:
+      return null
   }
 }
