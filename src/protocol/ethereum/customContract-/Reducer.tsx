@@ -20,7 +20,7 @@ const getAbiMethodInputs = (abi, methodName) => {
 }
 
 // Reducer Component
-export const Reducer = ({ info }) => {
+export const Reducer = ({ info, configuration }) => {
   const { contract, childrenElements, properties, properties_, hasInputs, hasOutputs, isTransaction, modifiers, modifiers_ } = info
 
   const { contractAddress, contractAbi } = contract
@@ -37,7 +37,8 @@ export const Reducer = ({ info }) => {
   const injectedContext = hooks.useDappHeroWeb3()
 
   const { addToast } = useToasts()
-  const displayToast = ({ message }: Error) => addToast(message, { appearance: 'error' })
+  const errorToast = ({ message }) => addToast(message, { appearance: 'error' })
+  const infoToast = ({ message }) => addToast(message, { appearance: 'info' })
 
   // States
   const [ result, setResult ] = useState(null)
@@ -49,6 +50,7 @@ export const Reducer = ({ info }) => {
     if (event) {
       event.preventDefault()
     }
+
     const ethValue = parameters?.EthValue
 
     const parsedParameters = omit(parameters, 'EthValue')
@@ -72,6 +74,7 @@ export const Reducer = ({ info }) => {
       // const gasLimit = await getGasLimit(...methodParams)
 
       const provider = new ethers.providers.Web3Provider(window.ethereum)
+
       const signer = provider.getSigner()
       const contractInstance = new ethers.Contract(contractAddress, contractAbi, signer)
 
@@ -114,13 +117,18 @@ export const Reducer = ({ info }) => {
           // Set Result on State
           setResult(methodResult.hash)
         } catch (err) {
-          logger.info('invoking method failed', err)
+          logger.info('invoke contract method failed in transaction', err)
         }
 
       } else {
         const method = contractInstance.functions[methodName]
-        const methodResult = await method(...methodParams)
-        setResult(methodResult)
+        try {
+          const methodResult = await method(...methodParams)
+          setResult(methodResult)
+        } catch (err) {
+          logger.info('Invoke contract method failed in view.  This happends when a contract is invoked on the wrong network or when a contract is not deployed on the current network\n', err)
+          infoToast({ message: 'Invoking a contract function failed.  Are you on the right network?' })
+        }
       }
       const [ input ] = childrenElements.filter(({ id }) => id.includes('input'))
       if (input?.element) {
@@ -129,8 +137,8 @@ export const Reducer = ({ info }) => {
         })
       }
     } catch (err) {
-      logger.error('Custom Contract handeRun method failed', err)
-      displayToast({ message: 'Error. Check the Console.' })
+      logger.error('Custom Contract handleRun method failed\n', err)
+      errorToast({ message: 'Error. Check the Console.' })
     }
   }
 
@@ -145,7 +153,7 @@ export const Reducer = ({ info }) => {
 
     if (inputChildrens.length > 0) {
       const [ inputs ] = inputChildrens
-      inputs.element.forEach(({ element, argumentName }) => {
+      const tearDowns = inputs.element.map(({ element, argumentName }) => {
         const clickHandlerFunction = (rawValue: string) => {
           const value = injectedContext?.accounts?.[0]
             ? rawValue.replace(consts.clientSide.currentUser, injectedContext.accounts[0]) ?? rawValue
@@ -160,10 +168,19 @@ export const Reducer = ({ info }) => {
           element.value = value
         }
         clickHandlerFunction(element.value)
-        element.addEventListener('input', ({ target: { value } }) => {
-          clickHandlerFunction(value)
-        })
+        const clickHandler = (event) => {
+          (({ target: { value } }) => {
+            clickHandlerFunction(value)
+          })()
+        }
+        element.addEventListener('input', clickHandler)
+        return () => {
+          element.removeEventListener('input', clickHandler)
+        }
       })
+      return () => {
+        tearDowns.forEach((cb) => cb())
+      }
     }
   }, [ childrenElements, injectedContext.accounts ])
 
@@ -182,6 +199,7 @@ export const Reducer = ({ info }) => {
   useEffect(() => {
     if (autoInvokeKey) {
       const { value } = autoInvokeKey
+      console.log('autoinvoking', injectedContext)
       if (value === 'true' && !isTransaction) handleRunMethod()
     }
   }, [ autoInvokeKey, handleRunMethod ])
