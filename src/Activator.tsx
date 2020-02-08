@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
+import * as hooks from 'hooks'
 import { logger } from 'logger/customLogger'
 import { loggerTest } from 'logger/loggerTest'
-import { useWeb3React } from '@web3-react/core'
 import * as contexts from 'contexts'
 import { FeatureReducer } from './protocol/ethereum/featureReducer'
 
@@ -9,9 +9,8 @@ import { FeatureReducer } from './protocol/ethereum/featureReducer'
 loggerTest()
 
 export const Activator = ({ configuration }) => {
-  const { active, error, activate, ...rest } = useWeb3React()
   const domElements = useContext(contexts.DomElementsContext)
-
+  hooks.useEagerConnect()
   return (
     <>
       {domElements

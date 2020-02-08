@@ -20,17 +20,17 @@ export const useDappHeroWeb3 = () => {
       || chainId == null
       || account == null
     ) return
-    (async () => {
-      await library.ready
-      setContext({
-        web3ReactContext,
-        lib: library,
-        accounts: [ account ],
-        networkId: chainId,
-        networkName: library?.network?.name,
-        connected: active,
-      })
-    })()
+
+    // await library.ready
+    setContext({
+      web3ReactContext,
+      lib: library,
+      accounts: [ account ],
+      networkId: chainId,
+      networkName: library?.network?.name,
+      connected: active,
+    })
+
   }, [ library, chainId, account ]) // intentionally only running on mount (make sure it's only mounted once :))
 
   // if the connection worked, wait until we get confirmation of that to flip the flag

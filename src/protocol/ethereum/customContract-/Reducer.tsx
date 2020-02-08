@@ -33,7 +33,7 @@ export const Reducer = ({ info, configuration }) => {
   const { value: methodName } = methodNameKey
 
   // Custom Hooks
-  hooks.useEagerConnect()
+
   const injectedContext = hooks.useDappHeroWeb3()
 
   const { addToast } = useToasts()
@@ -197,10 +197,17 @@ export const Reducer = ({ info, configuration }) => {
 
   // Auto invoke method
   useEffect(() => {
-    if (autoInvokeKey) {
+    if (
+      autoInvokeKey
+      && (injectedContext.networkId === info?.contract?.networkId
+      )) {
+      console.log('TCL: injectedContext.networkId', injectedContext.networkId)
+      console.log('TCL: info?.contract?.networkId', info?.contract?.networkId)
       const { value } = autoInvokeKey
-      console.log('autoinvoking', injectedContext)
-      if (value === 'true' && !isTransaction) handleRunMethod()
+      if (value === 'true' && !isTransaction) {
+        console.log('autoinvoking', injectedContext)
+        handleRunMethod()
+      }
     }
   }, [ autoInvokeKey, handleRunMethod ])
 
