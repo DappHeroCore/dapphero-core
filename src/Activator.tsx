@@ -9,42 +9,26 @@ import { FeatureReducer } from './protocol/ethereum/featureReducer'
 // Log tests and Startup Logs
 loggerTest()
 
-export const Activator = ({ configuration }, apiKey) => {
+export const Activator = ({ configuration }) => {
   const domElements = useContext(contexts.DomElementsContext)
-  window.dappHero = {
-    enabled: true,
-    domElements,
-    configuration,
-    projectId: consts.global.apiKey,
+
+  const attemptedEagerConnect = hooks.useEagerConnect()
+
+  if (attemptedEagerConnect) {
+    return (
+      <>
+        {domElements
+          && domElements.map((domElement) => (
+            <FeatureReducer
+              key={domElement.id}
+              element={domElement.element}
+              feature={domElement.feature}
+              configuration={configuration}
+              info={domElement}
+            />
+          ))}
+      </>
+    )
   }
-  hooks.useEagerConnect()
-  return (
-    <>
-      {domElements
-        && domElements.map((domElement) => (
-          <FeatureReducer
-            key={domElement.id}
-            element={domElement.element}
-            feature={domElement.feature}
-            configuration={configuration}
-            info={domElement}
-          />
-        ))}
-    </>
-  )
+  return null
 }
-
-// {configuration
-//   && elements.map((element, index) => {
-//     /* Avoid running customContract feature */
-//     if (element.getAttribute('id').includes('customContract')) return null
-
-//     return (
-//       <FeatureReducer
-//         element={element}
-//         index={index + 1}
-//         configuration={configuration}
-//         key={element.id + index.toString()}
-//       />
-//     )
-//   })}

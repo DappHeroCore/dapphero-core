@@ -32,5 +32,16 @@ export type FeatureReducerProps = {
 }
 
 declare global {
-  interface Window { ethereum: any; }
+  interface Window {
+    ethereum: any;
+    dappHero: {
+      enabled: true;
+      domElements: Element[];
+      configuration: {
+        [key: string]: any;
+        contracts: any[];
+      };
+      projectId: string
+    }
+  }
 }

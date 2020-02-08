@@ -1,5 +1,4 @@
 import React from 'react'
-import * as hooks from 'hooks'
 import { useWeb3React } from '@web3-react/core'
 // Reducers
 import { Reducer as NetworkReducer } from './network/Reducer'
@@ -12,7 +11,7 @@ import { Reducer as CustomContractReducer } from './customContract-/Reducer'
 import { FeatureReducerProps } from './types'
 
 export const FeatureReducer = ({ feature, element, configuration, info }: FeatureReducerProps) => {
-  // const injectedContext = hooks.useDappHeroWeb3()
+
   const injectedContext = useWeb3React()
   const featureType = feature
 
