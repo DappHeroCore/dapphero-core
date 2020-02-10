@@ -156,13 +156,17 @@ export const Reducer = ({ info, configuration }) => {
           const value = injectedContext?.account
             ? rawValue.replace(consts.clientSide.currentUser, injectedContext.account) ?? rawValue
             : rawValue
-          const displayUnits = element.getAttribute('data-dh-modifier-display-units')
-          const contractUnits = element.getAttribute('data-dh-modifier-contract-units')
-          const convertedValue = (displayUnits || contractUnits) ? utils.convertUnits(displayUnits, contractUnits, value) : value
-          setParameters((prevParameters) => ({
-            ...prevParameters,
-            [argumentName]: convertedValue,
-          }))
+          try {
+            const displayUnits = element.getAttribute('data-dh-modifier-display-units')
+            const contractUnits = element.getAttribute('data-dh-modifier-contract-units')
+            const convertedValue = (displayUnits || contractUnits) ? utils.convertUnits(displayUnits, contractUnits, value) : value
+            setParameters((prevParameters) => ({
+              ...prevParameters,
+              [argumentName]: convertedValue,
+            }))
+          } catch (err) {
+            console.warn('There may be an issue with your inputs')
+          }
           element.value = value
         }
         clickHandlerFunction(element.value)
