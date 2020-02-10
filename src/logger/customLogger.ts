@@ -1,87 +1,103 @@
 /* eslint-disable-no-console */
 import * as consts from 'consts'
-import Axios from 'axios'
 import cuid from 'cuid'
+import * as config from 'config'
+import { postLogToBubbleBackend, postLogToDappHeroBackend } from 'api/dappHero'
 
+export const sendLogsToConsole = (json: any): void => {
+  const { level, deviceId, isAnalytics, projectId, timestamp, message, ...restOfJson } = json
+  const logItems = [ ...restOfJson ].map((item) => [ item, '/n' ]).flat(1)
+  console.log(message, '\n', ...logItems)
+}
 export class DappHeroLogger {
-  private axios = Axios.create({ headers: { 'content-type': 'application/json' } })
 
+  private isPublic: boolean
+  private isDebug: boolean
   private isPrivate: boolean
+  private isAnalytics: boolean
 
-  private: DappHeroLogger
+  private public: DappHeroLogger
+  private debug: DappHeroLogger
+  private private: DappHeroLogger
+  private analytics: DappHeroLogger
 
   private token = consts.loggly.token
 
-  constructor(isPrivate = false) {
+  constructor({ isPublic = false, isDebug = false, isPrivate = false, isAnalytics = false } = {}) {
+
+    this.isPublic = isPublic
+    this.isDebug = isDebug
     this.isPrivate = isPrivate
+    this.isAnalytics = isAnalytics
 
-    this.private = isPrivate ? null : new DappHeroLogger(true)
+    this.private = (isPrivate || isDebug || isPublic ) ? null : new DappHeroLogger({ isPublic, isDebug, isPrivate: true, isAnalytics })
+    this.debug = (isDebug || isPrivate || isPublic ) ? null : new DappHeroLogger({ isPublic, isDebug: true, isPrivate, isAnalytics })
+    this.public = (isDebug || isPrivate || isPublic ) ? null : new DappHeroLogger({ isPublic: true, isDebug, isPrivate, isAnalytics })
+    this.analytics = isAnalytics ? null : new DappHeroLogger({ isPrivate: true, isDebug, isPublic, isAnalytics: true })
   }
 
-  private stringifyParams = (params) => {
-    const stringifiedParams = params.map((item) => {
-      if (typeof item === 'string') return item
-      try {
-        return JSON.stringify(item, null, 2)
-      } catch {
-        return item.toString()
+  private orchestrateLogging = (level, message, obj): void => {
+    const json = this.formatPayload(level, message, obj)
+
+    // Determine if logs should be sent to console
+    switch (true) {
+      case (this.isPublic):
+      case (this.isDebug && config.app.clientDebug):
+      case (!this.isPrivate && config.app.devDebug ): {
+        sendLogsToConsole(json)
+        break
       }
-    }).join(' ')
-    return stringifiedParams
+      default: break
+    }
+
+    // Send logs to bubble backend for analytics
+    if (this.isAnalytics) postLogToBubbleBackend(json)
+
+    // Log to dapphero backend
+    postLogToDappHeroBackend(json)
   }
 
-  private post = async (level, id, ...params) => {
-    params.unshift(`dappHeroLogId: ${id}`)
-    const timestamp = new Date().toString()
-    const json = {
+  private formatPayload = (level, message, json): { [key: string]: any } => {
+    const timestamp = new Date()
+    const jsonMessage = json?.message ?? null
+
+    const defaultPayload = {
       level,
-      id,
+      id: cuid(),
+      deviceId: config.app.deviceId,
+      isAnalytics: !!this.isAnalytics,
       projectId: consts.global.apiKey,
-      timestamp,
-      message: params.length === 1 ? params[0] : this.stringifyParams(params),
+      timestamp: timestamp.toString(),
+      epoch: timestamp.getTime(),
     }
-    return this.axios({
-      method: 'post',
-      url: `https://api.dapphero.io/log`,
-      data: JSON.stringify(json),
-    }).catch((e) => {
-      console.log(e)
-    })
-  }
-
-  log = (level, ...rest) => {
-    if ([ 'debug', 'info', 'warn', 'error' ].includes(level)) {
-      this[level](...rest)
-    } else {
-      this.info(...rest)
+    if (json && json.toString() !== '[object Object]') {
+      return {
+        ...json,
+        ...defaultPayload,
+        message: typeof message === 'string' ? message : (jsonMessage ?? null),
+      }
+    }
+    return {
+      ...defaultPayload,
+      message: typeof message === 'string' ? message : (jsonMessage ?? null),
     }
   }
 
-  debug = (...params) => {
-    const id = cuid()
-    if (!this.isPrivate) console.log(`dappHeroLogId: ${id}\n`, ...params)
-    this.post('debug', id, ...params)
+  log = (message, json: Record<string, any> = null): void => {
+    this.orchestrateLogging('debug', message, json)
   }
 
-  info = (...params) => {
-    const id = cuid()
-    if (!this.isPrivate) console.info(`dappHeroLogId: ${id}\n`, ...params)
-    this.post('info', id, ...params)
+  info = (message, json: Record<string, any> = null): void => {
+    this.orchestrateLogging('info', message, json)
   }
 
-  warn = (...params) => {
-    const id = cuid()
-    if (!this.isPrivate) console.warn(`dappHeroLogId: ${id}\n`, ...params)
-    this.post('warn', id, ...params)
+  warn = (message, json: Record<string, any> = null ): void => {
+    this.orchestrateLogging('warn', message, json)
   }
 
-  error = (...params) => {
-    const id = cuid()
-    if (!this.isPrivate) console.error(`dappHeroLogId: ${id}\n`, ...params)
-    this.post('error', id, ...params)
+  error = (message, json: Record<string, any> = null): void => {
+    this.orchestrateLogging('error', message, json)
   }
-
 }
 
 export const logger = new DappHeroLogger()
-

@@ -1,7 +1,7 @@
 import Axios from 'axios'
 import { logger } from 'logger/customLogger'
 import abi from '../abi/DappHeroTest.json' // eslint-disable-line
-const axios = Axios.create()
+const axios = Axios.create({ headers: { 'content-type': 'application/json' } })
 
 // Refactor when this is more fleshed out
 const DEV_URL = 'https://dapphero-admin.bubbleapps.io/api/1.1/wf/contracts'
@@ -9,16 +9,42 @@ const PROD_URL = 'https://dapphero-admin.bubbleapps.io/api/1.1/wf/contracts'
 
 const BASE_URL = process.env.NODE_ENV === 'production' ? PROD_URL : DEV_URL
 
-export const getContractByName = (contractName) => ({
-  abi,
-  contractAddress: '0x665605c40EECc83B51B56ad59bbEeaeF1aFE3330',
-  networkId: 3,
-})
+const BUBBLE_ENDPOINT = false
+
+const POST = 'post'
+const GET = 'get'
+const PUT = 'put'
+const DELETE = 'delete'
+
+export const sendLogsToConsole = (json): void => {
+  const { level, deviceId, isAnalytics, projectId, timestamp, message, ...restOfJson } = json
+  const logItems = [ ...restOfJson ].map((item) => [ item, '/n' ]).flat(1)
+  console.log(message, '\n', ...logItems)
+}
+
+export const postLogToDappHeroBackend = (payload) => {
+  axios({
+    method: POST,
+    url: `http://localhost:5000/log`,
+    // url: `https://api.dapphero.io/log`,
+    data: payload,
+  }).catch((e) => {
+    console.log(e)
+  })
+}
+
+export const postLogToBubbleBackend = (payload) => {
+  axios({
+    method: POST,
+    url: `BUBBLE_ENDPOINT`,
+    data: payload,
+  }).catch((e) => {
+    console.log(e)
+  })
+}
 
 export const getContractsByProjectKey = async (projectId) => {
-
-  // For Development, on localhost the project URL is empty.
-  logger.debug('projectId:', projectId)
+  logger.log(`projectId: ${projectId}`)
 
   const body = { projectId }
   try {

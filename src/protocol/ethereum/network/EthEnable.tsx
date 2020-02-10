@@ -6,7 +6,7 @@ import ReactTooltip from 'react-tooltip'
 import { useWeb3React } from '@web3-react/core'
 
 interface EthEnableProps {
-  element: HTMLElement
+  element: HTMLElement;
 }
 /**
  * This function attaches a click handler to any element that a user wants to be responsbile for
@@ -35,7 +35,7 @@ export const EthEnable: FunctionComponent<EthEnableProps> = ({ element }) => {
 
       return (() => element.removeEventListener('click', clickHandler, true))
     } catch (e) {
-      logger.debug(e)
+      logger.log(e)
     }
   }, [ injected.active ])
 

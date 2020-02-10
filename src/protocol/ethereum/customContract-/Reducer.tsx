@@ -110,7 +110,7 @@ export const Reducer = ({ info, configuration }) => {
           notify.hash(methodResult.hash)
 
           // Log transaction to Database
-          logger.debug(methodResult)
+          logger.log(methodResult)
 
           // Set Result on State
           setResult(methodResult.hash)

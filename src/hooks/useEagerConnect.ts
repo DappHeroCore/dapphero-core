@@ -12,20 +12,20 @@ export const useEagerConnect = () => {
   useEffect(() => {
     connectors.injected.isAuthorized().then((isAuthorized) => {
       if (isAuthorized) {
-        activate(connectors.injected, (err) => { logger.debug('isAuthorize', err) }, true).catch(() => {
+        activate(connectors.injected, (err) => { logger.log('isAuthorize', err) }, true).catch(() => {
           logger.info('User was already logged in')
           setTried(true)
         })
       } else if (
         isMobile && window.ethereum
       ) {
-        activate(connectors.injected, (err) => { logger.debug('isAuthorize', err) }, true).catch(() => {
+        activate(connectors.injected, (err) => { logger.log('isAuthorize', err) }, true).catch(() => {
           logger.info('User was already logged in to a mobile device')
           setTried(true)
         })
       } else {
         // TODO: add/remove this line
-        // activate(connectors.injected, (err) => { logger.debug('isAuthorize', err) }, true).catch(() => {
+        // activate(connectors.injected, (err) => { logger.log('isAuthorize', err) }, true).catch(() => {
         logger.info('User was not already logged in')
         setTried(true)
         // })

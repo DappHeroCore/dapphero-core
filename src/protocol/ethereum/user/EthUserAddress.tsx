@@ -6,7 +6,7 @@ import { logger } from 'logger/customLogger'
 
 interface EthUserAddressProps {
   element: HTMLElement;
-  displayFormat: 'short' | 'full'
+  displayFormat: 'short' | 'full';
 }
 
 export const EthUserAddress: FunctionComponent<EthUserAddressProps> = ({ element, displayFormat }) => {
@@ -19,7 +19,7 @@ export const EthUserAddress: FunctionComponent<EthUserAddressProps> = ({ element
         element.innerHTML = displayFormat === 'short' ? `${account.slice(0, 4)}...${account.slice(account.length - 5)}` : account
       }
     } catch (e) {
-      logger.debug('Getting account address failed', e)
+      logger.log('Getting account address failed', e)
     }
   }, [ account ])
 

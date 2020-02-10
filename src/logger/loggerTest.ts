@@ -3,7 +3,7 @@ import { logger } from './customLogger'
 
 export const loggerTest = () => {
   // logger.log('info', 'The logger.log function')
-  // logger.debug('The logger.debug function', 'is working')
+  // logger.log('The logger.log function', 'is working')
   // logger.info('The logger.info function', 'is working')
   // logger.warn('The logger.warn function', 'is working')
   // logger.error('The logger.error function', 'is working')
@@ -16,5 +16,5 @@ export const loggerTest = () => {
   // }
   // logger.info('Test Object: ', infoObj)
 
-  logger.private.info('This is a private message')
+  // logger.private.info('This is a private message')
 }

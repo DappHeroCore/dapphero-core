@@ -8,8 +8,8 @@ const { getProfile: get3boxProfile } = require('3box/lib/api')
 
 const ipfsRoot = 'https://cloudflare-ipfs.com/ipfs/'
 interface ReducerProps {
-  element: HTMLElement
-  info: any
+  element: HTMLElement;
+  info: any;
 }
 
 export const Reducer: FunctionComponent<ReducerProps> = ({ element, info }) => {
@@ -34,7 +34,7 @@ export const Reducer: FunctionComponent<ReducerProps> = ({ element, info }) => {
         const profile = await get3boxProfile(account)
         setThreeBoxProfile(profile)
       } catch (error) {
-        logger.debug('You have no profile. ', error)
+        logger.log('You have no profile. ', error)
       }
     }
     getProfile()
