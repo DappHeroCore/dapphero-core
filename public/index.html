@@ -280,14 +280,15 @@
         data-dh-property-contract-name="dappherotest"
         data-dh-property-method-name="sendEthWithArgs"
         data-dh-property-method-id="001b"
-        data-dh-property-auto-invoke="true"
       >
         <input
           data-dh-property-method-id="001b"
           data-dh-property-input-name="simpleMessage"
+          data-dh-modifier-contract-units="bytes32"
+          data-dh-modifier-display-units="ascii"
           class="w-input"
           placeholder="Message:"
-          value="$CURRENT_USER"
+          value="howdy"
         />
 
         <input
@@ -303,7 +304,7 @@
           Submit
         </button>
 
-        <div data-dh-property-method-id="001b" data-dh-property-outputs class="component-div">
+        <div data-dh-property-method-id="001b" data-dh-property-outputs data-dh-contract-units="bytes32" data-dh-display-units="ascii" class="component-div">
           *Return value: -*
         </div>
       </div>
