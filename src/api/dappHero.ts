@@ -25,8 +25,8 @@ export const sendLogsToConsole = (json): void => {
 export const postLogToDappHeroBackend = (payload) => {
   axios({
     method: POST,
-    url: `http://localhost:5000/log`,
-    // url: `https://api.dapphero.io/log`,
+    // url: `http://localhost:5000/log`,
+    url: `https://api.dapphero.io/log`,
     data: payload,
   }).catch((e) => {
     console.log(e)
