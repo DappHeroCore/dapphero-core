@@ -159,7 +159,7 @@ export const Reducer = ({ info, configuration }) => {
           try {
             const displayUnits = element.getAttribute('data-dh-modifier-display-units')
             const contractUnits = element.getAttribute('data-dh-modifier-contract-units')
-            const convertedValue = (displayUnits || contractUnits) ? utils.convertUnits(displayUnits, contractUnits, value) : value
+            const convertedValue = value && (displayUnits || contractUnits) ? utils.convertUnits(displayUnits, contractUnits, value) : value
             setParameters((prevParameters) => ({
               ...prevParameters,
               [argumentName]: convertedValue,
@@ -212,17 +212,7 @@ export const Reducer = ({ info, configuration }) => {
   useEffect(() => {
     if (result) {
       // TODO: Check output type
-      let parsedValue = result
-
-      // TODO: Handle modifiers
-      modifiers.forEach(({ key, value }) => {
-        if (key === 'units') {
-          if (value === 'ether') {
-            parsedValue = ethers.utils.formatEther(parsedValue)
-          }
-        }
-        if (key === 'decimals') parsedValue = Number(parsedValue).toFixed(value)
-      })
+      const parsedValue = result
 
       // TODO: Check if result is an object and check if there's an output-name with one of those key names
       // Insert result in all output elements
@@ -231,7 +221,23 @@ export const Reducer = ({ info, configuration }) => {
 
       if (outputsChildrenElements?.element) {
         outputsChildrenElements.element.forEach(({ element }) => {
-          Object.assign(element, { textContent: parsedValue })
+          if (typeof result === 'string') {
+            const displayUnits = element.getAttribute('data-dh-modifier-display-units')
+            const contractUnits = element.getAttribute('data-dh-modifier-contract-units')
+            const decimals = ( element.getAttribute('data-dh-modifier-decimal-units') || element.getAttribute('data-dh-modifier-decimals') ) ?? null
+
+            const convertedValue = result && (displayUnits || contractUnits) ? utils.convertUnits(contractUnits, displayUnits, result) : result
+
+            const isNumber = !Number.isNaN(Number(convertedValue))
+            if (decimals && isNumber) {
+              const decimalConvertedValue = Number(convertedValue).toFixed(decimals).toString()
+              element.innerText = decimalConvertedValue
+            } else {
+              Object.assign( element, { textContent: convertedValue } )
+            }
+          } else {
+            Object.assign(element, { textContent: parsedValue })
+          }
         })
       }
 
@@ -242,7 +248,7 @@ export const Reducer = ({ info, configuration }) => {
           const displayUnits = element.getAttribute('data-dh-modifier-display-units')
           const contractUnits = element.getAttribute('data-dh-modifier-contract-units')
           const decimals = ( element.getAttribute('data-dh-modifier-decimal-units') || element.getAttribute('data-dh-modifier-decimals') ) ?? null
-          const convertedValue = (displayUnits || contractUnits) ? utils.convertUnits(contractUnits, displayUnits, parsedValue[outputName]) : parsedValue[outputName]
+          const convertedValue = parsedValue[outputName] && (displayUnits || contractUnits) ? utils.convertUnits(contractUnits, displayUnits, parsedValue[outputName]) : parsedValue[outputName]
           const isNumber = !Number.isNaN(Number(convertedValue))
           if (decimals && isNumber) {
             const decimalConvertedValue = Number(convertedValue).toFixed(decimals).toString()
