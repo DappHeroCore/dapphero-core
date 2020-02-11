@@ -11,7 +11,7 @@ import { useWeb3React } from '@web3-react/core'
 const blockNativeApiKey = process.env.REACT_APP_BLOCKNATIVE_API
 
 // Utils
-const getAbiMethodInputs = (abi, methodName) => {
+const getAbiMethodInputs = (abi, methodName): Record<string, any> => {
   const method = abi.find(({ name }) => name === methodName)
   const output = method.inputs.reduce((acc, { name }) => ({ ...acc, [name]: '' }), [])
   return output
@@ -30,24 +30,21 @@ export const Reducer = ({ info, configuration }) => {
 
   const { value: methodName } = methodNameKey
 
-  // Custom Hooks
-
+  // Injected Web3 Context
   const injectedContext = useWeb3React()
 
+  // Toast Notifications
   const { addToast } = useToasts()
-  const errorToast = ({ message }) => addToast(message, { appearance: 'error' })
-  const infoToast = ({ message }) => addToast(message, { appearance: 'info' })
+  const errorToast = ({ message }): void => addToast(message, { appearance: 'error' })
+  const infoToast = ({ message }): void => addToast(message, { appearance: 'info' })
 
   // States
   const [ result, setResult ] = useState(null)
-  const [ context, setcontext ] = useState(injectedContext)
   const [ parameters, setParameters ] = useState(getAbiMethodInputs(info.contract.contractAbi, methodName))
 
   // -> Handlers
-  const handleRunMethod = async (event = null) => {
-    if (event) {
-      event.preventDefault()
-    }
+  const handleRunMethod = async (event = null): Promise<void> => {
+    if (event) event.preventDefault()
 
     const ethValue = parameters?.EthValue
 
@@ -140,11 +137,6 @@ export const Reducer = ({ info, configuration }) => {
     }
   }
 
-  // -> Effects
-  useEffect(() => {
-    setcontext(injectedContext)
-  }, [ injectedContext.chainId ])
-
   // Add triggers to input elements
   useEffect(() => {
     const inputChildrens = childrenElements.filter(({ id }) => id.includes('input'))
@@ -152,7 +144,7 @@ export const Reducer = ({ info, configuration }) => {
     if (inputChildrens.length > 0) {
       const [ inputs ] = inputChildrens
       const tearDowns = inputs.element.map(({ element, argumentName }) => {
-        const clickHandlerFunction = (rawValue: string) => {
+        const clickHandlerFunction = (rawValue: string): void => {
           const value = injectedContext?.account
             ? rawValue.replace(consts.clientSide.currentUser, injectedContext.account) ?? rawValue
             : rawValue
@@ -170,15 +162,16 @@ export const Reducer = ({ info, configuration }) => {
           element.value = value
         }
         clickHandlerFunction(element.value)
-        const clickHandler = (event) => {
+        const clickHandler = (event): void => {
           clickHandlerFunction(event.target.value)
         }
         element.addEventListener('input', clickHandler)
-        return () => {
+
+        return (): void => {
           element.removeEventListener('input', clickHandler)
         }
       })
-      return () => {
+      return (): void => {
         tearDowns.forEach((cb) => cb())
       }
     }
@@ -192,7 +185,7 @@ export const Reducer = ({ info, configuration }) => {
       invokeButtons.forEach(({ element }) => element.addEventListener('click', handleRunMethod))
     }
 
-    return () => invokeButtons.forEach(({ element }) => element.removeEventListener('click', handleRunMethod))
+    return (): void => invokeButtons.forEach(({ element }) => element.removeEventListener('click', handleRunMethod))
   }, [ childrenElements, handleRunMethod ])
 
   // Auto invoke method
@@ -211,11 +204,8 @@ export const Reducer = ({ info, configuration }) => {
   // Display new results in the UI
   useEffect(() => {
     if (result) {
-      // TODO: Check output type
       const parsedValue = result
 
-      // TODO: Check if result is an object and check if there's an output-name with one of those key names
-      // Insert result in all output elements
       const outputsChildrenElements = childrenElements.find(({ id }) => id.includes('output'))
       const outputNamedChildrenElements = childrenElements.find(({ id }) => id.includes('outputName'))
 

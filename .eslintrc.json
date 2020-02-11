@@ -28,6 +28,7 @@
         "eslint-plugin-react-hooks"
     ],
     "rules": {
+        "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/no-unused-vars": ["warn", { "args": "all", "varsIgnorePattern": "React", "argsIgnorePattern": "event" } ],
         "accessor-pairs": "off",
         "array-bracket-spacing": ["warn", "always"],
