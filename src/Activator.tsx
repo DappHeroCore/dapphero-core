@@ -14,6 +14,13 @@ export const Activator = ({ configuration }) => {
 
   const attemptedEagerConnect = hooks.useEagerConnect()
 
+  window.dappHero = {
+    enabled: true,
+    domElements,
+    configuration,
+    projectId: consts.global.apiKey,
+  }
+
   if (attemptedEagerConnect) {
     return (
       <>
