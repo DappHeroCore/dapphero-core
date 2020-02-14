@@ -5,9 +5,19 @@ import * as config from 'config'
 import { postLogToBubbleBackend, postLogToDappHeroBackend } from 'api/dappHero'
 
 export const sendLogsToConsole = (json: any): void => {
-  const { level, deviceId, isAnalytics, projectId, timestamp, message, ...restOfJson } = json
-  const logItems = [ ...restOfJson ].map((item) => [ item, '/n' ]).flat(1)
-  console.log(message, '\n', ...logItems)
+  try {
+    const { level, epoch, deviceId, isAnalytics, projectId, timestamp, message, ...restOfJson } = json
+    if (restOfJson && window?.dappHero?.debug) {
+      const logItems = restOfJson && Object.entries(restOfJson).map(([ key, value ]) => [ `${key}: ${value}`, '\n' ]).flat(1)
+      if (message) {
+        console.log(message, '\n', ...logItems)
+      } else {
+        console.log(...logItems)
+      }
+    }
+  } catch (err) {
+    console.log('There was a problem logging to the console')
+  }
 }
 export class DappHeroLogger {
 
@@ -40,15 +50,18 @@ export class DappHeroLogger {
     const json = this.formatPayload(level, message, obj)
 
     // Determine if logs should be sent to console
-    switch (true) {
-      case (this.isPublic):
-      case (this.isDebug && config.app.clientDebug):
-      case (!this.isPrivate && config.app.devDebug ): {
-        sendLogsToConsole(json)
-        break
-      }
-      default: break
-    }
+    // switch (true) {
+    //   case (this.isPublic): {
+    //     sendLogsToConsole(json)
+    //     break
+    //   }
+    //   case (window.dappHero?.debug): {
+    //     sendLogsToConsole(json)
+    //     break
+    //   }
+    //   default: break
+    // }
+    sendLogsToConsole(json)
 
     // Send logs to bubble backend for analytics
     if (this.isAnalytics) postLogToBubbleBackend(json)
