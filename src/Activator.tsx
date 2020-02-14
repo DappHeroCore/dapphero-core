@@ -19,6 +19,7 @@ export const Activator = ({ configuration }) => {
     domElements,
     configuration,
     projectId: consts.global.apiKey,
+    debug: false,
   }
 
   if (attemptedEagerConnect) {

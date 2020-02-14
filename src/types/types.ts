@@ -1,7 +1,23 @@
+declare global {
+  interface Window {
+    ethereum: any;
+    dappHero: {
+      enabled: true;
+      domElements: Element[];
+      configuration: {
+        [key: string]: any;
+        contracts: any[];
+      };
+      projectId: string;
+      debug: boolean;
+    };
+  }
+}
+
 export type EthereumUnits = 'wei' | 'ether'
 
 export interface DappHeroConfiguration {
-  contracts: {[key: string]: any}[]
+  contracts: {[key: string]: any}[];
 }
 
 export interface Request {
@@ -18,8 +34,8 @@ export interface Network {
 }
 
 export interface DappHeroConfig {
-  contracts: any[],
-  contractName?: string,
+  contracts: any[];
+  contractName?: string;
   network?: Network;
 }
 
@@ -31,26 +47,15 @@ export type EthContractProps = {
   signifiers: { [key: string]: string };
   instance: any; // build this type
   mock?: {
-    abi: any[],
-    contractAddress: string
-  }
+    abi: any[];
+    contractAddress: string;
+  };
 }
 
 export enum FunctionTypes {
   VIEW = 'view',
   NONPAYABLE = 'nonpayable',
   PAYABLE = 'payable'
-}
-
-// rename Z-TAGS?
-// TODO: Be clear in docs that ideas cannot start with any of these 'z's
-export enum Signifiers {
-  IDENTIFY_RETURN_VALUE = 'zr',
-  UNIT ='zu',
-  DECIMAL = 'zd',
-  PAYABLE = 'zp',
-  CHILD_ELEMENT = 'zc',
-  ITEM_PAGE = 'zi'
 }
 
 export enum RequestString {
