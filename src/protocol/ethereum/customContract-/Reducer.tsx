@@ -45,7 +45,12 @@ export const Reducer = ({ info, configuration }) => {
 
   // -> Handlers
   const handleRunMethod = async (event = null): Promise<void> => {
-    if (event) event.preventDefault()
+    if (event) {
+      try {
+        event.preventDefault()
+        event.stopPropagation()
+      } catch (err) {}
+    }
 
     const ethValue = parameters?.EthValue
 

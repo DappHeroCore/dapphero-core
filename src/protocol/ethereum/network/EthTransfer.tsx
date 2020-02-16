@@ -7,12 +7,12 @@ import { useWeb3React } from '@web3-react/core'
 
 const apiKey = process.env.REACT_APP_BLOCKNATIVE_API
 interface EthTransferProps {
-  element: HTMLElement
-  amountObj: {[key: string]: any}
-  addressObj: {[key: string]: any}
-  outputObj?: {[key: string]: any}
+  element: HTMLElement;
+  amountObj: {[key: string]: any};
+  addressObj: {[key: string]: any};
+  outputObj?: {[key: string]: any};
   // TODO: put correct type
-  info?: {[key: string]: any}
+  info?: {[key: string]: any};
 }
 // TODO: [BS-16] Add feature for sending fixed amount of eth without any inputs
 // TODO: [DEV-109] add blocknative support for simple eth transfers
@@ -24,7 +24,10 @@ export const EthTransfer: FunctionComponent<EthTransferProps> = ({ element, amou
   useEffect(() => {
     const transferEther = (e) => {
       try {
-        e.preventDefault()
+        try {
+          e.preventDefault()
+          e.stopPropagation()
+        } catch (err) {}
         const notify = Notify({
           dappId: apiKey, // [String] The API key created by step one above
           networkId: library._network.chainId, // [Integer] The Ethereum network ID your Dapp uses.
