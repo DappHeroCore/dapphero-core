@@ -49,7 +49,7 @@ export const Reducer = ({ info, configuration }) => {
       try {
         event.preventDefault()
         event.stopPropagation()
-      }
+      } catch (err) {}
     }
 
     const ethValue = parameters?.EthValue
