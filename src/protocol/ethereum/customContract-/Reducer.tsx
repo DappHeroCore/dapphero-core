@@ -9,6 +9,7 @@ import * as consts from 'consts'
 import { useWeb3React } from '@web3-react/core'
 
 const blockNativeApiKey = process.env.REACT_APP_BLOCKNATIVE_API
+const POLLING_INTERVAL = 1000
 
 // Utils
 const getAbiMethodInputs = (abi, methodName): Record<string, any> => {
@@ -197,6 +198,8 @@ export const Reducer = ({ info, configuration }) => {
       const { value } = autoInvokeKey
       if (value === 'true' && !isTransaction) {
         handleRunMethod()
+        const intervalId = setInterval(handleRunMethod, POLLING_INTERVAL)
+        return (): void => { clearInterval(intervalId) }
       }
     }
   }, [ autoInvokeKey, handleRunMethod ])

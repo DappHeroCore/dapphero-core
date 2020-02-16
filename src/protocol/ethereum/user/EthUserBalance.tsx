@@ -4,7 +4,7 @@ import { EthereumUnits } from 'types/types'
 import * as utils from 'utils'
 import { useWeb3React } from '@web3-react/core'
 
-const POLLING_INTERVAL = 2000
+const POLLING_INTERVAL = 1000
 
 interface EthUserBalanceProps {
   element: HTMLElement;
