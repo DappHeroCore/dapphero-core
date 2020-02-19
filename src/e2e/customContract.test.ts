@@ -98,6 +98,64 @@ describe('Test CustomContract Feature', () => {
     expect(isHexString).toBeTruthy()
   })
 
+  it('should test "sendEthWithArgs" method with hardcoded Eth', async () => {
+    // Method id
+    const ID = '001a'
+
+    // Selectors
+    const outputDivSelector = createOutputDivSelector(ID)
+    const submitButtonSelector = createSubmitButtonSelector(ID)
+    const inputDivSelector = createInputSelector(ID, 'simpleMessage')
+
+    // Type
+    const message = ethers.utils.formatBytes32String('DappHero')
+    await page.focus(inputDivSelector)
+    await page.keyboard.type(message)
+
+    // Submit Method
+    await page.click(submitButtonSelector)
+
+    // Confirm Metamask transaction
+    await page.waitFor(1000)
+    await metamask.confirmTransaction()
+    await page.bringToFront()
+
+    // Wait until method it's triggered and returns value
+    await page.waitFor(3000)
+
+    const outputDiv = await page.$(outputDivSelector)
+    const outputText = await page.evaluate((el) => el.innerText, outputDiv)
+
+    const isHexString = ethers.utils.isHexString(outputText)
+    expect(isHexString).toBeTruthy()
+  })
+
+  it('should test "sendEthWithArgs" method with user input Eth', async () => {
+    // Method id
+    const ID = '001b'
+
+    // Selectors
+    const outputDivSelector = createOutputDivSelector(ID)
+    const submitButtonSelector = createSubmitButtonSelector(ID)
+
+    // Submit Method
+    await page.click(submitButtonSelector)
+
+    // Confirm Metamask transaction
+    await page.waitFor(1000)
+    await metamask.confirmTransaction()
+    await page.bringToFront()
+
+    // Wait until method it's triggered and returns value
+    await page.waitFor(3000)
+
+    const outputDiv = await page.$(outputDivSelector)
+    const outputText = await page.evaluate((el) => el.innerText, outputDiv)
+
+    const isHexString = ethers.utils.isHexString(outputText)
+    expect(isHexString).toBeTruthy()
+  })
+
   afterAll(async () => {
     // await browser.close()
   })
