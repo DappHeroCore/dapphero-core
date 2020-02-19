@@ -12,11 +12,11 @@ const createInputAttribute = (name = ''): string => `[data-dh-property-input-nam
 
 const createSubmitButtonSelector = (id): string => `button${createMethodAttribute(id)}`
 const createOutputDivSelector = (id): string => `div${createMethodAttribute(id)}${createOutputAttribute()}`
-const createInputDivSelector = (id, inputName): string => `input${createMethodAttribute(id)}${createInputAttribute(inputName)}`
+const createInputSelector = (id, inputName): string => `input${createMethodAttribute(id)}${createInputAttribute(inputName)}`
 
 // Constants
 const NETWORKS = { rinkeby: 'rinkeby' }
-const ACCOUNTS = { main: 1 }
+const ACCOUNTS = { default: 1 }
 
 // Increast Jest default timeout
 jest.setTimeout(20000)
@@ -38,7 +38,7 @@ describe('Test CustomContract Feature', () => {
     })
 
     await metamask.switchNetwork(NETWORKS.rinkeby)
-    await metamask.switchAccount(ACCOUNTS.main)
+    await metamask.switchAccount(ACCOUNTS.default)
 
     page = await browser.newPage()
     done()
@@ -73,11 +73,10 @@ describe('Test CustomContract Feature', () => {
     // Selectors
     const outputDivSelector = createOutputDivSelector(ID)
     const submitButtonSelector = createSubmitButtonSelector(ID)
-    const inputDivSelector = createInputDivSelector(ID, 'simpleMessage')
+    const inputDivSelector = createInputSelector(ID, 'simpleMessage')
 
     // Type
     const message = ethers.utils.formatBytes32String('DappHero')
-    console.log('TCL: message', message)
     await page.focus(inputDivSelector)
     await page.keyboard.type(message)
 
@@ -85,6 +84,7 @@ describe('Test CustomContract Feature', () => {
     await page.click(submitButtonSelector)
 
     // Confirm Metamask transaction
+    await page.waitFor(1000)
     await metamask.confirmTransaction()
     await page.bringToFront()
 
@@ -93,7 +93,6 @@ describe('Test CustomContract Feature', () => {
 
     const outputDiv = await page.$(outputDivSelector)
     const outputText = await page.evaluate((el) => el.innerText, outputDiv)
-    console.log('TCL: outputText', outputText)
 
     const isHexString = ethers.utils.isHexString(outputText)
     expect(isHexString).toBeTruthy()
