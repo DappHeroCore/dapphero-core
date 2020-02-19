@@ -42,6 +42,7 @@ export const FeatureReducer = ({ feature, element, configuration, info }: Featur
     }
 
     case 'customContract': {
+      // FIXME: We're going to remove !isProduction conditional when Dappeteer library gets updated with chainId support
       if (
         !isProduction
         || (injectedContext?.chainId && info?.contract.networkId && injectedContext.chainId === info.contract.networkId)
