@@ -2,6 +2,15 @@
 
 *dependencies last pinned 1/8/20*
 
+### E2E Testing
+
+To run E2E tests:
+
+```sh
+> yarn start // or npm run start
+> yarn test  // or npm run test
+```
+
 ### `npm start`
 
 Runs the app in the development mode.<br />
