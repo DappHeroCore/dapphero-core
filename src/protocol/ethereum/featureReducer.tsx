@@ -18,12 +18,6 @@ export const FeatureReducer = ({ feature, element, configuration, info }: Featur
   const injectedContext = useWeb3React()
   const featureType = feature
 
-  if (info?.properties_?.methodId === '001') {
-    console.log('TCL: FeatureReducer -> info', info)
-    console.log('TCL: FeatureReducer -> featureType', featureType)
-    console.log('TCL: FeatureReducer -> injectedContext', injectedContext)
-  }
-
   switch (featureType) {
     case 'nft': {
       return <NftReducer element={element} configuration={configuration} info={info} />
