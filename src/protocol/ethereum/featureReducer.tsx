@@ -6,7 +6,7 @@ import { Reducer as NetworkReducer } from './network/Reducer'
 import { Reducer as UserReducer } from './user/Reducer'
 import { Reducer as ThreeBoxReducer } from './threeBox/Reducer'
 import { Reducer as NftReducer } from './nft/Reducer'
-import { Reducer as CustomContractReducer } from './customContract-/Reducer'
+import { Reducer as CustomContractReducer } from './customContract/Reducer'
 
 // Types
 import { FeatureReducerProps } from './types'
