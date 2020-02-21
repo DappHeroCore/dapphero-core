@@ -1,3 +1,4 @@
+export * from './dom'
 export * from './parseIdTag'
-export * from './addClickHandlerToTriggerElement'
 export * from './convertUnits'
+export * from './addClickHandlerToTriggerElement'
