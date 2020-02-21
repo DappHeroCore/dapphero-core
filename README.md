@@ -4,11 +4,18 @@
 
 ### E2E Testing
 
-To run E2E tests:
+1. Fulfill the following env variables:
 
+```
+E2E_METAMASK_SEED=
+E2E_METAMASK_ADDRESS=
+E2E_METAMASK_PASSWORD=
+```
+
+2. Run the following commands:
 ```sh
 > yarn start // or npm run start
-> yarn test  // or npm run test
+> yarn test:e2e  // or npm run test
 ```
 
 ### `npm start`
