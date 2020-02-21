@@ -10,9 +10,6 @@ import { useWeb3React } from '@web3-react/core'
 
 const blockNativeApiKey = process.env.REACT_APP_BLOCKNATIVE_API
 
-const message = ethers.utils.formatBytes32String('DappHero')
-console.log('TCL: message', message)
-
 // Utils
 const getAbiMethodInputs = (abi, methodName): Record<string, any> => {
   const method = abi.find(({ name }) => name === methodName)
