@@ -1,8 +1,15 @@
-import puppeteer from 'puppeteer'
-import { ethers } from 'ethers'
-import * as utils from 'utils'
-import * as dappeteer from 'dappeteer'
 import dotenv from 'dotenv'
+import { ethers } from 'ethers'
+import puppeteer from 'puppeteer'
+import * as dappeteer from 'dappeteer'
+
+import {
+  createInputSelector,
+  createParentSelector,
+  createOutputDivSelector,
+  createSubmitButtonSelector,
+  createOutputNameDivSelector,
+} from '../utils/dom'
 
 // Load env variables
 dotenv.config()
@@ -10,12 +17,12 @@ dotenv.config()
 // Constants
 const ACCOUNTS = { default: 1 }
 const NETWORKS = { rinkeby: 'rinkeby' }
-const { E2E_METAMASK_ADDRESS, E2E_METAMASK_SEED, E2E_METAMASK_PASSWORD } = process.env
+const { E2E_METAMASK_SEED, E2E_METAMASK_PASSWORD, E2E_METAMASK_ADDRESS } = process.env
 
 // Increast Jest default timeout
 jest.setTimeout(2000000)
 
-// Test setup
+// Setup
 let page
 let browser
 let metamask
@@ -53,9 +60,9 @@ afterAll(async () => {
 describe('Test CustomContract feature for "hello" method', () => {
   it('should test "hello" method', async () => {
     const ID = '000'
-    const parentSelector = utils.createParentSelector(ID)
-    const outputDivSelector = utils.createOutputDivSelector(ID)
-    const submitButtonSelector = utils.createSubmitButtonSelector(ID)
+    const parentSelector = createParentSelector(ID)
+    const outputDivSelector = createOutputDivSelector(ID)
+    const submitButtonSelector = createSubmitButtonSelector(ID)
 
     // Scroll into element
     const parentDiv = await page.$(parentSelector)
@@ -82,10 +89,10 @@ describe('Test CustomContract feature for "sendEthWithArgs" methods', () => {
     const ID = '001'
 
     // Selectors
-    const parentSelector = utils.createParentSelector(ID)
-    const outputDivSelector = utils.createOutputDivSelector(ID)
-    const submitButtonSelector = utils.createSubmitButtonSelector(ID)
-    const inputSelector = utils.createInputSelector(ID, 'simpleMessage')
+    const parentSelector = createParentSelector(ID)
+    const outputDivSelector = createOutputDivSelector(ID)
+    const submitButtonSelector = createSubmitButtonSelector(ID)
+    const inputSelector = createInputSelector(ID, 'simpleMessage')
 
     // Scroll into element
     const parentDiv = await page.$(parentSelector)
@@ -120,10 +127,10 @@ describe('Test CustomContract feature for "sendEthWithArgs" methods', () => {
     const ID = '001a'
 
     // Selectors
-    const parentSelector = utils.createParentSelector(ID)
-    const outputDivSelector = utils.createOutputDivSelector(ID)
-    const submitButtonSelector = utils.createSubmitButtonSelector(ID)
-    const inputSelector = utils.createInputSelector(ID, 'simpleMessage')
+    const parentSelector = createParentSelector(ID)
+    const outputDivSelector = createOutputDivSelector(ID)
+    const submitButtonSelector = createSubmitButtonSelector(ID)
+    const inputSelector = createInputSelector(ID, 'simpleMessage')
 
     // Scroll into element
     const parentDiv = await page.$(parentSelector)
@@ -158,9 +165,9 @@ describe('Test CustomContract feature for "sendEthWithArgs" methods', () => {
     const ID = '001b'
 
     // Selectors
-    const parentSelector = utils.createParentSelector(ID)
-    const outputDivSelector = utils.createOutputDivSelector(ID)
-    const submitButtonSelector = utils.createSubmitButtonSelector(ID)
+    const parentSelector = createParentSelector(ID)
+    const outputDivSelector = createOutputDivSelector(ID)
+    const submitButtonSelector = createSubmitButtonSelector(ID)
 
     // Scroll into element
     const parentDiv = await page.$(parentSelector)
@@ -192,11 +199,11 @@ describe('Test CustomContract feature for "viewMultipleArgs" method', () => {
     const ID = '002'
 
     // Selectors
-    const parentSelector = utils.createParentSelector(ID)
-    const outputDivSelector = utils.createOutputDivSelector(ID)
-    const submitButtonSelector = utils.createSubmitButtonSelector(ID)
-    const amountInputSelector = utils.createInputSelector(ID, 'amount')
-    const fromAddressinputSelector = utils.createInputSelector(ID, 'fromAddress')
+    const parentSelector = createParentSelector(ID)
+    const outputDivSelector = createOutputDivSelector(ID)
+    const submitButtonSelector = createSubmitButtonSelector(ID)
+    const amountInputSelector = createInputSelector(ID, 'amount')
+    const fromAddressinputSelector = createInputSelector(ID, 'fromAddress')
 
     // Scroll into element
     const parentDiv = await page.$(parentSelector)
@@ -239,11 +246,11 @@ describe('Test CustomContract feature for "viewMultipleArgs" method', () => {
     const ID = '004'
 
     // Selectors
-    const parentSelector = utils.createParentSelector(ID)
-    const outputDivSelector = utils.createOutputDivSelector(ID)
-    const submitButtonSelector = utils.createSubmitButtonSelector(ID)
-    const amountInputSelector = utils.createInputSelector(ID, 'amount')
-    const fromAddressinputSelector = utils.createInputSelector(ID, 'fromAddress')
+    const parentSelector = createParentSelector(ID)
+    const outputDivSelector = createOutputDivSelector(ID)
+    const submitButtonSelector = createSubmitButtonSelector(ID)
+    const amountInputSelector = createInputSelector(ID, 'amount')
+    const fromAddressinputSelector = createInputSelector(ID, 'fromAddress')
 
     // Scroll into element
     const parentDiv = await page.$(parentSelector)
@@ -279,9 +286,9 @@ describe('Test CustomContract feature for "sendVariableEthNoArgs" and "viewNoArg
     const ID = '003'
 
     // Selectors
-    const parentSelector = utils.createParentSelector(ID)
-    const outputDivSelector = utils.createOutputDivSelector(ID)
-    const submitButtonSelector = utils.createSubmitButtonSelector(ID)
+    const parentSelector = createParentSelector(ID)
+    const outputDivSelector = createOutputDivSelector(ID)
+    const submitButtonSelector = createSubmitButtonSelector(ID)
 
     // Scroll into element
     const parentDiv = await page.$(parentSelector)
@@ -311,11 +318,11 @@ describe('Test CustomContract feature for "sendVariableEthNoArgs" and "viewNoArg
     const ID = '005'
 
     // Selectors
-    const parentSelector = utils.createParentSelector(ID)
-    const allOutputsDivSelector = utils.createOutputDivSelector(ID)
+    const parentSelector = createParentSelector(ID)
+    const allOutputsDivSelector = createOutputDivSelector(ID)
     const helloOutputDivSelector = createOutputNameDivSelector(ID, 'sayHello')
     const importantNumberOutputDivSelector = createOutputNameDivSelector(ID, 'importantNumber')
-    const submitButtonSelector = utils.createSubmitButtonSelector(ID)
+    const submitButtonSelector = createSubmitButtonSelector(ID)
 
     // Scroll into element
     const parentDiv = await page.$(parentSelector)

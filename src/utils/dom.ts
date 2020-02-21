@@ -1,8 +1,8 @@
 // Attributes
-const createMethodAttribute = (id): string => `[data-dh-property-method-id="${id}"]`
-const createOutputAttribute = (): string => `[data-dh-property-outputs]`
-const createOutputNameAttribute = (name = ''): string => `[data-dh-property-output-name="${name}"]`
-const createInputAttribute = (name = ''): string => `[data-dh-property-input-name="${name}"]`
+export const createMethodAttribute = (id): string => `[data-dh-property-method-id="${id}"]`
+export const createOutputAttribute = (): string => `[data-dh-property-outputs]`
+export const createOutputNameAttribute = (name = ''): string => `[data-dh-property-output-name="${name}"]`
+export const createInputAttribute = (name = ''): string => `[data-dh-property-input-name="${name}"]`
 
 // Selectors
 export const createParentSelector = (id: string): string => `div${createMethodAttribute(id)}`
