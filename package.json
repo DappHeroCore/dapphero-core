@@ -107,9 +107,9 @@
     "start": "node scripts/start.js",
     "build": "node --max-old-space-size=4096 scripts/build.js",
     "test": "node scripts/test.js",
-    "deploy": "aws s3 cp ./build/static/js/main.js s3://package.dapphero.io/ --acl public-read",
-    "serve": "serve -s build",
-    "test:e2e": "npm run test src/e2e"
+    "test:e2e": "npm run test src/e2e",
+    "deploy": "npm run build && aws s3 cp ./build/static/js/main.js s3://package.dapphero.io/ --acl public-read",
+    "serve": "serve -s build"
   },
   "browserslist": {
     "production": [

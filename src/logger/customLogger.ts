@@ -7,7 +7,8 @@ import { postLogToBubbleBackend, postLogToDappHeroBackend } from 'api/dappHero'
 export const sendLogsToConsole = (json: any): void => {
   try {
     const { level, id, epoch, deviceId, isAnalytics, projectId, timestamp, message, ...restOfJson } = json
-    if (restOfJson && (window.location.href.match(/(localhost|127\.0\.0)/) || window?.dappHero?.debug)) {
+    // if (restOfJson && (window.location.href.match(/(localhost|127\.0\.0)/) || window?.dappHero?.debug)) {
+    if (true) {
       const logItems = restOfJson && Object.entries(restOfJson).map(([ key, value ]) => [ `${key}: ${value}`, '\n' ]).flat(1)
       if (message) {
         console.log(message, '\n', ...logItems)
