@@ -13,8 +13,13 @@ const POLLING_INTERVAL = 1000
 
 // Utils
 const getAbiMethodInputs = (abi, methodName): Record<string, any> => {
+  const emptyString = '$true'
+  const parseName = (value: string): string => (value === '' ? emptyString : value)
+
   const method = abi.find(({ name }) => name === methodName)
-  const output = method.inputs.reduce((acc, { name }) => ({ ...acc, [name]: '' }), [])
+  const parsedMethod = Object.assign(method, { inputs: method.inputs.map((input) => ({ ...input, name: parseName(input.name) })) })
+
+  const output = parsedMethod.inputs.reduce((acc, { name }) => ({ ...acc, [name]: '' }), [])
   return output
 }
 
@@ -209,10 +214,13 @@ export const Reducer = ({ info, configuration }) => {
   useEffect(() => {
     if (autoInvokeKey && injectedContext.chainId === info?.contract?.networkId) {
       const { value } = autoInvokeKey
+
       if (value === 'true' && !isTransaction) {
         handleRunMethod()
         const intervalId = setInterval(handleRunMethod, POLLING_INTERVAL)
-        return (): void => { clearInterval(intervalId) }
+        return (): void => {
+          clearInterval(intervalId)
+        }
       }
     }
   }, [ autoInvokeKey, handleRunMethod ])
