@@ -165,7 +165,9 @@ export const Reducer = ({ info, configuration }) => {
 
     if (inputChildrens.length > 0) {
       const [ inputs ] = inputChildrens
-      const tearDowns = inputs.element.map(({ element, argumentName }) => {
+      const tearDowns = inputs.element.map((input) => {
+        const { element, argumentName } = input
+
         const clickHandlerFunction = (rawValue: string): void => {
           const value = injectedContext?.account
             ? rawValue.replace(consts.clientSide.currentUser, injectedContext.account) ?? rawValue
@@ -183,10 +185,16 @@ export const Reducer = ({ info, configuration }) => {
           }
           element.value = value
         }
+
+        const ethValue = ethValueKey?.value
+
         clickHandlerFunction(element.value)
+
         const clickHandler = (event): void => {
-          clickHandlerFunction(event.target.value)
+          const rawValue = ethValue ?? event.target.value
+          clickHandlerFunction(rawValue)
         }
+
         element.addEventListener('input', clickHandler)
 
         return (): void => {
