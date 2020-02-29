@@ -219,7 +219,7 @@ export const Reducer = ({ info, configuration }) => {
 
       if (outputsChildrenElements?.element) {
         outputsChildrenElements.element.forEach(({ element }) => {
-          if (typeof result === 'string') {
+          if (typeof result === 'string' || typeof result === 'object') {
             const displayUnits = element.getAttribute('data-dh-modifier-display-units')
             const contractUnits = element.getAttribute('data-dh-modifier-contract-units')
             const decimals = ( element.getAttribute('data-dh-modifier-decimal-units') || element.getAttribute('data-dh-modifier-decimals') ) ?? null
