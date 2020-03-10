@@ -13,14 +13,29 @@ const POLLING_INTERVAL = 1000
 
 // Utils
 const getAbiMethodInputs = (abi, methodName): Record<string, any> => {
+  const emptyString = '$true'
+  const parseName = (value: string): string => (value === '' ? emptyString : value)
+
   const method = abi.find(({ name }) => name === methodName)
-  const output = method.inputs.reduce((acc, { name }) => ({ ...acc, [name]: '' }), [])
+  const parsedMethod = Object.assign(method, { inputs: method.inputs.map((input) => ({ ...input, name: parseName(input.name) })) })
+
+  const output = parsedMethod.inputs.reduce((acc, { name }) => ({ ...acc, [name]: '' }), [])
   return output
 }
 
 // Reducer Component
 export const Reducer = ({ info, configuration }) => {
-  const { contract, childrenElements, properties, properties_, hasInputs, hasOutputs, isTransaction, modifiers, modifiers_ } = info
+  const {
+    contract,
+    childrenElements,
+    properties,
+    properties_,
+    hasInputs,
+    hasOutputs,
+    isTransaction,
+    modifiers,
+    modifiers_,
+  } = info
 
   const { contractAddress, contractAbi } = contract
 
@@ -80,7 +95,6 @@ export const Reducer = ({ info, configuration }) => {
       const contractInstance = new ethers.Contract(contractAddress, contractAbi, signer)
 
       if (isTransaction) {
-
         const currentNetwork = await signer.provider.getNetwork()
         const notify = Notify({
           dappId: blockNativeApiKey, // [String] The API key created by step one above
@@ -120,14 +134,16 @@ export const Reducer = ({ info, configuration }) => {
         } catch (err) {
           logger.info('invoke contract method failed in transaction', err)
         }
-
       } else {
         const method = contractInstance.functions[methodName]
         try {
           const methodResult = await method(...methodParams)
           setResult(methodResult)
         } catch (err) {
-          logger.info('Invoke contract method failed in view.  This happends when a contract is invoked on the wrong network or when a contract is not deployed on the current network\n', err)
+          logger.info(
+            'Invoke contract method failed in view.  This happends when a contract is invoked on the wrong network or when a contract is not deployed on the current network\n',
+            err,
+          )
           infoToast({ message: 'Invoking a contract function failed.  Are you on the right network?' })
         }
       }
@@ -149,7 +165,9 @@ export const Reducer = ({ info, configuration }) => {
 
     if (inputChildrens.length > 0) {
       const [ inputs ] = inputChildrens
-      const tearDowns = inputs.element.map(({ element, argumentName }) => {
+      const tearDowns = inputs.element.map((input) => {
+        const { element, argumentName } = input
+
         const clickHandlerFunction = (rawValue: string): void => {
           const value = injectedContext?.account
             ? rawValue.replace(consts.clientSide.currentUser, injectedContext.account) ?? rawValue
@@ -167,10 +185,16 @@ export const Reducer = ({ info, configuration }) => {
           }
           element.value = value
         }
+
+        const ethValue = ethValueKey?.value
+
         clickHandlerFunction(element.value)
+
         const clickHandler = (event): void => {
-          clickHandlerFunction(event.target.value)
+          const rawValue = ethValue ?? event.target.value
+          clickHandlerFunction(rawValue)
         }
+
         element.addEventListener('input', clickHandler)
 
         return (): void => {
@@ -196,15 +220,15 @@ export const Reducer = ({ info, configuration }) => {
 
   // Auto invoke method
   useEffect(() => {
-    if (
-      autoInvokeKey
-      && (injectedContext.chainId === info?.contract?.networkId
-      )) {
+    if (autoInvokeKey && injectedContext.chainId === info?.contract?.networkId) {
       const { value } = autoInvokeKey
+
       if (value === 'true' && !isTransaction) {
         handleRunMethod()
         const intervalId = setInterval(handleRunMethod, POLLING_INTERVAL)
-        return (): void => { clearInterval(intervalId) }
+        return (): void => {
+          clearInterval(intervalId)
+        }
       }
     }
   }, [ autoInvokeKey, handleRunMethod ])
@@ -222,16 +246,22 @@ export const Reducer = ({ info, configuration }) => {
           if (typeof result === 'string' || typeof result === 'object') {
             const displayUnits = element.getAttribute('data-dh-modifier-display-units')
             const contractUnits = element.getAttribute('data-dh-modifier-contract-units')
-            const decimals = ( element.getAttribute('data-dh-modifier-decimal-units') || element.getAttribute('data-dh-modifier-decimals') ) ?? null
+            const decimals = (element.getAttribute('data-dh-modifier-decimal-units')
+                || element.getAttribute('data-dh-modifier-decimals'))
+              ?? null
 
-            const convertedValue = result && (displayUnits || contractUnits) ? utils.convertUnits(contractUnits, displayUnits, result) : result
+            const convertedValue = result && (displayUnits || contractUnits)
+              ? utils.convertUnits(contractUnits, displayUnits, result)
+              : result
 
             const isNumber = !Number.isNaN(Number(convertedValue))
             if (decimals && isNumber) {
-              const decimalConvertedValue = Number(convertedValue).toFixed(decimals).toString()
+              const decimalConvertedValue = Number(convertedValue)
+                .toFixed(decimals)
+                .toString()
               element.innerText = decimalConvertedValue
             } else {
-              Object.assign( element, { textContent: convertedValue } )
+              Object.assign(element, { textContent: convertedValue })
             }
           } else {
             Object.assign(element, { textContent: parsedValue })
@@ -241,18 +271,23 @@ export const Reducer = ({ info, configuration }) => {
 
       if (outputNamedChildrenElements?.element) {
         outputNamedChildrenElements.element.forEach(({ element }) => {
-
           const outputName = element.getAttribute('data-dh-property-output-name')
           const displayUnits = element.getAttribute('data-dh-modifier-display-units')
           const contractUnits = element.getAttribute('data-dh-modifier-contract-units')
-          const decimals = ( element.getAttribute('data-dh-modifier-decimal-units') || element.getAttribute('data-dh-modifier-decimals') ) ?? null
-          const convertedValue = parsedValue[outputName] && (displayUnits || contractUnits) ? utils.convertUnits(contractUnits, displayUnits, parsedValue[outputName]) : parsedValue[outputName]
+          const decimals = (element.getAttribute('data-dh-modifier-decimal-units')
+              || element.getAttribute('data-dh-modifier-decimals'))
+            ?? null
+          const convertedValue = parsedValue[outputName] && (displayUnits || contractUnits)
+            ? utils.convertUnits(contractUnits, displayUnits, parsedValue[outputName])
+            : parsedValue[outputName]
           const isNumber = !Number.isNaN(Number(convertedValue))
           if (decimals && isNumber) {
-            const decimalConvertedValue = Number(convertedValue).toFixed(decimals).toString()
+            const decimalConvertedValue = Number(convertedValue)
+              .toFixed(decimals)
+              .toString()
             element.innerText = decimalConvertedValue
           } else {
-            Object.assign( element, { textContent: convertedValue } )
+            Object.assign(element, { textContent: convertedValue })
           }
         })
       }

@@ -1,6 +1,35 @@
 # DappHero Core
 
-*dependencies last pinned 1/8/20*
+_dependencies last pinned 1/8/20_
+
+### E2E Testing
+
+1. Fulfill the following env variables:
+
+```
+E2E_METAMASK_SEED=
+E2E_METAMASK_ADDRESS=
+E2E_METAMASK_PASSWORD=
+```
+
+2. Run the following commands:
+
+```sh
+> yarn start // or npm run start
+> yarn test:e2e  // or npm run test
+```
+
+3. Since tests runs on Rinkeby network you will need Eth you can use [Rinkeby Faucet](https://faucet.rinkeby.io)
+
+   I. Paste this [twitter link](https://twitter.com/intent/tweet?text=Requesting%20faucet%20funds%20into%200x0000000000000000000000000000000000000000%20on%20the%20%23Rinkeby%20%23Ethereum%20test%20network.) into a new browser tab
+
+   II. Change `0x0000000000000000000000000000000000000000` for your address, the one you wrote on the env file (E2E_METAMASK_ADDRESS)
+
+![Captura de Pantalla 2020-02-21 a la(s) 19.20.47](https://i.imgur.com/thXJHfw.png)
+
+III. Copy the Twitter link from your profile to the Faucet input
+
+![Captura de Pantalla 2020-02-21 a la(s) 19.20.47](https://i.imgur.com/1PBDcFR.png)
 
 ### `npm start`
 
@@ -22,7 +51,7 @@ It bundles in production mode and optimizes the build for the best performance.
 
 The build is minified and the filenames include the hashes.<br />
 
-
 ### Eslint fix example
+
 For `getBaseContractData` file
 `npx eslint --fix src/modules/eth/utils/getBaseContractData.ts`
