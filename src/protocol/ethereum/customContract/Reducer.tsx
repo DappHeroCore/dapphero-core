@@ -165,7 +165,9 @@ export const Reducer = ({ info, configuration }) => {
 
     if (inputChildrens.length > 0) {
       const [ inputs ] = inputChildrens
-      const tearDowns = inputs.element.map(({ element, argumentName }) => {
+      const tearDowns = inputs.element.map((input) => {
+        const { element, argumentName } = input
+
         const clickHandlerFunction = (rawValue: string): void => {
           const value = injectedContext?.account
             ? rawValue.replace(consts.clientSide.currentUser, injectedContext.account) ?? rawValue
@@ -183,10 +185,16 @@ export const Reducer = ({ info, configuration }) => {
           }
           element.value = value
         }
+
+        const ethValue = ethValueKey?.value
+
         clickHandlerFunction(element.value)
+
         const clickHandler = (event): void => {
-          clickHandlerFunction(event.target.value)
+          const rawValue = ethValue ?? event.target.value
+          clickHandlerFunction(rawValue)
         }
+
         element.addEventListener('input', clickHandler)
 
         return (): void => {
@@ -235,7 +243,7 @@ export const Reducer = ({ info, configuration }) => {
 
       if (outputsChildrenElements?.element) {
         outputsChildrenElements.element.forEach(({ element }) => {
-          if (typeof result === 'string') {
+          if (typeof result === 'string' || typeof result === 'object') {
             const displayUnits = element.getAttribute('data-dh-modifier-display-units')
             const contractUnits = element.getAttribute('data-dh-modifier-contract-units')
             const decimals = (element.getAttribute('data-dh-modifier-decimal-units')
