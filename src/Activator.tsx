@@ -1,26 +1,42 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
+
 import * as hooks from 'hooks'
-import { logger } from 'logger/customLogger'
-import { loggerTest } from 'logger/loggerTest'
-import * as contexts from 'contexts'
 import * as consts from 'consts'
+import * as contexts from 'contexts'
+import { loggerTest } from 'logger/loggerTest'
+
 import { FeatureReducer } from './protocol/ethereum/featureReducer'
 
 // Log tests and Startup Logs
 loggerTest()
 
-export const Activator = ({ configuration }) => {
+// TODO: Type configuration
+type ActivatorProps = {
+  configuration: any;
+  highlightDomElements: (shouldHighlight: boolean) => void;
+}
+
+export const Activator = ({ configuration, highlightDomElements }: ActivatorProps) => {
   const domElements = useContext(contexts.DomElementsContext)
 
   const attemptedEagerConnect = hooks.useEagerConnect()
 
-  window.dappHero = {
-    enabled: true,
-    domElements,
-    configuration,
-    projectId: consts.global.apiKey,
-    debug: false,
-  }
+  useEffect(() => {
+    const dappHero = {
+      debug: false,
+      enabled: true,
+      highlightEnabled: false,
+      domElements,
+      configuration,
+      projectId: consts.global.apiKey,
+      toggleHighlight(): void {
+        dappHero.highlightEnabled = !dappHero.highlightEnabled
+        highlightDomElements(dappHero.highlightEnabled)
+      },
+    }
+
+    Object.assign(window, { dappHero })
+  }, [])
 
   if (attemptedEagerConnect) {
     return (
@@ -38,5 +54,6 @@ export const Activator = ({ configuration }) => {
       </>
     )
   }
+
   return null
 }
