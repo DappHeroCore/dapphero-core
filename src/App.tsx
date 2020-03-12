@@ -1,4 +1,6 @@
 import React from 'react'
+import { BrowserRouter as Router } from 'react-router-dom'
+
 import * as helpers from 'helpers'
 import { ProvidersWrapper } from './ProvidersWrapper'
 
@@ -12,6 +14,8 @@ export const App: React.FC = () => {
   helpers.cookies.startup()
 
   return (
-    <ProvidersWrapper />
+    <Router>
+      <ProvidersWrapper />
+    </Router>
   )
 }

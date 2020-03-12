@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useLocation, useParams } from 'react-router-dom'
 import { useToasts } from 'react-toast-notifications'
 import get from 'lodash.get'
 import { ELEMENT_TYPES, TAG_TYPES, DATA_PROPERTY } from '@dapphero/dapphero-dom'
@@ -9,6 +10,10 @@ import { openSeaApi } from './api'
 export const Reducer = ({ info, element }) => {
   // React hooks
   const [ nfts, setNfts ] = useState(null)
+
+  // Router hooks
+  const location = useLocation()
+  console.log('Reducer -> location', location)
 
   // Custom hooks
   const { addToast } = useToasts()
