@@ -172,17 +172,22 @@ export const Reducer = ({ info, configuration }) => {
           const value = injectedContext?.account
             ? rawValue.replace(consts.clientSide.currentUser, injectedContext.account) ?? rawValue
             : rawValue
+
           try {
             const displayUnits = element.getAttribute('data-dh-modifier-display-units')
             const contractUnits = element.getAttribute('data-dh-modifier-contract-units')
             const convertedValue = value && (displayUnits || contractUnits) ? utils.convertUnits(displayUnits, contractUnits, value) : value
-            setParameters((prevParameters) => ({
-              ...prevParameters,
-              [argumentName]: convertedValue,
-            }))
+
+            if (convertedValue) {
+              setParameters((prevParameters) => ({
+                ...prevParameters,
+                [argumentName]: convertedValue,
+              }))
+            }
           } catch (err) {
             console.warn('There may be an issue with your inputs')
           }
+
           element.value = value
         }
 
@@ -197,10 +202,31 @@ export const Reducer = ({ info, configuration }) => {
 
         element.addEventListener('input', clickHandler)
 
+        // Edge case where JS or jQuery uses .value property or .val() method
+        let temporaryValue = null
+        const { get, set } = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')
+
+        Object.defineProperty(element, 'value', {
+          get() {
+            return get.call(this)
+          },
+          set(newVal) {
+            set.call(this, newVal)
+
+            if (temporaryValue !== newVal) {
+              temporaryValue = newVal
+              clickHandlerFunction(newVal)
+            }
+
+            return newVal
+          },
+        })
+
         return (): void => {
           element.removeEventListener('input', clickHandler)
         }
       })
+
       return (): void => {
         tearDowns.forEach((cb) => cb())
       }
