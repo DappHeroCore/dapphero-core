@@ -224,7 +224,6 @@ export const Reducer = ({ info, configuration }) => {
       const { value } = autoInvokeKey
 
       if (value === 'true' && !isTransaction) {
-        handleRunMethod()
         const intervalId = setInterval(handleRunMethod, POLLING_INTERVAL)
         return (): void => {
           clearInterval(intervalId)
