@@ -59,7 +59,7 @@ export const Reducer = ({ info, configuration }) => {
   const [ parameters, setParameters ] = useState(getAbiMethodInputs(info.contract.contractAbi, methodName))
 
   // -> Handlers
-  const handleRunMethod = async (event = null): Promise<void> => {
+  const handleRunMethod = async (event = null, isAutoInvoke = false): Promise<void> => {
     if (event) {
       try {
         event.preventDefault()
@@ -148,10 +148,9 @@ export const Reducer = ({ info, configuration }) => {
         }
       }
       const [ input ] = childrenElements.filter(({ id }) => id.includes('input'))
-      if (input?.element) {
-        input.element.forEach(({ element }) => {
-          element.value = ''
-        })
+
+      if (input?.element && !isAutoInvoke) {
+        input.element.forEach(({ element }) => Object.assign(element, { value: '' }))
       }
     } catch (err) {
       logger.error('Custom Contract handleRun method failed\n', err)
@@ -250,11 +249,9 @@ export const Reducer = ({ info, configuration }) => {
       const { value } = autoInvokeKey
 
       if (value === 'true' && !isTransaction) {
-        handleRunMethod()
-        const intervalId = setInterval(handleRunMethod, POLLING_INTERVAL)
-        return (): void => {
-          clearInterval(intervalId)
-        }
+        const intervalId = setInterval(() => handleRunMethod(null, true), POLLING_INTERVAL)
+
+        return (): void => clearInterval(intervalId)
       }
     }
   }, [ autoInvokeKey, handleRunMethod ])
