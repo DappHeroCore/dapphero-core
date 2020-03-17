@@ -3,6 +3,9 @@ import { useToasts } from 'react-toast-notifications'
 import get from 'lodash.get'
 import { ELEMENT_TYPES, TAG_TYPES, DATA_PROPERTY } from '@dapphero/dapphero-dom'
 
+// Utils
+import * as utils from 'utils'
+
 // Api
 import { openSeaApi } from './api'
 
@@ -18,11 +21,24 @@ export const Reducer = ({ info, element }) => {
   const { nft, properties_ } = info
   const { item, tokens = [] } = nft
 
-  const assetOwnerAddress = properties_?.assetOwnerAddress
-  const assetContractAddress = properties_?.assetContractAddress
+  // Convert $URL to their respective value from query params
+  const parsedProperties = { ...properties_ }
+
+  for (const key in properties_) {
+    const value = properties_[key]
+    const parsedValue = utils.getQueryParameterValue(value, key)
+
+    Object.assign(parsedProperties, { [key]: parsedValue })
+  }
+
+  const parsedTokens = tokens.map((token: string) => utils.getQueryParameterValue(token, 'assetTokenId'))
+
+  // Constants
+  const assetOwnerAddress = parsedProperties?.assetOwnerAddress
+  const assetContractAddress = parsedProperties?.assetContractAddress
 
   // Token flags
-  const { length: totalTokens } = tokens
+  const { length: totalTokens } = parsedTokens
   const isAllTokens = totalTokens === 0
   const isSingleToken = totalTokens === 1
   const isMultipleTokens = totalTokens > 1
@@ -32,7 +48,7 @@ export const Reducer = ({ info, element }) => {
     if (!assetOwnerAddress) return
 
     if (isSingleToken) {
-      const [ token ] = tokens
+      const [ token ] = parsedTokens
       const errorMessage = `We couldn't get token ${token} from owner ${assetOwnerAddress}`
 
       openSeaApi.owner
@@ -65,7 +81,7 @@ export const Reducer = ({ info, element }) => {
     if (!assetContractAddress) return
 
     if (isSingleToken) {
-      const [ token ] = tokens
+      const [ token ] = parsedTokens
       const errorMessage = `We couldn't get token ${token} from contract address ${assetContractAddress}`
 
       openSeaApi.contract
