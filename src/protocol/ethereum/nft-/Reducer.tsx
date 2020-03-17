@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useToasts } from 'react-toast-notifications'
 import get from 'lodash.get'
+import { useWeb3React } from '@web3-react/core'
 import { ELEMENT_TYPES, TAG_TYPES, DATA_PROPERTY } from '@dapphero/dapphero-dom'
 
 // Utils
@@ -15,6 +16,9 @@ export const Reducer = ({ info, element }) => {
 
   // Custom hooks
   const { addToast } = useToasts()
+  const injectedContext = useWeb3React()
+
+  const userAddress = injectedContext?.account
   const errorToast = ({ message }): void => addToast(message, { appearance: 'error' })
 
   // Get NFTs properties
@@ -26,7 +30,7 @@ export const Reducer = ({ info, element }) => {
 
   for (const key in properties_) {
     const value = properties_[key]
-    const parsedValue = utils.getQueryParameterValue(value, key)
+    const parsedValue = utils.getQueryParameterValue(value, key, userAddress)
 
     Object.assign(parsedProperties, { [key]: parsedValue })
   }
