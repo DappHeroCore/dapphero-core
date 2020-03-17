@@ -13,7 +13,7 @@ const POLLING_INTERVAL = 1000
 
 // Utils
 const getAbiMethodInputs = (abi, methodName): Record<string, any> => {
-  const emptyString = '$true'
+  const emptyString = '$true' // TODO: What was this solving again?
   const parseName = (value: string): string => (value === '' ? emptyString : value)
 
   const method = abi.find(({ name }) => name === methodName)
