@@ -15,10 +15,11 @@ loggerTest()
 // TODO: Type configuration
 type ActivatorProps = {
   configuration: any;
+  retriggerEngine: () => void;
   highlightDomElements: (shouldHighlight: boolean) => void;
 }
 
-export const Activator = ({ configuration, highlightDomElements }: ActivatorProps) => {
+export const Activator = ({ configuration, highlightDomElements, retriggerEngine }: ActivatorProps) => {
   const domElements = useContext(contexts.DomElementsContext)
   const { actions: { listenToEvent } } = useContext(EmitterContext)
 
@@ -31,6 +32,7 @@ export const Activator = ({ configuration, highlightDomElements }: ActivatorProp
       highlightEnabled: false,
       domElements,
       configuration,
+      retriggerEngine,
       projectId: consts.global.apiKey,
       toggleHighlight(): void {
         dappHero.highlightEnabled = !dappHero.highlightEnabled
