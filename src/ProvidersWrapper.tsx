@@ -21,6 +21,7 @@ export const ProvidersWrapper: React.FC = () => {
   // react hooks
   const [ configuration, setConfig ] = useState(null)
   const [ domElements, setDomElements ] = useState(null)
+  const [ timestamp, setTimestamp ] = useState(+new Date())
 
   // effects
   useEffect(() => {
@@ -65,6 +66,8 @@ export const ProvidersWrapper: React.FC = () => {
     })
   }
 
+  const retriggerEngine = (): void => setTimestamp(+new Date())
+
   if (domElements != null) {
     return (
       <EmitterProvider>
@@ -72,7 +75,7 @@ export const ProvidersWrapper: React.FC = () => {
           <ToastProvider>
             <Web3ReactProvider getLibrary={getLibrary}>
               <DomElementsContext.Provider value={domElements}>
-                <Activator configuration={configuration} highlightDomElements={highlightDomElements} />
+                <Activator configuration={configuration} retriggerEngine={retriggerEngine} highlightDomElements={highlightDomElements} />
               </DomElementsContext.Provider>
             </Web3ReactProvider>
           </ToastProvider>
