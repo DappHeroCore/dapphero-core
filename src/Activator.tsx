@@ -1,4 +1,6 @@
 import React, { useContext, useEffect } from 'react'
+import { useWeb3React } from '@web3-react/core'
+import get from 'lodash.get'
 
 import * as hooks from 'hooks'
 import * as consts from 'consts'
@@ -20,10 +22,13 @@ type ActivatorProps = {
 }
 
 export const Activator = ({ configuration, highlightDomElements, retriggerEngine }: ActivatorProps) => {
+  // React hooks
   const domElements = useContext(contexts.DomElementsContext)
   const { actions: { listenToEvent } } = useContext(EmitterContext)
 
+  // Custom hooks
   const attemptedEagerConnect = hooks.useEagerConnect()
+  const web3React = useWeb3React()
 
   useEffect(() => {
     const dappHero = {
@@ -34,6 +39,7 @@ export const Activator = ({ configuration, highlightDomElements, retriggerEngine
       configuration,
       retriggerEngine,
       projectId: consts.global.apiKey,
+      provider: get(web3React, 'library.provider', null),
       toggleHighlight(): void {
         dappHero.highlightEnabled = !dappHero.highlightEnabled
         highlightDomElements(dappHero.highlightEnabled)
@@ -42,7 +48,7 @@ export const Activator = ({ configuration, highlightDomElements, retriggerEngine
     }
 
     Object.assign(window, { dappHero })
-  }, [])
+  }, [ web3React, web3React.library ])
 
   if (attemptedEagerConnect) {
     return (
