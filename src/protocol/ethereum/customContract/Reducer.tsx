@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { useToasts } from 'react-toast-notifications'
 import Notify from 'bnc-notify'
 import { ethers } from 'ethers'
@@ -7,6 +7,9 @@ import { logger } from 'logger/customLogger'
 import omit from 'lodash.omit'
 import * as consts from 'consts'
 import { useWeb3React } from '@web3-react/core'
+
+import { EVENT_NAMES } from 'providers/EmitterProvider/constants'
+import { EmitterContext } from 'providers/EmitterProvider/context'
 
 const blockNativeApiKey = process.env.REACT_APP_BLOCKNATIVE_API
 const POLLING_INTERVAL = 1000
@@ -48,6 +51,7 @@ export const Reducer = ({ info, configuration }) => {
 
   // Injected Web3 Context
   const injectedContext = useWeb3React()
+  const { actions: { emitToEvent } } = useContext(EmitterContext)
 
   // Toast Notifications
   const { addToast } = useToasts()
@@ -286,9 +290,13 @@ export const Reducer = ({ info, configuration }) => {
             } else {
               Object.assign(element, { textContent: convertedValue })
             }
+
+            emitToEvent(EVENT_NAMES.contract.outputUpdated, { value: convertedValue, element })
           } else {
             Object.assign(element, { textContent: parsedValue })
+            emitToEvent(EVENT_NAMES.contract.outputUpdated, { value: parsedValue, element })
           }
+
         })
       }
 
@@ -304,16 +312,21 @@ export const Reducer = ({ info, configuration }) => {
             ? utils.convertUnits(contractUnits, displayUnits, parsedValue[outputName])
             : parsedValue[outputName]
           const isNumber = !Number.isNaN(Number(convertedValue))
+
           if (decimals && isNumber) {
             const decimalConvertedValue = Number(convertedValue)
               .toFixed(decimals)
               .toString()
             element.innerText = decimalConvertedValue
+
+            emitToEvent(EVENT_NAMES.contract.outputUpdated, { value: decimalConvertedValue, element })
           } else {
             Object.assign(element, { textContent: convertedValue })
+            emitToEvent(EVENT_NAMES.contract.outputUpdated, { value: convertedValue, element })
           }
         })
       }
+
     }
   }, [ result ])
 

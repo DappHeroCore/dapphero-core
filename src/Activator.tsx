@@ -5,6 +5,8 @@ import * as consts from 'consts'
 import * as contexts from 'contexts'
 import { loggerTest } from 'logger/loggerTest'
 
+import { EVENT_NAMES } from 'providers/EmitterProvider/constants'
+import { EmitterContext } from 'providers/EmitterProvider/context'
 import { FeatureReducer } from './protocol/ethereum/featureReducer'
 
 // Log tests and Startup Logs
@@ -18,6 +20,7 @@ type ActivatorProps = {
 
 export const Activator = ({ configuration, highlightDomElements }: ActivatorProps) => {
   const domElements = useContext(contexts.DomElementsContext)
+  const { actions: { listenToEvent } } = useContext(EmitterContext)
 
   const attemptedEagerConnect = hooks.useEagerConnect()
 
@@ -33,6 +36,7 @@ export const Activator = ({ configuration, highlightDomElements }: ActivatorProp
         dappHero.highlightEnabled = !dappHero.highlightEnabled
         highlightDomElements(dappHero.highlightEnabled)
       },
+      listenToContractOutputChange: (cb): void => listenToEvent(EVENT_NAMES.contract.outputUpdated, cb),
     }
 
     Object.assign(window, { dappHero })
