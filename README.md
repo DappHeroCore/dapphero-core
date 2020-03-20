@@ -2,6 +2,29 @@
 
 _dependencies last pinned 1/8/20_
 
+## Listening to events
+
+#### How to use
+
+All listeners functions are defined inside `dappHero` object.
+
+For example to listen after a contract method result it's outputed to the DOM you can simple call:
+
+```javascript
+dappHero.listenToContractOutputChange(event => {
+   console.log(`Event changed`, event)
+})
+```
+
+#### Supported events currently are for:
+
+- [x] Custom Contract
+- [ ] Network
+- [ ] NFT
+- [ ] ThreeBox
+- [ ] User
+
+
 ### E2E Testing
 
 1. Fulfill the following env variables:

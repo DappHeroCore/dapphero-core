@@ -10,6 +10,7 @@ import * as api from 'api'
 import { ethers } from 'ethers'
 import * as consts from 'consts'
 import { DomElementsContext } from 'contexts'
+import { EmitterProvider } from 'providers/EmitterProvider/provider'
 
 import { Activator } from './Activator'
 import { logger } from './logger/customLogger'
@@ -66,15 +67,17 @@ export const ProvidersWrapper: React.FC = () => {
 
   if (domElements != null) {
     return (
-      <CookiesProvider>
-        <ToastProvider>
-          <Web3ReactProvider getLibrary={getLibrary}>
-            <DomElementsContext.Provider value={domElements}>
-              <Activator configuration={configuration} highlightDomElements={highlightDomElements} />
-            </DomElementsContext.Provider>
-          </Web3ReactProvider>
-        </ToastProvider>
-      </CookiesProvider>
+      <EmitterProvider>
+        <CookiesProvider>
+          <ToastProvider>
+            <Web3ReactProvider getLibrary={getLibrary}>
+              <DomElementsContext.Provider value={domElements}>
+                <Activator configuration={configuration} highlightDomElements={highlightDomElements} />
+              </DomElementsContext.Provider>
+            </Web3ReactProvider>
+          </ToastProvider>
+        </CookiesProvider>
+      </EmitterProvider>
     )
   }
   return null
