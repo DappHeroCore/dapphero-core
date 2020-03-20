@@ -43,6 +43,7 @@ export const Reducer = ({ info, configuration }) => {
   const { contractAddress, contractAbi } = contract
 
   // TODO Check for Overloaded Functions
+  const autoClearKey = properties.find(({ key }) => key === 'autoClear')
   const autoInvokeKey = properties.find(({ key }) => key === 'autoInvoke')
   const methodNameKey = properties.find(({ key }) => key === 'methodName')
   const ethValueKey = properties.find((property) => property.key === 'ethValue')
@@ -63,7 +64,7 @@ export const Reducer = ({ info, configuration }) => {
   const [ parameters, setParameters ] = useState(getAbiMethodInputs(info.contract.contractAbi, methodName))
 
   // -> Handlers
-  const handleRunMethod = async (event = null, isAutoInvoke = false): Promise<void> => {
+  const handleRunMethod = async (event = null, shouldClearInput = false): Promise<void> => {
     if (event) {
       try {
         event.preventDefault()
@@ -153,7 +154,7 @@ export const Reducer = ({ info, configuration }) => {
       }
       const [ input ] = childrenElements.filter(({ id }) => id.includes('input'))
 
-      if (input?.element && !isAutoInvoke) {
+      if (input?.element && !shouldClearInput) {
         input.element.forEach(({ element }) => Object.assign(element, { value: '' }))
       }
     } catch (err) {
@@ -250,15 +251,16 @@ export const Reducer = ({ info, configuration }) => {
   // Auto invoke method
   useEffect(() => {
     if (autoInvokeKey && injectedContext.chainId === info?.contract?.networkId) {
-      const { value } = autoInvokeKey
+      const { value: autoInvokeValue } = autoInvokeKey
+      const autoClearValue = autoClearKey?.value || false
 
-      if (value === 'true' && !isTransaction) {
-        const intervalId = setInterval(() => handleRunMethod(null, true), POLLING_INTERVAL)
+      if (autoInvokeValue === 'true' && !isTransaction) {
+        const intervalId = setInterval(() => handleRunMethod(null, autoClearValue), POLLING_INTERVAL)
 
         return (): void => clearInterval(intervalId)
       }
     }
-  }, [ autoInvokeKey, handleRunMethod ])
+  }, [ autoInvokeKey, autoClearKey, handleRunMethod ])
 
   // Display new results in the UI
   useEffect(() => {
