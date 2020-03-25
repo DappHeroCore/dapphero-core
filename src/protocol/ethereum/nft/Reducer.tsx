@@ -13,7 +13,6 @@ import { openSeaApi } from './api'
 export const Reducer = ({ info, element }) => {
   // React hooks
   const [ nfts, setNfts ] = useState(null)
-  console.log('Reducer -> nfts', nfts)
 
   // Custom hooks
   const { addToast } = useToasts()
