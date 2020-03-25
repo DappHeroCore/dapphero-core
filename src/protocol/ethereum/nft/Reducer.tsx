@@ -13,6 +13,7 @@ import { openSeaApi } from './api'
 export const Reducer = ({ info, element }) => {
   // React hooks
   const [ nfts, setNfts ] = useState(null)
+  console.log('Reducer -> nfts', nfts)
 
   // Custom hooks
   const { addToast } = useToasts()
@@ -125,13 +126,15 @@ export const Reducer = ({ info, element }) => {
         if (!jsonPath) return
 
         const tagType = TAG_TYPES[childNode.tagName] || TAG_TYPES.DEFAULT
-        const value = get(nft, jsonPath, '')
 
-        if (tagType === ELEMENT_TYPES.text) {
+        const value = get(nft, jsonPath, '')
+        if (!value) return
+
+        if (tagType === ELEMENT_TYPES.text ) {
           Object.assign(childNode, { textContent: value })
         }
 
-        if (tagType === ELEMENT_TYPES.image) {
+        if (tagType === ELEMENT_TYPES.image ) {
           Object.assign(childNode, { src: value })
         }
       })
