@@ -36,12 +36,12 @@ export const openSeaApi = {
       const query = queryString.stringify({ owner: assetOwnerAddress, token_ids: token })
       return getOpenSeaResource(query)
     },
-    getMultipleAssets: ({ assetOwnerAddress, tokens }) => {
-      const query = queryString.stringify({ owner: assetOwnerAddress, token_ids: tokens })
+    getMultipleAssets: ({ assetOwnerAddress, tokens, limit, offset }) => {
+      const query = queryString.stringify({ owner: assetOwnerAddress, token_ids: tokens, limit, offset })
       return getOpenSeaResource(query)
     },
-    getAllAssets: ({ assetOwnerAddress }) => {
-      const query = queryString.stringify({ owner: assetOwnerAddress })
+    getAllAssets: ({ assetOwnerAddress, limit, offset }) => {
+      const query = queryString.stringify({ owner: assetOwnerAddress, limit, offset })
       return getOpenSeaResource(query)
     },
   },
@@ -50,12 +50,12 @@ export const openSeaApi = {
       const query = queryString.stringify({ asset_contract_address: assetContractAddress, token_ids: token })
       return getOpenSeaResource(query)
     },
-    getMultipleAssets: ({ assetContractAddress, tokens }) => {
-      const query = queryString.stringify({ asset_contract_address: assetContractAddress, token_ids: tokens })
+    getMultipleAssets: ({ assetContractAddress, tokens, limit, offset }) => {
+      const query = queryString.stringify({ asset_contract_address: assetContractAddress, token_ids: tokens, limit, offset })
       return getOpenSeaResource(query)
     },
-    getAllAssets: ({ assetContractAddress }) => {
-      const query = queryString.stringify({ asset_contract_address: assetContractAddress })
+    getAllAssets: ({ assetContractAddress, limit, offset }) => {
+      const query = queryString.stringify({ asset_contract_address: assetContractAddress, limit, offset })
       return getOpenSeaResource(query)
     },
   },
