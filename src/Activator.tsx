@@ -24,7 +24,7 @@ type ActivatorProps = {
 export const Activator = ({ configuration, highlightDomElements, retriggerEngine }: ActivatorProps) => {
   // React hooks
   const domElements = useContext(contexts.DomElementsContext)
-  const { actions: { listenToEvent, emitToEvent } } = useContext(EmitterContext)
+  const { actions: { listenToEvent } } = useContext(EmitterContext)
 
   // Custom hooks
   const attemptedEagerConnect = hooks.useEagerConnect()
@@ -47,9 +47,10 @@ export const Activator = ({ configuration, highlightDomElements, retriggerEngine
       listenToContractOutputChange: (cb): void => listenToEvent(EVENT_NAMES.contract.outputUpdated, cb),
     }
 
-    Object.assign(window, { dappHero })
+    const event = new CustomEvent('dappHeroConfigLoaded', { detail: dappHero })
 
-    emitToEvent('dappHeroConfigLoaded', dappHero)
+    // Dispatch the event.
+    window.dispatchEvent(event)
   }, [ web3React, web3React.library ])
 
   if (attemptedEagerConnect) {
