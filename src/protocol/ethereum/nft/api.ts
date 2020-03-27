@@ -36,13 +36,12 @@ export const openSeaApi = {
       const query = queryString.stringify({ owner: assetOwnerAddress, token_ids: token, asset_contract_address: assetContractAddress })
       return getOpenSeaResource(query)
     },
-    getMultipleAssets: ({ assetOwnerAddress, assetContractAddress, tokens }) => {
-      const query = queryString.stringify({ owner: assetOwnerAddress, token_ids: tokens, asset_contract_address: assetContractAddress })
+    getMultipleAssets: ({ assetOwnerAddress, assetContractAddress, tokens, limit, offset }) => {
+      const query = queryString.stringify({ owner: assetOwnerAddress, token_ids: tokens, asset_contract_address: assetContractAddress, limit, offset })
       return getOpenSeaResource(query)
     },
-    getAllAssets: ({ assetOwnerAddress, assetContractAddress }) => {
-      const query = queryString.stringify({ owner: assetOwnerAddress, asset_contract_address: assetContractAddress })
-      return getOpenSeaResource(query)
+    getAllAssets: ({ assetOwnerAddress, assetContractAddress, limit, offset }) => {
+      const query = queryString.stringify({ owner: assetOwnerAddress, asset_contract_address: assetContractAddress, limit, offset })
     },
   },
   contract: {
@@ -50,12 +49,12 @@ export const openSeaApi = {
       const query = queryString.stringify({ asset_contract_address: assetContractAddress, token_ids: token })
       return getOpenSeaResource(query)
     },
-    getMultipleAssets: ({ assetContractAddress, tokens }) => {
-      const query = queryString.stringify({ asset_contract_address: assetContractAddress, token_ids: tokens })
+    getMultipleAssets: ({ assetContractAddress, tokens, limit, offset }) => {
+      const query = queryString.stringify({ asset_contract_address: assetContractAddress, token_ids: tokens, limit, offset })
       return getOpenSeaResource(query)
     },
-    getAllAssets: ({ assetContractAddress }) => {
-      const query = queryString.stringify({ asset_contract_address: assetContractAddress })
+    getAllAssets: ({ assetContractAddress, limit, offset }) => {
+      const query = queryString.stringify({ asset_contract_address: assetContractAddress, limit, offset })
       return getOpenSeaResource(query)
     },
   },
