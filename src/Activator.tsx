@@ -47,7 +47,10 @@ export const Activator = ({ configuration, highlightDomElements, retriggerEngine
       listenToContractOutputChange: (cb): void => listenToEvent(EVENT_NAMES.contract.outputUpdated, cb),
     }
 
-    Object.assign(window, { dappHero })
+    const event = new CustomEvent('dappHeroConfigLoaded', { detail: dappHero })
+
+    // Dispatch the event.
+    window.dispatchEvent(event)
   }, [ web3React, web3React.library ])
 
   if (attemptedEagerConnect) {
