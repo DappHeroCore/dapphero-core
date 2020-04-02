@@ -32,17 +32,16 @@ const getOpenSeaResource = (query: string) => axios.get(`assets?${query}`).then(
 
 export const openSeaApi = {
   owner: {
-    getSingleAsset: ({ assetOwnerAddress, token }) => {
-      const query = queryString.stringify({ owner: assetOwnerAddress, token_ids: token })
+    getSingleAsset: ({ assetOwnerAddress, assetContractAddress, token }) => {
+      const query = queryString.stringify({ owner: assetOwnerAddress, token_ids: token, asset_contract_address: assetContractAddress })
       return getOpenSeaResource(query)
     },
-    getMultipleAssets: ({ assetOwnerAddress, tokens, limit, offset }) => {
-      const query = queryString.stringify({ owner: assetOwnerAddress, token_ids: tokens, limit, offset })
+    getMultipleAssets: ({ assetOwnerAddress, assetContractAddress, tokens, limit, offset }) => {
+      const query = queryString.stringify({ owner: assetOwnerAddress, token_ids: tokens, asset_contract_address: assetContractAddress, limit, offset })
       return getOpenSeaResource(query)
     },
-    getAllAssets: ({ assetOwnerAddress, limit, offset }) => {
-      const query = queryString.stringify({ owner: assetOwnerAddress, limit, offset })
-      return getOpenSeaResource(query)
+    getAllAssets: ({ assetOwnerAddress, assetContractAddress, limit, offset }) => {
+      const query = queryString.stringify({ owner: assetOwnerAddress, asset_contract_address: assetContractAddress, limit, offset })
     },
   },
   contract: {

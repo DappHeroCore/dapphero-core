@@ -79,7 +79,7 @@ export const Reducer = ({ info, element }) => {
       const errorMessage = `We couldn't get token ${token} from owner ${assetOwnerAddress}`
 
       openSeaApi.owner
-        .getSingleAsset({ assetOwnerAddress, token })
+        .getSingleAsset({ assetOwnerAddress, assetContractAddress, token })
         .then(setNfts)
         .catch(() => errorToast({ message: errorMessage }))
     }
@@ -88,7 +88,7 @@ export const Reducer = ({ info, element }) => {
       const errorMessage = `We couldn't get tokens ${tokens.join(', ')} from owner ${assetOwnerAddress}`
 
       openSeaApi.owner
-        .getMultipleAssets({ assetOwnerAddress, tokens, limit, offset })
+        .getMultipleAssets({ assetOwnerAddress, assetContractAddress, tokens, limit, tokens })
         .then(setNfts)
         .catch(() => errorToast({ message: errorMessage }))
     }
@@ -97,7 +97,7 @@ export const Reducer = ({ info, element }) => {
       const errorMessage = `We couldn't get all tokens from owner ${assetOwnerAddress}`
 
       openSeaApi.owner
-        .getAllAssets({ assetOwnerAddress, limit, offset })
+        .getAllAssets({ assetOwnerAddress, assetContractAddress, limit, offset })
         .then(setNfts)
         .catch(() => errorToast({ message: errorMessage }))
     }
