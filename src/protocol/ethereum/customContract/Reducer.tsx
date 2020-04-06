@@ -98,6 +98,7 @@ export const Reducer = ({ info, configuration }) => {
 
       const signer = provider.getSigner()
       const contractInstance = new ethers.Contract(contractAddress, contractAbi, signer)
+      const readOnlyContractInstance = new ethers.Contract(contractAddress, contractAbi, provider)
 
       if (isTransaction) {
         const currentNetwork = await signer.provider.getNetwork()
@@ -140,7 +141,7 @@ export const Reducer = ({ info, configuration }) => {
           logger.info('invoke contract method failed in transaction', err)
         }
       } else {
-        const method = contractInstance.functions[methodName]
+        const method = readOnlyContractInstance.functions[methodName]
         try {
           const methodResult = await method(...methodParams)
           setResult(methodResult)
