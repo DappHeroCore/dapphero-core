@@ -11,6 +11,8 @@ import { EVENT_NAMES } from 'providers/EmitterProvider/constants'
 import { EmitterContext } from 'providers/EmitterProvider/context'
 import { FeatureReducer } from './protocol/ethereum/featureReducer'
 
+import { highlightDomElements } from './utils/highlightDomElements'
+
 // Log tests and Startup Logs
 loggerTest()
 
@@ -18,10 +20,9 @@ loggerTest()
 type ActivatorProps = {
   configuration: any;
   retriggerEngine: () => void;
-  highlightDomElements: (shouldHighlight: boolean) => void;
 }
 
-export const Activator = ({ configuration, highlightDomElements, retriggerEngine }: ActivatorProps) => {
+export const Activator = ({ configuration, retriggerEngine }: ActivatorProps) => {
   // React hooks
   const domElements = useContext(contexts.DomElementsContext)
   const { actions: { listenToEvent } } = useContext(EmitterContext)
@@ -42,13 +43,14 @@ export const Activator = ({ configuration, highlightDomElements, retriggerEngine
       provider: get(web3React, 'library.provider', null),
       toggleHighlight(): void {
         dappHero.highlightEnabled = !dappHero.highlightEnabled
-        highlightDomElements(dappHero.highlightEnabled)
+        highlightDomElements(dappHero.highlightEnabled, domElements)
       },
       listenToContractOutputChange: (cb): void => listenToEvent(EVENT_NAMES.contract.outputUpdated, cb),
     }
 
     const event = new CustomEvent('dappHeroConfigLoaded', { detail: dappHero })
 
+    Object.assign(window, { dappHero })
     // Dispatch the event.
     window.dispatchEvent(event)
   }, [ web3React, web3React.library ])
