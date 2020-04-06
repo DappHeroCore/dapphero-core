@@ -42,6 +42,7 @@ export const openSeaApi = {
     },
     getAllAssets: ({ assetOwnerAddress, assetContractAddress, limit, offset }) => {
       const query = queryString.stringify({ owner: assetOwnerAddress, asset_contract_address: assetContractAddress, limit, offset })
+      return getOpenSeaResource(query)
     },
   },
   contract: {
