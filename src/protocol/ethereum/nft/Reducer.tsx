@@ -190,5 +190,90 @@ export const Reducer = ({ info, element }) => {
     if (nextButton) nextButton.addEventListener('click', handleNextButton)
   }, [])
 
+  // Replace span elements having $THIS_TokenID as a text content to their respective token id
+  useEffect(() => {
+    if (!info) return
+
+    const spanTokenIdsPaths = document.evaluate("//span[contains(., '$THIS_TokenID')]", info.element, null, XPathResult.ANY_TYPE, null )
+    const spanTokenIdsElement = spanTokenIdsPaths.iterateNext()
+
+    if (!spanTokenIdsElement) return
+    Object.assign(spanTokenIdsElement, { textContent: info.id })
+  }, [ info ])
+
+  // Replace iframe elements having $THIS_TokenID as a text content to their respective token id
+  useEffect(() => {
+    if (!info) return
+
+    const iframeTokenIdsPaths = document.evaluate("//iframe[contains(@src, '$THIS_TokenID')]", info.element, null, XPathResult.ANY_TYPE, null )
+    const iframeTokenIdsElement = iframeTokenIdsPaths.iterateNext()
+
+    if (!iframeTokenIdsElement) return
+
+    const iframeSrc = iframeTokenIdsElement.getAttribute('src')
+    const updatedSrc = iframeSrc.replace('$THIS_TokenID', info.id)
+
+    iframeTokenIdsElement.setAttribute('src', updatedSrc)
+  }, [ info ])
+
+  // Replace iframe elements having $THIS_TokenID as a text content to their respective token id
+  useEffect(() => {
+    if (!info) return
+
+    const iframeContractAddressPaths = document.evaluate("//iframe[contains(@src, '$THIS_ContractAddress')]", info.element, null, XPathResult.ANY_TYPE, null )
+    const iframeContractAddressElement = iframeContractAddressPaths.iterateNext()
+
+    if (!iframeContractAddressElement) return
+
+    const iframeSrc = iframeContractAddressElement.getAttribute('src')
+    const updatedSrc = iframeSrc.replace('$THIS_ContractAddress', assetOwnerAddress)
+
+    iframeContractAddressElement.setAttribute('src', updatedSrc)
+  }, [ info ])
+
+  // Replace label elements in their "for" attribute having $THIS_ContractAddress value
+  useEffect(() => {
+    if (!info) return
+
+    const labels = info.element.querySelectorAll('label[for="$THIS_ContractAddress"')
+
+    labels.forEach((label) => {
+      const labelSrc = label.getAttribute('for')
+      const updatedSrc = labelSrc.replace('$THIS_ContractAddress', assetOwnerAddress)
+
+      label.setAttribute('src', updatedSrc)
+    })
+
+  }, [ info ])
+
+  // Replace input elements in their "for" attribute having $THIS_ContractAddress value
+  useEffect(() => {
+    if (!info) return
+
+    const inputsIds = info.element.querySelectorAll('input[id="$THIS_ContractAddress"')
+    inputsIds.forEach((input) => {
+      const inputSrc = input.getAttribute('id')
+      const updatedSrc = inputSrc.replace('$THIS_ContractAddress', assetOwnerAddress)
+
+      input.setAttribute('id', updatedSrc)
+    })
+
+    const inputsValuesAddress = info.element.querySelectorAll('input[value="$THIS_ContractAddress"')
+    inputsValuesAddress.forEach((input) => {
+      const inputSrc = input.getAttribute('value')
+      const updatedSrc = inputSrc.replace('$THIS_ContractAddress', assetOwnerAddress)
+
+      input.setAttribute('value', updatedSrc)
+    })
+
+    const inputsValuesTokens = info.element.querySelectorAll('input[value="$THIS_TokenID"')
+    inputsValuesTokens.forEach((input) => {
+      const inputSrc = input.getAttribute('value')
+      const updatedSrc = inputSrc.replace('$THIS_TokenID', info.id)
+
+      input.setAttribute('value', updatedSrc)
+    })
+  }, [ info ])
+
   return null
 }
