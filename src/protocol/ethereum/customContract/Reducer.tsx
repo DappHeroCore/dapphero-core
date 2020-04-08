@@ -12,7 +12,7 @@ import { EVENT_NAMES } from 'providers/EmitterProvider/constants'
 import { EmitterContext } from 'providers/EmitterProvider/context'
 
 const blockNativeApiKey = process.env.REACT_APP_BLOCKNATIVE_API
-const POLLING_INTERVAL = 4000
+const POLLING_INTERVAL = 1000
 
 // Utils
 const getAbiMethodInputs = (abi, methodName): Record<string, any> => {
@@ -151,8 +151,8 @@ export const Reducer = ({ info, configuration }) => {
       }
 
       const [ input ] = childrenElements.filter(({ id }) => id.includes('input'))
+      const { value: autoInvokeValue } = autoInvokeKey || { value: false }
 
-      const { value: autoInvokeValue } = autoInvokeKey
       const shouldAutoInvoke = autoInvokeValue === 'true'
 
       const shouldClearAllInputValues = input?.element && !shouldAutoInvoke && shouldClearInput
@@ -268,7 +268,9 @@ export const Reducer = ({ info, configuration }) => {
     const parametersValues = Object.values(parsedParameters)
 
     if (autoInvokeKey && injectedContext.chainId === info?.contract?.networkId) {
-      const { value: autoInvokeValue } = autoInvokeKey
+      const { value: autoInvokeValue } = autoInvokeKey || { value: false }
+      console.log('Reducer -> autoInvokeKey', autoInvokeKey)
+
       const autoClearValue = autoClearKey?.value || false
 
       if (autoInvokeValue === 'true' && !isTransaction) {
