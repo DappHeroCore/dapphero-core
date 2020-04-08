@@ -1,6 +1,6 @@
-const moment = require('moment');
+const moment = require('moment')
 
-const { execSync } = require('child_process');
+const { execSync } = require('child_process')
 
 const dateTime = moment().format('MM-DD-YYYY')
 
