@@ -88,7 +88,7 @@ export const Reducer = ({ info, element }) => {
       const errorMessage = `We couldn't get tokens ${tokens.join(', ')} from owner ${assetOwnerAddress}`
 
       openSeaApi.owner
-        .getMultipleAssets({ assetOwnerAddress, assetContractAddress, tokens, limit, tokens })
+        .getMultipleAssets({ assetOwnerAddress, assetContractAddress, tokens, limit, offset })
         .then(setNfts)
         .catch(() => errorToast({ message: errorMessage }))
     }
@@ -105,7 +105,7 @@ export const Reducer = ({ info, element }) => {
 
   // Get tokens for contract address
   useEffect(() => {
-    if (!assetContractAddress) return
+    if (assetOwnerAddress || !assetContractAddress) return
 
     if (isSingleToken) {
       const [ token ] = parsedTokens
