@@ -275,7 +275,7 @@ describe('Test CustomContract feature for "viewMultipleArgs" method', () => {
     const outputText = await page.evaluate((el) => el.innerText, outputDiv)
 
     // TODO: Convert balanceMultiplied to check converted value
-    const EXPECTED_BALANCE_MULTIPLIED_OUTPUT = '89898989'
+    const EXPECTED_BALANCE_MULTIPLIED_OUTPUT = '89898989.000'
     expect(outputText).toBe(EXPECTED_BALANCE_MULTIPLIED_OUTPUT)
   })
 })
