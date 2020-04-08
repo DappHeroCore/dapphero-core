@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext, useCallback } from 'react'
 import { useToasts } from 'react-toast-notifications'
 import Notify from 'bnc-notify'
 import { ethers } from 'ethers'
@@ -12,7 +12,7 @@ import { EVENT_NAMES } from 'providers/EmitterProvider/constants'
 import { EmitterContext } from 'providers/EmitterProvider/context'
 
 const blockNativeApiKey = process.env.REACT_APP_BLOCKNATIVE_API
-const POLLING_INTERVAL = 1000
+const POLLING_INTERVAL = 4000
 
 // Utils
 const getAbiMethodInputs = (abi, methodName): Record<string, any> => {
@@ -64,18 +64,13 @@ export const Reducer = ({ info, configuration }) => {
   const [ parameters, setParameters ] = useState(getAbiMethodInputs(info.contract.contractAbi, methodName))
 
   // -> Handlers
-  const handleRunMethod = async (event = null, shouldClearInput = false): Promise<void> => {
+  const handleRunMethod = async (event = null, shouldClearInput = false, parametersValues, ethValue): Promise<void> => {
     if (event) {
       try {
         event.preventDefault()
         event.stopPropagation()
       } catch (err) {}
     }
-
-    const ethValue = parameters?.EthValue
-
-    const parsedParameters = omit(parameters, 'EthValue')
-    const parametersValues = Object.values(parsedParameters)
 
     if (hasInputs) {
       const isParametersFilled = Boolean(parametersValues.filter(Boolean).join(''))
@@ -127,6 +122,7 @@ export const Reducer = ({ info, configuration }) => {
           value: ethers.utils.parseEther(value),
         }
         let methodResult
+
         try {
           methodResult = await method(...methodParams, overrides)
           // BlockNative Toaster to track tx
@@ -153,9 +149,15 @@ export const Reducer = ({ info, configuration }) => {
           infoToast({ message: 'Invoking a contract function failed.  Are you on the right network?' })
         }
       }
+
       const [ input ] = childrenElements.filter(({ id }) => id.includes('input'))
 
-      if (input?.element && !shouldClearInput) {
+      const { value: autoInvokeValue } = autoInvokeKey
+      const shouldAutoInvoke = autoInvokeValue === 'true'
+
+      const shouldClearAllInputValues = input?.element && !shouldAutoInvoke && shouldClearInput
+
+      if (shouldClearAllInputValues) {
         input.element.forEach(({ element }) => Object.assign(element, { value: '' }))
       }
     } catch (err) {
@@ -240,39 +242,54 @@ export const Reducer = ({ info, configuration }) => {
 
   // Add trigger to invoke buttons
   useEffect(() => {
+    const autoClearValue = autoClearKey?.value || false
     const invokeButtons = childrenElements.filter(({ id }) => id.includes('invoke'))
 
+    const ethValue = parameters?.EthValue
+    const parsedParameters = omit(parameters, 'EthValue')
+    const parametersValues = Object.values(parsedParameters)
+
+    const onRunMethod = (event) => handleRunMethod(event, autoClearValue, parametersValues, ethValue)
+
     if (invokeButtons) {
-      invokeButtons.forEach(({ element }) => element.addEventListener('click', handleRunMethod))
+      invokeButtons.forEach(({ element }) => {
+        element.removeEventListener('click', onRunMethod)
+        element.addEventListener('click', onRunMethod)
+      })
     }
 
-    return (): void => invokeButtons.forEach(({ element }) => element.removeEventListener('click', handleRunMethod))
-  }, [ childrenElements, handleRunMethod ])
+    return (): void => invokeButtons.forEach(({ element }) => element.removeEventListener('click', onRunMethod))
+  }, [ handleRunMethod, parameters ])
 
   // Auto invoke method
   useEffect(() => {
+    const ethValue = parameters?.EthValue
+    const parsedParameters = omit(parameters, 'EthValue')
+    const parametersValues = Object.values(parsedParameters)
+
     if (autoInvokeKey && injectedContext.chainId === info?.contract?.networkId) {
       const { value: autoInvokeValue } = autoInvokeKey
       const autoClearValue = autoClearKey?.value || false
 
       if (autoInvokeValue === 'true' && !isTransaction) {
-        const intervalId = setInterval(() => handleRunMethod(null, autoClearValue), POLLING_INTERVAL)
+        const intervalId = setInterval(() => handleRunMethod(null, autoClearValue, parametersValues, ethValue), POLLING_INTERVAL)
 
         return (): void => clearInterval(intervalId)
       }
     }
-  }, [ autoInvokeKey, autoClearKey, handleRunMethod ])
+  }, [ autoInvokeKey, autoClearKey, handleRunMethod, parameters ])
 
   // Display new results in the UI
   useEffect(() => {
     if (result) {
       const parsedValue = result
 
-      const outputsChildrenElements = childrenElements.find(({ id }) => id.includes('output'))
+      const outputsChildrenElements = childrenElements.find(({ id }) => id.includes('outputs'))
       const outputNamedChildrenElements = childrenElements.find(({ id }) => id.includes('outputName'))
 
       if (outputsChildrenElements?.element) {
         outputsChildrenElements.element.forEach(({ element }) => {
+
           if (typeof result === 'string' || typeof result === 'object') {
             const displayUnits = element.getAttribute('data-dh-modifier-display-units')
             const contractUnits = element.getAttribute('data-dh-modifier-contract-units')
