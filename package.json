@@ -111,6 +111,7 @@
     "start": "node scripts/start.js",
     "build": "node --max-old-space-size=4096 scripts/build.js",
     "test": "node scripts/test.js",
+    "build-dev-deploy": "node dev-deploy",
     "test:e2e": "jest src/e2e",
     "deploy": "npm run build && aws s3 cp ./build/static/js/main.js s3://package.dapphero.io/ --acl public-read",
     "serve": "serve -s build"
@@ -139,6 +140,7 @@
     "eslint-plugin-react-hooks": "^1.7.0",
     "husky": "^3.1.0",
     "lint-staged": "^9.5.0",
+    "moment": "^2.24.0",
     "ts-jest": "^25.2.0"
   },
   "babel": {
