@@ -56,7 +56,7 @@ export const Reducer = ({ info, element }) => {
   const isSingleToken = totalTokens === 1
   const isMultipleTokens = totalTokens > 1
 
-  // Handlers
+  // Helpers
   const getAssetElements = (): NodeListOf<Element> => document.querySelectorAll(`[data-dh-property-asset-item][${DATA_PROPERTY}-tag-id="${tagId}"]`)
 
   const removeAssetElements = (): void => {
@@ -64,6 +64,15 @@ export const Reducer = ({ info, element }) => {
     assetsElements.forEach((assetElement) => assetElement.remove())
   }
 
+  const displayErrorMessage = ({ simpleErrorMessage, completeErrorMessage, error }) => {
+    errorToast({ message: simpleErrorMessage })
+    console.log('-----')
+    console.log(completeErrorMessage)
+    console.log(error)
+    console.log('-----')
+  }
+
+  // Handlers
   const handlePrevButton = (): void => {
     if (offset < 1) return
 
@@ -82,30 +91,33 @@ export const Reducer = ({ info, element }) => {
 
     if (isSingleToken) {
       const [ token ] = parsedTokens
-      const errorMessage = `We couldn't get token ${token} from owner ${assetOwnerAddress}`
+      const simpleErrorMessage = `We have a problem getting the token, check the Console for more details`
+      const completeErrorMessage = `We couldn't get token ${token} from owner ${assetOwnerAddress}`
 
       openSeaApi.owner
         .getSingleAsset({ assetOwnerAddress, assetContractAddress, token })
         .then(setNfts)
-        .catch(() => errorToast({ message: errorMessage }))
+        .catch((error) => displayErrorMessage({ simpleErrorMessage, completeErrorMessage, error }))
     }
 
     if (isMultipleTokens) {
-      const errorMessage = `We couldn't get tokens ${tokens.join(', ')} from owner ${assetOwnerAddress}`
+      const simpleErrorMessage = `We have a problem getting the tokens, check the Console for more details`
+      const completeErrorMessage = `We couldn't get tokens ${tokens.join(', ')} from owner ${assetOwnerAddress}`
 
       openSeaApi.owner
         .getMultipleAssets({ assetOwnerAddress, assetContractAddress, tokens, limit, offset })
         .then(setNfts)
-        .catch(() => errorToast({ message: errorMessage }))
+        .catch((error) => displayErrorMessage({ simpleErrorMessage, completeErrorMessage, error }))
     }
 
     if (isAllTokens) {
-      const errorMessage = `We couldn't get all tokens from owner ${assetOwnerAddress}`
+      const simpleErrorMessage = `We have a problem getting all the token, check the Console for more details`
+      const completeErrorMessage = `We couldn't get all tokens from owner ${assetOwnerAddress}`
 
       openSeaApi.owner
         .getAllAssets({ assetOwnerAddress, assetContractAddress, limit, offset })
         .then(setNfts)
-        .catch(() => errorToast({ message: errorMessage }))
+        .catch((error) => displayErrorMessage({ simpleErrorMessage, completeErrorMessage, error }))
     }
   }, [ assetOwnerAddress, offset ])
 
@@ -115,30 +127,33 @@ export const Reducer = ({ info, element }) => {
 
     if (isSingleToken) {
       const [ token ] = parsedTokens
-      const errorMessage = `We couldn't get token ${token} from contract address ${assetContractAddress}`
+      const simpleErrorMessage = `We have a problem getting all the token, check the Console for more details`
+      const completeErrorMessage = `We couldn't get token ${token} from contract address ${assetContractAddress}`
 
       openSeaApi.contract
         .getSingleAsset({ assetContractAddress, token })
         .then(setNfts)
-        .catch(() => errorToast({ message: errorMessage }))
+        .catch((error) => displayErrorMessage({ simpleErrorMessage, completeErrorMessage, error }))
     }
 
     if (isMultipleTokens) {
-      const errorMessage = `We couldn't get tokens ${tokens.join(', ')} from contract address ${assetContractAddress}`
+      const simpleErrorMessage = `We have a problem getting all the token, check the Console for more details`
+      const completeErrorMessage = `We couldn't get tokens ${tokens.join(', ')} from contract address ${assetContractAddress}`
 
       openSeaApi.contract
         .getMultipleAssets({ assetContractAddress, tokens, limit, offset })
         .then(setNfts)
-        .catch(() => errorToast({ message: errorMessage }))
+        .catch((error) => displayErrorMessage({ simpleErrorMessage, completeErrorMessage, error }))
     }
 
     if (isAllTokens) {
-      const errorMessage = `We couldn't get all tokens from contract address ${assetContractAddress}`
+      const simpleErrorMessage = `We have a problem getting all the token, check the Console for more details`
+      const completeErrorMessage = `We couldn't get all tokens from contract address ${assetContractAddress}`
 
       openSeaApi.contract
         .getAllAssets({ assetContractAddress, limit, offset })
         .then(setNfts)
-        .catch(() => errorToast({ message: errorMessage }))
+        .catch((error) => displayErrorMessage({ simpleErrorMessage, completeErrorMessage, error }))
     }
   }, [ assetContractAddress, offset ])
 
