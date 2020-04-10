@@ -147,11 +147,8 @@ export const Reducer = ({ info, element }) => {
     if (!nfts) return
 
     nfts.forEach((nft, index) => {
-      const clonedItem = item.root.cloneNode(true)
-
-      Array.from(clonedItem.children).forEach((childNode: HTMLElement & HTMLImageElement) => {
-        const jsonPath = childNode.getAttribute(`${DATA_PROPERTY}-asset-json-path`)
-        if (!jsonPath) return
+      item.childrens.forEach((childrenItem) => {
+        const { element: childNode, jsonPath } = childrenItem
 
         const tagType = TAG_TYPES[childNode.tagName] || TAG_TYPES.DEFAULT
 
@@ -166,6 +163,8 @@ export const Reducer = ({ info, element }) => {
           Object.assign(childNode, { src: value })
         }
       })
+
+      const clonedItem = item.root.cloneNode(true)
 
       // Replace root with first cloned item
       if (index === 0) {
@@ -200,7 +199,13 @@ export const Reducer = ({ info, element }) => {
   useEffect(() => {
     if (!info) return
 
-    const spanTokenIdsPaths = document.evaluate("//span[contains(., '$THIS_TokenID')]", info.element, null, XPathResult.ANY_TYPE, null )
+    const spanTokenIdsPaths = document.evaluate(
+      "//span[contains(., '$THIS_TokenID')]",
+      info.element,
+      null,
+      XPathResult.ANY_TYPE,
+      null,
+    )
     const spanTokenIdsElement = spanTokenIdsPaths.iterateNext()
 
     if (!spanTokenIdsElement) return
@@ -211,7 +216,13 @@ export const Reducer = ({ info, element }) => {
   useEffect(() => {
     if (!info) return
 
-    const iframeTokenIdsPaths = document.evaluate("//iframe[contains(@src, '$THIS_TokenID')]", info.element, null, XPathResult.ANY_TYPE, null )
+    const iframeTokenIdsPaths = document.evaluate(
+      "//iframe[contains(@src, '$THIS_TokenID')]",
+      info.element,
+      null,
+      XPathResult.ANY_TYPE,
+      null,
+    )
     const iframeTokenIdsElement = iframeTokenIdsPaths.iterateNext()
 
     if (!iframeTokenIdsElement) return
@@ -226,7 +237,13 @@ export const Reducer = ({ info, element }) => {
   useEffect(() => {
     if (!info) return
 
-    const iframeContractAddressPaths = document.evaluate("//iframe[contains(@src, '$THIS_ContractAddress')]", info.element, null, XPathResult.ANY_TYPE, null )
+    const iframeContractAddressPaths = document.evaluate(
+      "//iframe[contains(@src, '$THIS_ContractAddress')]",
+      info.element,
+      null,
+      XPathResult.ANY_TYPE,
+      null,
+    )
     const iframeContractAddressElement = iframeContractAddressPaths.iterateNext()
 
     if (!iframeContractAddressElement) return
@@ -249,7 +266,6 @@ export const Reducer = ({ info, element }) => {
 
       label.setAttribute('src', updatedSrc)
     })
-
   }, [ info ])
 
   // Replace input elements in their "for" attribute having $THIS_ContractAddress value
