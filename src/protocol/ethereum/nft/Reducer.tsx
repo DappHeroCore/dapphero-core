@@ -39,6 +39,12 @@ export const Reducer = ({ info, element }) => {
 
   const parsedTokens = tokens.map((token: string) => utils.getQueryParameterValue(token, 'assetTokenId'))
 
+  const currentUser = utils.getQueryParameterValue(utils.CURRENT_USER, utils.CURRENT_USER, userAddress)
+
+  if (currentUser) {
+    Object.assign(parsedProperties, { assetOwnerAddress: currentUser })
+  }
+
   // Constants
   const tagId = parsedProperties?.tagId
   const assetOwnerAddress = parsedProperties?.assetOwnerAddress
