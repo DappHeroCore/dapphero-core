@@ -98,7 +98,6 @@ export const Reducer = ({ info, element }) => {
         .getSingleAsset({ assetOwnerAddress, assetContractAddress, token })
         .then(setNfts)
         .catch((error) => displayErrorMessage({ simpleErrorMessage, completeErrorMessage, error }))
-
     }
 
     if (isMultipleTokens) {
