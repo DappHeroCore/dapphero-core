@@ -92,7 +92,7 @@ export const Reducer = ({ info, element }) => {
     if (isSingleToken) {
       const [ token ] = parsedTokens
       const simpleErrorMessage = `We have a problem getting the token, check the Console for more details`
-      const completeErrorMessage = `We couldn't get token ${token} from owner ${assetOwnerAddress}`
+      const completeErrorMessage = `We couldn't get collectible ${token} from owner ${assetOwnerAddress}`
 
       openSeaApi.owner
         .getSingleAsset({ assetOwnerAddress, assetContractAddress, token })
@@ -102,7 +102,7 @@ export const Reducer = ({ info, element }) => {
 
     if (isMultipleTokens) {
       const simpleErrorMessage = `We have a problem getting the tokens, check the Console for more details`
-      const completeErrorMessage = `We couldn't get tokens ${tokens.join(', ')} from owner ${assetOwnerAddress}`
+      const completeErrorMessage = `We couldn't get collectibles ${tokens.join(', ')} from owner ${assetOwnerAddress}`
 
       openSeaApi.owner
         .getMultipleAssets({ assetOwnerAddress, assetContractAddress, tokens, limit, offset })
@@ -111,8 +111,8 @@ export const Reducer = ({ info, element }) => {
     }
 
     if (isAllTokens) {
-      const simpleErrorMessage = `We have a problem getting all the token, check the Console for more details`
-      const completeErrorMessage = `We couldn't get all tokens from owner ${assetOwnerAddress}`
+      const simpleErrorMessage = `Error retriving collectibles, check the Console for more details`
+      const completeErrorMessage = `We couldn't get the collectibles from owner ${assetOwnerAddress}`
 
       openSeaApi.owner
         .getAllAssets({ assetOwnerAddress, assetContractAddress, limit, offset })
@@ -127,8 +127,8 @@ export const Reducer = ({ info, element }) => {
 
     if (isSingleToken) {
       const [ token ] = parsedTokens
-      const simpleErrorMessage = `We have a problem getting all the token, check the Console for more details`
-      const completeErrorMessage = `We couldn't get token ${token} from contract address ${assetContractAddress}`
+      const simpleErrorMessage = `Error retriving collectibles, check the Console for more details`
+      const completeErrorMessage = `We couldn't get collectible ${token} from contract address ${assetContractAddress}`
 
       openSeaApi.contract
         .getSingleAsset({ assetContractAddress, token })
@@ -137,8 +137,8 @@ export const Reducer = ({ info, element }) => {
     }
 
     if (isMultipleTokens) {
-      const simpleErrorMessage = `We have a problem getting all the token, check the Console for more details`
-      const completeErrorMessage = `We couldn't get tokens ${tokens.join(', ')} from contract address ${assetContractAddress}`
+      const simpleErrorMessage = `Error retriving collectibles, check the Console for more details`
+      const completeErrorMessage = `We couldn't get collectibles ${tokens.join(', ')} from contract address ${assetContractAddress}`
 
       openSeaApi.contract
         .getMultipleAssets({ assetContractAddress, tokens, limit, offset })
@@ -147,8 +147,8 @@ export const Reducer = ({ info, element }) => {
     }
 
     if (isAllTokens) {
-      const simpleErrorMessage = `We have a problem getting all the token, check the Console for more details`
-      const completeErrorMessage = `We couldn't get all tokens from contract address ${assetContractAddress}`
+      const simpleErrorMessage = `Error retriving collectibles, check the Console for more details`
+      const completeErrorMessage = `We couldn't get all collectibles from contract address ${assetContractAddress}`
 
       openSeaApi.contract
         .getAllAssets({ assetContractAddress, limit, offset })
