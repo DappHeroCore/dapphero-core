@@ -269,7 +269,6 @@ export const Reducer = ({ info, configuration }) => {
 
     if (autoInvokeKey && injectedContext.chainId === info?.contract?.networkId) {
       const { value: autoInvokeValue } = autoInvokeKey || { value: false }
-      console.log('Reducer -> autoInvokeKey', autoInvokeKey)
 
       const autoClearValue = autoClearKey?.value || false
 
