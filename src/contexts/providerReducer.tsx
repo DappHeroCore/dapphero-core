@@ -13,6 +13,7 @@ const initialProvider = {
   signer: null,
   chainId: null,
   enableFunction: null,
+  address: null,
 }
 
 const providerReducer = ( state, action) => {
@@ -20,7 +21,7 @@ const providerReducer = ( state, action) => {
     case actionTypes.addProvider:
       return { ...state, provider: action.provider, chainId: action.chainId }
     case actionTypes.addSigner:
-      return { ...state, signer: action.signer, enableFunction: action.enableFunction }
+      return { ...state, signer: action.signer, enableFunction: action.enableFunction, address: action.address }
     default:
       return state
   }
@@ -32,8 +33,8 @@ export const useProvider = () => {
   const addProvider = async (provider) => {
     dispatch({ type: actionTypes.addProvider, provider, chainId: (await provider.getNetwork()) })
   }
-  const addSigner = (signer, enableFunction) => {
-    dispatch({ type: actionTypes.addSigner, signer, enableFunction })
+  const addSigner = (signer, address, enableFunction) => {
+    dispatch({ type: actionTypes.addSigner, signer, enableFunction, address })
   }
 
   const dhProviderContext = React.createContext(provider)

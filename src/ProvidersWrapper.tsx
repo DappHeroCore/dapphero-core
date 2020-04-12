@@ -25,8 +25,10 @@ export const ProvidersWrapper: React.FC = () => {
   const [ configuration, setConfig ] = useState(null)
   const [ domElements, setDomElements ] = useState(null)
   const [ timestamp, setTimestamp ] = useState(+new Date())
+  const retriggerEngine = (): void => setTimestamp(+new Date())
 
   const { provider, addProvider, addSigner } = useProvider()
+  console.log('ProvidersWrapper:React.FC -> provider', provider)
 
   // add provider
   useEffect(() => {
@@ -40,16 +42,17 @@ export const ProvidersWrapper: React.FC = () => {
       if (window.ethereum || window.web3) {
         try {
           const signer = new Web3Provider(window.ethereum || window.web3).getSigner()
-          await signer.getAddress()
-          logger.log('Metamask is enabled')
-          addSigner(signer, window.ethereum.enable || window.web3.enable)
+          const address = await signer.getAddress()
+          logger.log(`Metamask is enabled, address: ${address}`)
+          addSigner(signer, address, window.ethereum.enable || window.web3.enable)
+
         } catch (err) {
           logger.log('Metamask is not enabled')
         }
       }
     }
-
     tryMetamask()
+    window.ethereum.on('accountsChanged', tryMetamask)
   }, [])
 
   // effects
@@ -63,8 +66,6 @@ export const ProvidersWrapper: React.FC = () => {
   useEffect(() => {
     if (configuration) setDomElements(getDomElements(configuration))
   }, [ configuration ])
-
-  const retriggerEngine = (): void => setTimestamp(+new Date())
 
   if (domElements != null) {
     return (
