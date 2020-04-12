@@ -25,6 +25,8 @@ type ActivatorProps = {
 export const Activator = ({ configuration, retriggerEngine }: ActivatorProps) => {
   // React hooks
   const domElements = useContext(contexts.DomElementsContext)
+  const ethereum = useContext(contexts.EthereumContext)
+
   const { actions: { listenToEvent } } = useContext(EmitterContext)
 
   // Custom hooks

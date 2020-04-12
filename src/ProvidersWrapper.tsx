@@ -9,11 +9,11 @@ import { getDomElements } from '@dapphero/dapphero-dom'
 import * as api from 'api'
 import { ethers } from 'ethers'
 import * as consts from 'consts'
-import { DomElementsContext } from 'contexts'
+import { DomElementsContext, EthereumContext } from 'contexts'
 import { EmitterProvider } from 'providers/EmitterProvider/provider'
 
 import { Web3Provider } from 'ethers/providers'
-import { useProvider } from './contexts/providerReducer'
+import { useProvider } from './hooks/useProvider'
 
 import { Activator } from './Activator'
 import { logger } from './logger/customLogger'
@@ -25,10 +25,10 @@ export const ProvidersWrapper: React.FC = () => {
   const [ configuration, setConfig ] = useState(null)
   const [ domElements, setDomElements ] = useState(null)
   const [ timestamp, setTimestamp ] = useState(+new Date())
+  const [ providerChoice, setProviderChoice ] = useState('metamask')
   const retriggerEngine = (): void => setTimestamp(+new Date())
 
-  const { provider, addProvider, addSigner } = useProvider()
-  console.log('ProvidersWrapper:React.FC -> provider', provider)
+  const { provider: ethereum, addProvider, addSigner } = useProvider()
 
   // add provider
   useEffect(() => {
@@ -51,7 +51,7 @@ export const ProvidersWrapper: React.FC = () => {
         }
       }
     }
-    tryMetamask()
+    if (providerChoice === 'metamask') tryMetamask()
     window.ethereum.on('accountsChanged', tryMetamask)
   }, [])
 
@@ -73,9 +73,11 @@ export const ProvidersWrapper: React.FC = () => {
         <CookiesProvider>
           <ToastProvider>
             <Web3ReactProvider getLibrary={getLibrary}>
-              <DomElementsContext.Provider value={domElements}>
-                <Activator configuration={configuration} retriggerEngine={retriggerEngine} />
-              </DomElementsContext.Provider>
+              <EthereumContext.Provider value={ethereum}>
+                <DomElementsContext.Provider value={domElements}>
+                  <Activator configuration={configuration} retriggerEngine={retriggerEngine} />
+                </DomElementsContext.Provider>
+              </EthereumContext.Provider>
             </Web3ReactProvider>
           </ToastProvider>
         </CookiesProvider>

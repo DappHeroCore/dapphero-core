@@ -1,8 +1,5 @@
 import React from 'react'
 
-// const ADD_PROVIDER = 'ADD_PROVIDER'
-// const ADD_SIGNER = 'ADD_SIGNER'
-
 const actionTypes = {
   addProvider: 'ADD_PROVIDER',
   addSigner: 'ADD_SIGNER',
