@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import get from 'lodash.get'
 
@@ -12,6 +12,7 @@ import { EmitterContext } from 'providers/EmitterProvider/context'
 import { FeatureReducer } from './protocol/ethereum/featureReducer'
 
 import { highlightDomElements } from './utils/highlightDomElements'
+import { logger } from './logger/customLogger'
 
 // Log tests and Startup Logs
 loggerTest()
@@ -26,12 +27,28 @@ export const Activator = ({ configuration, retriggerEngine }: ActivatorProps) =>
   // React hooks
   const domElements = useContext(contexts.DomElementsContext)
   const ethereum = useContext(contexts.EthereumContext)
+  const { provider, signer, chainId } = ethereum
 
   const { actions: { listenToEvent } } = useContext(EmitterContext)
 
-  // Custom hooks
-  const attemptedEagerConnect = hooks.useEagerConnect()
-  const web3React = useWeb3React()
+  const [ providerReady, setProviderReady ] = useState(false)
+
+  // // Custom hooks
+  // const attemptedEagerConnect = hooks.useEagerConnect()
+  // const web3React = useWeb3React()
+  useEffect(() => {
+    const fetchReady = async () => {
+      try {
+        if (await provider.ready) {
+          logger.log(`Provider ready.`)
+          setProviderReady(true)
+        }
+      } catch (error) {
+        logger.log(`Provider not yet ready: ${error}`)
+      }
+    }
+    if (provider) fetchReady()
+  }, [ provider ])
 
   useEffect(() => {
     const dappHero = {
@@ -42,7 +59,7 @@ export const Activator = ({ configuration, retriggerEngine }: ActivatorProps) =>
       configuration,
       retriggerEngine,
       projectId: consts.global.apiKey,
-      provider: get(web3React, 'library.provider', null),
+      provider: ethereum,
       toggleHighlight(): void {
         dappHero.highlightEnabled = !dappHero.highlightEnabled
         highlightDomElements(dappHero.highlightEnabled, domElements)
@@ -55,9 +72,9 @@ export const Activator = ({ configuration, retriggerEngine }: ActivatorProps) =>
     Object.assign(window, { dappHero })
     // Dispatch the event.
     window.dispatchEvent(event)
-  }, [ web3React, web3React.library ])
+  }, [ provider, signer, chainId ])
 
-  if (attemptedEagerConnect) {
+  if (providerReady) {
     return (
       <>
         {domElements

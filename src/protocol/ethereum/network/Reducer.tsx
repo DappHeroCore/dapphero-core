@@ -9,10 +9,9 @@ import { EthTransfer } from './EthTransfer'
 
 export const Reducer = ({ element, info }) => {
   // const injected = hooks.useDappHeroWeb3()
-  const injectedContext = useWeb3React()
+  // const injectedContext = useWeb3React()
   const domElements = hooks.useDomElements()
-  const { chainId } = injectedContext
-  const networkName = consts.global.ethNetworkName[chainId]
+  // const { chainId } = injectedContext
   const defaultInfoObj = {
     networkId: 0,
     networkName: 'Unknown',
@@ -21,17 +20,20 @@ export const Reducer = ({ element, info }) => {
 
   const [ infoValue, setInfoValue ] = useState(defaultInfoObj)
 
+  const ethereum = useContext(contexts.EthereumContext)
+  const { chainId } = ethereum
+
   useEffect(() => {
 
     const isMetamask = (typeof window.ethereum !== 'undefined' && window.ethereum.isMetaMask) ? 'metamask' : null
 
     const infoValueObj = {
-      networkId: chainId ?? 0,
-      networkName: networkName ?? 'Unknown',
+      networkId: chainId.chainId ?? 0,
+      networkName: chainId.name ?? 'Unknown',
       providerName: isMetamask ?? 'Unknown',
     }
     setInfoValue(infoValueObj)
-  }, [ chainId, networkName ])
+  }, [ chainId ])
 
   switch (info?.properties[0]?.key) {
     case ('enable'): { // TODO: Drake- we need to settle on if we are going to use this style or not so we can be consistent
