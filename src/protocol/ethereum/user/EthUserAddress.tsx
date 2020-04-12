@@ -1,7 +1,6 @@
 
 import React, { useEffect, FunctionComponent, useContext, useState } from 'react'
 import * as contexts from 'contexts'
-import { useWeb3React } from '@web3-react/core'
 import { logger } from 'logger/customLogger'
 
 interface EthUserAddressProps {
@@ -11,11 +10,12 @@ interface EthUserAddressProps {
 
 export const EthUserAddress: FunctionComponent<EthUserAddressProps> = ({ element, displayFormat }) => {
 
-  const [ address, setAddress ] = useState('')
+  const [ address, setAddress ] = useState(null)
   const ethereum = useContext(contexts.EthereumContext)
   const { signer } = ethereum
 
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     const getAddress = async () => {
       try {
         setAddress(await (signer.getAddress()))
