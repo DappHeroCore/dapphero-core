@@ -1,17 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import * as hooks from 'hooks'
-import * as consts from 'consts'
 import * as contexts from 'contexts'
 import { EthEnable } from './EthEnable'
 import { EthNetworkInfo } from './EthNetworkInfo'
 import { EthTransfer } from './EthTransfer'
 
 export const Reducer = ({ element, info }) => {
-  // const injected = hooks.useDappHeroWeb3()
-  // const injectedContext = useWeb3React()
   const domElements = hooks.useDomElements()
-  // const { chainId } = injectedContext
   const defaultInfoObj = {
     networkId: 0,
     networkName: 'Unknown',

@@ -2,6 +2,7 @@ import { FunctionComponent, useEffect, useContext } from 'react'
 import Notify from 'bnc-notify'
 import { logger } from 'logger/customLogger'
 import * as utils from 'utils'
+import * as contexts from 'contexts'
 import { ethers } from 'ethers'
 import { useWeb3React } from '@web3-react/core'
 
@@ -14,15 +15,15 @@ interface EthTransferProps {
   // TODO: put correct type
   info?: {[key: string]: any};
 }
-// TODO: [BS-16] Add feature for sending fixed amount of eth without any inputs
-// TODO: [DEV-109] add blocknative support for simple eth transfers
-// TODO: clean this up,
-// TODO: consider adding a required unique id for this functionality
-// and base DOM parsing off id
+
 export const EthTransfer: FunctionComponent<EthTransferProps> = ({ element, amountObj, addressObj, outputObj, info }) => {
   const { library } = useWeb3React()
+
+  const ethereum = useContext(contexts.EthereumContext)
+  const { chainId, signer, writeProvider } = ethereum
+
   useEffect(() => {
-    const transferEther = (e) => {
+    const transferEther = async (e) => {
       try {
         try {
           e.preventDefault()
@@ -30,12 +31,14 @@ export const EthTransfer: FunctionComponent<EthTransferProps> = ({ element, amou
         } catch (err) {}
         const notify = Notify({
           dappId: apiKey, // [String] The API key created by step one above
-          networkId: library._network.chainId, // [Integer] The Ethereum network ID your Dapp uses.
+          networkId: chainId.chainId, // [Integer] The Ethereum network ID your Dapp uses.
         })
 
-        const from = library.provider.selectedAddress
+        const from = await signer.getAddress()
+        console.log('transferEther -> from', from)
         const inputUnits = amountObj?.modifiers_?.displayUnits ?? 'wei' // FIXME: move this to dappheroDOM
         const convertedUnits = utils.convertUnits(inputUnits, 'wei', amountObj.element.value)
+        console.log('transferEther -> convertedUnits', convertedUnits)
         const params = [ {
           from,
           to: addressObj.element.value,
@@ -43,7 +46,12 @@ export const EthTransfer: FunctionComponent<EthTransferProps> = ({ element, amou
           // value: utils.convertUnits(inputUnits, 'wei', amountObj.element.value),
         } ]
 
-        library.send('eth_sendTransaction', params)
+        const { ethereum: ethereum2 } = window
+        // Request account access if needed
+        await ethereum2.enable()
+        const provider = new ethers.providers.Web3Provider(ethereum2)
+
+        provider.sendTransaction('eth_sendTransaction', params)
           .then((hash) => {
             notify.hash(hash)
             amountObj.element.value = ''
@@ -52,15 +60,17 @@ export const EthTransfer: FunctionComponent<EthTransferProps> = ({ element, amou
           .catch((err) => {
             amountObj.element.value = ''
             addressObj.element.value = ''
+            console.log('THE SEND ERROR', err)
             logger.info('There was an error sending ether with metaMask', err)
           })
       } catch (err) {
+        console.log('What is the error: ', err)
         logger.warn('There was an error transfering ether', err)
       }
     }
 
-    if (library) utils.addClickHandlerToTriggerElement(element, transferEther)
-  }, [ library ])
+    if (signer) utils.addClickHandlerToTriggerElement(element, transferEther)
+  }, [ signer ])
 
   return null
 }

@@ -3,10 +3,12 @@ import React from 'react'
 const actionTypes = {
   addProvider: 'ADD_PROVIDER',
   addSigner: 'ADD_SIGNER',
+  addWriteProvider: 'ADD_WRITE_PROVIDER',
 }
 
 const initialProvider = {
   provider: null,
+  writeProvider: null,
   signer: null,
   chainId: null,
   enableFunction: null,
@@ -19,6 +21,8 @@ const providerReducer = ( state, action) => {
       return { ...state, provider: action.provider, chainId: action.chainId }
     case actionTypes.addSigner:
       return { ...state, signer: action.signer, enableFunction: action.enableFunction, address: action.address }
+    case actionTypes.addWriteProvider:
+      return { ...state, writeProvider: action.provider }
     default:
       return state
   }
@@ -34,7 +38,11 @@ export const useProvider = () => {
     dispatch({ type: actionTypes.addSigner, signer, enableFunction, address })
   }
 
+  const addWriteProvider = async (provider) => {
+    dispatch({ type: actionTypes.addWriteProvider, provider })
+  }
+
   const dhProviderContext = React.createContext(provider)
-  return { provider, addProvider, addSigner, dhProviderContext }
+  return { provider, addProvider, addSigner, addWriteProvider, dhProviderContext }
 }
 

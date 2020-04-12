@@ -28,7 +28,7 @@ export const ProvidersWrapper: React.FC = () => {
   const [ providerChoice, setProviderChoice ] = useState('metamask')
   const retriggerEngine = (): void => setTimestamp(+new Date())
 
-  const { provider: ethereum, addProvider, addSigner } = useProvider()
+  const { provider: ethereum, addProvider, addSigner, addWriteProvider } = useProvider()
 
   // add provider
   useEffect(() => {
@@ -41,11 +41,12 @@ export const ProvidersWrapper: React.FC = () => {
     const tryMetamask = async () => {
       if (window.ethereum || window.web3) {
         try {
-          const signer = new Web3Provider(window.ethereum || window.web3).getSigner()
+          const provider = new Web3Provider(window.ethereum || window.web3)
+          const signer = provider.getSigner()
           const address = await signer.getAddress()
           logger.log(`Metamask is enabled, address: ${address}`)
           addSigner(signer, address, window.ethereum.enable || window.web3.enable)
-
+          addWriteProvider(provider)
         } catch (err) {
           logger.log('Metamask is not enabled')
         }
