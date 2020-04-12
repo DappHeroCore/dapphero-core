@@ -1,6 +1,6 @@
 
-import React, { useEffect, FunctionComponent } from 'react'
-import * as hooks from 'hooks'
+import React, { useEffect, FunctionComponent, useContext, useState } from 'react'
+import * as contexts from 'contexts'
 import { useWeb3React } from '@web3-react/core'
 import { logger } from 'logger/customLogger'
 
@@ -11,17 +11,30 @@ interface EthUserAddressProps {
 
 export const EthUserAddress: FunctionComponent<EthUserAddressProps> = ({ element, displayFormat }) => {
 
-  // const { accounts, networkId } = hooks.useDappHeroWeb3()
-  const { account } = useWeb3React()
+  const [ address, setAddress ] = useState('')
+  const ethereum = useContext(contexts.EthereumContext)
+  const { signer } = ethereum
+
+  useEffect(() => {
+    const getAddress = async () => {
+      try {
+        setAddress(await (signer.getAddress()))
+      } catch (error) {
+        logger.log(`Error in retriving the users address`, error)
+      }
+    }
+    if (signer) getAddress()
+  }, [ signer ])
+
   useEffect(() => {
     try {
-      if (account) {
-        element.innerHTML = displayFormat === 'short' ? `${account.slice(0, 4)}...${account.slice(account.length - 5)}` : account
+      if (address) {
+        element.innerHTML = displayFormat === 'short' ? `${address.slice(0, 4)}...${address.slice(address.length - 5)}` : address
       }
     } catch (e) {
       logger.log('Getting account address failed', e)
     }
-  }, [ account ])
+  }, [ address ])
 
   return null
 }

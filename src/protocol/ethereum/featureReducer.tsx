@@ -28,9 +28,9 @@ export const FeatureReducer = ({ feature, element, configuration, info }: Featur
     //   return <NftReducer element={element} info={info} />
     // }
 
-    // case 'user': {
-    //   return <UserReducer element={element} info={info} />
-    // }
+    case 'user': {
+      return <UserReducer element={element} info={info} />
+    }
 
     case 'network': {
       return <NetworkReducer element={element} info={info} />
