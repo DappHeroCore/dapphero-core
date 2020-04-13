@@ -2,11 +2,11 @@ import React, { FunctionComponent, useEffect, useState, useContext } from 'react
 import * as contexts from 'contexts'
 import { useWeb3React } from '@web3-react/core'
 import { logger } from 'logger/customLogger'
+import { getProfile } from '3box/lib/api'
 import { ThreeBoxProfileDataElement } from './ThreeBoxProfileDataElement'
 import { ThreeBoxProfileImgElement } from './ThreeBoxProfileImgElement'
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const { getProfile: get3boxProfile } = require('3box/lib/api')
+const get3boxProfile = getProfile
 
 const ipfsRoot = 'https://cloudflare-ipfs.com/ipfs/'
 interface ReducerProps {

@@ -26,11 +26,34 @@ export const ProvidersWrapper: React.FC = () => {
   const [ domElements, setDomElements ] = useState(null)
   const [ timestamp, setTimestamp ] = useState(+new Date())
   const [ providerChoice, setProviderChoice ] = useState('metamask')
+  const [ supportedNetworks, setSupportedNetworks ] = useState([])
+  const [ appReady, setAppReady ] = useState(false)
   const retriggerEngine = (): void => setTimestamp(+new Date())
 
   const { provider: ethereum, addProvider, addSigner, addWriteProvider } = useProvider()
 
-  // add provider
+  // load contracts effects
+  useEffect(() => {
+    (async () => {
+      const newConfig = { contracts: await api.dappHero.getContractsByProjectKey(consts.global.apiKey) }
+      setConfig(newConfig)
+    })()
+  }, [])
+
+  useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    const getSupportedNetworks = () => {
+      const networks = configuration.contracts?.map((contract) => ({
+        contractName: contract.contractName,
+        chainId: contract.networkId,
+      }))
+      setSupportedNetworks(networks)
+    }
+
+    if (configuration?.contracts) getSupportedNetworks()
+  }, [ configuration ])
+
+  // add read provider
   useEffect(() => {
     const networkName = 'rinkeby'
     addProvider(ethers.getDefaultProvider(networkName))
@@ -42,9 +65,16 @@ export const ProvidersWrapper: React.FC = () => {
       if (window.ethereum || window.web3) {
         try {
           const provider = new Web3Provider(window.ethereum || window.web3)
+          const currentNetwork = await provider.ready
           const signer = provider.getSigner()
           const address = await signer.getAddress()
           logger.log(`Metamask is enabled, address: ${address}`)
+
+          const onCorrectNetwork = supportedNetworks.find((network) => network.chainId === currentNetwork.chainId)
+          console.log('tryMetamask -> onCorrectNetwork', onCorrectNetwork)
+          if (!onCorrectNetwork) {
+            console.log(`Metamask is on network ${currentNetwork.chainId.toString()} : ${consts.global.ethNetworkName[currentNetwork.chainId]}.`)
+          }
           addSigner(signer, address, window.ethereum.enable || window.web3.enable)
           addWriteProvider(provider)
         } catch (err) {
@@ -55,19 +85,11 @@ export const ProvidersWrapper: React.FC = () => {
     if (providerChoice === 'metamask') tryMetamask()
     window.ethereum.on('accountsChanged', tryMetamask)
     window.ethereum.on('networkChanged', tryMetamask)
-  }, [])
-
-  // effects
-  useEffect(() => {
-    (async () => {
-      const newConfig = { contracts: await api.dappHero.getContractsByProjectKey(consts.global.apiKey) }
-      setConfig(newConfig)
-    })()
-  }, [])
+  }, [ supportedNetworks ])
 
   useEffect(() => {
     if (configuration) setDomElements(getDomElements(configuration))
-  }, [ configuration ])
+  }, [ configuration, supportedNetworks ])
 
   if (domElements != null) {
     return (
