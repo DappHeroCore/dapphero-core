@@ -14,7 +14,10 @@ import { DomElementsContext, EthereumContext } from 'contexts'
 import { EmitterProvider } from 'providers/EmitterProvider/provider'
 
 import { Web3Provider } from 'ethers/providers'
+
+import { useInterval } from './utils/useInterval'
 import { useProvider } from './hooks/useProvider'
+import { useMetamask } from './providers/ethereum/metamask'
 
 import { Activator } from './Activator'
 import { logger } from './logger/customLogger'
@@ -42,20 +45,6 @@ export const ProvidersWrapper: React.FC = () => {
   const [ supportedNetworks, setSupportedNetworks ] = useState([])
   const [ appReady, setAppReady ] = useState(false)
   const retriggerEngine = (): void => setTimestamp(+new Date())
-
-  const [ modalIsOpen, setIsOpen ] = React.useState(false)
-  function openModal() {
-    setIsOpen(true)
-  }
-
-  function afterOpenModal() {
-    // references are now sync'd and can be accessed.
-
-  }
-
-  function closeModal() {
-    setIsOpen(false)
-  }
 
   const { provider: ethereum, addProvider, addSigner, addWriteProvider } = useProvider()
 
@@ -86,37 +75,42 @@ export const ProvidersWrapper: React.FC = () => {
     addProvider(ethers.getDefaultProvider(networkName))
   }, [])
 
+  const output = useMetamask(2000)
+
+  console.log('ProvidersWrapper:React.FC -> output', output)
+
   // add metamask if already enabled
-  useEffect(() => {
-    const tryMetamask = async () => {
-      if (window.ethereum || window.web3) {
-        try {
-          const provider = new Web3Provider(window.ethereum || window.web3)
-          const currentNetwork = await provider.ready
-          const signer = provider.getSigner()
-          const address = await signer.getAddress()
-          logger.log(`Metamask is enabled, address: ${address}`)
-
-          const onCorrectNetwork = supportedNetworks.find((network) => network.chainId === currentNetwork.chainId)
-          console.log('tryMetamask -> onCorrectNetwork', onCorrectNetwork)
-          if (!onCorrectNetwork) {
-            setIsOpen(true)
-            console.log(`Metamask is on network ${currentNetwork.chainId.toString()} : ${consts.global.ethNetworkName[currentNetwork.chainId]}.`)
-          } else {
-            setIsOpen(false)
-          }
-
-          addSigner(signer, address, window.ethereum.enable || window.web3.enable)
-          addWriteProvider(provider)
-        } catch (err) {
-          logger.log('Metamask is not enabled')
-        }
-      }
-    }
-    if (providerChoice === 'metamask') tryMetamask()
-    window.ethereum.on('accountsChanged', tryMetamask)
-    window.ethereum.on('networkChanged', tryMetamask)
-  }, [ supportedNetworks ])
+  // useInterval(() => {
+  //   let address = 'false'
+  //   const tryMetamask = async () => {
+  //     if (window.ethereum || window.web3) {
+  //       try {
+  //         const provider = new Web3Provider(window.ethereum || window.web3)
+  //         const currentNetwork = await provider.ready
+  //         const signer = provider.getSigner()
+  //         try {
+  //           address = await signer.getAddress()
+  //         } catch (error) {
+  //           console.log('address error:', error)
+  //         }
+  //         console.log('The address is: ', address)
+  //         const onCorrectNetwork = supportedNetworks.find((network) => network.chainId === currentNetwork.chainId)
+  //         if (!onCorrectNetwork) {
+  //           console.log(`Metamask is on network ${currentNetwork.chainId.toString()} : ${consts.global.ethNetworkName[currentNetwork.chainId]}.`)
+  //         } else if (onCorrectNetwork) {
+  //           console.log('on the right network!')
+  //           addSigner(signer, address, window.ethereum.enable || window.web3.enable)
+  //           addWriteProvider(provider)
+  //         }
+  //       } catch (err) {
+  //         logger.log('Metamask is not enabled')
+  //       }
+  //     }
+  //   }
+  //   if (providerChoice === 'metamask') tryMetamask()
+  //   // window.ethereum.on('accountsChanged', tryMetamask)
+  //   // window.ethereum.on('networkChanged', tryMetamask)
+  // }, 1000)
 
   useEffect(() => {
     if (configuration) setDomElements(getDomElements(configuration))
@@ -130,17 +124,6 @@ export const ProvidersWrapper: React.FC = () => {
             <Web3ReactProvider getLibrary={getLibrary}>
               <EthereumContext.Provider value={ethereum}>
                 <DomElementsContext.Provider value={domElements}>
-                  <Modal
-                    isOpen={modalIsOpen}
-                    onAfterOpen={afterOpenModal}
-                    onRequestClose={closeModal}
-                    style={customStyles}
-                    contentLabel="Example Modal"
-                  >
-                    <h2>Hello</h2>
-                    <button onClick={closeModal} type="button">close</button>
-                    <div>I am a modal</div>
-                  </Modal>
                   <Activator configuration={configuration} retriggerEngine={retriggerEngine} />
                 </DomElementsContext.Provider>
               </EthereumContext.Provider>
