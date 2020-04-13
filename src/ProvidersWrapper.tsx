@@ -17,36 +17,21 @@ import { Web3Provider } from 'ethers/providers'
 
 import { useInterval } from './utils/useInterval'
 import { useProvider } from './hooks/useProvider'
-import { useMetamask } from './providers/ethereum/metamask'
+import { useWeb3Provider } from './providers/ethereum/useWeb3Provider'
 
 import { Activator } from './Activator'
 import { logger } from './logger/customLogger'
 
 const getLibrary = (provider) => new ethers.providers.Web3Provider(provider) // this will vary according to whether you use e.g. ethers or web3.js
 
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-  },
-}
-// Modal.setAppElement('dh-apiKey')
-
 export const ProvidersWrapper: React.FC = () => {
   // react hooks
   const [ configuration, setConfig ] = useState(null)
   const [ domElements, setDomElements ] = useState(null)
   const [ timestamp, setTimestamp ] = useState(+new Date())
-  const [ providerChoice, setProviderChoice ] = useState('metamask')
   const [ supportedNetworks, setSupportedNetworks ] = useState([])
-  const [ appReady, setAppReady ] = useState(false)
-  const retriggerEngine = (): void => setTimestamp(+new Date())
 
-  const { provider: ethereum, addProvider, addSigner, addWriteProvider } = useProvider()
+  const retriggerEngine = (): void => setTimestamp(+new Date())
 
   // load contracts effects
   useEffect(() => {
@@ -69,48 +54,7 @@ export const ProvidersWrapper: React.FC = () => {
     if (configuration?.contracts) getSupportedNetworks()
   }, [ configuration ])
 
-  // add read provider
-  useEffect(() => {
-    const networkName = 'rinkeby'
-    addProvider(ethers.getDefaultProvider(networkName))
-  }, [])
-
-  const output = useMetamask(2000)
-
-  console.log('ProvidersWrapper:React.FC -> output', output)
-
-  // add metamask if already enabled
-  // useInterval(() => {
-  //   let address = 'false'
-  //   const tryMetamask = async () => {
-  //     if (window.ethereum || window.web3) {
-  //       try {
-  //         const provider = new Web3Provider(window.ethereum || window.web3)
-  //         const currentNetwork = await provider.ready
-  //         const signer = provider.getSigner()
-  //         try {
-  //           address = await signer.getAddress()
-  //         } catch (error) {
-  //           console.log('address error:', error)
-  //         }
-  //         console.log('The address is: ', address)
-  //         const onCorrectNetwork = supportedNetworks.find((network) => network.chainId === currentNetwork.chainId)
-  //         if (!onCorrectNetwork) {
-  //           console.log(`Metamask is on network ${currentNetwork.chainId.toString()} : ${consts.global.ethNetworkName[currentNetwork.chainId]}.`)
-  //         } else if (onCorrectNetwork) {
-  //           console.log('on the right network!')
-  //           addSigner(signer, address, window.ethereum.enable || window.web3.enable)
-  //           addWriteProvider(provider)
-  //         }
-  //       } catch (err) {
-  //         logger.log('Metamask is not enabled')
-  //       }
-  //     }
-  //   }
-  //   if (providerChoice === 'metamask') tryMetamask()
-  //   // window.ethereum.on('accountsChanged', tryMetamask)
-  //   // window.ethereum.on('networkChanged', tryMetamask)
-  // }, 1000)
+  const ethereum = useWeb3Provider(2000)
 
   useEffect(() => {
     if (configuration) setDomElements(getDomElements(configuration))
@@ -121,13 +65,11 @@ export const ProvidersWrapper: React.FC = () => {
       <EmitterProvider>
         <CookiesProvider>
           <ToastProvider>
-            <Web3ReactProvider getLibrary={getLibrary}>
-              <EthereumContext.Provider value={ethereum}>
-                <DomElementsContext.Provider value={domElements}>
-                  <Activator configuration={configuration} retriggerEngine={retriggerEngine} />
-                </DomElementsContext.Provider>
-              </EthereumContext.Provider>
-            </Web3ReactProvider>
+            <EthereumContext.Provider value={ethereum}>
+              <DomElementsContext.Provider value={domElements}>
+                <Activator configuration={configuration} retriggerEngine={retriggerEngine} />
+              </DomElementsContext.Provider>
+            </EthereumContext.Provider>
           </ToastProvider>
         </CookiesProvider>
       </EmitterProvider>

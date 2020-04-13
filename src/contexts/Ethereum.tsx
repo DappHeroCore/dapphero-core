@@ -2,9 +2,11 @@ import React from 'react'
 
 export const EthereumContext = React.createContext({
   provider: null,
-  writeProvider: null,
-  signer: null,
+  providerType: null,
   chainId: null,
-  enableFunction: null,
+  networkName: null,
+  signer: null,
+  isEnabled: false,
+  enable: null,
   address: null,
 })
