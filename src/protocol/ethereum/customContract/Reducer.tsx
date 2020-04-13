@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { useToasts } from 'react-toast-notifications'
 import Notify from 'bnc-notify'
 import { ethers } from 'ethers'
@@ -48,6 +48,7 @@ export const Reducer = ({ info, readContract, writeContract }) => {
   const ethValueKey = properties.find((property) => property.key === 'ethValue')
 
   const { value: methodName } = methodNameKey
+  console.log('Reducer -> methodName', methodName)
 
   const { actions: { emitToEvent } } = useContext(EmitterContext)
 
@@ -56,9 +57,46 @@ export const Reducer = ({ info, readContract, writeContract }) => {
   const errorToast = ({ message }): void => addToast(message, { appearance: 'error' })
   const infoToast = ({ message }): void => addToast(message, { appearance: 'info' })
 
-  // States
+  // React hooks
   const [ result, setResult ] = useState(null)
-  const [ parameters, setParameters ] = useState(getAbiMethodInputs(info.contract.contractAbi, methodName))
+
+  // Helpers - Get parameters values
+  const getParametersFromInputValues = (): Record<string, any> => {
+    const inputChildrens = childrenElements.filter(({ id }) => id.includes('input'))
+    const abiMethodInputs = getAbiMethodInputs(info.contract.contractAbi, methodName)
+
+    if (!inputChildrens.length ) return { parameterValues: [], ethValue: undefined }
+
+    const [ inputs ] = inputChildrens
+
+    const ethValue = abiMethodInputs?.EthValue
+
+    inputs.element.forEach(({ element, argumentName }) => {
+      const rawValue = ethValue ?? element.value
+      const value = injectedContext?.account
+        ? rawValue.replace(consts.clientSide.currentUser, injectedContext.account) ?? rawValue
+        : rawValue
+
+      try {
+        const displayUnits = element.getAttribute('data-dh-modifier-display-units')
+        const contractUnits = element.getAttribute('data-dh-modifier-contract-units')
+        const convertedValue = value && (displayUnits || contractUnits) ? utils.convertUnits(displayUnits, contractUnits, value) : value
+
+        if (convertedValue) {
+          Object.assign(abiMethodInputs, { [argumentName]: convertedValue })
+        }
+      } catch (err) {
+        console.warn('There may be an issue with your inputs')
+      }
+
+      element.value = value
+    })
+
+    const parsedParameters = omit(abiMethodInputs, 'EthValue')
+    const parametersValues = Object.values(parsedParameters)
+
+    return { parametersValues, ethValue }
+  }
 
   // Create a write Provider from the injected ethereum context
   const { provider, isEnabled, chainId, address } = useContext(contexts.EthereumContext)
