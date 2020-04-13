@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
+import ReactDOM from 'react-dom'
+import Modal from 'react-modal'
 import { ToastProvider } from 'react-toast-notifications'
-
 import get from 'lodash.get'
 import { CookiesProvider } from 'react-cookie'
 import { Web3ReactProvider } from '@web3-react/core'
@@ -20,6 +21,18 @@ import { logger } from './logger/customLogger'
 
 const getLibrary = (provider) => new ethers.providers.Web3Provider(provider) // this will vary according to whether you use e.g. ethers or web3.js
 
+const customStyles = {
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
+  },
+}
+// Modal.setAppElement('dh-apiKey')
+
 export const ProvidersWrapper: React.FC = () => {
   // react hooks
   const [ configuration, setConfig ] = useState(null)
@@ -29,6 +42,20 @@ export const ProvidersWrapper: React.FC = () => {
   const [ supportedNetworks, setSupportedNetworks ] = useState([])
   const [ appReady, setAppReady ] = useState(false)
   const retriggerEngine = (): void => setTimestamp(+new Date())
+
+  const [ modalIsOpen, setIsOpen ] = React.useState(false)
+  function openModal() {
+    setIsOpen(true)
+  }
+
+  function afterOpenModal() {
+    // references are now sync'd and can be accessed.
+
+  }
+
+  function closeModal() {
+    setIsOpen(false)
+  }
 
   const { provider: ethereum, addProvider, addSigner, addWriteProvider } = useProvider()
 
@@ -73,8 +100,12 @@ export const ProvidersWrapper: React.FC = () => {
           const onCorrectNetwork = supportedNetworks.find((network) => network.chainId === currentNetwork.chainId)
           console.log('tryMetamask -> onCorrectNetwork', onCorrectNetwork)
           if (!onCorrectNetwork) {
+            setIsOpen(true)
             console.log(`Metamask is on network ${currentNetwork.chainId.toString()} : ${consts.global.ethNetworkName[currentNetwork.chainId]}.`)
+          } else {
+            setIsOpen(false)
           }
+
           addSigner(signer, address, window.ethereum.enable || window.web3.enable)
           addWriteProvider(provider)
         } catch (err) {
@@ -99,6 +130,17 @@ export const ProvidersWrapper: React.FC = () => {
             <Web3ReactProvider getLibrary={getLibrary}>
               <EthereumContext.Provider value={ethereum}>
                 <DomElementsContext.Provider value={domElements}>
+                  <Modal
+                    isOpen={modalIsOpen}
+                    onAfterOpen={afterOpenModal}
+                    onRequestClose={closeModal}
+                    style={customStyles}
+                    contentLabel="Example Modal"
+                  >
+                    <h2>Hello</h2>
+                    <button onClick={closeModal} type="button">close</button>
+                    <div>I am a modal</div>
+                  </Modal>
                   <Activator configuration={configuration} retriggerEngine={retriggerEngine} />
                 </DomElementsContext.Provider>
               </EthereumContext.Provider>
