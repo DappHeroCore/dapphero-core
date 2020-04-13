@@ -1,4 +1,5 @@
-import React, { FunctionComponent, useEffect, useState } from 'react'
+import React, { FunctionComponent, useEffect, useState, useContext } from 'react'
+import * as contexts from 'contexts'
 import { useWeb3React } from '@web3-react/core'
 import { logger } from 'logger/customLogger'
 import { ThreeBoxProfileDataElement } from './ThreeBoxProfileDataElement'
@@ -13,8 +14,8 @@ interface ReducerProps {
 }
 
 export const Reducer: FunctionComponent<ReducerProps> = ({ element, info }) => {
-  const injectedContext = useWeb3React()
-  const { account } = injectedContext
+  // const injectedContext = useWeb3React()
+  // const { address } = injectedContext
   const [ threeBoxProfile, setThreeBoxProfile ] = useState({
     name: null,
     location: null,
@@ -27,18 +28,34 @@ export const Reducer: FunctionComponent<ReducerProps> = ({ element, info }) => {
     ],
   })
 
+  const [ address, setAddress ] = useState(null)
+  const ethereum = useContext(contexts.EthereumContext)
+  const { signer } = ethereum
+
+  useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    const getAddress = async () => {
+      try {
+        setAddress(await (signer.getAddress()))
+      } catch (error) {
+        logger.log(`Error in retriving the users address`, error)
+      }
+    }
+    if (signer) getAddress()
+  }, [ signer ])
+
   useEffect(() => {
     const getProfile = async () => {
       try {
         // TODO: [DEV-97] How to we check the status of a request? When no Profile this 404's
-        const profile = await get3boxProfile(account)
+        const profile = await get3boxProfile(address)
         setThreeBoxProfile(profile)
       } catch (error) {
         logger.log('You have no profile. ', error)
       }
     }
-    getProfile()
-  }, [ account ])
+    if (address)getProfile()
+  }, [ address ])
 
   switch (info?.properties[0]?.key) {
     case 'image': {

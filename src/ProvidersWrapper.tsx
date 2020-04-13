@@ -54,6 +54,7 @@ export const ProvidersWrapper: React.FC = () => {
     }
     if (providerChoice === 'metamask') tryMetamask()
     window.ethereum.on('accountsChanged', tryMetamask)
+    window.ethereum.on('networkChanged', tryMetamask)
   }, [])
 
   // effects

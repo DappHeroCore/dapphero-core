@@ -24,22 +24,23 @@ export const EthUserBalance: FunctionComponent<EthUserBalanceProps> = ({ element
   const [ data, setData ] = useState({ address: null, balance: null })
 
   const ethereum = useContext(contexts.EthereumContext)
-  const { provider, signer } = ethereum
+  const { writeProvider, signer } = ethereum
+  
 
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     const getBalance = async () => {
       try {
         const address = await signer.getAddress()
-        const balance = await provider.getBalance(address)
+        const balance = await writeProvider.getBalance(address)
         setData({ address, balance })
       } catch (error) {
         logger.log(`Error trying to retrieve users balance`, error)
       }
     }
-    if (signer) getBalance()
+    if (writeProvider) getBalance()
 
-  }, [ provider, signer ])
+  }, [ writeProvider.ready])
 
   useEffect(() => {
     const getData = async (): Promise<void> => {
@@ -55,7 +56,7 @@ export const EthUserBalance: FunctionComponent<EthUserBalanceProps> = ({ element
     getData()
     const intervalId = setInterval(getData, POLLING_INTERVAL)
     return (): void => { clearInterval(intervalId) }
-  }, [ data.address ])
+  }, [ writeProvider, signer, data.address ])
 
   return null
 }

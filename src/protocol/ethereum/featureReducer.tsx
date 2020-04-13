@@ -18,9 +18,7 @@ import { FeatureReducerProps } from './types'
 const isProduction = process.env.NODE_ENV === 'production'
 
 export const FeatureReducer = ({ feature, element, configuration, info }: FeatureReducerProps) => {
-  // const injectedContext = useWeb3React()
   const ethereum = useContext(contexts.EthereumContext)
-  const { chainId } = ethereum
   const featureType = feature
 
   switch (featureType) {
@@ -36,9 +34,9 @@ export const FeatureReducer = ({ feature, element, configuration, info }: Featur
       return <NetworkReducer element={element} info={info} />
     }
 
-    // case 'threebox': {
-    //   return <ThreeBoxReducer element={element} info={info} />
-    // }
+    case 'threebox': {
+      return <ThreeBoxReducer element={element} info={info} />
+    }
 
     // case 'customContract': {
     //   // FIXME: We're going to remove !isProduction conditional when Dappeteer library gets updated with chainId support

@@ -2,34 +2,45 @@ import React, { useState, useEffect, useContext } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import * as hooks from 'hooks'
 import * as contexts from 'contexts'
+import { logger } from 'logger/customLogger'
 import { EthEnable } from './EthEnable'
 import { EthNetworkInfo } from './EthNetworkInfo'
 import { EthTransfer } from './EthTransfer'
 
+
 export const Reducer = ({ element, info }) => {
   const domElements = hooks.useDomElements()
   const defaultInfoObj = {
-    networkId: 0,
-    networkName: 'Unknown',
+    chainId: 0,
+    name: 'Unknown',
     providerName: 'Unknown',
   }
 
   const [ infoValue, setInfoValue ] = useState(defaultInfoObj)
 
   const ethereum = useContext(contexts.EthereumContext)
-  const { chainId } = ethereum
+  const { writeProvider } = ethereum
+
+  // Who is the provider?
+  useEffect(() => {
+    const providerName = (typeof window.ethereum !== 'undefined' && window.ethereum.isMetaMask) ? 'metamask' : null
+    setInfoValue({ ...infoValue, providerName })
+  }, [ writeProvider ])
 
   useEffect(() => {
 
-    const isMetamask = (typeof window.ethereum !== 'undefined' && window.ethereum.isMetaMask) ? 'metamask' : null
-
-    const infoValueObj = {
-      networkId: chainId.chainId ?? 0,
-      networkName: chainId.name ?? 'Unknown',
-      providerName: isMetamask ?? 'Unknown',
+    const getWriteProviderInfo = async () => {
+      try {
+        const networkInfo = await writeProvider.ready
+        const { name, chainId } = networkInfo
+        setInfoValue({ ...infoValue, name: (name === 'homestead') ? 'mainnet' : name, chainId }) // no one uses homstead as a name
+      } catch (error) {
+        logger.log('Error getting write provider data in Network Reducer', error)
+      }
     }
-    setInfoValue(infoValueObj)
-  }, [ chainId ])
+
+    if (writeProvider) getWriteProviderInfo()
+  }, [ writeProvider ])
 
   switch (info?.properties[0]?.key) {
     case ('enable'): { // TODO: Drake- we need to settle on if we are going to use this style or not so we can be consistent
@@ -43,7 +54,7 @@ export const Reducer = ({ element, info }) => {
       return (
         <EthNetworkInfo
           element={element}
-          infoValue={infoValue.networkId.toString()}
+          infoValue={infoValue.chainId.toString()}
         />
       )
     }
@@ -51,7 +62,7 @@ export const Reducer = ({ element, info }) => {
       return (
         <EthNetworkInfo
           element={element}
-          infoValue={infoValue.networkName}
+          infoValue={infoValue.name}
         />
       )
     }

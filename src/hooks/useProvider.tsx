@@ -10,7 +10,7 @@ const initialProvider = {
   provider: null,
   writeProvider: null,
   signer: null,
-  chainId: null,
+  readChainId: null,
   enableFunction: null,
   address: null,
 }
