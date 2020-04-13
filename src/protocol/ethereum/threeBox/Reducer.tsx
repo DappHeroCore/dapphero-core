@@ -5,6 +5,7 @@ import { logger } from 'logger/customLogger'
 import { ThreeBoxProfileDataElement } from './ThreeBoxProfileDataElement'
 import { ThreeBoxProfileImgElement } from './ThreeBoxProfileImgElement'
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const { getProfile: get3boxProfile } = require('3box/lib/api')
 
 const ipfsRoot = 'https://cloudflare-ipfs.com/ipfs/'

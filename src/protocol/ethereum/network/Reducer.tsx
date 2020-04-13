@@ -7,7 +7,6 @@ import { EthEnable } from './EthEnable'
 import { EthNetworkInfo } from './EthNetworkInfo'
 import { EthTransfer } from './EthTransfer'
 
-
 export const Reducer = ({ element, info }) => {
   const domElements = hooks.useDomElements()
   const defaultInfoObj = {

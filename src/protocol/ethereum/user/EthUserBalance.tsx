@@ -25,7 +25,6 @@ export const EthUserBalance: FunctionComponent<EthUserBalanceProps> = ({ element
 
   const ethereum = useContext(contexts.EthereumContext)
   const { writeProvider, signer } = ethereum
-  
 
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -40,7 +39,7 @@ export const EthUserBalance: FunctionComponent<EthUserBalanceProps> = ({ element
     }
     if (writeProvider) getBalance()
 
-  }, [ writeProvider.ready])
+  }, [ writeProvider.ready ])
 
   useEffect(() => {
     const getData = async (): Promise<void> => {
