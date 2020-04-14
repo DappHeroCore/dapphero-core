@@ -38,17 +38,17 @@ export const FeatureReducer = ({ feature, element, configuration, info }: Featur
       return <ThreeBoxReducer element={element} info={info} />
     }
 
-    // case 'customContract': {
-    //   // FIXME: We're going to remove !isProduction conditional when Dappeteer library gets updated with chainId support
-    //   if (
-    //     !isProduction
-    //     || (chainId && info?.contract.networkId && chainId === info.contract.networkId)
-    //   ) {
-    //     return <CustomContractReducer element={element} configuration={configuration} info={info} />
-    //   }
+    case 'customContract': {
+      // FIXME: We're going to remove !isProduction conditional when Dappeteer library gets updated with chainId support
+      if (
+        !isProduction
+        || (chainId && info?.contract.networkId && chainId === info.contract.networkId)
+      ) {
+        return <CustomContractReducer element={element} configuration={configuration} info={info} />
+      }
 
-    //   return null
-    // }
+      return null
+    }
 
     default:
       return null

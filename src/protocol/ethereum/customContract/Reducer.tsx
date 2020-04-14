@@ -7,12 +7,13 @@ import { logger } from 'logger/customLogger'
 import omit from 'lodash.omit'
 import * as consts from 'consts'
 import { useWeb3React } from '@web3-react/core'
-
+import * as contexts from 'contexts'
 import { EVENT_NAMES } from 'providers/EmitterProvider/constants'
 import { EmitterContext } from 'providers/EmitterProvider/context'
+import { useWeb3Provider } from 'providers/ethereum/useWeb3Provider'
 
 const blockNativeApiKey = process.env.REACT_APP_BLOCKNATIVE_API
-const POLLING_INTERVAL = 1000
+const POLLING_INTERVAL = 4000
 
 // Utils
 const getAbiMethodInputs = (abi, methodName): Record<string, any> => {
@@ -40,8 +41,7 @@ export const Reducer = ({ info, configuration }) => {
     modifiers_,
   } = info
 
-  const { contractAddress, contractAbi } = contract
-
+  const { contractAddress, contractAbi, networkId } = contract
   // TODO Check for Overloaded Functions
   const autoClearKey = properties.find(({ key }) => key === 'autoClear')
   const autoInvokeKey = properties.find(({ key }) => key === 'autoInvoke')
@@ -62,6 +62,38 @@ export const Reducer = ({ info, configuration }) => {
   // States
   const [ result, setResult ] = useState(null)
   const [ parameters, setParameters ] = useState(getAbiMethodInputs(info.contract.contractAbi, methodName))
+
+  const contractNetworkName = consts.global.ethNetworkName[networkId].toLowerCase()
+
+  // Create a read Provider and read only contract instance
+  const [ readContractInstance, setReadContractInstance ] = useState(null)
+
+  const newEthersReadProvider = ethers.getDefaultProvider(contractNetworkName)
+  const readWeb3Connection = useWeb3Provider(POLLING_INTERVAL, newEthersReadProvider, `dh-${contractNetworkName}`)
+  const { provider: readOnlyProvider, chainId: readChainId, networkName: readNetworkName, providerType: readProvidertype } = readWeb3Connection
+  useEffect(() => {
+    const makeReadOnlyContractInstance = () => {
+      const readOnlyContractInstance = new ethers.Contract(contractAddress, contractAbi, readOnlyProvider)
+      setReadContractInstance(readOnlyContractInstance)
+    }
+    if (readOnlyProvider) makeReadOnlyContractInstance()
+  }, [ readChainId ])
+
+  // Create a write Provider from the injexted ethereum context
+  const [ contractInstance, setContractInstance ] = useState(null)
+  const ethereum = useContext(contexts.EthereumContext)
+  const { provider, signer, isEnabled, chainId } = ethereum
+
+  // const contractInstance = new ethers.Contract(contractAddress, contractAbi, signer)
+
+  useEffect(() => {
+    const makeWriteContractInstance = () => {
+      const instance = new ethers.Contract(contractAddress, contractAbi, signer)
+      setContractInstance(instance)
+    }
+
+    if (isEnabled) makeWriteContractInstance()
+  }, [ chainId, signer, isEnabled ])
 
   // -> Handlers
   const handleRunMethod = async (event = null, shouldClearInput = false, parametersValues, ethValue): Promise<void> => {
@@ -89,13 +121,12 @@ export const Reducer = ({ info, configuration }) => {
       // TODO: Get gas limit through ethers, and remove MAX_LIMIT
       // const gasLimit = await getGasLimit(...methodParams)
 
-      const provider = new ethers.providers.Web3Provider(window.ethereum)
+      // const provider = new ethers.providers.Web3Provider(window.ethereum)
 
-      const signer = provider.getSigner()
-      const contractInstance = new ethers.Contract(contractAddress, contractAbi, signer)
-      const readOnlyContractInstance = new ethers.Contract(contractAddress, contractAbi, provider)
+      // const signer = provider.getSigner()
+      // const contractInstance = new ethers.Contract(contractAddress, contractAbi, signer)
 
-      if (isTransaction) {
+      if (isTransaction && isEnabled && contractInstance) {
         const currentNetwork = await signer.provider.getNetwork()
         const notify = Notify({
           dappId: blockNativeApiKey, // [String] The API key created by step one above
@@ -137,7 +168,7 @@ export const Reducer = ({ info, configuration }) => {
           logger.info('invoke contract method failed in transaction', err)
         }
       } else {
-        const method = readOnlyContractInstance.functions[methodName]
+        const method = readContractInstance.functions[methodName]
         try {
           const methodResult = await method(...methodParams)
           setResult(methodResult)

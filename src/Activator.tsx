@@ -40,7 +40,7 @@ export const Activator = ({ configuration, retriggerEngine }: ActivatorProps) =>
     const fetchReady = async () => {
       try {
         if (await provider.ready) {
-          logger.log(`Provider ready.`)
+          // logger.log(`Provider ready.`)
           setProviderReady(true)
         }
       } catch (error) {

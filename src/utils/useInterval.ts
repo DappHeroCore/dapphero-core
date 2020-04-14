@@ -19,4 +19,5 @@ export function useInterval(callback, delay) {
       return () => clearInterval(id)
     }
   }, [ delay ])
+  // setTimeout(callback, 30)
 }

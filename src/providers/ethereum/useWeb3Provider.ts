@@ -4,25 +4,26 @@ import { logger } from '../../logger/customLogger'
 import { useInterval } from '../../utils/useInterval'
 import { providerSchema } from '../../consts'
 
-export const useWeb3Provider = (polling) => {
+export const useWeb3Provider = (polling, web3provider, providerTypeName) => {
   const [ metamask, setMetamask ] = useState(providerSchema)
-  const provider = new Web3Provider(window.ethereum || window.web3)
+  const provider = web3provider || new Web3Provider(window.ethereum || window.web3)
 
   useInterval(() => {
     const fetchMetamask = async () => {
       if (window.ethereum || window.web3) {
         try {
           const ready = await provider.ready
-          const signer = provider.getSigner()
+          let signer = null
           let address = null
           try {
+            signer = provider.getSigner()
             address = await signer.getAddress()
           } catch (q) {
-            // do nothing we aren't ready
+            // do nothing we aren't ready or there is no signer attached
           }
           const isEnabled = Boolean(address)
-          const providerType = (window.ethereum.isMetaMask || window.web3.isMetaMask) ? 'metamask' : 'unknown provider'
-          setMetamask({ provider, providerType, signer, chainId: ready.chainId, address, isEnabled, networkName: (ready.name === 'homestead') ? 'mainnet' : ready.name, enable: window.ethereum.enable || window.web3.enable })
+          const providerType = (window.ethereum.isMetaMask || window.web3.isMetaMask ) && !web3provider ? 'metamask' : 'unknown provider'
+          setMetamask({ provider, providerType: providerTypeName || providerType, signer, chainId: ready.chainId, address, isEnabled, networkName: (ready.name === 'homestead') ? 'mainnet' : ready.name, enable: window.ethereum.enable || window.web3.enable })
         } catch (err) {
           logger.log(`Attempt to connect to Metamask failed with error: ${err}`)
         }
@@ -30,6 +31,5 @@ export const useWeb3Provider = (polling) => {
     }
     fetchMetamask()
   }, polling)
-
   return metamask
 }
