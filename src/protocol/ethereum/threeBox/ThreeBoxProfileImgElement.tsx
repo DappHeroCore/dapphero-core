@@ -1,4 +1,4 @@
-import { FunctionComponent } from 'react'
+import { FunctionComponent, useMemo } from 'react'
 
 interface ThreeBoxProfileImgElementProps {
   element: HTMLImageElement;
@@ -6,8 +6,19 @@ interface ThreeBoxProfileImgElementProps {
 }
 
 export const ThreeBoxProfileImgElement: FunctionComponent<ThreeBoxProfileImgElementProps> = ({ element, imgSrc }) => {
-  if (imgSrc == null) return null
+  const memoizedValue = useMemo(
+    () => element.src
+    , [],
+  )
+  console.log('Memo:', memoizedValue)
+
+  if (!imgSrc) {
+    element.removeAttribute('srcSet')
+    element.src = memoizedValue
+    return null
+  }
   element.removeAttribute('srcSet')
   element.src = imgSrc
   return null
+
 }

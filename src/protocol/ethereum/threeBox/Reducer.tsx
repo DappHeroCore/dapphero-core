@@ -62,7 +62,8 @@ export const Reducer: FunctionComponent<ReducerProps> = ({ element, info }) => {
         const imgSrc = `${ipfsRoot}${threeBoxProfile.image[0].contentUrl['/']}`
         return <ThreeBoxProfileImgElement element={element} imgSrc={imgSrc} />
       }
-      return null
+      return <ThreeBoxProfileImgElement element={element} imgSrc={null} />
+
     }
     case 'name': {
       return <ThreeBoxProfileDataElement element={element} profileData={threeBoxProfile.name} />
