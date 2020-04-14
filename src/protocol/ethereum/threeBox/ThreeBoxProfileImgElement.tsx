@@ -10,7 +10,6 @@ export const ThreeBoxProfileImgElement: FunctionComponent<ThreeBoxProfileImgElem
     () => element.src
     , [],
   )
-  console.log('Memo:', memoizedValue)
 
   if (!imgSrc) {
     element.removeAttribute('srcSet')

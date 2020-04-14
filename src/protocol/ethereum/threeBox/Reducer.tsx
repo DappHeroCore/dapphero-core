@@ -43,7 +43,7 @@ export const Reducer: FunctionComponent<ReducerProps> = ({ element, info }) => {
   const ethereum = useContext(contexts.EthereumContext)
   const { address, isEnabled } = ethereum
   useEffect(() => {
-    const getProfile = async () => {
+    const fetchProfile = async () => {
       try {
         // TODO: [DEV-97] How to we check the status of a request? When no Profile this 404's
         const profile = await get3boxProfile(address)
@@ -52,7 +52,7 @@ export const Reducer: FunctionComponent<ReducerProps> = ({ element, info }) => {
         logger.log('You have no profile. ', error)
       }
     }
-    if (address)getProfile()
+    if (address)fetchProfile()
   }, [ address, isEnabled ])
 
   switch (info?.properties[0]?.key) {
