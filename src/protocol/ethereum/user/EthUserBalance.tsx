@@ -4,10 +4,6 @@ import { EthereumUnits } from 'types/types'
 import * as utils from 'utils'
 import * as contexts from 'contexts'
 
-import { useWeb3React } from '@web3-react/core'
-
-const POLLING_INTERVAL = 1000
-
 interface EthUserBalanceProps {
   element: HTMLElement;
   units: EthereumUnits;
@@ -45,12 +41,10 @@ export const EthUserBalance: FunctionComponent<EthUserBalanceProps> = ({ element
           element.innerHTML = formatedBalanced
         }
       } catch (e) {
-        logger.log('Get Balance in the USER feature set Failed', e)
+        logger.log('Format Balance in the USER feature set Failed', e)
       }
     }
     getData()
-    const intervalId = setInterval(getData, POLLING_INTERVAL)
-    return (): void => { clearInterval(intervalId) }
   }, [ provider, address ])
 
   return null
