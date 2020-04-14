@@ -17,7 +17,7 @@ interface EthTransferProps {
 
 export const EthTransfer: FunctionComponent<EthTransferProps> = ({ element, amountObj, addressObj, outputObj, info }) => {
   const ethereum = useContext(contexts.EthereumContext)
-  const { chainId, signer, writeProvider } = ethereum
+  const { signer, provider, isEnabled } = ethereum
 
   useEffect(() => {
     const transferEther = async (e) => {
@@ -26,12 +26,18 @@ export const EthTransfer: FunctionComponent<EthTransferProps> = ({ element, amou
           e.preventDefault()
           e.stopPropagation()
         } catch (err) {}
+        // We need to get the provider details at time of sending, we can't rely on state here
+        const ready = await provider.ready
         const notify = Notify({
           dappId: apiKey, // [String] The API key created by step one above
-          networkId: chainId.chainId, // [Integer] The Ethereum network ID your Dapp uses.
+          networkId: ready.chainId, // [Integer] The Ethereum network ID your Dapp uses.
         })
-
-        const from = await signer.getAddress()
+        let from = null
+        try {
+          from = await signer.getAddress()
+        } catch (error) {
+          logger.warn('A write provider (signer) has not been enabled')
+        }
         const inputUnits = amountObj?.modifiers_?.displayUnits ?? 'wei' // FIXME: move this to dappheroDOM
         const convertedUnits = utils.convertUnits(inputUnits, 'wei', amountObj.element.value)
         const params = [ {
@@ -41,24 +47,26 @@ export const EthTransfer: FunctionComponent<EthTransferProps> = ({ element, amou
           // value: utils.convertUnits(inputUnits, 'wei', amountObj.element.value),
         } ]
 
-        writeProvider.send('eth_sendTransaction', params)
-          .then((hash) => {
-            notify.hash(hash)
-            amountObj.element.value = ''
-            addressObj.element.value = ''
-          })
-          .catch((err) => {
-            amountObj.element.value = ''
-            addressObj.element.value = ''
-            logger.info('There was an error sending ether with metaMask', err)
-          })
+        if (from && isEnabled) { // We will only attempt this if we actually got our address from the signer ourslves.
+          provider.send('eth_sendTransaction', params)
+            .then((hash) => {
+              notify.hash(hash)
+              amountObj.element.value = ''
+              addressObj.element.value = ''
+            })
+            .catch((err) => {
+              amountObj.element.value = ''
+              addressObj.element.value = ''
+              logger.info('There was an error sending ether with metaMask', err)
+            })
+        }
       } catch (err) {
         logger.warn('There was an error transfering ether', err)
       }
     }
 
     if (signer) utils.addClickHandlerToTriggerElement(element, transferEther)
-  }, [ signer ])
+  }, [ signer, isEnabled ])
 
   return null
 }
