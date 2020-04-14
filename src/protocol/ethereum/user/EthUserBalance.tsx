@@ -18,28 +18,24 @@ export const EthUserBalance: FunctionComponent<EthUserBalanceProps> = ({ element
   units = units ?? 'wei' //eslint-disable-line
   decimals = decimals ?? 0 //eslint-disable-line
 
-  // const { accounts, networkId, lib } = hooks.useDappHeroWeb3()
-  // const { account, chainId, library } = useWeb3React()
-
   const [ data, setData ] = useState({ address: null, balance: null })
 
   const ethereum = useContext(contexts.EthereumContext)
-  const { writeProvider, signer } = ethereum
+  const { provider, address } = ethereum
 
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     const getBalance = async () => {
       try {
-        const address = await signer.getAddress()
-        const balance = await writeProvider.getBalance(address)
+        const balance = await provider.getBalance(address)
         setData({ address, balance })
       } catch (error) {
         logger.log(`Error trying to retrieve users balance`, error)
       }
     }
-    if (writeProvider) getBalance()
+    if (provider) getBalance()
 
-  }, [ writeProvider.ready ])
+  }, [ provider.ready ])
 
   useEffect(() => {
     const getData = async (): Promise<void> => {
@@ -55,7 +51,7 @@ export const EthUserBalance: FunctionComponent<EthUserBalanceProps> = ({ element
     getData()
     const intervalId = setInterval(getData, POLLING_INTERVAL)
     return (): void => { clearInterval(intervalId) }
-  }, [ writeProvider, signer, data.address ])
+  }, [ provider, address ])
 
   return null
 }
