@@ -17,6 +17,17 @@ interface ReducerProps {
 export const Reducer: FunctionComponent<ReducerProps> = ({ element, info }) => {
   // const injectedContext = useWeb3React()
   // const { address } = injectedContext
+  const defaultProfile = {
+    name: null,
+    location: null,
+    emoji: null,
+    job: null,
+    description: null,
+    website: null,
+    image: [
+      { contentUrl: { '/': null } },
+    ],
+  }
   const [ threeBoxProfile, setThreeBoxProfile ] = useState({
     name: null,
     location: null,
@@ -29,22 +40,8 @@ export const Reducer: FunctionComponent<ReducerProps> = ({ element, info }) => {
     ],
   })
 
-  const [ address, setAddress ] = useState(null)
   const ethereum = useContext(contexts.EthereumContext)
-  const { signer } = ethereum
-
-  useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-    const getAddress = async () => {
-      try {
-        setAddress(await (signer.getAddress()))
-      } catch (error) {
-        logger.log(`Error in retriving the users address`, error)
-      }
-    }
-    if (signer) getAddress()
-  }, [ signer ])
-
+  const { address, isEnabled } = ethereum
   useEffect(() => {
     const getProfile = async () => {
       try {
@@ -56,7 +53,7 @@ export const Reducer: FunctionComponent<ReducerProps> = ({ element, info }) => {
       }
     }
     if (address)getProfile()
-  }, [ address ])
+  }, [ address, isEnabled ])
 
   switch (info?.properties[0]?.key) {
     case 'image': {
