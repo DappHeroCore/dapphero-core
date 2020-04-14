@@ -98,36 +98,7 @@
   text-transform: uppercase;
 }
 
-@media (max-width: 991px) {
-  .page-div {
-    width: 9%;
-  }
-}
 
-@media (max-width: 767px) {
-  .page-div {
-    width: 95%;
-  }
-}
-
-@media (max-width: 479px) {
-  .page-div {
-    width: 90%;
-    margin-top: 12px;
-  }
-  .component-div {
-    overflow: scroll;
-  }
-  .nav {
-    height: auto;
-    -webkit-flex-wrap: wrap;
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
-  }
-  .nav-button {
-    margin-bottom: 8px;
-  }
-}
 
 @font-face {
   font-family: 'Robotomono';
