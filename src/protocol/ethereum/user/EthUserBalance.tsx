@@ -34,7 +34,7 @@ export const EthUserBalance: FunctionComponent<EthUserBalanceProps> = ({ element
         logger.log(`Error trying to retrieve users balance`, error)
       }
     }
-    if (provider) getBalance()
+    if (isEnabled) getBalance()
 
   }, [ provider.ready ])
 
