@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, FunctionComponent } from 'react'
+import React, { useEffect, useState, useContext, FunctionComponent, useMemo } from 'react'
 import { logger } from 'logger/customLogger'
 import * as contexts from 'contexts'
 import ReactTooltip from 'react-tooltip'
@@ -12,6 +12,10 @@ interface EthEnableProps {
  * @param props From props we use only injected and request.
  */
 export const EthEnable: FunctionComponent<EthEnableProps> = ({ element }) => {
+  const memoizedValue = useMemo(
+    () => element.innerText
+    , [],
+  )
   const ethereum = useContext(contexts.EthereumContext)
   const { isEnabled, enable } = ethereum
 
@@ -23,6 +27,8 @@ export const EthEnable: FunctionComponent<EthEnableProps> = ({ element }) => {
   useEffect(() => {
     if (isEnabled) {
       setButtonStatus('Connected')
+    } else {
+      setButtonStatus(memoizedValue)
     }
   }, [ isEnabled ])
 

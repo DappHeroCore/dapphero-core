@@ -67,7 +67,6 @@ export const Reducer = ({ info, configuration }) => {
 
   // Create a read Provider and read only contract instance
   const [ readContractInstance, setReadContractInstance ] = useState(null)
-
   const newEthersReadProvider = ethers.getDefaultProvider(contractNetworkName)
   const readWeb3Connection = useWeb3Provider(POLLING_INTERVAL, newEthersReadProvider, `dh-${contractNetworkName}`)
   const { provider: readOnlyProvider, chainId: readChainId, networkName: readNetworkName, providerType: readProvidertype } = readWeb3Connection
@@ -120,11 +119,6 @@ export const Reducer = ({ info, configuration }) => {
 
       // TODO: Get gas limit through ethers, and remove MAX_LIMIT
       // const gasLimit = await getGasLimit(...methodParams)
-
-      // const provider = new ethers.providers.Web3Provider(window.ethereum)
-
-      // const signer = provider.getSigner()
-      // const contractInstance = new ethers.Contract(contractAddress, contractAbi, signer)
 
       if (isTransaction && isEnabled && contractInstance) {
         const currentNetwork = await signer.provider.getNetwork()

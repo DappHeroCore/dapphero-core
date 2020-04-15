@@ -54,7 +54,7 @@ export const ProvidersWrapper: React.FC = () => {
     if (configuration?.contracts) getSupportedNetworks()
   }, [ configuration ])
 
-  const ethereum = useWeb3Provider(2000)
+  const ethereum = useWeb3Provider(2000, null, null)
 
   useEffect(() => {
     if (configuration) setDomElements(getDomElements(configuration))
