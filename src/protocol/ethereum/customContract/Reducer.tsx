@@ -47,8 +47,8 @@ export const Reducer = ({ info, readContract, writeContract }) => {
   const methodNameKey = properties.find(({ key }) => key === 'methodName')
   const ethValueKey = properties.find((property) => property.key === 'ethValue')
 
+  const ethValue = ethValueKey?.value
   const { value: methodName } = methodNameKey
-  console.log('Reducer -> methodName', methodName)
 
   const { actions: { emitToEvent } } = useContext(EmitterContext)
 
@@ -65,11 +65,8 @@ export const Reducer = ({ info, readContract, writeContract }) => {
     const inputChildrens = childrenElements.filter(({ id }) => id.includes('input'))
     const abiMethodInputs = getAbiMethodInputs(info.contract.contractAbi, methodName)
 
-    if (!inputChildrens.length ) return { parameterValues: [], ethValue: undefined }
-
+    if (!inputChildrens.length ) return { parameterValues: [] }
     const [ inputs ] = inputChildrens
-
-    const ethValue = abiMethodInputs?.EthValue
 
     inputs.element.forEach(({ element, argumentName }) => {
       const rawValue = ethValue ?? element.value
@@ -95,14 +92,15 @@ export const Reducer = ({ info, readContract, writeContract }) => {
     const parsedParameters = omit(abiMethodInputs, 'EthValue')
     const parametersValues = Object.values(parsedParameters)
 
-    return { parametersValues, ethValue }
+    return { parametersValues }
   }
 
   // Create a write Provider from the injected ethereum context
   const { provider, isEnabled, chainId, address } = useContext(contexts.EthereumContext)
 
   // -> Handlers
-  const handleRunMethod = async (event = null, shouldClearInput = false, parametersValues, ethValue): Promise<void> => {
+  const handleRunMethod = async (event = null, shouldClearInput = false): Promise<void> => {
+    const { parametersValues } = getParametersFromInputValues()
 
     if (event) {
       try {
@@ -119,8 +117,9 @@ export const Reducer = ({ info, readContract, writeContract }) => {
     try {
       let value = '0'
       const methodParams = [ ...(hasInputs ? parametersValues : []) ]
-      if (ethValueKey || ethValue) {
-        value = ethValueKey?.value || ethValue
+
+      if (ethValue) {
+        value = ethValue
       }
       if (isTransaction && isEnabled && writeContract) {
         sendTx({ writeContract, provider, methodName, methodParams, value, setResult, notify: notify(blockNativeApiKey, chainId) })
