@@ -11,6 +11,11 @@ import { EVENT_NAMES } from 'providers/EmitterProvider/constants'
 import { EmitterContext } from 'providers/EmitterProvider/context'
 import { useWeb3Provider } from 'providers/ethereum/useWeb3Provider'
 
+import { useAddTriggersToInputElements } from './useAddTriggersToInputElements'
+import { useAddInvokeTrigger } from './useAddInvokeTrigger'
+import { useAutoInvokeMethod } from './useAutoInvokeMethod'
+import { useDisplayResults } from './useDisplayResults'
+
 const blockNativeApiKey = process.env.REACT_APP_BLOCKNATIVE_API
 const POLLING_INTERVAL = 4000
 
@@ -41,7 +46,6 @@ export const Reducer = ({ info, readContract, writeContract }) => {
     modifiers_,
   } = info
 
-  const { contractAddress, contractAbi, networkId } = contract
   // TODO Check for Overloaded Functions
   const autoClearKey = properties.find(({ key }) => key === 'autoClear')
   const autoInvokeKey = properties.find(({ key }) => key === 'autoInvoke')
@@ -163,190 +167,16 @@ export const Reducer = ({ info, readContract, writeContract }) => {
   }
 
   // Add triggers to input elements
-  useEffect(() => {
-    const inputChildrens = childrenElements.filter(({ id }) => id.includes('input'))
-
-    if (inputChildrens.length > 0) {
-      const [ inputs ] = inputChildrens
-      const tearDowns = inputs.element.map((input) => {
-        const { element, argumentName } = input
-
-        const clickHandlerFunction = (rawValue: string): void => {
-          // I don't understand what this is doing. - dennison
-          const value = address
-            ? rawValue.replace(consts.clientSide.currentUser, address) ?? rawValue
-            : rawValue
-
-          try {
-            const displayUnits = element.getAttribute('data-dh-modifier-display-units')
-            const contractUnits = element.getAttribute('data-dh-modifier-contract-units')
-            const convertedValue = value && (displayUnits || contractUnits) ? utils.convertUnits(displayUnits, contractUnits, value) : value
-
-            if (convertedValue) {
-              setParameters((prevParameters) => ({
-                ...prevParameters,
-                [argumentName]: convertedValue,
-              }))
-            }
-          } catch (err) {
-            console.warn('There may be an issue with your inputs')
-          }
-
-          element.value = value
-        }
-
-        const ethValue = ethValueKey?.value
-
-        clickHandlerFunction(element.value)
-
-        const clickHandler = (event): void => {
-          const rawValue = ethValue ?? event.target.value
-          clickHandlerFunction(rawValue)
-        }
-
-        element.addEventListener('input', clickHandler)
-
-        // Edge case where JS or jQuery uses .value property or .val() method
-        const temporaryValue = null
-        // const { get, set } = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')
-
-        // Object.defineProperty(element, 'value', {
-        //   get() {
-        //     return get.call(this)
-        //   },
-        //   set(newVal) {
-        //     set.call(this, newVal)
-
-        //     if (temporaryValue !== newVal) {
-        //       temporaryValue = newVal
-        //       clickHandlerFunction(newVal)
-        //     }
-
-        //     return newVal
-        //   },
-        // })
-
-        return (): void => {
-          element.removeEventListener('input', clickHandler)
-        }
-      })
-
-      return (): void => {
-        tearDowns.forEach((cb) => cb())
-      }
-    }
-  }, [ childrenElements, address ])
+  useAddTriggersToInputElements(info, ethValueKey, setParameters, address)
 
   // Add trigger to invoke buttons
-  useEffect(() => {
-    const autoClearValue = autoClearKey?.value || false
-    const invokeButtons = childrenElements.filter(({ id }) => id.includes('invoke'))
-
-    const ethValue = parameters?.EthValue
-    const parsedParameters = omit(parameters, 'EthValue')
-    const parametersValues = Object.values(parsedParameters)
-
-    const onRunMethod = (event) => handleRunMethod(event, autoClearValue, parametersValues, ethValue)
-
-    if (invokeButtons) {
-      invokeButtons.forEach(({ element }) => {
-        element.removeEventListener('click', onRunMethod)
-        element.addEventListener('click', onRunMethod)
-      })
-    }
-
-    return (): void => invokeButtons.forEach(({ element }) => element.removeEventListener('click', onRunMethod))
-  }, [ handleRunMethod, parameters ])
+  useAddInvokeTrigger(info, autoClearKey, handleRunMethod, parameters)
 
   // Auto invoke method
-  useEffect(() => {
-    const ethValue = parameters?.EthValue
-    const parsedParameters = omit(parameters, 'EthValue')
-    const parametersValues = Object.values(parsedParameters)
-
-    if (autoInvokeKey && chainId === info?.contract?.networkId) {
-      const { value: autoInvokeValue } = autoInvokeKey || { value: false }
-
-      const autoClearValue = autoClearKey?.value || false
-
-      if (autoInvokeValue === 'true' && !isTransaction) {
-        const intervalId = setInterval(() => handleRunMethod(null, autoClearValue, parametersValues, ethValue), POLLING_INTERVAL)
-
-        return (): void => clearInterval(intervalId)
-      }
-    }
-  }, [ autoInvokeKey, autoClearKey, handleRunMethod, parameters ])
+  useAutoInvokeMethod(info, autoInvokeKey, autoClearKey, isTransaction, handleRunMethod, parameters, chainId, POLLING_INTERVAL)
 
   // Display new results in the UI
-  useEffect(() => {
-    if (result) {
-      const parsedValue = result
-
-      const outputsChildrenElements = childrenElements.find(({ id }) => id.includes('outputs'))
-      const outputNamedChildrenElements = childrenElements.find(({ id }) => id.includes('outputName'))
-
-      if (outputsChildrenElements?.element) {
-        outputsChildrenElements.element.forEach(({ element }) => {
-
-          if (typeof result === 'string' || typeof result === 'object') {
-            const displayUnits = element.getAttribute('data-dh-modifier-display-units')
-            const contractUnits = element.getAttribute('data-dh-modifier-contract-units')
-            const decimals = (element.getAttribute('data-dh-modifier-decimal-units')
-                || element.getAttribute('data-dh-modifier-decimals'))
-              ?? null
-
-            const convertedValue = result && (displayUnits || contractUnits)
-              ? utils.convertUnits(contractUnits, displayUnits, result)
-              : result
-
-            const isNumber = !Number.isNaN(Number(convertedValue))
-            if (decimals && isNumber) {
-              const decimalConvertedValue = Number(convertedValue)
-                .toFixed(decimals)
-                .toString()
-              element.innerText = decimalConvertedValue
-            } else {
-              Object.assign(element, { textContent: convertedValue })
-            }
-
-            emitToEvent(EVENT_NAMES.contract.outputUpdated, { value: convertedValue, element })
-          } else {
-            Object.assign(element, { textContent: parsedValue })
-            emitToEvent(EVENT_NAMES.contract.outputUpdated, { value: parsedValue, element })
-          }
-
-        })
-      }
-
-      if (outputNamedChildrenElements?.element) {
-        outputNamedChildrenElements.element.forEach(({ element }) => {
-          const outputName = element.getAttribute('data-dh-property-output-name')
-          const displayUnits = element.getAttribute('data-dh-modifier-display-units')
-          const contractUnits = element.getAttribute('data-dh-modifier-contract-units')
-          const decimals = (element.getAttribute('data-dh-modifier-decimal-units')
-              || element.getAttribute('data-dh-modifier-decimals'))
-            ?? null
-          const convertedValue = parsedValue[outputName] && (displayUnits || contractUnits)
-            ? utils.convertUnits(contractUnits, displayUnits, parsedValue[outputName])
-            : parsedValue[outputName]
-          const isNumber = !Number.isNaN(Number(convertedValue))
-
-          if (decimals && isNumber) {
-            const decimalConvertedValue = Number(convertedValue)
-              .toFixed(decimals)
-              .toString()
-            element.innerText = decimalConvertedValue
-
-            emitToEvent(EVENT_NAMES.contract.outputUpdated, { value: decimalConvertedValue, element })
-          } else {
-            Object.assign(element, { textContent: convertedValue })
-            emitToEvent(EVENT_NAMES.contract.outputUpdated, { value: convertedValue, element })
-          }
-        })
-      }
-
-    }
-  }, [ result ])
+  useDisplayResults(childrenElements, result, emitToEvent)
 
   return null
 }
