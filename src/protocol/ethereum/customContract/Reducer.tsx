@@ -28,6 +28,8 @@ const getAbiMethodInputs = (abi, methodName): Record<string, any> => {
 
 // Reducer Component
 export const Reducer = ({ info, readContract, writeContract }) => {
+  console.log('Reducer -> info', info)
+
   const {
     contract,
     childrenElements,
@@ -206,24 +208,24 @@ export const Reducer = ({ info, readContract, writeContract }) => {
         element.addEventListener('input', clickHandler)
 
         // Edge case where JS or jQuery uses .value property or .val() method
-        let temporaryValue = null
-        const { get, set } = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')
+        const temporaryValue = null
+        // const { get, set } = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')
 
-        Object.defineProperty(element, 'value', {
-          get() {
-            return get.call(this)
-          },
-          set(newVal) {
-            set.call(this, newVal)
+        // Object.defineProperty(element, 'value', {
+        //   get() {
+        //     return get.call(this)
+        //   },
+        //   set(newVal) {
+        //     set.call(this, newVal)
 
-            if (temporaryValue !== newVal) {
-              temporaryValue = newVal
-              clickHandlerFunction(newVal)
-            }
+        //     if (temporaryValue !== newVal) {
+        //       temporaryValue = newVal
+        //       clickHandlerFunction(newVal)
+        //     }
 
-            return newVal
-          },
-        })
+        //     return newVal
+        //   },
+        // })
 
         return (): void => {
           element.removeEventListener('input', clickHandler)

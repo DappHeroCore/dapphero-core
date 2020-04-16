@@ -29,5 +29,6 @@ export type FeatureReducerProps = {
   key?: string;
   index?: number;
   info?: any;
+  customContractElements?: any;
 }
 

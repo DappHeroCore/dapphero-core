@@ -7,18 +7,7 @@ import { Reducer as CustomContractReducer } from './Reducer'
 
 const POLLING_INTERVAL = 4000
 
-export const Router = ({ info, configuration }) => {
-  const {
-    contract,
-    childrenElements,
-    properties,
-    properties_,
-    hasInputs,
-    hasOutputs,
-    isTransaction,
-    modifiers,
-    modifiers_,
-  } = info
+export const Router = ({ listOfContractMethods, contract }) => {
 
   const ethereum = useContext(contexts.EthereumContext)
   const { signer, isEnabled, chainId } = ethereum
@@ -58,7 +47,13 @@ export const Router = ({ info, configuration }) => {
   }, [ chainId, signer, isEnabled ])
 
   return (
-    <CustomContractReducer readContract={readContract} writeContract={writeContract} info={info} />
+    <>
+      {listOfContractMethods.map((contractMethodElement: { id: React.ReactText }) => (
+        <CustomContractReducer readContract={readContract} writeContract={writeContract} info={contractMethodElement} key={contractMethodElement.id} />
+      ))}
+    </>
   )
+
+  return null
 
 }

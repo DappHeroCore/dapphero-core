@@ -24,6 +24,7 @@ import { logger } from './logger/customLogger'
 
 const getLibrary = (provider) => new ethers.providers.Web3Provider(provider) // this will vary according to whether you use e.g. ethers or web3.js
 
+const APP_REFRESH_SPEED = 3000
 export const ProvidersWrapper: React.FC = () => {
   // react hooks
   const [ configuration, setConfig ] = useState(null)
@@ -32,6 +33,7 @@ export const ProvidersWrapper: React.FC = () => {
   const [ supportedNetworks, setSupportedNetworks ] = useState([])
 
   const retriggerEngine = (): void => setTimestamp(+new Date())
+  const ethereum = useWeb3Provider(APP_REFRESH_SPEED, null, null) // This sets refresh speed of the whole app
 
   // load contracts effects
   useEffect(() => {
@@ -53,8 +55,6 @@ export const ProvidersWrapper: React.FC = () => {
 
     if (configuration?.contracts) getSupportedNetworks()
   }, [ configuration ])
-
-  const ethereum = useWeb3Provider(2000, null, null)
 
   useEffect(() => {
     if (configuration) setDomElements(getDomElements(configuration))

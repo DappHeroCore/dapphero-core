@@ -26,29 +26,24 @@ type ActivatorProps = {
 export const Activator = ({ configuration, retriggerEngine }: ActivatorProps) => {
   // React hooks
   const domElements = useContext(contexts.DomElementsContext)
+  const domElementsFilteredForContracts = domElements.filter((element) => element.feature !== 'customContract')
+
+  // This needs to filter for Unique Contracts
+  const domOnlyContract = domElements.filter((element) => element.feature === 'customContract')
+
+  if (domOnlyContract.length > 0) {
+    domElementsFilteredForContracts.push({
+      id: domOnlyContract[0].id,
+      feature: 'customContract',
+    })
+  }
+
   const ethereum = useContext(contexts.EthereumContext)
-  const { provider, signer, chainId } = ethereum
+  const { isEnabled } = ethereum
+
+  const AppReady = isEnabled // We should make this a state later
 
   const { actions: { listenToEvent } } = useContext(EmitterContext)
-
-  const [ providerReady, setProviderReady ] = useState(false)
-
-  // // Custom hooks
-  // const attemptedEagerConnect = hooks.useEagerConnect()
-  // const web3React = useWeb3React()
-  useEffect(() => {
-    const fetchReady = async () => {
-      try {
-        if (await provider.ready) {
-          // logger.log(`Provider ready.`)
-          setProviderReady(true)
-        }
-      } catch (error) {
-        logger.log(`Provider not yet ready: ${error}`)
-      }
-    }
-    if (provider) fetchReady()
-  }, [ provider ])
 
   useEffect(() => {
     const dappHero = {
@@ -72,19 +67,20 @@ export const Activator = ({ configuration, retriggerEngine }: ActivatorProps) =>
     Object.assign(window, { dappHero })
     // Dispatch the event.
     window.dispatchEvent(event)
-  }, [ provider, signer, chainId ])
+  }, [ AppReady ])
 
-  if (providerReady) {
+  if (AppReady) {
     return (
       <>
-        {domElements
-          && domElements.map((domElement) => (
+        {domElementsFilteredForContracts
+          && domElementsFilteredForContracts.map((domElement) => (
             <FeatureReducer
               key={domElement.id}
               element={domElement.element}
               feature={domElement.feature}
               configuration={configuration}
               info={domElement}
+              customContractElements={domOnlyContract}
             />
           ))}
       </>
