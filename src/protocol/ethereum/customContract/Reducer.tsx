@@ -1,25 +1,25 @@
-import React, { useState, useEffect, useContext, useCallback } from 'react'
+import React, { useState, useContext } from 'react'
 import { useToasts } from 'react-toast-notifications'
 import Notify from 'bnc-notify'
 import { ethers } from 'ethers'
-import * as utils from 'utils'
 import { logger } from 'logger/customLogger'
-import omit from 'lodash.omit'
-import * as consts from 'consts'
 import * as contexts from 'contexts'
-import { EVENT_NAMES } from 'providers/EmitterProvider/constants'
 import { EmitterContext } from 'providers/EmitterProvider/context'
-import { useWeb3Provider } from 'providers/ethereum/useWeb3Provider'
 
 import { useAddTriggersToInputElements } from './useAddTriggersToInputElements'
 import { useAddInvokeTrigger } from './useAddInvokeTrigger'
 import { useAutoInvokeMethod } from './useAutoInvokeMethod'
 import { useDisplayResults } from './useDisplayResults'
 
+import { sendTx } from './sendTx'
+import { callMethod } from './callMethod'
+
 const blockNativeApiKey = process.env.REACT_APP_BLOCKNATIVE_API
 const POLLING_INTERVAL = 4000
 
 // Utils
+const notify = (apiKey, chainId) => Notify({ dappId: apiKey, networkId: chainId })
+
 const getAbiMethodInputs = (abi, methodName): Record<string, any> => {
   const emptyString = '$true'
   const parseName = (value: string): string => (value === '' ? emptyString : value)
@@ -35,15 +35,10 @@ const getAbiMethodInputs = (abi, methodName): Record<string, any> => {
 export const Reducer = ({ info, readContract, writeContract }) => {
 
   const {
-    contract,
     childrenElements,
     properties,
-    properties_,
     hasInputs,
-    hasOutputs,
     isTransaction,
-    modifiers,
-    modifiers_,
   } = info
 
   // TODO Check for Overloaded Functions
@@ -65,12 +60,12 @@ export const Reducer = ({ info, readContract, writeContract }) => {
   const [ result, setResult ] = useState(null)
   const [ parameters, setParameters ] = useState(getAbiMethodInputs(info.contract.contractAbi, methodName))
 
-  // Create a write Provider from the injexted ethereum context
-  const ethereum = useContext(contexts.EthereumContext)
-  const { provider, signer, isEnabled, chainId, address } = ethereum
+  // Create a write Provider from the injected ethereum context
+  const { provider, isEnabled, chainId, address } = useContext(contexts.EthereumContext)
 
   // -> Handlers
   const handleRunMethod = async (event = null, shouldClearInput = false, parametersValues, ethValue): Promise<void> => {
+
     if (event) {
       try {
         event.preventDefault()
@@ -86,80 +81,24 @@ export const Reducer = ({ info, readContract, writeContract }) => {
     try {
       let value = '0'
       const methodParams = [ ...(hasInputs ? parametersValues : []) ]
-
-      // TODO: Test send eth value to method
       if (ethValueKey || ethValue) {
         value = ethValueKey?.value || ethValue
       }
-
-      // TODO: Get gas limit through ethers, and remove MAX_LIMIT
-      // const gasLimit = await getGasLimit(...methodParams)
-
       if (isTransaction && isEnabled && writeContract) {
-        const currentNetwork = await signer.provider.getNetwork()
-        const notify = Notify({
-          dappId: blockNativeApiKey, // [String] The API key created by step one above
-          networkId: currentNetwork.chainId, // [Integer] The Ethereum network ID your Dapp uses.
-        })
-
-        const method = writeContract.functions[methodName]
-
-        const gasPrice = await provider.getGasPrice()
-
-        const estimateMethod = writeContract.estimate[methodName]
-
-        let estimatedGas
-        const tempOverride = { value: ethers.utils.parseEther(value) }
-        try {
-          estimatedGas = await estimateMethod(...methodParams, tempOverride)
-        } catch (err) {
-          logger.error('estimateGasMethod failed', err)
-        }
-
-        const overrides = {
-          gasLimit: estimatedGas,
-          gasPrice,
-          value: ethers.utils.parseEther(value),
-        }
-        let methodResult
-
-        try {
-          methodResult = await method(...methodParams, overrides)
-          // BlockNative Toaster to track tx
-          notify.hash(methodResult.hash)
-
-          // Log transaction to Database
-          logger.log(methodResult)
-
-          // Set Result on State
-          setResult(methodResult.hash)
-        } catch (err) {
-          logger.info('invoke contract method failed in transaction', err)
-        }
+        sendTx(writeContract, provider, methodName, methodParams, value, setResult, notify(blockNativeApiKey, chainId))
       } else {
-        const method = readContract.functions[methodName]
-        try {
-          const methodResult = await method(...methodParams)
-          setResult(methodResult)
-        } catch (err) {
-          logger.info(
-            'Invoke contract method failed in view.  This happends when a contract is invoked on the wrong network or when a contract is not deployed on the current network\n',
-            err,
-          )
-          infoToast({ message: 'Invoking a contract function failed.  Are you on the right network?' })
-        }
+        callMethod(readContract, methodName, methodParams, setResult, infoToast)
       }
 
       const [ input ] = childrenElements.filter(({ id }) => id.includes('input'))
       const { value: autoInvokeValue } = autoInvokeKey || { value: false }
-
       const shouldAutoInvoke = autoInvokeValue === 'true'
-
       const shouldClearAllInputValues = input?.element && !shouldAutoInvoke && shouldClearInput
 
       if (shouldClearAllInputValues) {
         input.element.forEach(({ element }) => Object.assign(element, { value: '' }))
       }
+
     } catch (err) {
       logger.error('Custom Contract handleRun method failed\n', err)
       errorToast({ message: 'Error. Check the Console.' })
