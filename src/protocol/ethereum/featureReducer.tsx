@@ -32,21 +32,21 @@ export const FeatureReducer = ({ feature, element, configuration, info, customCo
   })
 
   switch (featureType) {
-    // case 'nft': {
-    //   return <NftReducer element={element} info={info} />
-    // }
+    case 'nft': {
+      return <NftReducer element={element} info={info} />
+    }
 
-    // case 'user': {
-    //   return <UserReducer element={element} info={info} />
-    // }
+    case 'user': {
+      return <UserReducer element={element} info={info} />
+    }
 
-    // case 'network': {
-    //   return <NetworkReducer element={element} info={info} />
-    // }
+    case 'network': {
+      return <NetworkReducer element={element} info={info} />
+    }
 
-    // case 'threebox': {
-    //   return <ThreeBoxReducer element={element} info={info} />
-    // }
+    case 'threebox': {
+      return <ThreeBoxReducer element={element} info={info} />
+    }
 
     case 'customContract': {
       // FIXME: We're going to remove !isProduction conditional when Dappeteer library gets updated with chainId support
@@ -57,13 +57,6 @@ export const FeatureReducer = ({ feature, element, configuration, info, customCo
 
         return <CustomContractRouter listOfContractMethods={methodsByContractAsElements} contract={contract} />
       }
-
-      // if (
-      //   !isProduction
-      //   || (chainId && info?.contract.networkId && chainId === info.contract.networkId)
-      // ) {
-      //   return <CustomContractRouter element={customContractElements} configuration={configuration} info={info} />
-      // }
 
       return null
     }

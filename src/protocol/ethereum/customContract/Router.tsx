@@ -54,6 +54,4 @@ export const Router = ({ listOfContractMethods, contract }) => {
     </>
   )
 
-  return null
-
 }

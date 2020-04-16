@@ -28,7 +28,6 @@ const getAbiMethodInputs = (abi, methodName): Record<string, any> => {
 
 // Reducer Component
 export const Reducer = ({ info, readContract, writeContract }) => {
-  console.log('Reducer -> info', info)
 
   const {
     contract,
