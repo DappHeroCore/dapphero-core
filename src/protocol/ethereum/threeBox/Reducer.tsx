@@ -52,13 +52,13 @@ export const Reducer: FunctionComponent<ReducerProps> = ({ element, info }) => {
         logger.log('You have no profile. ', error)
       }
     }
-    if (address)fetchProfile()
+    if (isEnabled)fetchProfile()
   }, [ address, isEnabled ])
 
   switch (info?.properties[0]?.key) {
     case 'image': {
       const imageHash = threeBoxProfile?.image?.[0]?.contentUrl?.['/'] ?? null
-      if (imageHash) {
+      if (imageHash && isEnabled) {
         const imgSrc = `${ipfsRoot}${threeBoxProfile.image[0].contentUrl['/']}`
         return <ThreeBoxProfileImgElement element={element} imgSrc={imgSrc} />
       }
