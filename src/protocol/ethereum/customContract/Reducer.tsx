@@ -28,7 +28,7 @@ const getAbiMethodInputs = (abi, methodName): Record<string, any> => {
 }
 
 // Reducer Component
-export const Reducer = ({ info }) => {
+export const Reducer = ({ info, readContract, writeContract }) => {
   const {
     contract,
     childrenElements,
@@ -51,7 +51,7 @@ export const Reducer = ({ info }) => {
   const { value: methodName } = methodNameKey
 
   // Injected Web3 Context
-  const injectedContext = useWeb3React()
+  // const injectedContext = useWeb3React()
   const { actions: { emitToEvent } } = useContext(EmitterContext)
 
   // Toast Notifications
@@ -80,7 +80,7 @@ export const Reducer = ({ info }) => {
   // Create a write Provider from the injexted ethereum context
   const [ contractInstance, setContractInstance ] = useState(null)
   const ethereum = useContext(contexts.EthereumContext)
-  const { provider, signer, isEnabled, chainId } = ethereum
+  const { provider, signer, isEnabled, chainId, address } = ethereum
 
   // const contractInstance = new ethers.Contract(contractAddress, contractAbi, signer)
 
@@ -200,8 +200,9 @@ export const Reducer = ({ info }) => {
         const { element, argumentName } = input
 
         const clickHandlerFunction = (rawValue: string): void => {
-          const value = injectedContext?.account
-            ? rawValue.replace(consts.clientSide.currentUser, injectedContext.account) ?? rawValue
+          // I don't understand what this is doing. - dennison
+          const value = address
+            ? rawValue.replace(consts.clientSide.currentUser, address) ?? rawValue
             : rawValue
 
           try {
@@ -262,7 +263,7 @@ export const Reducer = ({ info }) => {
         tearDowns.forEach((cb) => cb())
       }
     }
-  }, [ childrenElements, injectedContext.account ])
+  }, [ childrenElements, address ])
 
   // Add trigger to invoke buttons
   useEffect(() => {
@@ -291,7 +292,7 @@ export const Reducer = ({ info }) => {
     const parsedParameters = omit(parameters, 'EthValue')
     const parametersValues = Object.values(parsedParameters)
 
-    if (autoInvokeKey && injectedContext.chainId === info?.contract?.networkId) {
+    if (autoInvokeKey && chainId === info?.contract?.networkId) {
       const { value: autoInvokeValue } = autoInvokeKey || { value: false }
 
       const autoClearValue = autoClearKey?.value || false

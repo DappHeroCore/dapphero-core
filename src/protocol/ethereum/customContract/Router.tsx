@@ -3,7 +3,7 @@ import { ethers } from 'ethers'
 import { useWeb3Provider } from 'providers/ethereum/useWeb3Provider'
 import * as contexts from 'contexts'
 import * as consts from 'consts'
-import { Reducer } from './Reducer'
+import { Reducer as CustomContractReducer } from './Reducer'
 
 const POLLING_INTERVAL = 4000
 
@@ -58,7 +58,7 @@ export const Router = ({ info, configuration }) => {
   }, [ chainId, signer, isEnabled ])
 
   return (
-    <Reducer readContract={readContract} writeContract={writeContract} info={info} />
+    <CustomContractReducer readContract={readContract} writeContract={writeContract} info={info} />
   )
 
 }

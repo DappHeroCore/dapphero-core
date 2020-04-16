@@ -7,7 +7,7 @@ import { Reducer as NetworkReducer } from './network/Reducer'
 import { Reducer as UserReducer } from './user/Reducer'
 import { Reducer as ThreeBoxReducer } from './threeBox/Reducer'
 import { Reducer as NftReducer } from './nft/Reducer'
-import { Reducer as CustomContractReducer } from './customContract/Reducer'
+import { Router as CustomContractRouter } from './customContract/Router'
 
 // Types
 import { FeatureReducerProps } from './types'
@@ -44,7 +44,7 @@ export const FeatureReducer = ({ feature, element, configuration, info }: Featur
         !isProduction
         || (chainId && info?.contract.networkId && chainId === info.contract.networkId)
       ) {
-        return <CustomContractReducer element={element} configuration={configuration} info={info} />
+        return <CustomContractRouter element={element} configuration={configuration} info={info} />
       }
 
       return null
