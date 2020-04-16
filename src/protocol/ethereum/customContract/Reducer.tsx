@@ -28,7 +28,7 @@ const getAbiMethodInputs = (abi, methodName): Record<string, any> => {
 }
 
 // Reducer Component
-export const Reducer = ({ info, configuration }) => {
+export const Reducer = ({ info }) => {
   const {
     contract,
     childrenElements,
@@ -63,9 +63,8 @@ export const Reducer = ({ info, configuration }) => {
   const [ result, setResult ] = useState(null)
   const [ parameters, setParameters ] = useState(getAbiMethodInputs(info.contract.contractAbi, methodName))
 
-  const contractNetworkName = consts.global.ethNetworkName[networkId].toLowerCase()
-
   // Create a read Provider and read only contract instance
+  const contractNetworkName = consts.global.ethNetworkName[networkId].toLowerCase()
   const [ readContractInstance, setReadContractInstance ] = useState(null)
   const newEthersReadProvider = ethers.getDefaultProvider(contractNetworkName)
   const readWeb3Connection = useWeb3Provider(POLLING_INTERVAL, newEthersReadProvider, `dh-${contractNetworkName}`)
