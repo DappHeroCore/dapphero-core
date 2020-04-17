@@ -4,10 +4,14 @@ import abi from '../abi/DappHeroTest.json' // eslint-disable-line
 const axios = Axios.create({ headers: { 'content-type': 'application/json' } })
 
 // Refactor when this is more fleshed out
-const DEV_URL = 'https://dapphero-admin.bubbleapps.io/api/1.1/wf/contracts'
-const PROD_URL = 'https://dapphero-admin.bubbleapps.io/api/1.1/wf/contracts'
+const BUBBLE_DEV_URL = 'https://dapphero-admin.bubbleapps.io/api/1.1/wf/contracts'
+const BUBBLE_PROD_URL = 'https://dapphero-admin.bubbleapps.io/api/1.1/wf/contracts'
 
-const BASE_URL = process.env.NODE_ENV === 'production' ? PROD_URL : DEV_URL
+const BACKEND_DEV_URL = 'https://api.dapphero.io/'
+const BACKEND_PROD_URL = 'https://api.dapphero.io/'
+
+const BASE_URL = process.env.NODE_ENV === 'production' ? BUBBLE_PROD_URL : BUBBLE_DEV_URL
+const BACKEND_URL = process.env.NODE_ENV === 'production' ? BACKEND_PROD_URL : BACKEND_DEV_URL
 
 const BUBBLE_ENDPOINT = false
 
@@ -50,7 +54,7 @@ export const getContractsByProjectKey = async (projectId) => {
   try {
     const axiosResponse = (await axios({
       method: 'post',
-      url: BASE_URL,
+      url: `${BACKEND_URL}/projects/${projectId}/contracts/`,
       data: body,
     }))
     const responseData = axiosResponse.data.response.data
