@@ -42,7 +42,7 @@ export const Router = ({ listOfContractMethods, contract }: RouterProps) => {
   )
 
   useEffect(() => {
-    const makeReadOnlyContract = () => {
+    const makeReadOnlyContract = (): void => {
       const readOnlyContract = new ethers.Contract(contractAddress, contractAbi, readOnlyProvider)
       setReadContract(readOnlyContract)
     }
@@ -53,7 +53,7 @@ export const Router = ({ listOfContractMethods, contract }: RouterProps) => {
   // Here we can check if were on the right network or not
 
   useEffect(() => {
-    const makeWriteContract = () => {
+    const makeWriteContract = (): void => {
       const instance = new ethers.Contract(contractAddress, contractAbi, signer)
       setWriteContract(instance)
     }
