@@ -1,7 +1,7 @@
 import { logger } from 'logger/customLogger'
 
-export const callMethod = async ({ contractInstance, methodName, methodParams, setResult, infoToast }): Promise<void> => {
-  const method = contractInstance.functions[methodName]
+export const callMethod = async ({ readContract, methodName, methodParams, setResult, infoToast }): Promise<void> => {
+  const method = readContract.functions[methodName]
   try {
     const methodResult = await method(...methodParams)
     setResult(methodResult)
