@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import omit from 'lodash.omit'
 
 export const useAutoInvokeMethod = ({ info, autoInvokeKey, autoClearKey, isTransaction, handleRunMethod, parameters, chainId, POLLING_INTERVAL }) => {
@@ -14,6 +14,7 @@ export const useAutoInvokeMethod = ({ info, autoInvokeKey, autoClearKey, isTrans
       const autoClearValue = autoClearKey?.value || false
 
       if (autoInvokeValue === 'true' && !isTransaction) {
+        console.log('Yes invoke here')
         const intervalId = setInterval(() => handleRunMethod(null, autoClearValue, parametersValues, ethValue), POLLING_INTERVAL)
         return (): void => clearInterval(intervalId)
       }

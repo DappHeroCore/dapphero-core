@@ -24,7 +24,7 @@ import { logger } from './logger/customLogger'
 
 const getLibrary = (provider) => new ethers.providers.Web3Provider(provider) // this will vary according to whether you use e.g. ethers or web3.js
 
-const APP_REFRESH_SPEED = 500
+const APP_REFRESH_SPEED = 4000
 export const ProvidersWrapper: React.FC = () => {
   // react hooks
   const [ configuration, setConfig ] = useState(null)

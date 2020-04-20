@@ -1,15 +1,17 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { useToasts } from 'react-toast-notifications'
 import Notify from 'bnc-notify'
 import { ethers } from 'ethers'
-import { logger } from 'logger/customLogger'
+import omit from 'lodash.omit'
 import * as contexts from 'contexts'
+import { logger } from 'logger/customLogger'
 import { EmitterContext } from 'providers/EmitterProvider/context'
 
 import { useAddTriggersToInputElements } from './useAddTriggersToInputElements'
 import { useAddInvokeTrigger } from './useAddInvokeTrigger'
 import { useAutoInvokeMethod } from './useAutoInvokeMethod'
 import { useDisplayResults } from './useDisplayResults'
+import { useInterval } from '../../../utils/useInterval'
 
 import { sendTx } from './sendTx'
 import { callMethod } from './callMethod'
@@ -56,12 +58,22 @@ export const Reducer = ({ info, readContract, writeContract }) => {
   const errorToast = ({ message }): void => addToast(message, { appearance: 'error' })
   const infoToast = ({ message }): void => addToast(message, { appearance: 'info' })
 
+  // Create a write Provider from the injected ethereum context
+  const { provider, isEnabled, chainId, address } = useContext(contexts.EthereumContext)
+
   // States
   const [ result, setResult ] = useState(null)
   const [ parameters, setParameters ] = useState(getAbiMethodInputs(info.contract.contractAbi, methodName))
+  const [ readEnabled, setReadEnabled ] = useState(false)
+  const [ writeEnabled, setWriteEnabled ] = useState(false)
 
-  // Create a write Provider from the injected ethereum context
-  const { provider, isEnabled, chainId, address } = useContext(contexts.EthereumContext)
+  useEffect(() => {
+    if (isTransaction && isEnabled && writeContract) { setWriteEnabled(true) } else ( setWriteEnabled(false))
+  }, [ isTransaction, isEnabled, writeContract ])
+
+  useEffect(() => {
+    if (!isTransaction && isEnabled && readContract) { setReadEnabled(true) } else { setReadEnabled(false) }
+  }, [ isTransaction, isEnabled, readContract ])
 
   // -> Handlers
   const handleRunMethod = async (event = null, shouldClearInput = false, parametersValues, ethValue): Promise<void> => {
@@ -81,14 +93,20 @@ export const Reducer = ({ info, readContract, writeContract }) => {
     try {
       let value = '0'
       const methodParams = [ ...(hasInputs ? parametersValues : []) ]
+
       if (ethValueKey || ethValue) {
         value = ethValueKey?.value || ethValue
       }
-      if (isTransaction && isEnabled && writeContract) {
+
+      if (writeEnabled) {
+        console.log('Reducer -> writeEnabled', writeEnabled)
         sendTx({ writeContract, provider, methodName, methodParams, value, setResult, notify: notify(blockNativeApiKey, chainId) })
-      } else {
+      } else if (readEnabled) {
+        console.log('Reducer -> readEnabled', readEnabled)
         callMethod({ readContract, methodName, methodParams, setResult, infoToast })
       }
+
+      if (!readEnabled && !writeEnabled) console.log('Providers not ready')
 
       const [ input ] = childrenElements.filter(({ id }) => id.includes('input'))
       const { value: autoInvokeValue } = autoInvokeKey || { value: false }
@@ -111,8 +129,34 @@ export const Reducer = ({ info, readContract, writeContract }) => {
   // Add trigger to invoke buttons
   useAddInvokeTrigger({ info, autoClearKey, handleRunMethod, parameters })
 
-  // Auto invoke method
-  useAutoInvokeMethod({ info, autoInvokeKey, autoClearKey, isTransaction, handleRunMethod, parameters, chainId, POLLING_INTERVAL })
+  // // Auto invoke method
+  // useAutoInvokeMethod({ info, autoInvokeKey, autoClearKey, isTransaction, handleRunMethod, parameters, chainId, POLLING_INTERVAL })
+  // // console.log("Reducer -> auto", auto)
+
+  useEffect(() => {
+    const ethValue = parameters?.EthValue
+    const parsedParameters = omit(parameters, 'EthValue')
+    const parametersValues = Object.values(parsedParameters)
+
+    if (autoInvokeKey && chainId === info?.contract?.networkId) {
+      const { value: autoInvokeValue } = autoInvokeKey || { value: false }
+
+      const autoClearValue = autoClearKey?.value || false
+
+      if (autoInvokeValue === 'true' && !isTransaction) {
+        console.log('Yes invoke here')
+        const intervalId = setInterval(() => handleRunMethod(null, autoClearValue, parametersValues, ethValue), POLLING_INTERVAL)
+        return (): void => clearInterval(intervalId)
+      }
+    }
+  }, [ readEnabled, autoInvokeKey, autoClearKey, parameters ])
+
+  // const [ delay, setDelay ] = useState(POLLING_INTERVAL)
+  // const [ isRunning, setIsRunning ] = useState(false)
+
+  // useInterval(() => {
+  //   console.log("Hello!")
+  // }, isRunning ? delay : null)
 
   // Display new results in the UI
   useDisplayResults({ childrenElements, result, emitToEvent })
