@@ -85,9 +85,9 @@ export const Reducer = ({ info, readContract, writeContract }) => {
         value = ethValueKey?.value || ethValue
       }
       if (isTransaction && isEnabled && writeContract) {
-        sendTx(writeContract, provider, methodName, methodParams, value, setResult, notify(blockNativeApiKey, chainId))
+        sendTx({ writeContract, provider, methodName, methodParams, value, setResult, notify: notify(blockNativeApiKey, chainId) })
       } else {
-        callMethod(readContract, methodName, methodParams, setResult, infoToast)
+        callMethod({ readContract, methodName, methodParams, setResult, infoToast })
       }
 
       const [ input ] = childrenElements.filter(({ id }) => id.includes('input'))
@@ -106,16 +106,16 @@ export const Reducer = ({ info, readContract, writeContract }) => {
   }
 
   // Add triggers to input elements
-  useAddTriggersToInputElements(info, ethValueKey, setParameters, address)
+  useAddTriggersToInputElements({ info, ethValueKey, setParameters, address })
 
   // Add trigger to invoke buttons
-  useAddInvokeTrigger(info, autoClearKey, handleRunMethod, parameters)
+  useAddInvokeTrigger({ info, autoClearKey, handleRunMethod, parameters })
 
   // Auto invoke method
-  useAutoInvokeMethod(info, autoInvokeKey, autoClearKey, isTransaction, handleRunMethod, parameters, chainId, POLLING_INTERVAL)
+  useAutoInvokeMethod({ info, autoInvokeKey, autoClearKey, isTransaction, handleRunMethod, parameters, chainId, POLLING_INTERVAL })
 
   // Display new results in the UI
-  useDisplayResults(childrenElements, result, emitToEvent)
+  useDisplayResults({ childrenElements, result, emitToEvent })
 
   return null
 }

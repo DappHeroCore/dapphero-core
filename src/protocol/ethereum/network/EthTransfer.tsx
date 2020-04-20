@@ -49,15 +49,11 @@ export const EthTransfer: FunctionComponent<EthTransferProps> = ({ element, amou
 
         if (from && isEnabled) { // We will only attempt this if we actually got our address from the signer ourslves.
           provider.send('eth_sendTransaction', params)
-            .then((hash) => {
-              notify.hash(hash)
+            .then(notify.hash)
+            .catch((err) => logger.info('There was an error sending ether with metaMask', err))
+            .finally(() => {
               amountObj.element.value = ''
               addressObj.element.value = ''
-            })
-            .catch((err) => {
-              amountObj.element.value = ''
-              addressObj.element.value = ''
-              logger.info('There was an error sending ether with metaMask', err)
             })
         }
       } catch (err) {

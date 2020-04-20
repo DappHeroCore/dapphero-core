@@ -4,7 +4,7 @@ import { logger } from '../../logger/customLogger'
 import { useInterval } from '../../utils/useInterval'
 import { providerSchema } from '../../consts'
 
-export const useWeb3Provider = (polling, web3provider, providerTypeName) => {
+export const useWeb3Provider = (polling, web3provider = null, providerTypeName = null) => {
   const [ metamask, setMetamask ] = useState(providerSchema)
   const provider = web3provider || new Web3Provider(window.ethereum || window.web3) // What if there is no injected either?
 

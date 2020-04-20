@@ -1,13 +1,28 @@
 import React, { useState, useEffect, useContext, useCallback } from 'react'
-import { ethers } from 'ethers'
-import { useWeb3Provider } from 'providers/ethereum/useWeb3Provider'
+
 import * as contexts from 'contexts'
 import * as consts from 'consts'
+import { ethers } from 'ethers'
+import { useWeb3Provider } from 'providers/ethereum/useWeb3Provider'
+
 import { Reducer as CustomContractReducer } from './Reducer'
 
 const POLLING_INTERVAL = 4000
 
-export const Router = ({ listOfContractMethods, contract }) => {
+type ContractMethod = {
+  id: string;
+}
+
+type ListOfContractMethods = ContractMethods[];
+
+type Contract = any;
+
+type RouterProps = {
+  listOfContractMethods: ListOfContractMethods;
+  contract: Contract;
+}
+
+export const Router = ({ listOfContractMethods, contract }: RouterProps) => {
 
   const ethereum = useContext(contexts.EthereumContext)
   const { signer, isEnabled, chainId } = ethereum
@@ -49,7 +64,12 @@ export const Router = ({ listOfContractMethods, contract }) => {
   return (
     <>
       {listOfContractMethods.map((contractMethodElement: { id: React.ReactText }) => (
-        <CustomContractReducer readContract={readContract} writeContract={writeContract} info={contractMethodElement} key={contractMethodElement.id} />
+        <CustomContractReducer
+          readContract={readContract}
+          writeContract={writeContract}
+          info={contractMethodElement}
+          key={contractMethodElement.id}
+        />
       ))}
     </>
   )

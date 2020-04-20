@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import omit from 'lodash.omit'
 
-export const useAutoInvokeMethod = (info, autoInvokeKey, autoClearKey, isTransaction, handleRunMethod, parameters, chainId, POLLING_INTERVAL) => {
+export const useAutoInvokeMethod = ({ info, autoInvokeKey, autoClearKey, isTransaction, handleRunMethod, parameters, chainId, POLLING_INTERVAL }) => {
 
   useEffect(() => {
     const ethValue = parameters?.EthValue

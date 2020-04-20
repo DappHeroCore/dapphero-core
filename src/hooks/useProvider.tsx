@@ -32,7 +32,8 @@ export const useProvider = () => {
   const [ provider, dispatch ] = React.useReducer(providerReducer, initialProvider)
 
   const addProvider = async (provider) => {
-    dispatch({ type: actionTypes.addProvider, provider, chainId: (await provider.getNetwork()) })
+    const chainId = await provider.getNetwork()
+    dispatch({ type: actionTypes.addProvider, provider, chainId })
   }
   const addSigner = (signer, address, enableFunction) => {
     dispatch({ type: actionTypes.addSigner, signer, enableFunction, address })

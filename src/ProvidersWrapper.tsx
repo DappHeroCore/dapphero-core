@@ -33,7 +33,7 @@ export const ProvidersWrapper: React.FC = () => {
   const [ supportedNetworks, setSupportedNetworks ] = useState([])
 
   const retriggerEngine = (): void => setTimestamp(+new Date())
-  const ethereum = useWeb3Provider(APP_REFRESH_SPEED, null, null) // This sets refresh speed of the whole app
+  const ethereum = useWeb3Provider(APP_REFRESH_SPEED) // This sets refresh speed of the whole app
 
   // load contracts effects
   useEffect(() => {
@@ -46,9 +46,9 @@ export const ProvidersWrapper: React.FC = () => {
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     const getSupportedNetworks = () => {
-      const networks = configuration.contracts?.map((contract) => ({
-        contractName: contract.contractName,
-        chainId: contract.networkId,
+      const networks = configuration.contracts?.map(({ contractName, networkId: chainId }) => ({
+        contractName,
+        chainId,
       }))
       setSupportedNetworks(networks)
     }

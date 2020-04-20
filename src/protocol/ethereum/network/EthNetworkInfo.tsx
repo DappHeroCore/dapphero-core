@@ -12,17 +12,6 @@ export const EthNetworkInfo: FunctionComponent<EthNetworkInfoProps> = ({ element
     , [],
   )
 
-  if (!infoValue) {
-    element.innerHTML = memoizedValue
-  } else {
-    element.innerHTML = infoValue
-  }
+  element.innerHTML = infoValue || memoizedValue
   return null
-
-  // try {
-  //   element.innerHTML = infoValue
-  // } catch (e) {
-  //   logger.log(e)
-  // }
-  // return null
 }

@@ -34,10 +34,9 @@ export const EthEnable: FunctionComponent<EthEnableProps> = ({ element }) => {
 
   useEffect(() => {
     try {
-      const clickHandler = () => { enable() }
-      element.addEventListener('click', clickHandler, true)
+      element.addEventListener('click', enable, true)
 
-      return (() => element.removeEventListener('click', clickHandler, true))
+      return (() => element.removeEventListener('click', enable, true))
     } catch (e) {
       logger.log(e)
     }

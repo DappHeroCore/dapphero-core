@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import omit from 'lodash.omit'
 
-export const useAddInvokeTrigger = (info, autoClearKey, handleRunMethod, parameters) => {
+export const useAddInvokeTrigger = ({ info, autoClearKey, handleRunMethod, parameters }) => {
 
   const { childrenElements } = info
   useEffect(() => {

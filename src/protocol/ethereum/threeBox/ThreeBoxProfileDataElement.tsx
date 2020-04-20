@@ -12,11 +12,6 @@ export const ThreeBoxProfileDataElement: FunctionComponent<ThreeBoxProfileDataEl
     , [],
   )
 
-  if (!profileData) {
-    element.innerText = memoizedValue
-    return null
-  }
-  element.innerText = profileData
+  element.innerText = profileData || memoizedValue
   return null
-
 }

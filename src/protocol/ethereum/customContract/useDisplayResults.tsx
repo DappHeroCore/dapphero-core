@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import * as utils from 'utils'
 import { EVENT_NAMES } from 'providers/EmitterProvider/constants'
 
-export const useDisplayResults = (childrenElements, result, emitToEvent ) => {
+export const useDisplayResults = ({ childrenElements, result, emitToEvent }) => {
   useEffect(() => {
     if (result) {
       const parsedValue = result

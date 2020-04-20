@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState, Fragment } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import get from 'lodash.get'
 
@@ -26,22 +26,22 @@ type ActivatorProps = {
 export const Activator = ({ configuration, retriggerEngine }: ActivatorProps) => {
   // React hooks
   const domElements = useContext(contexts.DomElementsContext)
-  const domElementsFilteredForContracts = domElements.filter((element) => element.feature !== 'customContract')
 
   // This needs to filter for Unique Contracts
-  const domOnlyContract = domElements.filter((element) => element.feature === 'customContract')
+  const contractElements = domElements.filter((element) => element.feature === 'customContract')
 
-  if (domOnlyContract.length > 0) {
-    domElementsFilteredForContracts.push({
-      id: domOnlyContract[0].id,
-      feature: 'customContract',
-    })
+  const getDomContractElements = () => {
+    const filteredForContracts = domElements.filter((element) => element.feature !== 'customContract')
+    return contractElements.length ? [ ...filteredForContracts, { id: contractElements[0].id, feature: 'customContract' } ] : filteredForContracts
   }
+
+  const domElementsFilteredForContracts = getDomContractElements()
 
   const ethereum = useContext(contexts.EthereumContext)
   const { isEnabled } = ethereum
 
-  const AppReady = isEnabled // We should make this a state later
+  // TODO: [DEV-248] We should make this an app level state later.
+  const AppReady = isEnabled
 
   const { actions: { listenToEvent } } = useContext(EmitterContext)
 
@@ -69,10 +69,11 @@ export const Activator = ({ configuration, retriggerEngine }: ActivatorProps) =>
     window.dispatchEvent(event)
   }, [ AppReady ])
 
-  if (AppReady) {
-    return (
-      <>
-        {domElementsFilteredForContracts
+  if (!AppReady || !domElementsFilteredForContracts) return null
+
+  return (
+    <>
+      {domElementsFilteredForContracts
           && domElementsFilteredForContracts.map((domElement) => (
             <FeatureReducer
               key={domElement.id}
@@ -80,12 +81,10 @@ export const Activator = ({ configuration, retriggerEngine }: ActivatorProps) =>
               feature={domElement.feature}
               configuration={configuration}
               info={domElement}
-              customContractElements={domOnlyContract}
+              customContractElements={contractElements}
             />
           ))}
-      </>
-    )
-  }
+    </>
+  )
 
-  return null
 }

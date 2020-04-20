@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import * as utils from 'utils'
 import * as consts from 'consts'
 
-export const useAddTriggersToInputElements = (info, ethValueKey, setParameters, address) => {
+export const useAddTriggersToInputElements = ({ info, ethValueKey, setParameters, address }) => {
   const { childrenElements } = info
 
   // Add triggers to input elements

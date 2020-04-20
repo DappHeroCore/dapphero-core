@@ -25,16 +25,12 @@ export const FeatureReducer = ({ feature, element, configuration, info, customCo
   // sort customContractElements => Array of different Contracts.
   // case'customContract' maps through this array, and renders a router for each contract.
 
-  const uniqueContractNames = new Set()
-  customContractElements.map((element) => {
-    uniqueContractNames.add(element.contract.contractName)
-    return null
-  })
+  const uniqueContractNames = new Set([ ...customContractElements.map(({ contract }) => contract.contractName) ])
 
   switch (featureType) {
-    case 'nft': {
-      return <NftReducer element={element} info={info} />
-    }
+    // case 'nft': {
+    //   return <NftReducer element={element} info={info} />
+    // }
 
     case 'user': {
       return <UserReducer element={element} info={info} />

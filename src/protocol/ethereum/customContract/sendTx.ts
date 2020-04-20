@@ -1,7 +1,7 @@
 import { ethers } from 'ethers'
 import { logger } from 'logger/customLogger'
 
-export const sendTx = async (contractInstance, provider, methodName, methodParams, value, setResult, notify) => {
+export const sendTx = async ({ contractInstance, provider, methodName, methodParams, value, setResult, notify }) => {
 
   const method = contractInstance.functions[methodName]
   const gasPrice = await provider.getGasPrice()
