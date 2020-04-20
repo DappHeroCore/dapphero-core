@@ -1,10 +1,12 @@
-import React, { FunctionComponent, useEffect, useState } from 'react'
+import React, { FunctionComponent, useEffect, useState, useContext } from 'react'
+import * as contexts from 'contexts'
 import { useWeb3React } from '@web3-react/core'
 import { logger } from 'logger/customLogger'
+import { getProfile } from '3box/lib/api'
 import { ThreeBoxProfileDataElement } from './ThreeBoxProfileDataElement'
 import { ThreeBoxProfileImgElement } from './ThreeBoxProfileImgElement'
 
-const { getProfile: get3boxProfile } = require('3box/lib/api')
+const get3boxProfile = getProfile
 
 const ipfsRoot = 'https://cloudflare-ipfs.com/ipfs/'
 interface ReducerProps {
@@ -13,8 +15,19 @@ interface ReducerProps {
 }
 
 export const Reducer: FunctionComponent<ReducerProps> = ({ element, info }) => {
-  const injectedContext = useWeb3React()
-  const { account } = injectedContext
+  // const injectedContext = useWeb3React()
+  // const { address } = injectedContext
+  const defaultProfile = {
+    name: null,
+    location: null,
+    emoji: null,
+    job: null,
+    description: null,
+    website: null,
+    image: [
+      { contentUrl: { '/': null } },
+    ],
+  }
   const [ threeBoxProfile, setThreeBoxProfile ] = useState({
     name: null,
     location: null,
@@ -27,27 +40,30 @@ export const Reducer: FunctionComponent<ReducerProps> = ({ element, info }) => {
     ],
   })
 
+  const ethereum = useContext(contexts.EthereumContext)
+  const { address, isEnabled } = ethereum
   useEffect(() => {
-    const getProfile = async () => {
+    const fetchProfile = async () => {
       try {
         // TODO: [DEV-97] How to we check the status of a request? When no Profile this 404's
-        const profile = await get3boxProfile(account)
+        const profile = await get3boxProfile(address)
         setThreeBoxProfile(profile)
       } catch (error) {
         logger.log('You have no profile. ', error)
       }
     }
-    getProfile()
-  }, [ account ])
+    if (isEnabled)fetchProfile()
+  }, [ address, isEnabled ])
 
   switch (info?.properties[0]?.key) {
     case 'image': {
       const imageHash = threeBoxProfile?.image?.[0]?.contentUrl?.['/'] ?? null
-      if (imageHash) {
+      if (imageHash && isEnabled) {
         const imgSrc = `${ipfsRoot}${threeBoxProfile.image[0].contentUrl['/']}`
         return <ThreeBoxProfileImgElement element={element} imgSrc={imgSrc} />
       }
-      return null
+      return <ThreeBoxProfileImgElement element={element} imgSrc={null} />
+
     }
     case 'name': {
       return <ThreeBoxProfileDataElement element={element} profileData={threeBoxProfile.name} />

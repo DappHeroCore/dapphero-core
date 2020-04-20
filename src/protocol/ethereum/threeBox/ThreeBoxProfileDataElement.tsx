@@ -1,4 +1,4 @@
-import { FunctionComponent } from 'react'
+import { FunctionComponent, useMemo } from 'react'
 
 interface ThreeBoxProfileDataElementProps {
   element: HTMLElement;
@@ -6,7 +6,12 @@ interface ThreeBoxProfileDataElementProps {
 }
 
 export const ThreeBoxProfileDataElement: FunctionComponent<ThreeBoxProfileDataElementProps> = ({ element, profileData }) => {
-  if (profileData == null) return null
-  element.innerText = profileData
+
+  const memoizedValue = useMemo(
+    () => element.innerText
+    , [],
+  )
+
+  element.innerText = profileData || memoizedValue
   return null
 }

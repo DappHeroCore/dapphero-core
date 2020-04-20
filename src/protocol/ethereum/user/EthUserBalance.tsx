@@ -1,10 +1,9 @@
 import { logger } from 'logger/customLogger'
-import { useEffect, FunctionComponent } from 'react'
+import { useEffect, useState, useContext, FunctionComponent, useMemo } from 'react'
 import { EthereumUnits } from 'types/types'
 import * as utils from 'utils'
-import { useWeb3React } from '@web3-react/core'
-
-const POLLING_INTERVAL = 1000
+import * as contexts from 'contexts'
+import { VoidSigner } from 'ethers'
 
 interface EthUserBalanceProps {
   element: HTMLElement;
@@ -13,28 +12,30 @@ interface EthUserBalanceProps {
 }
 
 export const EthUserBalance: FunctionComponent<EthUserBalanceProps> = ({ element, units, decimals }) => {
+  const memoizedValue = useMemo(
+    () => element.innerText
+    , [],
+  )
+
   units = units ?? 'wei' //eslint-disable-line
   decimals = decimals ?? 0 //eslint-disable-line
 
-  // const { accounts, networkId, lib } = hooks.useDappHeroWeb3()
-  const { account, chainId, library } = useWeb3React()
+  const ethereum = useContext(contexts.EthereumContext)
+  const { provider, address, isEnabled } = ethereum
 
   useEffect(() => {
-    const getData = async (): Promise<void> => {
+    const getBalance = async (): Promise<void> => {
       try {
-        if (account) {
-          const unformatedBalance = await library.getBalance(account)
-          const formatedBalanced = Number(utils.convertUnits('wei', units, unformatedBalance)).toFixed(decimals)
-          element.innerHTML = formatedBalanced
-        }
-      } catch (e) {
-        logger.log('Get Balance in the USER feature set Failed', e)
+        const balance = await provider.getBalance(address)
+        const formatedBalanced = Number(utils.convertUnits('wei', units, balance)).toFixed(decimals)
+        element.innerHTML = formatedBalanced
+      } catch (error) {
+        logger.log(`Error trying to retrieve users balance`, error)
       }
     }
-    getData()
-    const intervalId = setInterval(getData, POLLING_INTERVAL)
-    return (): void => { clearInterval(intervalId) }
-  }, [ account, chainId ])
+
+    if (address && isEnabled) { getBalance() } else { element.innerHTML = memoizedValue }
+  }, [ provider.ready ])
 
   return null
 }

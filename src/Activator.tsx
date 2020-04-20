@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState, Fragment } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import get from 'lodash.get'
 
@@ -12,6 +12,7 @@ import { EmitterContext } from 'providers/EmitterProvider/context'
 import { FeatureReducer } from './protocol/ethereum/featureReducer'
 
 import { highlightDomElements } from './utils/highlightDomElements'
+import { logger } from './logger/customLogger'
 
 // Log tests and Startup Logs
 loggerTest()
@@ -25,11 +26,24 @@ type ActivatorProps = {
 export const Activator = ({ configuration, retriggerEngine }: ActivatorProps) => {
   // React hooks
   const domElements = useContext(contexts.DomElementsContext)
-  const { actions: { listenToEvent } } = useContext(EmitterContext)
 
-  // Custom hooks
-  const attemptedEagerConnect = hooks.useEagerConnect()
-  const web3React = useWeb3React()
+  // This needs to filter for Unique Contracts
+  const contractElements = domElements.filter((element) => element.feature === 'customContract')
+
+  const getDomContractElements = () => {
+    const filteredForContracts = domElements.filter((element) => element.feature !== 'customContract')
+    return contractElements.length ? [ ...filteredForContracts, { id: contractElements[0].id, feature: 'customContract' } ] : filteredForContracts
+  }
+
+  const domElementsFilteredForContracts = getDomContractElements()
+
+  const ethereum = useContext(contexts.EthereumContext)
+  const { isEnabled } = ethereum
+
+  // TODO: [DEV-248] We should make this an app level state later.
+  const AppReady = isEnabled
+
+  const { actions: { listenToEvent } } = useContext(EmitterContext)
 
   useEffect(() => {
     const dappHero = {
@@ -40,7 +54,7 @@ export const Activator = ({ configuration, retriggerEngine }: ActivatorProps) =>
       configuration,
       retriggerEngine,
       projectId: consts.global.apiKey,
-      provider: get(web3React, 'library.provider', null),
+      provider: ethereum,
       toggleHighlight(): void {
         dappHero.highlightEnabled = !dappHero.highlightEnabled
         highlightDomElements(dappHero.highlightEnabled, domElements)
@@ -53,24 +67,24 @@ export const Activator = ({ configuration, retriggerEngine }: ActivatorProps) =>
     Object.assign(window, { dappHero })
     // Dispatch the event.
     window.dispatchEvent(event)
-  }, [ web3React, web3React.library ])
+  }, [ AppReady ])
 
-  if (attemptedEagerConnect) {
-    return (
-      <>
-        {domElements
-          && domElements.map((domElement) => (
+  if (!AppReady || !domElementsFilteredForContracts) return null
+
+  return (
+    <>
+      {domElementsFilteredForContracts
+          && domElementsFilteredForContracts.map((domElement) => (
             <FeatureReducer
               key={domElement.id}
               element={domElement.element}
               feature={domElement.feature}
               configuration={configuration}
               info={domElement}
+              customContractElements={contractElements}
             />
           ))}
-      </>
-    )
-  }
+    </>
+  )
 
-  return null
 }
