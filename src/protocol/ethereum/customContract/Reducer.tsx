@@ -1,11 +1,14 @@
 import React, { useState, useContext } from 'react'
 import { useToasts } from 'react-toast-notifications'
-import Notify from 'bnc-notify'
 import { logger } from 'logger/customLogger'
+import Notify from 'bnc-notify'
+import omit from 'lodash.omit'
+
+import * as utils from 'utils'
+import * as consts from 'consts'
 import * as contexts from 'contexts'
 import { EmitterContext } from 'providers/EmitterProvider/context'
 
-import { useAddTriggersToInputElements } from './useAddTriggersToInputElements'
 import { useAddInvokeTrigger } from './useAddInvokeTrigger'
 import { useAutoInvokeMethod } from './useAutoInvokeMethod'
 import { useDisplayResults } from './useDisplayResults'
@@ -32,7 +35,6 @@ const getAbiMethodInputs = (abi, methodName): Record<string, any> => {
 
 // Reducer Component
 export const Reducer = ({ info, readContract, writeContract }) => {
-
   const {
     childrenElements,
     properties,
@@ -59,6 +61,10 @@ export const Reducer = ({ info, readContract, writeContract }) => {
   // React hooks
   const [ result, setResult ] = useState(null)
 
+  // Create a write Provider from the injected ethereum context
+  const { provider, isEnabled, chainId, address } = useContext(contexts.EthereumContext)
+  console.log('Reducer -> provider', provider)
+
   // Helpers - Get parameters values
   const getParametersFromInputValues = (): Record<string, any> => {
     const inputChildrens = childrenElements.filter(({ id }) => id.includes('input'))
@@ -69,8 +75,8 @@ export const Reducer = ({ info, readContract, writeContract }) => {
 
     inputs.element.forEach(({ element, argumentName }) => {
       const rawValue = ethValue ?? element.value
-      const value = injectedContext?.account
-        ? rawValue.replace(consts.clientSide.currentUser, injectedContext.account) ?? rawValue
+      const value = address
+        ? rawValue.replace(consts.clientSide.currentUser, address) ?? rawValue
         : rawValue
 
       try {
@@ -93,9 +99,6 @@ export const Reducer = ({ info, readContract, writeContract }) => {
 
     return { parametersValues }
   }
-
-  // Create a write Provider from the injected ethereum context
-  const { provider, isEnabled, chainId, address } = useContext(contexts.EthereumContext)
 
   // -> Handlers
   const handleRunMethod = async (event = null, shouldClearInput = false): Promise<void> => {
@@ -141,14 +144,11 @@ export const Reducer = ({ info, readContract, writeContract }) => {
     }
   }
 
-  // Add triggers to input elements
-  useAddTriggersToInputElements({ info, ethValueKey, setParameters, address })
-
   // Add trigger to invoke buttons
-  useAddInvokeTrigger({ info, autoClearKey, handleRunMethod, parameters })
+  useAddInvokeTrigger({ info, autoClearKey, handleRunMethod })
 
   // Auto invoke method
-  useAutoInvokeMethod({ info, autoInvokeKey, autoClearKey, isTransaction, handleRunMethod, parameters, chainId, POLLING_INTERVAL })
+  useAutoInvokeMethod({ info, autoInvokeKey, autoClearKey, isTransaction, handleRunMethod, getParametersFromInputValues, chainId, POLLING_INTERVAL })
 
   // Display new results in the UI
   useDisplayResults({ childrenElements, result, emitToEvent })
