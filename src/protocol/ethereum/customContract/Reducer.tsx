@@ -63,7 +63,6 @@ export const Reducer = ({ info, readContract, writeContract }) => {
 
   // Create a write Provider from the injected ethereum context
   const { provider, isEnabled, chainId, address } = useContext(contexts.EthereumContext)
-  console.log('Reducer -> provider', provider)
 
   // Helpers - Get parameters values
   const getParametersFromInputValues = (): Record<string, any> => {
