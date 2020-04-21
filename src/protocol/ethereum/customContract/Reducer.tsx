@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useContext } from 'react'
 import { useToasts } from 'react-toast-notifications'
 import Notify from 'bnc-notify'
-import { ethers } from 'ethers'
 import { logger } from 'logger/customLogger'
 import * as contexts from 'contexts'
 import { EmitterContext } from 'providers/EmitterProvider/context'
