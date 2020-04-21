@@ -1,18 +1,12 @@
 import { useEffect } from 'react'
-import omit from 'lodash.omit'
 
-export const useAddInvokeTrigger = ({ info, autoClearKey, handleRunMethod, parameters }) => {
-
+export const useAddInvokeTrigger = ({ info, autoClearKey, handleRunMethod }): void => {
   const { childrenElements } = info
+
   useEffect(() => {
     const autoClearValue = autoClearKey?.value || false
     const invokeButtons = childrenElements.filter(({ id }) => id.includes('invoke'))
-
-    const ethValue = parameters?.EthValue
-    const parsedParameters = omit(parameters, 'EthValue')
-    const parametersValues = Object.values(parsedParameters)
-
-    const onRunMethod = (event) => handleRunMethod(event, autoClearValue, parametersValues, ethValue)
+    const onRunMethod = (event): Promise<void> => handleRunMethod(event, autoClearValue)
 
     if (invokeButtons) {
       invokeButtons.forEach(({ element }) => {
@@ -22,7 +16,7 @@ export const useAddInvokeTrigger = ({ info, autoClearKey, handleRunMethod, param
     }
 
     return (): void => invokeButtons.forEach(({ element }) => element.removeEventListener('click', onRunMethod))
-  }, [ handleRunMethod, parameters ])
+  }, [ handleRunMethod ])
 
   return null
 }

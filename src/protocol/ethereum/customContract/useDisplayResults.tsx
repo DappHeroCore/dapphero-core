@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import * as utils from 'utils'
 import { EVENT_NAMES } from 'providers/EmitterProvider/constants'
 
-export const useDisplayResults = ({ childrenElements, result, emitToEvent }) => {
+export const useDisplayResults = ({ childrenElements, result, emitToEvent }): void => {
   useEffect(() => {
     if (result) {
       const parsedValue = result
@@ -17,8 +17,8 @@ export const useDisplayResults = ({ childrenElements, result, emitToEvent }) => 
             const displayUnits = element.getAttribute('data-dh-modifier-display-units')
             const contractUnits = element.getAttribute('data-dh-modifier-contract-units')
             const decimals = (element.getAttribute('data-dh-modifier-decimal-units')
-                    || element.getAttribute('data-dh-modifier-decimals'))
-                  ?? null
+                || element.getAttribute('data-dh-modifier-decimals'))
+              ?? null
 
             const convertedValue = result && (displayUnits || contractUnits)
               ? utils.convertUnits(contractUnits, displayUnits, result)
@@ -49,8 +49,8 @@ export const useDisplayResults = ({ childrenElements, result, emitToEvent }) => 
           const displayUnits = element.getAttribute('data-dh-modifier-display-units')
           const contractUnits = element.getAttribute('data-dh-modifier-contract-units')
           const decimals = (element.getAttribute('data-dh-modifier-decimal-units')
-                  || element.getAttribute('data-dh-modifier-decimals'))
-                ?? null
+              || element.getAttribute('data-dh-modifier-decimals'))
+            ?? null
           const convertedValue = parsedValue[outputName] && (displayUnits || contractUnits)
             ? utils.convertUnits(contractUnits, displayUnits, parsedValue[outputName])
             : parsedValue[outputName]
@@ -72,4 +72,6 @@ export const useDisplayResults = ({ childrenElements, result, emitToEvent }) => 
 
     }
   }, [ result ])
+
+  return null
 }

@@ -1,10 +1,11 @@
 import { logger } from 'logger/customLogger'
 
-export const callMethod = async ({ readContract, methodName, methodParams, setResult, infoToast }): Promise<void> => {
+export const callMethod = async ({ readContract, methodName, methodParams, infoToast }): Promise<void> => {
   const method = readContract.functions[methodName]
+
   try {
     const methodResult = await method(...methodParams)
-    setResult(methodResult)
+    return methodResult
   } catch (err) {
     logger.info(
       'Invoke contract method failed in view. This happends when a contract is invoked on the wrong network or when a contract is not deployed on the current network\n',

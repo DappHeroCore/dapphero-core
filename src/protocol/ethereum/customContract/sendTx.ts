@@ -1,7 +1,7 @@
 import { ethers } from 'ethers'
 import { logger } from 'logger/customLogger'
 
-export const sendTx = async ({ writeContract, provider, methodName, methodParams, value, setResult, notify }) => {
+export const sendTx = async ({ writeContract, provider, methodName, methodParams, value, notify }): Promise<void> => {
 
   const method = writeContract.functions[methodName]
   const gasPrice = await provider.getGasPrice()
@@ -32,7 +32,7 @@ export const sendTx = async ({ writeContract, provider, methodName, methodParams
     logger.log(methodResult)
 
     // Set Result on State
-    setResult(methodResult.hash)
+    return methodResult.hash
   } catch (err) {
     logger.info('invoke contract method failed in transaction', err)
   }

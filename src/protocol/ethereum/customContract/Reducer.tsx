@@ -1,12 +1,14 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { useToasts } from 'react-toast-notifications'
-import Notify from 'bnc-notify'
-import { ethers } from 'ethers'
 import { logger } from 'logger/customLogger'
+import Notify from 'bnc-notify'
+import omit from 'lodash.omit'
+
+import * as utils from 'utils'
+import * as consts from 'consts'
 import * as contexts from 'contexts'
 import { EmitterContext } from 'providers/EmitterProvider/context'
 
-import { useAddTriggersToInputElements } from './useAddTriggersToInputElements'
 import { useAddInvokeTrigger } from './useAddInvokeTrigger'
 import { useAutoInvokeMethod } from './useAutoInvokeMethod'
 import { useDisplayResults } from './useDisplayResults'
@@ -33,7 +35,6 @@ const getAbiMethodInputs = (abi, methodName): Record<string, any> => {
 
 // Reducer Component
 export const Reducer = ({ info, readContract, writeContract }) => {
-
   const {
     childrenElements,
     properties,
@@ -47,6 +48,7 @@ export const Reducer = ({ info, readContract, writeContract }) => {
   const methodNameKey = properties.find(({ key }) => key === 'methodName')
   const ethValueKey = properties.find((property) => property.key === 'ethValue')
 
+  const ethValue = ethValueKey?.value
   const { value: methodName } = methodNameKey
 
   const { actions: { emitToEvent } } = useContext(EmitterContext)
@@ -56,15 +58,50 @@ export const Reducer = ({ info, readContract, writeContract }) => {
   const errorToast = ({ message }): void => addToast(message, { appearance: 'error' })
   const infoToast = ({ message }): void => addToast(message, { appearance: 'info' })
 
-  // States
+  // React hooks
   const [ result, setResult ] = useState(null)
-  const [ parameters, setParameters ] = useState(getAbiMethodInputs(info.contract.contractAbi, methodName))
 
   // Create a write Provider from the injected ethereum context
   const { provider, isEnabled, chainId, address } = useContext(contexts.EthereumContext)
 
+  // Helpers - Get parameters values
+  const getParametersFromInputValues = (): Record<string, any> => {
+    const inputChildrens = childrenElements.filter(({ id }) => id.includes('input'))
+    const abiMethodInputs = getAbiMethodInputs(info.contract.contractAbi, methodName)
+
+    if (!inputChildrens.length ) return { parameterValues: [] }
+    const [ inputs ] = inputChildrens
+
+    inputs.element.forEach(({ element, argumentName }) => {
+      const rawValue = ethValue ?? element.value
+      const value = address
+        ? rawValue.replace(consts.clientSide.currentUser, address) ?? rawValue
+        : rawValue
+
+      try {
+        const displayUnits = element.getAttribute('data-dh-modifier-display-units')
+        const contractUnits = element.getAttribute('data-dh-modifier-contract-units')
+        const convertedValue = value && (displayUnits || contractUnits) ? utils.convertUnits(displayUnits, contractUnits, value) : value
+
+        if (convertedValue) {
+          Object.assign(abiMethodInputs, { [argumentName]: convertedValue })
+        }
+      } catch (err) {
+        console.warn('There may be an issue with your inputs')
+      }
+
+      element.value = value
+    })
+
+    const parsedParameters = omit(abiMethodInputs, 'EthValue')
+    const parametersValues = Object.values(parsedParameters)
+
+    return { parametersValues }
+  }
+
   // -> Handlers
-  const handleRunMethod = async (event = null, shouldClearInput = false, parametersValues, ethValue): Promise<void> => {
+  const handleRunMethod = async (event = null, shouldClearInput = false): Promise<void> => {
+    const { parametersValues } = getParametersFromInputValues()
 
     if (event) {
       try {
@@ -81,13 +118,16 @@ export const Reducer = ({ info, readContract, writeContract }) => {
     try {
       let value = '0'
       const methodParams = [ ...(hasInputs ? parametersValues : []) ]
-      if (ethValueKey || ethValue) {
-        value = ethValueKey?.value || ethValue
+
+      if (ethValue) {
+        value = ethValue
       }
       if (isTransaction && isEnabled && writeContract) {
-        sendTx({ writeContract, provider, methodName, methodParams, value, setResult, notify: notify(blockNativeApiKey, chainId) })
+        const methodHash = await sendTx({ writeContract, provider, methodName, methodParams, value, notify: notify(blockNativeApiKey, chainId) })
+        setResult(methodHash)
       } else {
-        callMethod({ readContract, methodName, methodParams, setResult, infoToast })
+        const methodResult = await callMethod({ readContract, methodName, methodParams, infoToast })
+        setResult(methodResult)
       }
 
       const [ input ] = childrenElements.filter(({ id }) => id.includes('input'))
@@ -105,14 +145,11 @@ export const Reducer = ({ info, readContract, writeContract }) => {
     }
   }
 
-  // Add triggers to input elements
-  useAddTriggersToInputElements({ info, ethValueKey, setParameters, address })
-
   // Add trigger to invoke buttons
-  useAddInvokeTrigger({ info, autoClearKey, handleRunMethod, parameters })
+  useAddInvokeTrigger({ info, autoClearKey, handleRunMethod })
 
   // Auto invoke method
-  useAutoInvokeMethod({ info, autoInvokeKey, autoClearKey, isTransaction, handleRunMethod, parameters, chainId, POLLING_INTERVAL })
+  useAutoInvokeMethod({ info, autoInvokeKey, autoClearKey, isTransaction, handleRunMethod, getParametersFromInputValues, chainId, POLLING_INTERVAL })
 
   // Display new results in the UI
   useDisplayResults({ childrenElements, result, emitToEvent })
