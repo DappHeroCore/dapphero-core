@@ -48,7 +48,7 @@ export const Reducer = ({ info, readContract, writeContract }) => {
   const methodNameKey = properties.find(({ key }) => key === 'methodName')
   const ethValueKey = properties.find((property) => property.key === 'ethValue')
 
-  const ethValue = ethValueKey?.value
+  let ethValue = ethValueKey?.value
   const { value: methodName } = methodNameKey
 
   const { actions: { emitToEvent } } = useContext(EmitterContext)
@@ -73,10 +73,8 @@ export const Reducer = ({ info, readContract, writeContract }) => {
     const [ inputs ] = inputChildrens
 
     inputs.element.forEach(({ element, argumentName }) => {
-      const rawValue = ethValue ?? element.value
-      const value = address
-        ? rawValue.replace(consts.clientSide.currentUser, address) ?? rawValue
-        : rawValue
+      const rawValue = element.value
+      const value = address ? (rawValue.replace(consts.clientSide.currentUser, address) ?? rawValue) : rawValue
 
       try {
         const displayUnits = element.getAttribute('data-dh-modifier-display-units')
@@ -90,8 +88,13 @@ export const Reducer = ({ info, readContract, writeContract }) => {
         console.warn('There may be an issue with your inputs')
       }
 
+      // TODO: Check if we need to re-assign the input value (with Drake)
       element.value = value
     })
+
+    if (abiMethodInputs?.EthValue) {
+      ethValue = abiMethodInputs?.EthValue
+    }
 
     const parsedParameters = omit(abiMethodInputs, 'EthValue')
     const parametersValues = Object.values(parsedParameters)
@@ -122,6 +125,7 @@ export const Reducer = ({ info, readContract, writeContract }) => {
       if (ethValue) {
         value = ethValue
       }
+
       if (isTransaction && isEnabled && writeContract) {
         const methodHash = await sendTx({ writeContract, provider, methodName, methodParams, value, notify: notify(blockNativeApiKey, chainId) })
         setResult(methodHash)
