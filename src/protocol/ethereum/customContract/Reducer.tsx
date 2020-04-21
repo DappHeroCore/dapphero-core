@@ -65,6 +65,7 @@ export const Reducer = ({ info, readContract, writeContract }) => {
   const [ result, setResult ] = useState(null)
   const [ parameters, setParameters ] = useState(getAbiMethodInputs(info.contract.contractAbi, methodName))
   const [ readEnabled, setReadEnabled ] = useState(false)
+  console.log('Reducer -> readEnabled', readEnabled)
   const [ writeEnabled, setWriteEnabled ] = useState(false)
 
   useEffect(() => {
