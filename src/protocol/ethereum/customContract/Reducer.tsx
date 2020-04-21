@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { useToasts } from 'react-toast-notifications'
 import { logger } from 'logger/customLogger'
 import Notify from 'bnc-notify'
@@ -123,9 +123,11 @@ export const Reducer = ({ info, readContract, writeContract }) => {
         value = ethValue
       }
       if (isTransaction && isEnabled && writeContract) {
-        sendTx({ writeContract, provider, methodName, methodParams, value, setResult, notify: notify(blockNativeApiKey, chainId) })
+        const methodHash = await sendTx({ writeContract, provider, methodName, methodParams, value, notify: notify(blockNativeApiKey, chainId) })
+        setResult(methodHash)
       } else {
-        callMethod({ readContract, methodName, methodParams, setResult, infoToast })
+        const methodResult = await callMethod({ readContract, methodName, methodParams, infoToast })
+        setResult(methodResult)
       }
 
       const [ input ] = childrenElements.filter(({ id }) => id.includes('input'))
