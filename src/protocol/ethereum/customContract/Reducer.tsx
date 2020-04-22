@@ -53,6 +53,9 @@ export const Reducer = ({ info, readContract, writeContract }) => {
 
   const { actions: { emitToEvent } } = useContext(EmitterContext)
 
+  // Create a write Provider from the injected ethereum context
+  const { provider, isEnabled, chainId, address } = useContext(contexts.EthereumContext)
+
   // Toast Notifications
   const { addToast } = useToasts()
   const errorToast = ({ message }): void => addToast(message, { appearance: 'error' })
@@ -60,9 +63,16 @@ export const Reducer = ({ info, readContract, writeContract }) => {
 
   // React hooks
   const [ result, setResult ] = useState(null)
+  const [ readEnabled, setReadEnabled ] = useState(false)
+  const [ writeEnabled, setWriteEnabled ] = useState(false)
 
-  // Create a write Provider from the injected ethereum context
-  const { provider, isEnabled, chainId, address } = useContext(contexts.EthereumContext)
+  useEffect(() => {
+    if (isTransaction && isEnabled && writeContract) { setWriteEnabled(true) } else ( setWriteEnabled(false))
+  }, [ isTransaction, isEnabled, writeContract ])
+
+  useEffect(() => {
+    if (!isTransaction && isEnabled && readContract) { setReadEnabled(true) } else { setReadEnabled(false) }
+  }, [ isTransaction, isEnabled, readContract ])
 
   // Helpers - Get parameters values
   const getParametersFromInputValues = (): Record<string, any> => {
@@ -126,13 +136,15 @@ export const Reducer = ({ info, readContract, writeContract }) => {
         value = ethValue
       }
 
-      if (isTransaction && isEnabled && writeContract) {
+      if (writeEnabled) {
         const methodHash = await sendTx({ writeContract, provider, methodName, methodParams, value, notify: notify(blockNativeApiKey, chainId) })
         setResult(methodHash)
-      } else {
+      } else if (readEnabled) {
         const methodResult = await callMethod({ readContract, methodName, methodParams, infoToast })
         setResult(methodResult)
       }
+
+      if (!readEnabled && !writeEnabled) console.log('Providers not ready')
 
       const [ input ] = childrenElements.filter(({ id }) => id.includes('input'))
       const { value: autoInvokeValue } = autoInvokeKey || { value: false }
@@ -153,7 +165,19 @@ export const Reducer = ({ info, readContract, writeContract }) => {
   useAddInvokeTrigger({ info, autoClearKey, handleRunMethod })
 
   // Auto invoke method
-  useAutoInvokeMethod({ info, autoInvokeKey, autoClearKey, isTransaction, handleRunMethod, getParametersFromInputValues, chainId, POLLING_INTERVAL })
+  // useAutoInvokeMethod({ info, autoInvokeKey, autoClearKey, isTransaction, handleRunMethod, getParametersFromInputValues, chainId, POLLING_INTERVAL })
+  console.log('readContract', Boolean(readContract), ' readEnabled ', readEnabled)
+  useEffect(() => {
+    if (autoInvokeKey && chainId === info?.contract?.networkId) {
+      const { value: autoInvokeValue } = autoInvokeKey || { value: false }
+      const autoClearValue = autoClearKey?.value || false
+
+      if (autoInvokeValue === 'true' && !isTransaction) {
+        const intervalId = setInterval(() => handleRunMethod(null, autoClearValue), POLLING_INTERVAL)
+        return (): void => clearInterval(intervalId)
+      }
+    }
+  }, [ readEnabled, readContract ])
 
   // Display new results in the UI
   useDisplayResults({ childrenElements, result, emitToEvent })
