@@ -34,7 +34,7 @@ const getAbiMethodInputs = (abi, methodName): Record<string, any> => {
 }
 
 // Reducer Component
-export const Reducer = ({ info, readContract, writeContract }) => {
+export const Reducer = ({ info, readContract, writeContract, readEnabled, writeEnabled }) => {
   const {
     childrenElements,
     properties,
@@ -53,6 +53,9 @@ export const Reducer = ({ info, readContract, writeContract }) => {
 
   const { actions: { emitToEvent } } = useContext(EmitterContext)
 
+  // Create a write Provider from the injected ethereum context
+  const { provider, isEnabled, chainId, address } = useContext(contexts.EthereumContext)
+
   // Toast Notifications
   const { addToast } = useToasts()
   const errorToast = ({ message }): void => addToast(message, { appearance: 'error' })
@@ -60,9 +63,6 @@ export const Reducer = ({ info, readContract, writeContract }) => {
 
   // React hooks
   const [ result, setResult ] = useState(null)
-
-  // Create a write Provider from the injected ethereum context
-  const { provider, isEnabled, chainId, address } = useContext(contexts.EthereumContext)
 
   // Helpers - Get parameters values
   const getParametersFromInputValues = (): Record<string, any> => {
@@ -104,6 +104,10 @@ export const Reducer = ({ info, readContract, writeContract }) => {
 
   // -> Handlers
   const handleRunMethod = async (event = null, shouldClearInput = false): Promise<void> => {
+
+    // Return early if the read and write instances aren't ready
+    // if (!readEnabled && !writeEnabled) return null
+
     const { parametersValues } = getParametersFromInputValues()
 
     if (event) {
@@ -126,10 +130,10 @@ export const Reducer = ({ info, readContract, writeContract }) => {
         value = ethValue
       }
 
-      if (isTransaction && isEnabled && writeContract) {
+      if (writeEnabled && isTransaction) {
         const methodHash = await sendTx({ writeContract, provider, methodName, methodParams, value, notify: notify(blockNativeApiKey, chainId) })
         setResult(methodHash)
-      } else {
+      } else if (readEnabled && !isTransaction) {
         const methodResult = await callMethod({ readContract, methodName, methodParams, infoToast })
         setResult(methodResult)
       }
@@ -153,7 +157,7 @@ export const Reducer = ({ info, readContract, writeContract }) => {
   useAddInvokeTrigger({ info, autoClearKey, handleRunMethod })
 
   // Auto invoke method
-  useAutoInvokeMethod({ info, autoInvokeKey, autoClearKey, isTransaction, handleRunMethod, getParametersFromInputValues, chainId, POLLING_INTERVAL })
+  useAutoInvokeMethod({ info, autoInvokeKey, autoClearKey, isTransaction, handleRunMethod, readEnabled, readContract, chainId, POLLING_INTERVAL })
 
   // Display new results in the UI
   useDisplayResults({ childrenElements, result, emitToEvent })
