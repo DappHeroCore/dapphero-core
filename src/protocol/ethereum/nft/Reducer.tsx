@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { useToasts } from 'react-toast-notifications'
 import get from 'lodash.get'
-import { useWeb3React } from '@web3-react/core'
+import * as contexts from 'contexts'
 import { ELEMENT_TYPES, TAG_TYPES, DATA_PROPERTY } from '@dapphero/dapphero-dom'
 
-// Utils
 import * as utils from 'utils'
+import { useGetTokensForContractAddress } from './useGetTokensForContractAddress'
+import { useGetTokensFromOwner } from './useGetTokensFromOwner'
+import { useRenderNfts } from './useRenderNfts'
 
 // Api
 import { openSeaApi } from './api'
@@ -17,14 +19,13 @@ export const Reducer = ({ info, element }) => {
   const { limit, offset: defaultOffset } = pagination
 
   // React hooks
-  const [ nfts, setNfts ] = useState(null)
   const [ offset, setOffset ] = useState(defaultOffset)
 
   // Custom hooks
   const { addToast } = useToasts()
-  const injectedContext = useWeb3React()
 
-  const userAddress = injectedContext?.account
+  const { address: userAddress } = useContext(contexts.EthereumContext)
+
   const errorToast = ({ message }): void => addToast(message, { appearance: 'error' })
 
   // Convert $URL to their respective value from query params
@@ -86,119 +87,40 @@ export const Reducer = ({ info, element }) => {
   }
 
   // Get tokens from owner address
+  const tokensFromOwnerAddress = useGetTokensFromOwner({
+    isSingleToken,
+    isMultipleTokens,
+    isAllTokens,
+    parsedTokens,
+    assetContractAddress,
+    assetOwnerAddress,
+    limit,
+    offset,
+    tokens,
+  })
+
+  // Get tokens by contract address
+  const tokensFromContractAddress = useGetTokensForContractAddress({
+    isSingleToken,
+    isMultipleTokens,
+    isAllTokens,
+    parsedTokens,
+    assetContractAddress,
+    assetOwnerAddress,
+    limit,
+    offset,
+    tokens,
+  })
+
+  // Display any errors from retriving tokens
   useEffect(() => {
-    if (!assetOwnerAddress) return
+    if (tokensFromContractAddress.error) displayErrorMessage(tokensFromContractAddress.error)
+    if (tokensFromOwnerAddress.error) displayErrorMessage(tokensFromOwnerAddress.error)
 
-    if (isSingleToken) {
-      const [ token ] = parsedTokens
-      const simpleErrorMessage = `We have a problem getting the token, check the Console for more details`
-      const completeErrorMessage = `We couldn't get collectible ${token} from owner ${assetOwnerAddress}`
-
-      openSeaApi.owner
-        .getSingleAsset({ assetOwnerAddress, assetContractAddress, token })
-        .then(setNfts)
-        .catch((error) => displayErrorMessage({ simpleErrorMessage, completeErrorMessage, error }))
-    }
-
-    if (isMultipleTokens) {
-      const simpleErrorMessage = `We have a problem getting the tokens, check the Console for more details`
-      const completeErrorMessage = `We couldn't get collectibles ${tokens.join(', ')} from owner ${assetOwnerAddress}`
-
-      openSeaApi.owner
-        .getMultipleAssets({ assetOwnerAddress, assetContractAddress, tokens, limit, offset })
-        .then(setNfts)
-        .catch((error) => displayErrorMessage({ simpleErrorMessage, completeErrorMessage, error }))
-    }
-
-    if (isAllTokens) {
-      const simpleErrorMessage = `Error retriving collectibles, check the Console for more details`
-      const completeErrorMessage = `We couldn't get the collectibles from owner ${assetOwnerAddress}`
-
-      openSeaApi.owner
-        .getAllAssets({ assetOwnerAddress, assetContractAddress, limit, offset })
-        .then(setNfts)
-        .catch((error) => displayErrorMessage({ simpleErrorMessage, completeErrorMessage, error }))
-    }
-  }, [ assetOwnerAddress, offset ])
-
-  // Get tokens for contract address
-  useEffect(() => {
-    if (assetOwnerAddress || !assetContractAddress) return
-
-    if (isSingleToken) {
-      const [ token ] = parsedTokens
-      const simpleErrorMessage = `Error retriving collectibles, check the Console for more details`
-      const completeErrorMessage = `We couldn't get collectible ${token} from contract address ${assetContractAddress}`
-
-      openSeaApi.contract
-        .getSingleAsset({ assetContractAddress, token })
-        .then(setNfts)
-        .catch((error) => displayErrorMessage({ simpleErrorMessage, completeErrorMessage, error }))
-    }
-
-    if (isMultipleTokens) {
-      const simpleErrorMessage = `Error retriving collectibles, check the Console for more details`
-      const completeErrorMessage = `We couldn't get collectibles ${tokens.join(', ')} from contract address ${assetContractAddress}`
-
-      openSeaApi.contract
-        .getMultipleAssets({ assetContractAddress, tokens, limit, offset })
-        .then(setNfts)
-        .catch((error) => displayErrorMessage({ simpleErrorMessage, completeErrorMessage, error }))
-    }
-
-    if (isAllTokens) {
-      const simpleErrorMessage = `Error retriving collectibles, check the Console for more details`
-      const completeErrorMessage = `We couldn't get all collectibles from contract address ${assetContractAddress}`
-
-      openSeaApi.contract
-        .getAllAssets({ assetContractAddress, limit, offset })
-        .then(setNfts)
-        .catch((error) => displayErrorMessage({ simpleErrorMessage, completeErrorMessage, error }))
-    }
-  }, [ assetContractAddress, offset ])
+  }, [ tokensFromContractAddress.error, tokensFromOwnerAddress.error ])
 
   // Render NFTs
-  useEffect(() => {
-    if (!nfts) return
-
-    nfts.forEach((nft, index) => {
-      item.childrens.forEach((childrenItem) => {
-        const { element: childNode, jsonPath } = childrenItem
-
-        const tagType = TAG_TYPES[childNode.tagName] || TAG_TYPES.DEFAULT
-
-        const value = get(nft, jsonPath, '')
-        if (!value) return
-
-        if (tagType === ELEMENT_TYPES.text) {
-          Object.assign(childNode, { textContent: value })
-        }
-
-        if (tagType === ELEMENT_TYPES.image) {
-          Object.assign(childNode, { src: value })
-        }
-      })
-
-      const clonedItem = item.root.cloneNode(true)
-
-      // Replace root with first cloned item
-      if (index === 0) {
-        const assetElements = getAssetElements()
-
-        if (assetElements.length) {
-          item.root.replaceWith(clonedItem)
-        } else {
-          element.insertAdjacentElement('beforeend', clonedItem)
-        }
-      }
-
-      // Get last cloned item appended and insert a new cloned item after that
-      if (index) {
-        const beforeElement = element.querySelector(`[${DATA_PROPERTY}-asset-item]:last-child`)
-        if (beforeElement) (beforeElement as HTMLElement).insertAdjacentElement('afterend', clonedItem)
-      }
-    })
-  }, [ nfts ])
+  useRenderNfts({ nfts: (tokensFromOwnerAddress.nfts || tokensFromContractAddress.nfts), item, element, getAssetElements })
 
   // Add event listeners to prev and next buttons
   useEffect(() => {
@@ -242,6 +164,7 @@ export const Reducer = ({ info, element }) => {
 
     if (!iframeTokenIdsElement) return
 
+    // TODO: [DEV-255] Does 'getAttribute' exist on type node? In NFT reducer
     const iframeSrc = iframeTokenIdsElement.getAttribute('src')
     const updatedSrc = iframeSrc.replace('$THIS_TokenID', info.id)
 

@@ -1,7 +1,6 @@
 import React, { useContext } from 'react'
 
 // Reducers
-import * as contexts from 'contexts'
 import { Reducer as NetworkReducer } from './network/Reducer'
 import { Reducer as UserReducer } from './user/Reducer'
 import { Reducer as ThreeBoxReducer } from './threeBox/Reducer'
@@ -11,13 +10,11 @@ import { Router as CustomContractRouter } from './customContract/Router'
 // Types
 import { FeatureReducerProps } from './types'
 
-// Contexts
-
 // Constants
 const isProduction = process.env.NODE_ENV === 'production'
 
 export const FeatureReducer = ({ feature, element, configuration, info, customContractElements }: FeatureReducerProps) => {
-  const { chainId } = useContext(contexts.EthereumContext)
+
   const featureType = feature
 
   // A single contract thing comes in, now we need to SORT these by different contracts
@@ -28,9 +25,9 @@ export const FeatureReducer = ({ feature, element, configuration, info, customCo
   const uniqueContractNames = new Set([ ...customContractElements.map(({ contract }) => contract.contractName) ])
 
   switch (featureType) {
-    // case 'nft': {
-    //   return <NftReducer element={element} info={info} />
-    // }
+    case 'nft': {
+      return <NftReducer element={element} info={info} />
+    }
 
     case 'user': {
       return <UserReducer element={element} info={info} />
