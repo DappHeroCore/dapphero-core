@@ -7,7 +7,7 @@ import { useWeb3Provider } from 'providers/ethereum/useWeb3Provider'
 
 import { Reducer as CustomContractReducer } from './Reducer'
 
-const POLLING_INTERVAL = 4000
+const POLLING_INTERVAL = 5000
 
 type ContractMethod = {
   id: string;
@@ -25,7 +25,7 @@ type RouterProps = {
 export const Router = ({ listOfContractMethods, contract }: RouterProps) => {
 
   const ethereum = useContext(contexts.EthereumContext)
-  const { signer, isEnabled, chainId } = ethereum
+  const { signer, isEnabled: writeEnabled, chainId } = ethereum
   const { contractAddress, contractAbi, networkId } = contract
 
   const [ readContract, setReadContract ] = useState(null)
@@ -35,38 +35,41 @@ export const Router = ({ listOfContractMethods, contract }: RouterProps) => {
   const contractNetwork = consts.global.ethNetworkName[networkId].toLowerCase()
 
   // Create the Read Provider
-  const { provider: readOnlyProvider, chainId: readChainId } = useWeb3Provider(
+  const { provider: readOnlyProvider, chainId: readChainId, isEnabled: readEnabled } = useWeb3Provider(
     POLLING_INTERVAL,
     ethers.getDefaultProvider(contractNetwork),
     `dh-${contractNetwork}`,
   )
 
   useEffect(() => {
-    const makeReadOnlyContract = (): void => {
-      const readOnlyContract = new ethers.Contract(contractAddress, contractAbi, readOnlyProvider)
-      setReadContract(readOnlyContract)
+    const makeReadContract = (): void => {
+      const readContractInstance = new ethers.Contract(contractAddress, contractAbi, readOnlyProvider)
+      setReadContract(readContractInstance)
     }
-    if (readOnlyProvider) makeReadOnlyContract()
-  }, [ readChainId ])
 
-  // Create a write Provider from the injected ethereum context
-  // Here we can check if were on the right network or not
+    // TODO: Check if we are on the right ChainId for the contract
+    if (readOnlyProvider) makeReadContract()
+  }, [ readEnabled, readChainId ])
 
   useEffect(() => {
     const makeWriteContract = (): void => {
-      const instance = new ethers.Contract(contractAddress, contractAbi, signer)
-      setWriteContract(instance)
+      const writeContractInstance = new ethers.Contract(contractAddress, contractAbi, signer)
+      setWriteContract(writeContractInstance)
     }
 
-    if (isEnabled) makeWriteContract()
-  }, [ chainId, signer, isEnabled ])
+    // TODO: Check if we are on the same chainID as the Contract
+    if (writeEnabled) makeWriteContract()
+  }, [ chainId, signer, writeEnabled ])
 
+  // If the read and write contracts aren't ready return early
   return (
     <>
       {listOfContractMethods.map((contractMethodElement: { id: React.ReactText }) => (
         <CustomContractReducer
           readContract={readContract}
           writeContract={writeContract}
+          readEnabled={readEnabled}
+          writeEnabled={writeEnabled}
           info={contractMethodElement}
           key={contractMethodElement.id}
         />

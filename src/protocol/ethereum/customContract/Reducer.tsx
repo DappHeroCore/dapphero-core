@@ -34,7 +34,7 @@ const getAbiMethodInputs = (abi, methodName): Record<string, any> => {
 }
 
 // Reducer Component
-export const Reducer = ({ info, readContract, writeContract }) => {
+export const Reducer = ({ info, readContract, writeContract, readEnabled, writeEnabled }) => {
   const {
     childrenElements,
     properties,
@@ -63,16 +63,6 @@ export const Reducer = ({ info, readContract, writeContract }) => {
 
   // React hooks
   const [ result, setResult ] = useState(null)
-  const [ readEnabled, setReadEnabled ] = useState(false)
-  const [ writeEnabled, setWriteEnabled ] = useState(false)
-
-  useEffect(() => {
-    if (isTransaction && isEnabled && writeContract) { setWriteEnabled(true) } else ( setWriteEnabled(false))
-  }, [ isTransaction, isEnabled, writeContract ])
-
-  useEffect(() => {
-    if (!isTransaction && isEnabled && readContract) { setReadEnabled(true) } else { setReadEnabled(false) }
-  }, [ isTransaction, isEnabled, readContract ])
 
   // Helpers - Get parameters values
   const getParametersFromInputValues = (): Record<string, any> => {
@@ -114,6 +104,10 @@ export const Reducer = ({ info, readContract, writeContract }) => {
 
   // -> Handlers
   const handleRunMethod = async (event = null, shouldClearInput = false): Promise<void> => {
+
+    // Return early if the read and write instances aren't ready
+    // if (!readEnabled && !writeEnabled) return null
+
     const { parametersValues } = getParametersFromInputValues()
 
     if (event) {
@@ -136,15 +130,13 @@ export const Reducer = ({ info, readContract, writeContract }) => {
         value = ethValue
       }
 
-      if (writeEnabled) {
+      if (writeEnabled && isTransaction) {
         const methodHash = await sendTx({ writeContract, provider, methodName, methodParams, value, notify: notify(blockNativeApiKey, chainId) })
         setResult(methodHash)
-      } else if (readEnabled) {
+      } else if (readEnabled && !isTransaction) {
         const methodResult = await callMethod({ readContract, methodName, methodParams, infoToast })
         setResult(methodResult)
       }
-
-      if (!readEnabled && !writeEnabled) console.log('Providers not ready')
 
       const [ input ] = childrenElements.filter(({ id }) => id.includes('input'))
       const { value: autoInvokeValue } = autoInvokeKey || { value: false }
@@ -166,7 +158,7 @@ export const Reducer = ({ info, readContract, writeContract }) => {
 
   // Auto invoke method
   // useAutoInvokeMethod({ info, autoInvokeKey, autoClearKey, isTransaction, handleRunMethod, getParametersFromInputValues, chainId, POLLING_INTERVAL })
-  console.log('readContract', Boolean(readContract), ' readEnabled ', readEnabled)
+  // console.log('readContract', Boolean(readContract), ' readEnabled ', readEnabled)
   useEffect(() => {
     if (autoInvokeKey && chainId === info?.contract?.networkId) {
       const { value: autoInvokeValue } = autoInvokeKey || { value: false }
