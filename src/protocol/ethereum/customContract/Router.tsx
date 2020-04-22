@@ -7,8 +7,6 @@ import { useWeb3Provider } from 'providers/ethereum/useWeb3Provider'
 
 import { Reducer as CustomContractReducer } from './Reducer'
 
-const POLLING_INTERVAL = 5000
-
 type ContractMethod = {
   id: string;
 }
@@ -36,7 +34,7 @@ export const Router = ({ listOfContractMethods, contract }: RouterProps) => {
 
   // Create the Read Provider
   const { provider: readOnlyProvider, chainId: readChainId, isEnabled: readEnabled } = useWeb3Provider(
-    POLLING_INTERVAL,
+    consts.global.POLLING_INTERVAL,
     ethers.getDefaultProvider(contractNetwork),
     `dh-${contractNetwork}`,
   )

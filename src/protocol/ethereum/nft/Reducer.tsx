@@ -1,16 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { useToasts } from 'react-toast-notifications'
-import get from 'lodash.get'
 import * as contexts from 'contexts'
-import { ELEMENT_TYPES, TAG_TYPES, DATA_PROPERTY } from '@dapphero/dapphero-dom'
+import { DATA_PROPERTY } from '@dapphero/dapphero-dom'
 
 import * as utils from 'utils'
 import { useGetTokensForContractAddress } from './useGetTokensForContractAddress'
 import { useGetTokensFromOwner } from './useGetTokensFromOwner'
 import { useRenderNfts } from './useRenderNfts'
-
-// Api
-import { openSeaApi } from './api'
 
 export const Reducer = ({ info, element }) => {
   // Get NFTs properties

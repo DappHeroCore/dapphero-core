@@ -12,3 +12,4 @@ export const ethNetworkName = {
 }
 const apiKeyElement = document.getElementById('dh-apiKey')
 export const apiKey = apiKeyElement.getAttribute('data-api')
+

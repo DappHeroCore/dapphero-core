@@ -17,7 +17,7 @@ import { sendTx } from './sendTx'
 import { callMethod } from './callMethod'
 
 const blockNativeApiKey = process.env.REACT_APP_BLOCKNATIVE_API
-const POLLING_INTERVAL = 4000
+const { POLLING_INTERVAL } = consts.global
 
 // Utils
 const notify = (apiKey, chainId) => Notify({ dappId: apiKey, networkId: chainId })

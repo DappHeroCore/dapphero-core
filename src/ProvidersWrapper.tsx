@@ -1,30 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import ReactDOM from 'react-dom'
-import Modal from 'react-modal'
 import { ToastProvider } from 'react-toast-notifications'
-import get from 'lodash.get'
 import { CookiesProvider } from 'react-cookie'
-import { Web3ReactProvider } from '@web3-react/core'
 import { getDomElements } from '@dapphero/dapphero-dom'
 
-import * as api from 'api'
 import { ethers } from 'ethers'
+import * as api from 'api'
 import * as consts from 'consts'
 import { DomElementsContext, EthereumContext } from 'contexts'
 import { EmitterProvider } from 'providers/EmitterProvider/provider'
-
-import { Web3Provider } from 'ethers/providers'
-
-import { useInterval } from './utils/useInterval'
-import { useProvider } from './hooks/useProvider'
 import { useWeb3Provider } from './providers/ethereum/useWeb3Provider'
-
 import { Activator } from './Activator'
-import { logger } from './logger/customLogger'
 
-const getLibrary = (provider) => new ethers.providers.Web3Provider(provider) // this will vary according to whether you use e.g. ethers or web3.js
-
-const APP_REFRESH_SPEED = 2000
 export const ProvidersWrapper: React.FC = () => {
   // react hooks
   const [ configuration, setConfig ] = useState(null)
@@ -33,7 +19,7 @@ export const ProvidersWrapper: React.FC = () => {
   const [ supportedNetworks, setSupportedNetworks ] = useState([])
 
   const retriggerEngine = (): void => setTimestamp(+new Date())
-  const ethereum = useWeb3Provider(APP_REFRESH_SPEED) // This sets refresh speed of the whole app
+  const ethereum = useWeb3Provider(consts.global.POLLING_INTERVAL) // This sets refresh speed of the whole app
 
   // load contracts effects
   useEffect(() => {
