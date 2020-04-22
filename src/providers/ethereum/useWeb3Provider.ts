@@ -5,10 +5,11 @@ import { useInterval } from '../../utils/useInterval'
 import { providerSchema } from '../../consts'
 
 export const useWeb3Provider = (polling, web3provider = null, providerTypeName = null) => {
-  const [ ethereum, setEthereum ] = useState(providerSchema)
+  const [ ethereum, setEthereum ] = useState(providerSchema.providerSchema)
+  const [ details, setDetails ] = useState({ address: null, chainId: null })
 
   // If no providers return early the provider schema with all null values
-  if (!web3provider && !window.ethereum && !window.web3?.currentProvider) return providerSchema
+  if (!web3provider && !window.ethereum && !window.web3?.currentProvider) return providerSchema.providerSchema
   const provider = web3provider || new Web3Provider(window.ethereum || window?.web3?.currentProvider)
 
   // find the provider type
@@ -24,7 +25,7 @@ export const useWeb3Provider = (polling, web3provider = null, providerTypeName =
     providerType = 'unknown'
   }
 
-  useInterval(() => {
+  useEffect(() => {
     const fetchMetamask = async () => {
       if (window.ethereum || window.web3) {
         try {
@@ -46,7 +47,32 @@ export const useWeb3Provider = (polling, web3provider = null, providerTypeName =
       }
     }
     if (provider) fetchMetamask()
-  }, polling)
+  }, [ details ])
 
-  return ethereum
+  useInterval(() => {
+
+    const poll = async () => {
+      // const { provider, signer } = provider
+      try {
+        const ready = await provider.ready
+        const signer = provider.getSigner()
+        console.log('poll -> signer', signer)
+        const address = await signer.getAddress()
+        const { chainId } = ready
+        if (address !== details.address || chainId !== details.chainId) {
+          console.log('There changes!')
+          setDetails({ address, chainId })
+        }
+      } catch (error) {
+        console.log("poll didn't work", error)
+      }
+
+    }
+
+    if (provider?.getSigner) {
+      poll()
+    }
+  }, 500)
+  return { ...ethereum, ...details }
 }
+

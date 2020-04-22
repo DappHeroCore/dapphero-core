@@ -37,9 +37,6 @@ export const Activator = ({ configuration, retriggerEngine }: ActivatorProps) =>
 
   const domElementsFilteredForContracts = getDomContractElements()
 
-  const ethereum = useContext(contexts.EthereumContext)
-  const { isEnabled } = ethereum
-
   // TODO: [DEV-248] We should make this an app level state later.
   const AppReady = true
 

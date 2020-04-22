@@ -35,8 +35,7 @@ const getAbiMethodInputs = (abi, methodName): Record<string, any> => {
 
 // Reducer Component
 export const Reducer = ({ info, readContract, writeContract, readEnabled, writeEnabled }) => {
-  // console.log("Reducer -> readContract, writeContract", readContract, writeContract)
-  console.log('Reducer -> readEnabled, writeEnabled', readEnabled, writeEnabled)
+  console.log('Does this loop?')
   const {
     childrenElements,
     properties,

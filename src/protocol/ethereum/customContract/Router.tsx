@@ -64,9 +64,9 @@ export const Router = ({ listOfContractMethods, contract }: RouterProps) => {
     <>
       {listOfContractMethods.map((contractMethodElement: { id: React.ReactText }) => (
         <CustomContractReducer
-          readContract={readContract || writeContract}
+          readContract={readContract}
           writeContract={writeContract}
-          readEnabled={readEnabled || writeEnabled}
+          readEnabled={readEnabled}
           writeEnabled={writeEnabled}
           info={contractMethodElement}
           key={contractMethodElement.id}

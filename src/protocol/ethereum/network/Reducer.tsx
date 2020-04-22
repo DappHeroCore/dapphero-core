@@ -10,7 +10,7 @@ import { EthTransfer } from './EthTransfer'
 export const Reducer = ({ element, info }) => {
   const domElements = hooks.useDomElements()
   const ethereum = useContext(contexts.EthereumContext)
-  const { chainId, networkName, providerType } = ethereum
+  const { chainId, networkName, providerType, isEnabled } = ethereum
 
   switch (info?.properties[0]?.key) {
     case ('enable'): { // TODO: Drake- we need to settle on if we are going to use this style or not so we can be consistent
