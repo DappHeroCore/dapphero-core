@@ -41,7 +41,7 @@ export const Activator = ({ configuration, retriggerEngine }: ActivatorProps) =>
   const { isEnabled } = ethereum
 
   // TODO: [DEV-248] We should make this an app level state later.
-  const AppReady = isEnabled
+  const AppReady = true
 
   const { actions: { listenToEvent } } = useContext(EmitterContext)
 

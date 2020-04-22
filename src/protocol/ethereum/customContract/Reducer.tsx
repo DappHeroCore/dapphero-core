@@ -17,7 +17,7 @@ import { sendTx } from './sendTx'
 import { callMethod } from './callMethod'
 
 const blockNativeApiKey = process.env.REACT_APP_BLOCKNATIVE_API
-const { POLLING_INTERVAL } = consts.global
+const { AUTO_INVOKE_INTERVAL: POLLING_INTERVAL } = consts.global
 
 // Utils
 const notify = (apiKey, chainId) => Notify({ dappId: apiKey, networkId: chainId })
@@ -35,6 +35,8 @@ const getAbiMethodInputs = (abi, methodName): Record<string, any> => {
 
 // Reducer Component
 export const Reducer = ({ info, readContract, writeContract, readEnabled, writeEnabled }) => {
+  // console.log("Reducer -> readContract, writeContract", readContract, writeContract)
+  console.log('Reducer -> readEnabled, writeEnabled', readEnabled, writeEnabled)
   const {
     childrenElements,
     properties,
