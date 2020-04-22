@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-export const useAutoInvokeMethod = ({ info, autoInvokeKey, autoClearKey, isTransaction, handleRunMethod, getParametersFromInputValues, chainId, POLLING_INTERVAL }): void => {
+export const useAutoInvokeMethod = ({ info, autoInvokeKey, autoClearKey, readEnabled, readContract, isTransaction, handleRunMethod, chainId, POLLING_INTERVAL }): void => {
   useEffect(() => {
     if (autoInvokeKey && chainId === info?.contract?.networkId) {
       const { value: autoInvokeValue } = autoInvokeKey || { value: false }
@@ -11,7 +11,7 @@ export const useAutoInvokeMethod = ({ info, autoInvokeKey, autoClearKey, isTrans
         return (): void => clearInterval(intervalId)
       }
     }
-  }, [ autoInvokeKey, autoClearKey, handleRunMethod, getParametersFromInputValues ])
+  }, [ readEnabled, readContract ])
 
   return null
 }

@@ -157,19 +157,7 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, writeE
   useAddInvokeTrigger({ info, autoClearKey, handleRunMethod })
 
   // Auto invoke method
-  // useAutoInvokeMethod({ info, autoInvokeKey, autoClearKey, isTransaction, handleRunMethod, getParametersFromInputValues, chainId, POLLING_INTERVAL })
-  // console.log('readContract', Boolean(readContract), ' readEnabled ', readEnabled)
-  useEffect(() => {
-    if (autoInvokeKey && chainId === info?.contract?.networkId) {
-      const { value: autoInvokeValue } = autoInvokeKey || { value: false }
-      const autoClearValue = autoClearKey?.value || false
-
-      if (autoInvokeValue === 'true' && !isTransaction) {
-        const intervalId = setInterval(() => handleRunMethod(null, autoClearValue), POLLING_INTERVAL)
-        return (): void => clearInterval(intervalId)
-      }
-    }
-  }, [ readEnabled, readContract ])
+  useAutoInvokeMethod({ info, autoInvokeKey, autoClearKey, isTransaction, handleRunMethod, readEnabled, readContract, chainId, POLLING_INTERVAL })
 
   // Display new results in the UI
   useDisplayResults({ childrenElements, result, emitToEvent })
