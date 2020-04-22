@@ -5,8 +5,24 @@ import { useInterval } from '../../utils/useInterval'
 import { providerSchema } from '../../consts'
 
 export const useWeb3Provider = (polling, web3provider = null, providerTypeName = null) => {
-  const [ metamask, setMetamask ] = useState(providerSchema)
-  const provider = web3provider || new Web3Provider(window.ethereum || window.web3) // What if there is no injected either?
+  const [ ethereum, setEthereum ] = useState(providerSchema)
+
+  // If no providers return early the provider schema with all null values
+  if (!web3provider && !window.ethereum && !window.web3?.currentProvider) return providerSchema
+  const provider = web3provider || new Web3Provider(window.ethereum || window?.web3?.currentProvider)
+
+  // find the provider type
+  let providerType
+
+  if (providerTypeName) {
+    providerType = providerTypeName
+  } else if (window.ethereum.isMetaMask && !web3provider) {
+    providerType = 'metamask'
+  } else if (window.web3?.currentProvider?.isToshi) {
+    providerType = 'toshi'
+  } else {
+    providerType = 'unknown'
+  }
 
   useInterval(() => {
     const fetchMetamask = async () => {
@@ -22,15 +38,15 @@ export const useWeb3Provider = (polling, web3provider = null, providerTypeName =
             // do nothing we aren't ready or there is no signer attached
           }
           const isEnabled = Boolean(window.ethereum.selectedAddress) || false
-          const providerType = (window.ethereum.isMetaMask || window.web3.isMetaMask ) && !web3provider ? 'metamask' : 'unknown provider'
-          setMetamask({ provider, providerType: providerTypeName || providerType, signer, chainId: ready.chainId, address, isEnabled, networkName: (ready.name === 'homestead') ? 'mainnet' : ready.name, enable: window.ethereum.enable || window.web3.enable })
+
+          setEthereum({ provider, providerType, signer, chainId: ready.chainId, address, isEnabled, networkName: (ready.name === 'homestead') ? 'mainnet' : ready.name, enable: window.ethereum.enable || window.web3.enable })
         } catch (err) {
           logger.log(`Attempt to connect to Metamask failed with error: ${err}`)
         }
       }
     }
     if (provider) fetchMetamask()
-
   }, polling)
-  return metamask
+
+  return ethereum
 }
