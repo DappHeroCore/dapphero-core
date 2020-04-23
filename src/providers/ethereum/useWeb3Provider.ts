@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { Web3Provider } from 'ethers/providers'
-import { addListener } from 'cluster'
 import { logger } from '../../logger/customLogger'
 import { useInterval } from '../../utils/useInterval'
 import { providerSchema } from '../../consts'
@@ -84,9 +83,9 @@ export const useWeb3Provider = (polling, web3provider = null, providerTypeName =
     if (provider?.getSigner) {
       poll()
     }
-  }, 500) // TODO: Set back to consts file
+  }, polling)
 
-  // If
+  // If the provider doesn't have an address (a wallet attached), just return ethereum
   if (!details.address) return ethereum
 
   return { ...ethereum, ...details }

@@ -25,10 +25,10 @@ export const FeatureReducer = ({ feature, element, configuration, info, customCo
   const uniqueContractNames = new Set([ ...customContractElements.map(({ contract }) => contract.contractName) ])
 
   switch (featureType) {
-    // case 'nft': {
-    //   // TODO add some sort of delay here
-    //   return <NftReducer element={element} info={info} />
-    // }
+    case 'nft': {
+      // TODO add some sort of delay here
+      return <NftReducer element={element} info={info} />
+    }
 
     case 'user': {
       return <UserReducer element={element} info={info} />
