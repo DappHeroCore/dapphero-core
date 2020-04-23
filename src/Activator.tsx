@@ -21,7 +21,6 @@ type ActivatorProps = {
 }
 
 export const Activator = ({ configuration, retriggerEngine }: ActivatorProps) => {
-  console.log('This should also not loop')
 
   // Ethereum
   const ethereum = useContext(contexts.EthereumContext)

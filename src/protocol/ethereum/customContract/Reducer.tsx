@@ -34,8 +34,8 @@ const getAbiMethodInputs = (abi, methodName): Record<string, any> => {
 }
 
 // Reducer Component
-export const Reducer = ({ info, readContract, writeContract, readEnabled, writeEnabled }) => {
-  console.log('This should not loop.')
+export const Reducer = ({ info, readContract, writeContract, readEnabled, readChainId, writeEnabled }) => {
+
   const {
     childrenElements,
     properties,
@@ -132,7 +132,14 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, writeE
       }
 
       if (writeEnabled && isTransaction) {
-        const methodHash = await sendTx({ writeContract, provider, methodName, methodParams, value, notify: notify(blockNativeApiKey, chainId) })
+        const methodHash = await sendTx({
+          writeContract,
+          provider,
+          methodName,
+          methodParams,
+          value,
+          notify: notify(blockNativeApiKey, chainId),
+        })
         setResult(methodHash)
       } else if (readEnabled && !isTransaction) {
         const methodResult = await callMethod({ readContract, methodName, methodParams, infoToast })
@@ -158,7 +165,17 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, writeE
   useAddInvokeTrigger({ info, autoClearKey, handleRunMethod })
 
   // Auto invoke method
-  useAutoInvokeMethod({ info, autoInvokeKey, autoClearKey, isTransaction, handleRunMethod, readEnabled, readContract, chainId, POLLING_INTERVAL })
+  useAutoInvokeMethod({
+    info,
+    autoInvokeKey,
+    autoClearKey,
+    isTransaction,
+    handleRunMethod,
+    readEnabled,
+    readContract,
+    readChainId,
+    POLLING_INTERVAL,
+  })
 
   // Display new results in the UI
   useDisplayResults({ childrenElements, result, emitToEvent })

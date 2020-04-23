@@ -23,7 +23,7 @@ type RouterProps = {
 export const Router = ({ listOfContractMethods, contract }: RouterProps) => {
 
   const ethereum = useContext(contexts.EthereumContext)
-  const { signer, isEnabled: writeEnabled, chainId } = ethereum
+  const { signer, isEnabled: writeEnabled, chainId: writeChainId } = ethereum
   const { contractAddress, contractAbi, networkId } = contract
 
   const [ readContract, setReadContract ] = useState(null)
@@ -57,7 +57,7 @@ export const Router = ({ listOfContractMethods, contract }: RouterProps) => {
 
     // TODO: Check if we are on the same chainID as the Contract
     if (writeEnabled) makeWriteContract()
-  }, [ chainId, signer, writeEnabled ])
+  }, [ writeChainId, signer, writeEnabled ])
 
   // If the read contract provider isnt ready return early
   if (!readEnabled) return null
@@ -67,6 +67,7 @@ export const Router = ({ listOfContractMethods, contract }: RouterProps) => {
       {listOfContractMethods.map((contractMethodElement: { id: React.ReactText }) => (
         <CustomContractReducer
           readContract={readContract}
+          readChainId={readChainId}
           writeContract={writeContract}
           readEnabled={readEnabled}
           writeEnabled={writeEnabled}

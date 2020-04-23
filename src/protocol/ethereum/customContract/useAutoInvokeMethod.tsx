@@ -1,8 +1,22 @@
 import { useEffect } from 'react'
 
-export const useAutoInvokeMethod = ({ info, autoInvokeKey, autoClearKey, readEnabled, readContract, isTransaction, handleRunMethod, chainId, POLLING_INTERVAL }): void => {
+export const useAutoInvokeMethod = ({
+  info,
+  autoInvokeKey,
+  autoClearKey,
+  readEnabled,
+  readContract,
+  isTransaction,
+  handleRunMethod,
+  readChainId,
+  POLLING_INTERVAL,
+}): void => {
+
   useEffect(() => {
-    if (autoInvokeKey && chainId === info?.contract?.networkId) {
+    // console.log('info?.contract?.networkId', info?.contract?.networkId)
+    // console.log('readChainId', readChainId)
+    // console.log('autoInvokeKey', autoInvokeKey)
+    if (autoInvokeKey && readChainId === info?.contract?.networkId) {
       const { value: autoInvokeValue } = autoInvokeKey || { value: false }
       const autoClearValue = autoClearKey?.value || false
 
