@@ -1,8 +1,5 @@
 import React, { useContext, useEffect, useState, Fragment } from 'react'
-import { useWeb3React } from '@web3-react/core'
-import get from 'lodash.get'
 
-import * as hooks from 'hooks'
 import * as consts from 'consts'
 import * as contexts from 'contexts'
 import { loggerTest } from 'logger/loggerTest'
@@ -24,6 +21,9 @@ type ActivatorProps = {
 }
 
 export const Activator = ({ configuration, retriggerEngine }: ActivatorProps) => {
+  // Ethereum
+  const ethereum = useContext(contexts.EthereumContext)
+
   // React hooks
   const domElements = useContext(contexts.DomElementsContext)
 

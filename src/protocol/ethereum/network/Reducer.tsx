@@ -24,7 +24,7 @@ export const Reducer = ({ element, info }) => {
       return (
         <EthNetworkInfo
           element={element}
-          infoValue={chainId.toString()}
+          infoValue={chainId ? chainId.toString() : null}
         />
       )
     }

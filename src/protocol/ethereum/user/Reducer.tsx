@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { EthUserBalance } from './EthUserBalance'
 import { EthUserAddress } from './EthUserAddress'
 

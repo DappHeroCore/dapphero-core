@@ -35,7 +35,7 @@ export const EthUserBalance: FunctionComponent<EthUserBalanceProps> = ({ element
     }
 
     if (address && isEnabled) { getBalance() } else { element.innerHTML = memoizedValue }
-  }, [ provider.ready ])
+  }, [ address, isEnabled ])
 
   return null
 }
