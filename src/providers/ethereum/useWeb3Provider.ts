@@ -52,7 +52,7 @@ export const useWeb3Provider = (polling, web3provider = null, providerTypeName =
   useInterval(() => {
 
     const poll = async () => {
-      // const { provider, signer } = provider
+      console.log('This should loop.')
       try {
         const provider = web3provider || new Web3Provider(window.ethereum || window?.web3?.currentProvider)
         const ready = await provider.ready

@@ -59,7 +59,9 @@ export const Router = ({ listOfContractMethods, contract }: RouterProps) => {
     if (writeEnabled) makeWriteContract()
   }, [ chainId, signer, writeEnabled ])
 
-  // If the read and write contracts aren't ready return early
+  // If the read contract provider isnt ready return early
+  if (!readEnabled) return null
+
   return (
     <>
       {listOfContractMethods.map((contractMethodElement: { id: React.ReactText }) => (

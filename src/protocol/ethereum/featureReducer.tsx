@@ -26,6 +26,7 @@ export const FeatureReducer = ({ feature, element, configuration, info, customCo
 
   switch (featureType) {
     // case 'nft': {
+    //   // TODO add some sort of delay here
     //   return <NftReducer element={element} info={info} />
     // }
 
