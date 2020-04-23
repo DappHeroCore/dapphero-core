@@ -5,10 +5,11 @@ import { useInterval } from '../../utils/useInterval'
 import { providerSchema } from '../../consts'
 
 export const useWeb3Provider = (polling, web3provider = null, providerTypeName = null) => {
-  const [ ethereum, setEthereum ] = useState(providerSchema)
+  const [ ethereum, setEthereum ] = useState(providerSchema.providerSchema)
+  const [ details, setDetails ] = useState({ address: null, chainId: null })
 
   // If no providers return early the provider schema with all null values
-  if (!web3provider && !window.ethereum && !window.web3?.currentProvider) return providerSchema
+  if (!web3provider && !window.ethereum && !window.web3?.currentProvider) return providerSchema.providerSchema
   const provider = web3provider || new Web3Provider(window.ethereum || window?.web3?.currentProvider)
 
   // find the provider type
@@ -24,7 +25,7 @@ export const useWeb3Provider = (polling, web3provider = null, providerTypeName =
     providerType = 'unknown'
   }
 
-  useInterval(() => {
+  useEffect(() => {
     const fetchMetamask = async () => {
       if (window.ethereum || window.web3) {
         try {
@@ -46,7 +47,47 @@ export const useWeb3Provider = (polling, web3provider = null, providerTypeName =
       }
     }
     if (provider) fetchMetamask()
+  }, [ details ])
+
+  // Load a read provider
+  useEffect(() => {
+    const loadReadProvider = async () => {
+      try {
+        const ready = await provider.ready
+        setEthereum({ provider, providerType, signer: null, chainId: ready.chainId, address: null, isEnabled: Boolean(ready.chainId), networkName: ready.name, enable: null })
+      } catch (err) {
+        logger.log(`Attempt to connect to Metamask failed with error: ${err}`)
+      }
+    }
+    if (web3provider) loadReadProvider()
+  }, [])
+
+  // Poll a write provider
+  useInterval(() => {
+    const poll = async () => {
+      try {
+        const provider = web3provider || new Web3Provider(window.ethereum || window?.web3?.currentProvider)
+        const ready = await provider.ready
+        const signer = provider.getSigner()
+        const address = await signer.getAddress()
+        const { chainId } = ready
+        if (address !== details.address || chainId !== details.chainId) {
+          setDetails({ address, chainId })
+        }
+      } catch (error) {
+        logger.log('Polling did not work in useWeb3Provider.', error)
+      }
+
+    }
+
+    if (provider?.getSigner) {
+      poll()
+    }
   }, polling)
 
-  return ethereum
+  // If the provider doesn't have an address (a wallet attached), just return ethereum
+  if (!details.address) return ethereum
+
+  return { ...ethereum, ...details }
 }
+
