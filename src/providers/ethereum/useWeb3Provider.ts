@@ -54,17 +54,16 @@ export const useWeb3Provider = (polling, web3provider = null, providerTypeName =
     const poll = async () => {
       // const { provider, signer } = provider
       try {
+        const provider = web3provider || new Web3Provider(window.ethereum || window?.web3?.currentProvider)
         const ready = await provider.ready
         const signer = provider.getSigner()
-        console.log('poll -> signer', signer)
         const address = await signer.getAddress()
         const { chainId } = ready
         if (address !== details.address || chainId !== details.chainId) {
-          console.log('There changes!')
           setDetails({ address, chainId })
         }
       } catch (error) {
-        console.log("poll didn't work", error)
+        logger.log('Polling did not work in useWeb3Provider.', error)
       }
 
     }
