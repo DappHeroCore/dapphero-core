@@ -1,9 +1,8 @@
 import { logger } from 'logger/customLogger'
-import { useEffect, useState, useContext, FunctionComponent, useMemo } from 'react'
+import { useEffect, useContext, FunctionComponent, useMemo } from 'react'
 import { EthereumUnits } from 'types/types'
 import * as utils from 'utils'
 import * as contexts from 'contexts'
-import { VoidSigner } from 'ethers'
 
 interface EthUserBalanceProps {
   element: HTMLElement;
