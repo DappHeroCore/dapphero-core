@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Web3Provider } from 'ethers/providers'
+import { useInterval } from 'beautiful-react-hooks'
 import { logger } from '../logger/customLogger'
-import { useInterval } from '../utils/useInterval'
 import { providerSchema } from '../consts'
 
 export const useWeb3Provider = (polling, web3provider = null, providerTypeName = null) => {
