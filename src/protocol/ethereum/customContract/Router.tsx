@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useContext, useCallback } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 
 import * as contexts from 'contexts'
 import * as consts from 'consts'
 import { ethers } from 'ethers'
-import { useWeb3Provider } from 'providers/ethereum/useWeb3Provider'
+import { useWeb3Provider } from 'hooks'
 
 import { Reducer as CustomContractReducer } from './Reducer'
 

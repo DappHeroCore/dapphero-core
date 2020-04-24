@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
+import { useState, useContext } from 'react'
 import { useToasts } from 'react-toast-notifications'
 import { logger } from 'logger/customLogger'
 import Notify from 'bnc-notify'

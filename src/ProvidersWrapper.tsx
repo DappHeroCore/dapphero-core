@@ -3,12 +3,11 @@ import { ToastProvider } from 'react-toast-notifications'
 import { CookiesProvider } from 'react-cookie'
 import { getDomElements } from '@dapphero/dapphero-dom'
 
-import { ethers } from 'ethers'
 import * as api from 'api'
 import * as consts from 'consts'
 import { DomElementsContext, EthereumContext } from 'contexts'
 import { EmitterProvider } from 'providers/EmitterProvider/provider'
-import { useWeb3Provider } from './providers/ethereum/useWeb3Provider'
+import { useWeb3Provider } from 'hooks'
 import { Activator } from './Activator'
 
 export const ProvidersWrapper: React.FC = () => {

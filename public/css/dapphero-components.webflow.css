@@ -98,6 +98,10 @@
   text-transform: uppercase;
 }
 
+img {
+  width: 40vw;
+}
+
 
 
 @font-face {
