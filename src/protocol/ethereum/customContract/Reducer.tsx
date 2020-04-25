@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react'
+import { useState, useContext, useEffect, useMemo } from 'react'
 import { useToasts } from 'react-toast-notifications'
 import { logger } from 'logger/customLogger'
 import Notify from 'bnc-notify'
@@ -64,44 +64,59 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
 
   // React hooks
   const [ result, setResult ] = useState(null)
-
+  const [ parametersValues, setParametersValues ] = useState([])
+  console.log('Reducer -> parametersValues', parametersValues)
   // Helpers - Get parameters values
-  const getParametersFromInputValues = (): Record<string, any> => {
+
+  useEffect(() => {
     const inputChildrens = childrenElements.filter(({ id }) => id.includes('input'))
     const abiMethodInputs = getAbiMethodInputs(info.contract.contractAbi, methodName)
 
-    if (!inputChildrens.length ) return { parameterValues: [] }
-    const [ inputs ] = inputChildrens
+    // if (!inputChildrens.length ) setParametersValues({ parameterValues: [] })
+    const rawValues = []
+    const getInputs = () => {
+      const [ inputs ] = inputChildrens
 
-    inputs.element.forEach(({ element, argumentName }) => {
-      const rawValue = element.value
-      const value = address ? (rawValue.replace(consts.clientSide.currentUser, address) ?? rawValue) : rawValue
+      inputs.element.forEach(({ element, argumentName }) => {
+        // TODO: [DEV-258] This works only on the first pass. If we change addreses, it does not update.
 
-      try {
-        const displayUnits = element.getAttribute('data-dh-modifier-display-units')
-        const contractUnits = element.getAttribute('data-dh-modifier-contract-units')
-        const convertedValue = value && (displayUnits || contractUnits) ? utils.convertUnits(displayUnits, contractUnits, value) : value
+        const rawValue = element.value
+        rawValues.push({ element, rawValue })
+        console.log('Reducer -> rawValues', rawValues)
+        const value = address ? (rawValue.replace(consts.clientSide.currentUser, address) ?? rawValue) : rawValue
 
-        if (convertedValue) {
-          Object.assign(abiMethodInputs, { [argumentName]: convertedValue })
+        try {
+          const displayUnits = element.getAttribute('data-dh-modifier-display-units')
+          const contractUnits = element.getAttribute('data-dh-modifier-contract-units')
+          const convertedValue = value && (displayUnits || contractUnits) ? utils.convertUnits(displayUnits, contractUnits, value) : value
+
+          if (convertedValue) {
+            Object.assign(abiMethodInputs, { [argumentName]: convertedValue })
+          }
+        } catch (err) {
+          console.warn('There may be an issue with your inputs')
         }
-      } catch (err) {
-        console.warn('There may be an issue with your inputs')
+
+        // TODO: Check if we need to re-assign the input value (with Drake)
+        element.value = value
+      })
+
+      if (abiMethodInputs?.EthValue) {
+        ethValue = abiMethodInputs?.EthValue
       }
 
-      // TODO: Check if we need to re-assign the input value (with Drake)
-      element.value = value
-    })
-
-    if (abiMethodInputs?.EthValue) {
-      ethValue = abiMethodInputs?.EthValue
+      const parsedParameters = omit(abiMethodInputs, 'EthValue')
+      const paramVals = Object.values(parsedParameters)
+      setParametersValues([ ...paramVals ])
     }
-
-    const parsedParameters = omit(abiMethodInputs, 'EthValue')
-    const parametersValues = Object.values(parsedParameters)
-
-    return { parametersValues }
-  }
+    if (inputChildrens.length ) getInputs()
+    return () => {
+      rawValues.map((el) => {
+        console.log('Reducer -> el', el)
+        el.element.value = el.rawValue
+      })
+    }
+  }, [ address, chainId ])
 
   // -> Handlers
   const handleRunMethod = async (event = null, shouldClearInput = false): Promise<void> => {
@@ -109,7 +124,8 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
     // Return early if the read and write instances aren't ready
     // if (!readEnabled && !writeEnabled) return null
 
-    const { parametersValues } = getParametersFromInputValues()
+    // const { parametersValues } = getParametersFromInputValues()
+    console.log('parametersValues', parametersValues)
 
     if (event) {
       try {
@@ -175,6 +191,8 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
     readContract,
     readChainId,
     POLLING_INTERVAL,
+    writeAddress: address,
+    parametersValues,
   })
 
   // Display new results in the UI

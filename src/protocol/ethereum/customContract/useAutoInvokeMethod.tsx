@@ -10,6 +10,7 @@ export const useAutoInvokeMethod = ({
   handleRunMethod,
   readChainId,
   POLLING_INTERVAL,
+  writeAddress, parametersValues,
 }): void => {
 
   useEffect(() => {
@@ -22,7 +23,7 @@ export const useAutoInvokeMethod = ({
         return (): void => clearInterval(intervalId)
       }
     }
-  }, [ readEnabled, readContract ])
+  }, [ readEnabled, readContract, writeAddress, parametersValues ])
 
   return null
 }
