@@ -65,6 +65,7 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
   // React hooks
   const [ result, setResult ] = useState(null)
   const [ parametersValues, setParametersValues ] = useState([])
+  const [ preventAutoInvoke, setPreventAutoInvoke ] = useState(false)
   // Helpers - Get parameters values
 
   useEffect(() => {
@@ -106,6 +107,10 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
       const parsedParameters = omit(abiMethodInputs, 'EthValue')
       const paramVals = Object.values(parsedParameters)
       setParametersValues([ ...paramVals ])
+
+      // Stop auto-invoke if we don't have a user address
+      const addressNeeded = rawValues.find((e) => e.rawValue === '$CURRENT_USER')
+      if (addressNeeded && !address) setPreventAutoInvoke(true)
     }
     if (inputChildrens.length ) getInputs()
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -186,6 +191,7 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
     POLLING_INTERVAL,
     writeAddress: address,
     parametersValues,
+    preventAutoInvoke,
   })
 
   // Display new results in the UI
