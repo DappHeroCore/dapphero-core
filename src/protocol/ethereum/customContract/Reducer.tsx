@@ -65,7 +65,6 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
   // React hooks
   const [ result, setResult ] = useState(null)
   const [ parametersValues, setParametersValues ] = useState([])
-  console.log('Reducer -> parametersValues', parametersValues)
   // Helpers - Get parameters values
 
   useEffect(() => {
@@ -82,7 +81,6 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
 
         const rawValue = element.value
         rawValues.push({ element, rawValue })
-        console.log('Reducer -> rawValues', rawValues)
         const value = address ? (rawValue.replace(consts.clientSide.currentUser, address) ?? rawValue) : rawValue
 
         try {
@@ -110,9 +108,10 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
       setParametersValues([ ...paramVals ])
     }
     if (inputChildrens.length ) getInputs()
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     return () => {
+      // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
       rawValues.map((el) => {
-        console.log('Reducer -> el', el)
         el.element.value = el.rawValue
       })
     }
@@ -120,12 +119,6 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
 
   // -> Handlers
   const handleRunMethod = async (event = null, shouldClearInput = false): Promise<void> => {
-
-    // Return early if the read and write instances aren't ready
-    // if (!readEnabled && !writeEnabled) return null
-
-    // const { parametersValues } = getParametersFromInputValues()
-    console.log('parametersValues', parametersValues)
 
     if (event) {
       try {
