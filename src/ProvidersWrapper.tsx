@@ -43,7 +43,7 @@ export const ProvidersWrapper: React.FC = () => {
 
   useEffect(() => {
     if (configuration) setDomElements(getDomElements(configuration))
-  }, [ configuration, supportedNetworks ])
+  }, [ configuration ])
 
   if (domElements != null) {
     return (
@@ -51,9 +51,9 @@ export const ProvidersWrapper: React.FC = () => {
         <CookiesProvider>
           <ToastProvider>
             <EthereumContext.Provider value={ethereum}>
-              <DomElementsContext.Provider value={domElements}>
-                <Activator configuration={configuration} retriggerEngine={retriggerEngine} />
-              </DomElementsContext.Provider>
+
+              <Activator configuration={configuration} domElements={domElements} retriggerEngine={retriggerEngine} />
+
             </EthereumContext.Provider>
           </ToastProvider>
         </CookiesProvider>

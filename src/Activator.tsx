@@ -20,13 +20,10 @@ type ActivatorProps = {
   retriggerEngine: () => void;
 }
 
-export const Activator = ({ configuration, retriggerEngine }: ActivatorProps) => {
+export const Activator = ({ configuration, retriggerEngine, domElements }: ActivatorProps) => {
 
   // Ethereum
   const ethereum = useContext(contexts.EthereumContext)
-
-  // React hooks
-  const domElements = useContext(contexts.DomElementsContext)
 
   // This needs to filter for Unique Contracts
   const contractElements = domElements.filter((element) => element.feature === 'customContract')
