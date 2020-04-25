@@ -3,6 +3,8 @@ import * as contexts from 'contexts'
 import { useWeb3React } from '@web3-react/core'
 import { logger } from 'logger/customLogger'
 import { getProfile } from '3box/lib/api'
+import AbortablePromise from 'promise-abortable'
+
 import { ThreeBoxProfileDataElement } from './ThreeBoxProfileDataElement'
 import { ThreeBoxProfileImgElement } from './ThreeBoxProfileImgElement'
 
@@ -24,9 +26,7 @@ export const Reducer: FunctionComponent<ReducerProps> = ({ element, info }) => {
     job: null,
     description: null,
     website: null,
-    image: [
-      { contentUrl: { '/': null } },
-    ],
+    image: [ { contentUrl: { '/': null } } ],
   }
   const [ threeBoxProfile, setThreeBoxProfile ] = useState({
     name: null,
@@ -35,24 +35,40 @@ export const Reducer: FunctionComponent<ReducerProps> = ({ element, info }) => {
     job: null,
     description: null,
     website: null,
-    image: [
-      { contentUrl: { '/': null } },
-    ],
+    image: [ { contentUrl: { '/': null } } ],
   })
+  console.log('threeBoxProfile', threeBoxProfile)
 
   const ethereum = useContext(contexts.EthereumContext)
   const { address, isEnabled } = ethereum
+
   useEffect(() => {
-    const fetchProfile = async () => {
+    const get3boxProfileAbortable = (address: string) => new AbortablePromise((resolve, reject, signal) => {
       try {
         // TODO: [DEV-97] How to we check the status of a request? When no Profile this 404's
-        const profile = await get3boxProfile(address)
+        resolve(get3boxProfile(address))
+      } catch (error) {
+        reject(error)
+      }
+      signal.abort = 'Aborting 3Box profile'
+    })
+
+    const call3boxProfilePromise = get3boxProfileAbortable(address)
+
+    const fetchProfile = async () => {
+      try {
+        const profile = await call3boxProfilePromise
+        console.log('fetchProfile -> profile', profile)
         setThreeBoxProfile(profile)
       } catch (error) {
         logger.log('You have no profile. ', error)
       }
     }
-    if (isEnabled)fetchProfile()
+
+    console.log('isEnabled', isEnabled)
+    if (isEnabled) fetchProfile()
+
+    return () => call3boxProfilePromise.abort()
   }, [ address, isEnabled ])
 
   switch (info?.properties[0]?.key) {
@@ -63,7 +79,6 @@ export const Reducer: FunctionComponent<ReducerProps> = ({ element, info }) => {
         return <ThreeBoxProfileImgElement element={element} imgSrc={imgSrc} />
       }
       return <ThreeBoxProfileImgElement element={element} imgSrc={null} />
-
     }
     case 'name': {
       return <ThreeBoxProfileDataElement element={element} profileData={threeBoxProfile.name} />

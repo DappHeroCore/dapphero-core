@@ -7,6 +7,11 @@ export const useGetTokensForContractAddress = ({ isSingleToken, isMultipleTokens
 
   useEffect(() => {
     if (assetOwnerAddress || !assetContractAddress) return
+    let isSuscribed = true
+
+    const handleSetNfts = (nfts): void => {
+      if (isSuscribed) setNfts(nfts)
+    }
 
     if (isSingleToken) {
       const [ token ] = parsedTokens
@@ -15,7 +20,7 @@ export const useGetTokensForContractAddress = ({ isSingleToken, isMultipleTokens
 
       openSeaApi.contract
         .getSingleAsset({ assetContractAddress, token })
-        .then(setNfts)
+        .then(handleSetNfts)
         .catch((error) => setError({ simpleErrorMessage, completeErrorMessage, error }))
     }
 
@@ -25,7 +30,7 @@ export const useGetTokensForContractAddress = ({ isSingleToken, isMultipleTokens
 
       openSeaApi.contract
         .getMultipleAssets({ assetContractAddress, tokens, limit, offset })
-        .then(setNfts)
+        .then(handleSetNfts)
         .catch((error) => setError({ simpleErrorMessage, completeErrorMessage, error }))
     }
 
@@ -35,10 +40,14 @@ export const useGetTokensForContractAddress = ({ isSingleToken, isMultipleTokens
 
       openSeaApi.contract
         .getAllAssets({ assetContractAddress, limit, offset })
-        .then(setNfts)
+        .then(handleSetNfts)
         .catch((error) => setError({ simpleErrorMessage, completeErrorMessage, error }))
     }
-  }, [ assetContractAddress, offset ])
+
+    return (): void => {
+      isSuscribed = false
+    }
+  }, [ ])
 
   return { nfts, error }
 }

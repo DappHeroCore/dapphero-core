@@ -13,6 +13,7 @@ const OPEN_SEA = {
   apiKey: process.env.REACT_APP_OPENSEA_API_KEY,
 }
 
+export const signal = Axios.CancelToken.source()
 const axios = Axios.create({
   baseURL: OPEN_SEA.baseUrl.mainnet,
   headers: { 'X-API-KEY': OPEN_SEA.apiKey },
@@ -28,7 +29,7 @@ const axios = Axios.create({
 
 const getData = ({ data }) => data
 
-const getOpenSeaResource = (query: string) => axios.get(`assets?${query}`).then(getData)
+const getOpenSeaResource = (query: string) => axios.get(`assets?${query}`, { cancelToken: signal.token }).then(getData)
 
 export const openSeaApi = {
   owner: {

@@ -21,7 +21,6 @@ type ActivatorProps = {
 }
 
 export const Activator = ({ configuration, retriggerEngine }: ActivatorProps) => {
-
   // Ethereum
   const ethereum = useContext(contexts.EthereumContext)
 
@@ -33,7 +32,9 @@ export const Activator = ({ configuration, retriggerEngine }: ActivatorProps) =>
 
   const getDomContractElements = () => {
     const filteredForContracts = domElements.filter((element) => element.feature !== 'customContract')
-    return contractElements.length ? [ ...filteredForContracts, { id: contractElements[0].id, feature: 'customContract' } ] : filteredForContracts
+    return contractElements.length
+      ? [ ...filteredForContracts, { id: contractElements[0].id, feature: 'customContract' } ]
+      : filteredForContracts
   }
 
   const domElementsFilteredForContracts = getDomContractElements()
@@ -65,24 +66,23 @@ export const Activator = ({ configuration, retriggerEngine }: ActivatorProps) =>
     Object.assign(window, { dappHero })
     // Dispatch the event.
     window.dispatchEvent(event)
+    console.log('=========================================================== .>>>>Activator -> AppReady', AppReady)
   }, [ AppReady ])
 
   if (!AppReady || !domElementsFilteredForContracts) return null
 
   return (
     <>
-      {domElementsFilteredForContracts
-          && domElementsFilteredForContracts.map((domElement) => (
-            <FeatureReducer
-              key={domElement.id}
-              element={domElement.element}
-              feature={domElement.feature}
-              configuration={configuration}
-              info={domElement}
-              customContractElements={contractElements}
-            />
-          ))}
+      {domElementsFilteredForContracts.map((domElement) => (
+        <FeatureReducer
+          key={domElement.id}
+          element={domElement.element}
+          feature={domElement.feature}
+          configuration={configuration}
+          info={domElement}
+          customContractElements={contractElements}
+        />
+      ))}
     </>
   )
-
 }

@@ -13,8 +13,13 @@ import { FeatureReducerProps } from './types'
 // Constants
 const isProduction = process.env.NODE_ENV === 'production'
 
-export const FeatureReducer = ({ feature, element, configuration, info, customContractElements }: FeatureReducerProps) => {
-
+export const FeatureReducer = ({
+  feature,
+  element,
+  configuration,
+  info,
+  customContractElements,
+}: FeatureReducerProps) => {
   const featureType = feature
 
   // A single contract thing comes in, now we need to SORT these by different contracts
@@ -29,15 +34,16 @@ export const FeatureReducer = ({ feature, element, configuration, info, customCo
       // TODO add some sort of delay here
       return <NftReducer element={element} info={info} />
     }
-
+    /*
     case 'user': {
       return <UserReducer element={element} info={info} />
     }
-
     case 'network': {
       return <NetworkReducer element={element} info={info} />
     }
+    */
 
+    /*
     case 'threebox': {
       return <ThreeBoxReducer element={element} info={info} />
     }
@@ -45,16 +51,18 @@ export const FeatureReducer = ({ feature, element, configuration, info, customCo
     case 'customContract': {
       // FIXME: We're going to remove !isProduction conditional when Dappeteer library gets updated with chainId support
       for (const contractName of uniqueContractNames) {
-        const methodsByContractAsElements = customContractElements.filter((element) => element.contract.contractName === contractName)
-        // console.log("Contract Branches", methodsByContractAsElements)
-        const contract = configuration.contracts.filter((contract) => (contract.contractName === contractName))[0]
+        const methodsByContractAsElements = customContractElements.filter(
+          (element) => element.contract.contractName === contractName
+          )
+          // console.log("Contract Branches", methodsByContractAsElements)
+          const contract = configuration.contracts.filter((contract) => contract.contractName === contractName)[0]
 
-        return <CustomContractRouter listOfContractMethods={methodsByContractAsElements} contract={contract} />
+          return <CustomContractRouter listOfContractMethods={methodsByContractAsElements} contract={contract} />
+        }
+
+        return null
       }
-
-      return null
-    }
-
+      */
     default:
       return null
   }

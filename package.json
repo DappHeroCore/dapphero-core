@@ -74,6 +74,7 @@
     "postcss-preset-env": "6.7.0",
     "postcss-safe-parser": "4.0.1",
     "profile-hover": "^1.1.1",
+    "promise-abortable": "^1.2.6",
     "prop-types": "^15.7.2",
     "puppeteer": "1.16.0",
     "query-string": "^6.11.1",

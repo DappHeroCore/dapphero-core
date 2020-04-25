@@ -126,6 +126,11 @@ export const Reducer = ({ info, element }) => {
 
     if (prevButton) prevButton.addEventListener('click', handlePrevButton)
     if (nextButton) nextButton.addEventListener('click', handleNextButton)
+
+    return () => {
+      if (prevButton) prevButton.removeEventListener('click', handlePrevButton)
+      if (nextButton) nextButton.removeEventListener('click', handleNextButton)
+    }
   }, [])
 
   // Replace span elements having $THIS_TokenID as a text content to their respective token id
