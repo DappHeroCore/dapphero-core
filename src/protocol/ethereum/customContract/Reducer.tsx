@@ -74,63 +74,54 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
     if (autoInterval && status.error) {
       clearInterval(autoInterval)
     }
-
   }, [ autoInterval, status.error ])
 
   // Helpers - Get parameters values
-  useEffect(() => {
+  const getParametersFromInputValues = (): Record<string, any> => {
     const inputChildrens = childrenElements.filter(({ id }) => id.includes('input'))
     const abiMethodInputs = getAbiMethodInputs(info.contract.contractAbi, methodName)
 
-    // if (!inputChildrens.length ) setParametersValues({ parameterValues: [] })
-    const rawValues = []
-    const getInputs = () => {
-      const [ inputs ] = inputChildrens
+    if (!inputChildrens.length ) return { parameterValues: [] }
+    const [ inputs ] = inputChildrens
 
-      inputs.element.forEach(({ element, argumentName }) => {
-        // TODO: [DEV-258] This works only on the first pass. If we change addreses, it does not update.
+    inputs.element.forEach(({ element, argumentName }) => {
+      const rawValue = element.value
+      const value = address ? (rawValue.replace(consts.clientSide.currentUser, address) ?? rawValue) : rawValue
 
-        const rawValue = element.value
-        rawValues.push({ element, rawValue })
-        const value = address ? (rawValue.replace(consts.clientSide.currentUser, address) ?? rawValue) : rawValue
+      try {
+        const displayUnits = element.getAttribute('data-dh-modifier-display-units')
+        const contractUnits = element.getAttribute('data-dh-modifier-contract-units')
+        const convertedValue = value && (displayUnits || contractUnits) ? utils.convertUnits(displayUnits, contractUnits, value) : value
 
-        try {
-          const displayUnits = element.getAttribute('data-dh-modifier-display-units')
-          const contractUnits = element.getAttribute('data-dh-modifier-contract-units')
-          const convertedValue = value && (displayUnits || contractUnits) ? utils.convertUnits(displayUnits, contractUnits, value) : value
-
-          if (convertedValue) {
-            Object.assign(abiMethodInputs, { [argumentName]: convertedValue })
-          }
-        } catch (err) {
-          console.warn('There may be an issue with your inputs')
+        if (convertedValue) {
+          Object.assign(abiMethodInputs, { [argumentName]: convertedValue })
         }
-
-        // TODO: Check if we need to re-assign the input value (with Drake)
-        element.value = value
-      })
-
-      if (abiMethodInputs?.EthValue) {
-        ethValue = abiMethodInputs?.EthValue
+      } catch (err) {
+        console.warn('There may be an issue with your inputs')
       }
 
-      const parsedParameters = omit(abiMethodInputs, 'EthValue')
-      const paramVals = Object.values(parsedParameters)
-      setParametersValues([ ...paramVals ])
+      // TODO: Check if we need to re-assign the input value (with Drake)
+      element.value = value
+    })
 
-      // Stop auto-invoke if we don't have a user address
-      const addressNeeded = rawValues.find((e) => e.rawValue === '$CURRENT_USER')
-      if (addressNeeded && !address) setPreventAutoInvoke(true)
+    if (abiMethodInputs?.EthValue) {
+      ethValue = abiMethodInputs?.EthValue
     }
-    if (inputChildrens.length ) getInputs()
-    return (): void => {
-      for (const el of rawValues) {
-        el.element.value = el.rawValue
-      }
-      return null
-    }
-  }, [ address, chainId ])
 
+    const parsedParameters = omit(abiMethodInputs, 'EthValue')
+    const parametersValues = Object.values(parsedParameters)
+
+    return { parametersValues }
+  }
+
+  // //Return values to their orignal value when unmounted
+  // if (inputChildrens.length ) getInputs()
+  // return (): void => {
+  //   for (const el of rawValues) {
+  //     el.element.value = el.rawValue
+  //   }
+  //   return null
+  // }
   // -> Handlers
   const handleRunMethod = async (event = null, shouldClearInput = false): Promise<void> => {
     if (event) {
@@ -139,6 +130,11 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
         event.stopPropagation()
       } catch (err) {}
     }
+
+    // Return early if the read and write instances aren't ready
+    // if (!readEnabled && !writeEnabled) return null
+
+    const { parametersValues } = getParametersFromInputValues()
 
     if (hasInputs) {
       const isParametersFilled = Boolean(parametersValues.filter(Boolean).join(''))
@@ -154,6 +150,7 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
       }
 
       if (writeEnabled && isTransaction && !status.error) {
+        console.log('WRITE PARAMS: ', methodParams)
         const methodHash = await sendTx({
           writeContract,
           provider,
@@ -164,6 +161,7 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
         })
         setResult(methodHash)
       } else if (readEnabled && !isTransaction && !status.error ) {
+        if (methodParams.length) console.log('VIEW PARAMS: ', methodParams)
         const methodResult = await callMethod({ readContract, methodName, methodParams, infoToast, setStatus })
         setResult(methodResult)
       }
