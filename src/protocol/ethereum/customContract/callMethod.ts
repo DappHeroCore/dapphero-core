@@ -20,10 +20,7 @@ export const callMethod = async ({ readContract, methodName, methodParams, infoT
     const methodResult = await method(...methodParams)
     return methodResult
   } catch (error) {
-    infoToast({
-      message: `Invoking a contract function failed in view.  Are you on the right network? DappHero tried to call 
-    method: ${methodName} while on Network: ${readContract.provider._network.name}`,
-    })
+    infoToast({ message: `Error calling method { ${methodName} } on your contract. Is your Web3 provider on Network: ${readContract.provider._network.name}? Check console for more details.` })
 
     dispatch({
       type: ACTION_TYPES.callMethodError,
