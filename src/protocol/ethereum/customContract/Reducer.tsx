@@ -47,14 +47,8 @@ const getAbiMethodInputs = (abi, methodName, dispatch): Record<string, any> => {
 // Reducer Component
 export const Reducer = ({ info, readContract, writeContract, readEnabled, readChainId, writeEnabled }) => {
 
-  const initialState = { status: null, val: null }
-
   const [ state, dispatch ] = useReducer(stateReducer, {})
-  state.isPolling || !state.msg ? null : console.log('State Change: (omitting polling)', state)
-
-  // status object
-  const [ status, setStatus ] = useState({ error: false, msg: '' })
-  // const [ txStatus, dispatch ] = useState(null)
+  state.isPolling || !state.msg ? null : console.log('State Change: (omitting polling)', { status: null, val: null })
 
   const {
     childrenElements,
@@ -94,6 +88,20 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
       clearInterval(autoInterval)
     }
   }, [ autoInterval, state.error ])
+
+  useEffect(() => {
+    const { msg, error, info } = state
+    console.log('Reducer -> state', state)
+    if (error) {
+      logger.error(msg, error)
+      addToast(msg, { appearance: 'error' })
+    }
+    if (info) {
+      logger.info(msg, info)
+      addToast(msg, { appearance: 'info' })
+    }
+
+  }, [ state.error ])
 
   // Helpers - Get parameters values
   const getParametersFromInputValues = (): Record<string, any> => {
@@ -194,7 +202,7 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
         setResult(methodHash)
       } else if (readEnabled && !isTransaction && !state.error ) {
         if (methodParams.length) console.log('VIEW PARAMS: ', methodParams)
-        const methodResult = await callMethod({ readContract, methodName, methodParams, infoToast, dispatch, isPolling })
+        const methodResult = await callMethod({ readContract, methodName, methodParams, dispatch, isPolling })
         setResult(methodResult)
       }
 
@@ -208,8 +216,15 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
       }
 
     } catch (err) {
-      logger.error('Custom Contract handleRun method failed\n', err)
-      errorToast({ message: 'Error. Check the Console.' })
+      dispatch({
+        type: ACTION_TYPES.confirmed,
+        status: {
+          msg: 'An error has occured when interacting with your contract.',
+          error: err,
+          fetching: false,
+          inFlight: false,
+        },
+      })
     }
   }
 

@@ -1,5 +1,3 @@
-import { useReducer } from 'react'
-import { FetchTransport } from '@sentry/browser/dist/transports'
 
 export const ACTION_TYPES = {
   malformedInputName: 'MALFORMED_INPUT_NAME',
@@ -15,6 +13,7 @@ export const ACTION_TYPES = {
   confirmation: 'CONFIRMATION',
   confirmed: 'CONFIRMED',
   txUpdate: 'TX_UPDATE',
+  genericContractError: 'GENERIC_CONTRACT_ERROR',
 }
 
 export const stateReducer = (state, action) => {
@@ -24,6 +23,8 @@ export const stateReducer = (state, action) => {
     case ACTION_TYPES.callMethodError:
       return { ...action.status }
     case ACTION_TYPES.estimateGas:
+      return { ...action.status }
+    case ACTION_TYPES.txError:
       return { ...action.status }
     case ACTION_TYPES.sendtx:
       return { ...action.status }
@@ -36,6 +37,8 @@ export const stateReducer = (state, action) => {
     case ACTION_TYPES.txUpdate:
       return { ...action.status }
     case ACTION_TYPES.malformedInputName:
+      return { ...action.status }
+    case ACTION_TYPES.genericContractError:
       return { ...action.status }
     default:
       return { ...state }

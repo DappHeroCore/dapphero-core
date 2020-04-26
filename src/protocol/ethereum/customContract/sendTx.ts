@@ -1,5 +1,4 @@
 import { ethers } from 'ethers'
-import { logger } from 'logger/customLogger'
 import { ACTION_TYPES } from './stateMachine'
 
 export const sendTx = async ({ writeContract, dispatch, provider, methodName, methodParams, value, notify }): Promise<void> => {
@@ -36,7 +35,6 @@ export const sendTx = async ({ writeContract, dispatch, provider, methodName, me
         ...methodDetails,
       },
     } )
-    logger.error('estimateGasMethod failed', error)
   }
 
   const overrides = {
@@ -83,13 +81,13 @@ export const sendTx = async ({ writeContract, dispatch, provider, methodName, me
     dispatch({
       type: ACTION_TYPES.txError,
       status: {
-        msg: 'There was an error and the transaction failed.',
+        msg: 'Transaction failed. Check console for more details.',
         error,
         inFlight: false,
         fetching: false,
         ...methodDetails,
       },
     } )
-    logger.info('invoke contract method failed in transaction', error)
+    // logger.info('invoke contract method failed in transaction', error)
   }
 }
