@@ -2,6 +2,7 @@ import { useReducer } from 'react'
 import { FetchTransport } from '@sentry/browser/dist/transports'
 
 export const ACTION_TYPES = {
+  malformedInputName: 'MALFORMED_INPUT_NAME',
   estimateGas: 'ESTIMATE_GAS',
   estimateGasError: 'ESTIMATE_GAS_ERROR',
   error: 'ERROR',
@@ -17,8 +18,11 @@ export const ACTION_TYPES = {
 }
 
 export const stateReducer = (state, action) => {
-  console.log('stateReducer -> action', action)
   switch (action.type) {
+    case ACTION_TYPES.callMethod:
+      return { ...action.status }
+    case ACTION_TYPES.callMethodError:
+      return { ...action.status }
     case ACTION_TYPES.estimateGas:
       return { ...action.status }
     case ACTION_TYPES.sendtx:
@@ -30,6 +34,8 @@ export const stateReducer = (state, action) => {
     case ACTION_TYPES.confirmed:
       return { ...action.status }
     case ACTION_TYPES.txUpdate:
+      return { ...action.status }
+    case ACTION_TYPES.malformedInputName:
       return { ...action.status }
     default:
       return { ...state }

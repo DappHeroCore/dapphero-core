@@ -9,11 +9,10 @@ export const callMethod = async ({ readContract, methodName, methodParams, infoT
     type: ACTION_TYPES.callMethod,
     status: {
       msg: `Calling public method { ${methodName} }`,
-      status: {
-        error: false,
-        ...methodDetails,
-        isPolling,
-      },
+      error: false,
+      ...methodDetails,
+      isPolling,
+
     },
   })
   try {

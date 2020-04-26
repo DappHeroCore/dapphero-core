@@ -12,7 +12,7 @@ import { EmitterContext } from 'providers/EmitterProvider/context'
 import { useAddInvokeTrigger } from './useAddInvokeTrigger'
 import { useAutoInvokeMethod } from './useAutoInvokeMethod'
 import { useDisplayResults } from './useDisplayResults'
-import { stateReducer } from './stateMachine'
+import { stateReducer, ACTION_TYPES } from './stateMachine'
 
 import { sendTx } from './sendTx'
 import { callMethod } from './callMethod'
@@ -23,11 +23,21 @@ const { AUTO_INVOKE_INTERVAL: POLLING_INTERVAL } = consts.global
 // Utils
 const notify = (apiKey, chainId) => Notify({ dappId: apiKey, networkId: chainId })
 
-const getAbiMethodInputs = (abi, methodName): Record<string, any> => {
+const getAbiMethodInputs = (abi, methodName, dispatch): Record<string, any> => {
   const emptyString = '$true'
   const parseName = (value: string): string => (value === '' ? emptyString : value)
 
   const method = abi.find(({ name }) => name === methodName)
+  if (!method) {
+    dispatch({
+      type: ACTION_TYPES.malformedInputName,
+      status: {
+        error: true,
+        msg: `The method name: { ${methodName} } is incorrect. Perhaps a typo in your html?`,
+      },
+    })
+    return null
+  }
   const parsedMethod = Object.assign(method, { inputs: method.inputs.map((input) => ({ ...input, name: parseName(input.name) })) })
 
   const output = parsedMethod.inputs.reduce((acc, { name }) => ({ ...acc, [name]: '' }), [])
@@ -40,6 +50,7 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
   const initialState = { status: null, val: null }
 
   const [ state, dispatch ] = useReducer(stateReducer, initialState)
+  state.isPolling ? null : console.log('Reducer -> state', state)
 
   // status object
   const [ status, setStatus ] = useState({ error: false, msg: '' })
@@ -79,15 +90,15 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
 
   // Stop AutoInvoke if the call is not working
   useEffect(() => {
-    if (autoInterval && status.error) {
+    if (autoInterval && state.error) {
       clearInterval(autoInterval)
     }
-  }, [ autoInterval, status.error ])
+  }, [ autoInterval, state.error ])
 
   // Helpers - Get parameters values
   const getParametersFromInputValues = (): Record<string, any> => {
     const inputChildrens = childrenElements.filter(({ id }) => id.includes('input'))
-    const abiMethodInputs = getAbiMethodInputs(info.contract.contractAbi, methodName)
+    const abiMethodInputs = getAbiMethodInputs(info.contract.contractAbi, methodName, dispatch)
 
     if (!inputChildrens.length ) return { parameterValues: [] }
     const [ inputs ] = inputChildrens
@@ -170,7 +181,7 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
         value = ethValue
       }
 
-      if (writeEnabled && isTransaction && !status.error) {
+      if (writeEnabled && isTransaction && !state.error) {
         const methodHash = await sendTx({
           writeContract,
           provider,
@@ -181,7 +192,7 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
           dispatch,
         })
         setResult(methodHash)
-      } else if (readEnabled && !isTransaction && !status.error ) {
+      } else if (readEnabled && !isTransaction && !state.error ) {
         if (methodParams.length) console.log('VIEW PARAMS: ', methodParams)
         const methodResult = await callMethod({ readContract, methodName, methodParams, infoToast, dispatch, isPolling })
         setResult(methodResult)
