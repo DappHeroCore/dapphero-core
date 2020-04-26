@@ -114,14 +114,30 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
     return { parametersValues }
   }
 
-  // //Return values to their orignal value when unmounted
-  // if (inputChildrens.length ) getInputs()
-  // return (): void => {
-  //   for (const el of rawValues) {
-  //     el.element.value = el.rawValue
-  //   }
-  //   return null
-  // }
+  // Return values to their orignal value when unmounted
+  // TODO: Ask @lndgalante if this is doing what I think it's doing.
+  const [ originalValues, setOriginalValues ] = useState([])
+  useEffect(() => {
+    const inputChildrens = childrenElements.filter(({ id }) => id.includes('input'))
+    const getOriginalValues = () => {
+      const [ inputs ] = inputChildrens
+      console.log('inputs', inputs)
+      const rawValues = inputs.element.map(({ element }) => ({ element, rawValue: element.value }))
+
+      setOriginalValues(rawValues)
+
+      return (): void => {
+        console.log('unmount')
+        for (const el of originalValues) {
+          console.log('El raw: ', el.rawValue)
+          el.element.value = el.rawValue
+        }
+        return null
+      }
+    }
+    if (inputChildrens.length) getOriginalValues()
+  }, [])
+
   // -> Handlers
   const handleRunMethod = async (event = null, shouldClearInput = false): Promise<void> => {
     if (event) {
