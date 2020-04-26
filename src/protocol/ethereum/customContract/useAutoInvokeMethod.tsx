@@ -10,7 +10,10 @@ export const useAutoInvokeMethod = ({
   handleRunMethod,
   readChainId,
   POLLING_INTERVAL,
-  writeAddress, parametersValues, preventAutoInvoke,
+  writeAddress,
+  parametersValues,
+  preventAutoInvoke,
+  setAutoInterval,
 }): void => {
 
   useEffect(() => {
@@ -20,6 +23,7 @@ export const useAutoInvokeMethod = ({
 
       if (autoInvokeValue === 'true' && !isTransaction) {
         const intervalId = setInterval(() => handleRunMethod(null, autoClearValue), POLLING_INTERVAL)
+        setAutoInterval(intervalId)
         return (): void => clearInterval(intervalId)
       }
     }

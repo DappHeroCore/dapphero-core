@@ -66,8 +66,18 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
   const [ result, setResult ] = useState(null)
   const [ parametersValues, setParametersValues ] = useState([])
   const [ preventAutoInvoke, setPreventAutoInvoke ] = useState(false)
-  // Helpers - Get parameters values
+  const [ status, setStatus ] = useState({ error: false, msg: '' })
+  const [ autoInterval, setAutoInterval ] = useState(null)
 
+  // Stop AutoInvoke if the call is not working
+  useEffect(() => {
+    if (autoInterval && status.error) {
+      clearInterval(autoInterval)
+    }
+
+  }, [ autoInterval, status.error ])
+
+  // Helpers - Get parameters values
   useEffect(() => {
     const inputChildrens = childrenElements.filter(({ id }) => id.includes('input'))
     const abiMethodInputs = getAbiMethodInputs(info.contract.contractAbi, methodName)
@@ -113,18 +123,16 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
       if (addressNeeded && !address) setPreventAutoInvoke(true)
     }
     if (inputChildrens.length ) getInputs()
-    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-    return () => {
-      // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-      rawValues.map((el) => {
+    return (): void => {
+      for (const el of rawValues) {
         el.element.value = el.rawValue
-      })
+      }
+      return null
     }
   }, [ address, chainId ])
 
   // -> Handlers
   const handleRunMethod = async (event = null, shouldClearInput = false): Promise<void> => {
-
     if (event) {
       try {
         event.preventDefault()
@@ -145,7 +153,7 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
         value = ethValue
       }
 
-      if (writeEnabled && isTransaction) {
+      if (writeEnabled && isTransaction && !status.error) {
         const methodHash = await sendTx({
           writeContract,
           provider,
@@ -155,8 +163,8 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
           notify: notify(blockNativeApiKey, chainId),
         })
         setResult(methodHash)
-      } else if (readEnabled && !isTransaction) {
-        const methodResult = await callMethod({ readContract, methodName, methodParams, infoToast })
+      } else if (readEnabled && !isTransaction && !status.error ) {
+        const methodResult = await callMethod({ readContract, methodName, methodParams, infoToast, setStatus })
         setResult(methodResult)
       }
 
@@ -192,6 +200,7 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
     writeAddress: address,
     parametersValues,
     preventAutoInvoke,
+    setAutoInterval,
   })
 
   // Display new results in the UI
