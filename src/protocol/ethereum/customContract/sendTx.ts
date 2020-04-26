@@ -17,6 +17,8 @@ export const sendTx = async ({ writeContract, dispatch, provider, methodName, me
     status: {
       msg: 'User Signature Requested',
       error: false,
+      fetching: true,
+      inFlight: false,
       ...methodDetails,
     },
   })
@@ -29,6 +31,8 @@ export const sendTx = async ({ writeContract, dispatch, provider, methodName, me
       status: {
         msg: 'Error estimating the gas cost for this transaction.',
         error,
+        fetching: false,
+        inFlight: false,
         ...methodDetails,
       },
     } )
@@ -50,6 +54,8 @@ export const sendTx = async ({ writeContract, dispatch, provider, methodName, me
       status: {
         msg: `TX Broadcast.`,
         error: false,
+        fetching: true,
+        inFlight: true,
         txReceipt: methodResult.hash,
         ...methodDetails,
       },
@@ -61,7 +67,8 @@ export const sendTx = async ({ writeContract, dispatch, provider, methodName, me
         status: {
           msg: 'TX Confirmed.',
           error: false,
-          receipt,
+          fetching: false,
+          inFlight: false,
           ...methodDetails,
         },
       })
@@ -78,6 +85,8 @@ export const sendTx = async ({ writeContract, dispatch, provider, methodName, me
       status: {
         msg: 'There was an error and the transaction failed.',
         error,
+        inFlight: false,
+        fetching: false,
         ...methodDetails,
       },
     } )

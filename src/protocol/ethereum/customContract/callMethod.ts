@@ -11,6 +11,7 @@ export const callMethod = async ({ readContract, methodName, methodParams, infoT
       msg: `Calling public method { ${methodName} }`,
       error: false,
       ...methodDetails,
+      fetching: true,
       isPolling,
 
     },
@@ -29,6 +30,7 @@ export const callMethod = async ({ readContract, methodName, methodParams, infoT
       status: {
         msg: `Error calling the view method: { ${methodName} }.`,
         isPolling,
+        fetching: false,
         error,
         ...methodDetails,
       },

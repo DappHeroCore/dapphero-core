@@ -49,8 +49,8 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
 
   const initialState = { status: null, val: null }
 
-  const [ state, dispatch ] = useReducer(stateReducer, initialState)
-  state.isPolling ? null : console.log('Reducer -> state', state)
+  const [ state, dispatch ] = useReducer(stateReducer, {})
+  state.isPolling || !state.msg ? null : console.log('State Change: (omitting polling)', state)
 
   // status object
   const [ status, setStatus ] = useState({ error: false, msg: '' })
