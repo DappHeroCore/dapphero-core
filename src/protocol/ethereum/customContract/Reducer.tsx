@@ -127,9 +127,7 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
       setOriginalValues(rawValues)
 
       return (): void => {
-        console.log('unmount')
         for (const el of originalValues) {
-          console.log('El raw: ', el.rawValue)
           el.element.value = el.rawValue
         }
         return null
