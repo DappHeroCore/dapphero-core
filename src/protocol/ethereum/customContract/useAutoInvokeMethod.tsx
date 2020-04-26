@@ -22,7 +22,7 @@ export const useAutoInvokeMethod = ({
       const autoClearValue = autoClearKey?.value || false
 
       if (autoInvokeValue === 'true' && !isTransaction) {
-        const intervalId = setInterval(() => handleRunMethod(null, autoClearValue), POLLING_INTERVAL)
+        const intervalId = setInterval(() => handleRunMethod(null, autoClearValue, true), POLLING_INTERVAL)
         setAutoInterval(intervalId)
         return (): void => clearInterval(intervalId)
       }

@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect, useMemo } from 'react'
+import { useState, useContext, useEffect, useReducer } from 'react'
 import { useToasts } from 'react-toast-notifications'
 import { logger } from 'logger/customLogger'
 import Notify from 'bnc-notify'
@@ -12,6 +12,7 @@ import { EmitterContext } from 'providers/EmitterProvider/context'
 import { useAddInvokeTrigger } from './useAddInvokeTrigger'
 import { useAutoInvokeMethod } from './useAutoInvokeMethod'
 import { useDisplayResults } from './useDisplayResults'
+import { stateReducer } from './stateMachine'
 
 import { sendTx } from './sendTx'
 import { callMethod } from './callMethod'
@@ -35,6 +36,14 @@ const getAbiMethodInputs = (abi, methodName): Record<string, any> => {
 
 // Reducer Component
 export const Reducer = ({ info, readContract, writeContract, readEnabled, readChainId, writeEnabled }) => {
+
+  const initialState = { status: null, val: null }
+
+  const [ state, dispatch ] = useReducer(stateReducer, initialState)
+
+  // status object
+  const [ status, setStatus ] = useState({ error: false, msg: '' })
+  // const [ txStatus, dispatch ] = useState(null)
 
   const {
     childrenElements,
@@ -66,7 +75,6 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
   const [ result, setResult ] = useState(null)
   const [ parametersValues, setParametersValues ] = useState([])
   const [ preventAutoInvoke, setPreventAutoInvoke ] = useState(false)
-  const [ status, setStatus ] = useState({ error: false, msg: '' })
   const [ autoInterval, setAutoInterval ] = useState(null)
 
   // Stop AutoInvoke if the call is not working
@@ -121,7 +129,6 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
     const inputChildrens = childrenElements.filter(({ id }) => id.includes('input'))
     const getOriginalValues = () => {
       const [ inputs ] = inputChildrens
-      console.log('inputs', inputs)
       const rawValues = inputs.element.map(({ element }) => ({ element, rawValue: element.value }))
 
       setOriginalValues(rawValues)
@@ -137,7 +144,7 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
   }, [])
 
   // -> Handlers
-  const handleRunMethod = async (event = null, shouldClearInput = false): Promise<void> => {
+  const handleRunMethod = async (event = null, shouldClearInput = false, isPolling = false): Promise<void> => {
     if (event) {
       try {
         event.preventDefault()
@@ -164,7 +171,6 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
       }
 
       if (writeEnabled && isTransaction && !status.error) {
-        console.log('WRITE PARAMS: ', methodParams)
         const methodHash = await sendTx({
           writeContract,
           provider,
@@ -172,11 +178,12 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
           methodParams,
           value,
           notify: notify(blockNativeApiKey, chainId),
+          dispatch,
         })
         setResult(methodHash)
       } else if (readEnabled && !isTransaction && !status.error ) {
         if (methodParams.length) console.log('VIEW PARAMS: ', methodParams)
-        const methodResult = await callMethod({ readContract, methodName, methodParams, infoToast, setStatus })
+        const methodResult = await callMethod({ readContract, methodName, methodParams, infoToast, dispatch, isPolling })
         setResult(methodResult)
       }
 
