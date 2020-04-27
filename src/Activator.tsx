@@ -22,7 +22,8 @@ type ActivatorProps = {
   retriggerEngine: () => void;
 }
 
-export const Activator = ({ configuration, retriggerEngine, domElements }: ActivatorProps) => {
+export const Activator = ({ configuration, retriggerEngine, domElements, setConfig, supportedNetworks }: ActivatorProps) => {
+  console.log('Activator -> configuration', configuration)
 
   // Ethereum
   const ethereum = useContext(contexts.EthereumContext)
@@ -41,8 +42,11 @@ export const Activator = ({ configuration, retriggerEngine, domElements }: Activ
   const AppReady = true
 
   const { actions: { listenToEvent } } = useContext(EmitterContext)
-  const addClientSideContract = ({ address, abi, provider }) => {
-    Object.assign(window.dappHero.contracts, { [address]: new ethers.Contract(address, abi, provider) })
+
+  // Allow users to add contracts using Javascript
+  const addClientSideContract = ({ contractName, contractAddress, contractAbi, networkId }) => {
+    const existingContracts = configuration.contracts
+    setConfig({ contracts: [ ...existingContracts, { contractName, contractAddress, contractAbi, networkId } ] })
   }
 
   useEffect(() => {
