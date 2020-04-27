@@ -33,10 +33,10 @@ export const Router = ({ listOfContractMethods, contract }: RouterProps) => {
   useEffect(() => {
 
     if (!window?.dappHero) return
-    console.log('Before: ', window.dappHero)
-    Object.assign(window.dappHero, { [contractAddress]: { readContract, writeContract } })
-    console.log('After: ', window.dappHero)
+
+    Object.assign(window.dappHero.contracts, { [contractAddress]: { readContract, writeContract } })
   }, [ readContract, writeContract ])
+
   // WE CAN CHECK HERE IF WE ARE ON THE RIGHT NETWORK WITH THE PROVIDER
   const contractNetwork = consts.global.ethNetworkName[networkId].toLowerCase()
 

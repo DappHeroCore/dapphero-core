@@ -3,9 +3,11 @@ import React, { useContext, useEffect, useState, Fragment } from 'react'
 import * as consts from 'consts'
 import * as contexts from 'contexts'
 import { loggerTest } from 'logger/loggerTest'
+import { ethers } from 'ethers'
 
 import { EVENT_NAMES } from 'providers/EmitterProvider/constants'
 import { EmitterContext } from 'providers/EmitterProvider/context'
+import { EtherscanProvider } from 'ethers/providers'
 import { FeatureReducer } from './protocol/ethereum/featureReducer'
 
 import { highlightDomElements } from './utils/highlightDomElements'
@@ -39,6 +41,9 @@ export const Activator = ({ configuration, retriggerEngine, domElements }: Activ
   const AppReady = true
 
   const { actions: { listenToEvent } } = useContext(EmitterContext)
+  const addClientSideContract = ({ address, abi, provider }) => {
+    Object.assign(window.dappHero.contracts, { [address]: new ethers.Contract(address, abi, provider) })
+  }
 
   useEffect(() => {
     const dappHero = {
@@ -47,6 +52,8 @@ export const Activator = ({ configuration, retriggerEngine, domElements }: Activ
       highlightEnabled: false,
       domElements,
       configuration,
+      contracts: {},
+      addClientSideContract,
       retriggerEngine,
       projectId: consts.global.apiKey,
       provider: ethereum,
