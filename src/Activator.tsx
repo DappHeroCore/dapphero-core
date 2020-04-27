@@ -3,9 +3,11 @@ import React, { useContext, useEffect, useState, Fragment } from 'react'
 import * as consts from 'consts'
 import * as contexts from 'contexts'
 import { loggerTest } from 'logger/loggerTest'
+import { ethers } from 'ethers'
 
 import { EVENT_NAMES } from 'providers/EmitterProvider/constants'
 import { EmitterContext } from 'providers/EmitterProvider/context'
+import { EtherscanProvider } from 'ethers/providers'
 import { FeatureReducer } from './protocol/ethereum/featureReducer'
 
 import { highlightDomElements } from './utils/highlightDomElements'
@@ -20,13 +22,10 @@ type ActivatorProps = {
   retriggerEngine: () => void;
 }
 
-export const Activator = ({ configuration, retriggerEngine }: ActivatorProps) => {
+export const Activator = ({ configuration, retriggerEngine, domElements, setConfig, supportedNetworks }: ActivatorProps) => {
 
   // Ethereum
   const ethereum = useContext(contexts.EthereumContext)
-
-  // React hooks
-  const domElements = useContext(contexts.DomElementsContext)
 
   // This needs to filter for Unique Contracts
   const contractElements = domElements.filter((element) => element.feature === 'customContract')
@@ -43,6 +42,12 @@ export const Activator = ({ configuration, retriggerEngine }: ActivatorProps) =>
 
   const { actions: { listenToEvent } } = useContext(EmitterContext)
 
+  // Allow users to add contracts using Javascript
+  const addClientSideContract = ({ contractName, contractAddress, contractAbi, networkId }) => {
+    const existingContracts = configuration.contracts
+    setConfig({ contracts: [ ...existingContracts, { contractName, contractAddress, contractAbi, networkId } ] })
+  }
+
   useEffect(() => {
     const dappHero = {
       debug: false,
@@ -50,6 +55,8 @@ export const Activator = ({ configuration, retriggerEngine }: ActivatorProps) =>
       highlightEnabled: false,
       domElements,
       configuration,
+      contracts: {},
+      addClientSideContract,
       retriggerEngine,
       projectId: consts.global.apiKey,
       provider: ethereum,
@@ -68,7 +75,6 @@ export const Activator = ({ configuration, retriggerEngine }: ActivatorProps) =>
   }, [ AppReady ])
 
   if (!AppReady || !domElementsFilteredForContracts) return null
-
   return (
     <>
       {domElementsFilteredForContracts

@@ -28,32 +28,36 @@ export const ProvidersWrapper: React.FC = () => {
     })()
   }, [])
 
+  // Figure out the networks the dapp supports by contracts
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-    const getSupportedNetworks = () => {
+    const getSupportedNetworks = (): void => {
       const networks = configuration.contracts?.map(({ contractName, networkId: chainId }) => ({
         contractName,
         chainId,
       }))
       setSupportedNetworks(networks)
     }
-
     if (configuration?.contracts) getSupportedNetworks()
   }, [ configuration ])
 
   useEffect(() => {
     if (configuration) setDomElements(getDomElements(configuration))
-  }, [ configuration, supportedNetworks ])
+  }, [ configuration ])
 
   if (domElements != null) {
+
     return (
       <EmitterProvider>
         <CookiesProvider>
           <ToastProvider>
             <EthereumContext.Provider value={ethereum}>
-              <DomElementsContext.Provider value={domElements}>
-                <Activator configuration={configuration} retriggerEngine={retriggerEngine} />
-              </DomElementsContext.Provider>
+              <Activator
+                configuration={configuration}
+                setConfig={setConfig}
+                domElements={domElements}
+                retriggerEngine={retriggerEngine}
+                supportedNetworks={supportedNetworks}
+              />
             </EthereumContext.Provider>
           </ToastProvider>
         </CookiesProvider>

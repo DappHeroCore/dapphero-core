@@ -68,14 +68,27 @@ export const useWeb3Provider = (polling, web3provider = null, providerTypeName =
       try {
         const provider = web3provider || new Web3Provider(window.ethereum || window?.web3?.currentProvider)
         const ready = await provider.ready
-        const signer = provider.getSigner()
-        const address = await signer.getAddress()
+        const signer = provider?.getSigner ? provider.getSigner() : null
+        let address = null
+        if (signer?.getAddress) {
+          const getCustomAddress = async () => {
+            try {
+              const signerAddress = await signer.getAddress()
+              return signerAddress
+            } catch (error) {
+              console.log('This error: ', error)
+              return ''
+            }
+          }
+          address = await getCustomAddress()
+        }
         const { chainId } = ready
         if (address !== details.address || chainId !== details.chainId) {
-          setDetails({ address, chainId })
+          setDetails({ address, chainId, isEnabled: Boolean(address) })
         }
       } catch (error) {
-        logger.log('Polling did not work in useWeb3Provider.', error)
+        console.log('Polling did not work in useWeb3Provider.', error)
+        setDetails({ address: null })
       }
 
     }
@@ -83,6 +96,7 @@ export const useWeb3Provider = (polling, web3provider = null, providerTypeName =
     if (provider?.getSigner) {
       poll()
     }
+
   }, polling)
 
   // If the provider doesn't have an address (a wallet attached), just return ethereum

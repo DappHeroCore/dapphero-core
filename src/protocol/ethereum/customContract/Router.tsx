@@ -29,6 +29,14 @@ export const Router = ({ listOfContractMethods, contract }: RouterProps) => {
   const [ readContract, setReadContract ] = useState(null)
   const [ writeContract, setWriteContract ] = useState(null)
 
+  // Set this on the window object
+  useEffect(() => {
+
+    if (!window?.dappHero) return
+
+    Object.assign(window.dappHero.contracts, { [contractAddress]: { readContract, writeContract } })
+  }, [ readContract, writeContract ])
+
   // WE CAN CHECK HERE IF WE ARE ON THE RIGHT NETWORK WITH THE PROVIDER
   const contractNetwork = consts.global.ethNetworkName[networkId].toLowerCase()
 

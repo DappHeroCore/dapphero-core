@@ -1,0 +1,548 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Dosis|Source+Code+Pro&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/main.css" />
+    <script
+      src="https://kit.fontawesome.com/2dfee5d193.js"
+      crossorigin="anonymous"
+    ></script>
+
+    <title>SNODEX</title>
+  </head>
+  <body>
+    <!-- header -->
+    <header id="header-inner">
+      <div class="shade">
+        <div class="container">
+          <nav id="main-nav" class="about-nav">
+            <img src="img/SDlogo4.png" alt="My Portfolio" id="logo" />
+            <ul>
+              <li><a href="index.html" >About</a></li>
+              <li><a href="impact.html">Use Cases</a></li>
+              <li><a href="snodex.html" class="current showfoot glo">ValveDAO</a></li>
+              <li><a href="daodashboard.html" >DAO Dashboard</a></li>
+              <li>
+                <button
+                  data-dh-feature="network"
+                  data-dh-property-enable
+                  class="metamask"
+                >
+                  Enable MetaMask
+                </button>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <!-- section A:Contact Form -->
+
+    <section id="contact-a" class="text-center py-3">
+      <div class="container snoc">
+        <div class="left">
+          <h2 class="section-title">SN❄DEX</h2>
+          <div class="bottom-line"></div>
+          <p class="lead">Impact Market for Global Snowfall Levels</p>
+        </div>
+      </div>
+      <div class="right">
+        <div class="textbox">
+          <p>By using an augmented scenario bonding curve, we can incentivize mass price signalling in the perception of global warming while simultaneously funding climate impact research. Future iterations of the model could see the market tied to meaningful oracle signals, such as global snowfall levels. </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact-b" >
+     
+          
+
+<graphA>
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  <script src="addSlider.js"></script>
+
+  <style>
+    /* set the CSS */
+    
+    .myLine {
+      stroke: steelblue;
+      stroke-width: 2;
+      fill: none;
+    }
+    .myLine2 {
+      stroke: steelblue;
+      stroke-width: 2;
+      fill: none;
+    }
+    .axis path,
+    .axis line {
+      fill: none;
+      stroke: grey;
+      stroke-width: 1;
+      shape-rendering: crispEdges;
+    }
+    /* slider */
+    .slider .halo {
+      fill: none;
+      stroke: #ddd;
+      stroke-width: 8px;
+      stroke-linecap: round;
+    }
+    .slider .handle circle {
+      fill: #fff;
+      stroke: #000;
+      stroke-opacity: .5;
+      stroke-width: 1.25px;
+      cursor: crosshair;
+    }
+    .slider text {
+      font: bold 10px sans-serif;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      user-select: none;
+    }
+    .ctrl circle {
+      fill: #fff;
+      stroke: #000;
+      stroke-opacity: .5;
+      stroke-width: 1.25px;
+      cursor: pointer;
+    }
+  </style>
+</graphA>
+
+<graphX>
+  <script>
+    var margin = {
+      top: 30,
+      right: 20,
+      bottom: 30,
+      left: 50
+    },
+
+      width = 600 - margin.left - margin.right,
+      height = 270 - margin.top - margin.bottom;
+
+    var svg = d3.select("body")
+      .append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform",
+        "translate(" + margin.left + "," + margin.top + ")");
+
+    var x = d3.scale.linear().range([0, width]);
+    var y = d3.scale.linear().range([height, 0]);
+
+    xAxis = d3.svg.axis()
+      .scale(x)
+      .orient('bottom');
+
+    yAxis = d3.svg.axis()
+      .scale(y)
+      .orient('left');
+
+    svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis);
+
+     // Add the Y Axis
+    svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis);
+
+    var lineFunc = d3.svg.line()
+      .x(function(d) {
+        return x(d.x);
+      })
+      .y(function(d) {
+        return y(d.y);
+      })
+      .interpolate('linear');
+
+    svg.append('svg:path')
+      .attr("class", "myLine");
+
+    svg.append('svg:path')
+      .attr("class", "myLine2");
+
+    var sliders = {};
+    sliders.k = addSlider(300, 10, drawPlot);
+    sliders.t = addSlider(300, 50, drawPlot);
+
+    var func = function(x) {
+      return (1.7**(x-3)) - (1/(1.6**3))
+    },
+    step = 0.01;
+
+    var func2 = function(x) {
+      return 0.5*(1.7**(0.9*x-3)) - (1/(1.6**3*2))
+    },
+    step = 0.01;
+
+    drawPlot();
+
+    function drawPlot() {
+      
+      if (!sliders.k ||
+          !sliders.t) return;
+      
+      var kMag = sliders.k();
+      var tMag = sliders.t();
+      var safeMinimum = 10;
+      var limit = Math.max(safeMinimum, 1.15 * Math.max(kMag, tMag));
+      
+      var data = [];
+      for (var i = 0; i < limit; i += step) {
+        data.push({
+          x: i,
+          y: func2(i)
+        })
+      }
+
+      y.domain(
+        [0, Math.ceil(limit)]
+      );
+      x.domain(
+        [0, Math.ceil(limit)]
+      );
+      
+      svg.selectAll("g.y.axis").call(yAxis);
+      svg.selectAll("g.x.axis").call(xAxis);
+      
+      svg.select('.myLine')
+        .attr('d', lineFunc(data));
+      drawPlot2();
+    }
+
+        function drawPlot2() {
+      
+      if (!sliders.k ||
+          !sliders.t) return;
+      
+      var kMag = sliders.k();
+      var tMag = sliders.t();
+      var safeMinimum = 10;
+      var limit = Math.max(safeMinimum, 1.15 * Math.max(kMag, tMag));
+      
+      var data = [];
+      for (var i = 0; i < limit; i += step) {
+        data.push({
+          x: i,
+          y: func(i)
+        })
+      }
+	y.domain(
+        [0, Math.ceil(limit)]
+      );
+      x.domain(
+        [0, Math.ceil(limit)]
+      );
+      
+      svg.selectAll("g.y.axis").call(yAxis);
+      svg.selectAll("g.x.axis").call(xAxis);
+      
+      svg.select('.myLine2')
+        .attr('d', lineFunc(data))
+      
+    }
+  </script>
+</graphX>
+
+
+        
+    </section>
+
+    <section id="contact-c" class="bg-main py-4">
+      <div class="topLR">
+        <!-- Ether Available -->
+
+        <div>
+          <span>Ether Balance: </span>
+          <span
+          class='customTextColor'
+            data-dh-feature="user"
+            data-dh-property-balance
+            data-dh-modifier-units="ether"
+            data-dh-modifier-decimals="3"
+          >
+          </div>
+          <!-- // Display Shares Balance -->
+
+          <input
+          data-dh-property-method-id="001"
+          data-dh-property-input-name=""
+          value="$CURRENT_USER"
+          style="display:none;"
+        />
+        <div>
+          <div
+            data-dh-feature="customContract"
+            data-dh-property-contract-name="curve"
+            data-dh-property-method-name="ledger"
+            data-dh-property-method-id="001"
+            data-dh-property-auto-invoke="true"
+          ></div>
+          <span>Your Tokens: </span>
+          <span
+          class='customTextColor'
+            data-dh-property-method-id="001"
+            data-dh-property-outputs
+          ></span>
+        </div>
+
+        <!-- Your Stake -->
+
+        <div>
+          <div
+            data-dh-feature="customContract"
+            data-dh-property-contract-name="curve"
+            data-dh-property-method-name="locked"
+            data-dh-property-method-id="110"
+            data-dh-property-auto-invoke="true"
+          ></div>
+          <span>Your Stake:</span>
+          <span
+          class='customTextColor'
+            data-dh-property-method-id="110"
+            data-dh-property-outputs
+          ></span>
+        </div>
+
+        <!-- Total Stake -->
+
+        <div>
+          <div
+            data-dh-feature="customContract"
+            data-dh-property-contract-name="curve"
+            data-dh-property-method-name="totalLocked"
+            data-dh-property-method-id="111"
+            data-dh-property-auto-invoke="true"
+          ></div>
+          <span>Total Stake:</span>
+          <span
+          class='customTextColor'
+            data-dh-property-method-id="111"
+            data-dh-property-outputs
+          ></span>
+        </div>
+
+        <!-- Available Rewards -->
+
+        <div>
+          <input
+          data-dh-property-method-id="112"
+          data-dh-property-input-name=""
+          value="$CURRENT_USER"
+          style="display:none;"
+        />
+          <div
+            data-dh-feature="customContract"
+            data-dh-property-contract-name="dao"
+            data-dh-property-method-name="getReward"
+            data-dh-property-method-id="112"
+            data-dh-property-auto-invoke="true"
+          ></div>
+          <span>Your Available Rewards:</span>
+          <span
+          class='customTextColor'
+            data-dh-property-method-id="112"
+            data-dh-property-outputs
+          ></span>
+        </div>
+
+
+      </div>
+      <br>
+      <div class="container snoc3">
+        
+        <div class="left">
+           
+             
+        <!-- set buy price -->
+        <button class="sn0" data-dh-property-method-id="008" data-dh-property-invoke>
+          Enter Tokens to Buy
+        </button>
+        <input
+          data-dh-property-method-id="008"
+          data-dh-property-input-name="amount"
+        />
+        <div
+          data-dh-feature="customContract"
+          data-dh-property-contract-name="curve"
+          data-dh-property-method-name="setBuyPrice"
+          data-dh-property-method-id="008"
+        ></div>
+        <!-- xxx -->
+        <!-- Buy Price -->
+        <div class='customSpan'>
+         
+          <div
+          data-dh-feature="customContract"
+          data-dh-property-contract-name="curve"
+          data-dh-property-method-name="getPrice"
+          data-dh-property-method-id="010"
+          data-dh-property-auto-invoke="true"
+          
+        
+         
+        ></div>
+          <span >Buy Price: </span>
+          <span
+          class='customTextColor'
+          data-dh-property-method-id="010"
+          
+          data-dh-property-outputs="true"
+          
+        ></span>
+        </div>
+
+        
+
+        <!-- xxx -->
+         <!-- Buy Method -->
+         <button class="sn0" data-dh-property-method-id="000" data-dh-property-invoke>
+          Enter ETH & #Tokens
+        </button>
+        <input
+          data-dh-property-method-id="000"
+          data-dh-property-input-name="EthValue"
+     
+          
+          
+        />
+        <input
+          class="customInput"
+          data-dh-property-method-id="000"
+          data-dh-property-input-name="amount"
+        />
+        <div
+          data-dh-feature="customContract"
+          data-dh-property-contract-name="curve"
+          data-dh-property-method-name="buy"
+          data-dh-property-method-id="000"
+        ></div>
+        <!-- xxx -->
+
+        <button class="sn0" data-dh-property-invoke data-dh-property-method-id="011">
+          Set Sell Price
+        </button>
+        <input
+          data-dh-property-method-id="011"
+          data-dh-property-input-name="amount"
+        />
+        <div
+          data-dh-feature="customContract"
+          data-dh-property-contract-name="curve"
+          data-dh-property-method-name="setSellPrice"
+          data-dh-property-method-id="011"
+        ></div>
+
+        <!-- sell tokens -->
+        
+        <button class="sn0" data-dh-property-invoke data-dh-property-method-id="004">
+          Sell Tokens
+        </button>
+        <input
+          data-dh-property-method-id="004"
+          data-dh-property-input-name="amount"
+        />
+        <div
+          data-dh-feature="customContract"
+          data-dh-property-contract-name="curve"
+          data-dh-property-method-name="sell"
+          data-dh-property-method-id="004"
+        ></div>
+
+<!-- xxx -->
+
+         
+        </div>
+        <div class="right">
+        
+          <!-- Stake Tokens (amount) -->
+          <button class="sn0" data-dh-property-method-id="100" data-dh-property-invoke>
+            Enter Tokens to Stake
+          </button>
+          <input
+            data-dh-property-method-id="100"
+            data-dh-property-input-name="amount"
+          />
+          <div
+            data-dh-feature="customContract"
+            data-dh-property-contract-name="curve"
+            data-dh-property-method-name="lockTokens"
+            data-dh-property-method-id="100"
+          ></div>
+
+
+          <!-- Withdraw Stake (amount) -->
+
+          <button class="sn0" data-dh-property-method-id="101" data-dh-property-invoke>
+            Withdraw Stake
+          </button>
+          <input
+            data-dh-property-method-id="101"
+            data-dh-property-input-name="amount"
+          />
+          <div
+            data-dh-feature="customContract"
+            data-dh-property-contract-name="curve"
+            data-dh-property-method-name="unlockTokens"
+            data-dh-property-method-id="101"
+          ></div>
+
+
+  
+
+          <!-- Withdraw Reward -->
+
+          <button class="sn0" data-dh-property-method-id="103" data-dh-property-invoke>
+            Withdraw Reward
+          </button>
+          <input
+            data-dh-property-method-id="103"
+            data-dh-property-input-name="amount"
+          />
+          <div
+            data-dh-feature="customContract"
+            data-dh-property-contract-name="dao"
+            data-dh-property-method-name="withdrawReward"
+            data-dh-property-method-id="103"
+          ></div>
+          
+      </div>
+    </section>
+      
+<!--   xxxxxxxxxxxxxxxxxxxxxxxxxxx    -->
+   
+    <!-- footer -->
+
+    <footer id="main-footer">
+      <div class="footer-content container">
+        <p>Copyright &copy 2020 All Memes Reserved</p>
+        <div class="social">
+          <i class="fab fa-twitter"></i>
+          <i class="fab fa-facebook"></i>
+          <i class="fab fa-instagram"></i>
+          <i class="fab fa-reddit"></i>
+        </div>
+      </div>
+    </footer>
+
+    <!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
+
+
+    <script src="https://package.dapphero.io/main-04-25-2020.js" id="dh-apiKey" data-api="1587894704758x108109518994669570"></script>
+
+  </body>
+</html>

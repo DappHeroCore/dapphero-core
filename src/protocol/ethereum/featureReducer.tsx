@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 // Reducers
 import { Reducer as NetworkReducer } from './network/Reducer'
@@ -9,9 +9,6 @@ import { Router as CustomContractRouter } from './customContract/Router'
 
 // Types
 import { FeatureReducerProps } from './types'
-
-// Constants
-const isProduction = process.env.NODE_ENV === 'production'
 
 export const FeatureReducer = ({ feature, element, configuration, info, customContractElements }: FeatureReducerProps) => {
 
@@ -25,10 +22,10 @@ export const FeatureReducer = ({ feature, element, configuration, info, customCo
   const uniqueContractNames = new Set([ ...customContractElements.map(({ contract }) => contract.contractName) ])
 
   switch (featureType) {
-    case 'nft': {
-      // TODO add some sort of delay here
-      return <NftReducer element={element} info={info} />
-    }
+    // case 'nft': {
+    //   // TODO add some sort of delay here
+    //   return <NftReducer element={element} info={info} />
+    // }
 
     case 'user': {
       return <UserReducer element={element} info={info} />
@@ -48,7 +45,6 @@ export const FeatureReducer = ({ feature, element, configuration, info, customCo
         const methodsByContractAsElements = customContractElements.filter((element) => element.contract.contractName === contractName)
         // console.log("Contract Branches", methodsByContractAsElements)
         const contract = configuration.contracts.filter((contract) => (contract.contractName === contractName))[0]
-
         return <CustomContractRouter listOfContractMethods={methodsByContractAsElements} contract={contract} />
       }
 

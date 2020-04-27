@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react'
+import { useState, useContext, useEffect, useReducer } from 'react'
 import { useToasts } from 'react-toast-notifications'
 import { logger } from 'logger/customLogger'
 import Notify from 'bnc-notify'
@@ -12,6 +12,7 @@ import { EmitterContext } from 'providers/EmitterProvider/context'
 import { useAddInvokeTrigger } from './useAddInvokeTrigger'
 import { useAutoInvokeMethod } from './useAutoInvokeMethod'
 import { useDisplayResults } from './useDisplayResults'
+import { stateReducer, ACTION_TYPES } from './stateMachine'
 
 import { sendTx } from './sendTx'
 import { callMethod } from './callMethod'
@@ -22,11 +23,23 @@ const { AUTO_INVOKE_INTERVAL: POLLING_INTERVAL } = consts.global
 // Utils
 const notify = (apiKey, chainId) => Notify({ dappId: apiKey, networkId: chainId })
 
-const getAbiMethodInputs = (abi, methodName): Record<string, any> => {
+const getAbiMethodInputs = (abi, methodName, dispatch): Record<string, any> => {
   const emptyString = '$true'
   const parseName = (value: string): string => (value === '' ? emptyString : value)
 
   const method = abi.find(({ name }) => name === methodName)
+
+  if (!method) {
+    dispatch({
+      type: ACTION_TYPES.malformedInputName,
+      status: {
+        error: true,
+        msg: `The method name: { ${methodName} } is incorrect. Perhaps a typo in your html?`,
+      },
+    })
+    return null
+  }
+
   const parsedMethod = Object.assign(method, { inputs: method.inputs.map((input) => ({ ...input, name: parseName(input.name) })) })
 
   const output = parsedMethod.inputs.reduce((acc, { name }) => ({ ...acc, [name]: '' }), [])
@@ -35,6 +48,11 @@ const getAbiMethodInputs = (abi, methodName): Record<string, any> => {
 
 // Reducer Component
 export const Reducer = ({ info, readContract, writeContract, readEnabled, readChainId, writeEnabled }) => {
+
+  const [ state, dispatch ] = useReducer(stateReducer, {})
+  if (!(state.isPolling || !state.msg)) {
+    console.log('State Change: (omitting polling)', state)
+  };
 
   const {
     childrenElements,
@@ -59,16 +77,35 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
 
   // Toast Notifications
   const { addToast } = useToasts()
-  const errorToast = ({ message }): void => addToast(message, { appearance: 'error' })
-  const infoToast = ({ message }): void => addToast(message, { appearance: 'info' })
 
   // React hooks
   const [ result, setResult ] = useState(null)
+  const [ autoInterval, setAutoInterval ] = useState(null)
+
+  // Stop AutoInvoke if the call is not working
+  useEffect(() => {
+    if (autoInterval && state.error) {
+      clearInterval(autoInterval)
+    }
+  }, [ autoInterval, state.error ])
+
+  useEffect(() => {
+    const { msg, error, info } = state
+    if (error) {
+      logger.error(msg, error)
+      addToast(msg, { appearance: 'error', autoDismiss: true, autoDismissTimeout: consts.global.REACT_TOAST_AUTODISMISS_INTERVAL })
+    }
+    if (info) {
+      logger.info(msg, info)
+      addToast(msg, { appearance: 'info', autoDismiss: true, autoDismissTimeout: consts.global.REACT_TOAST_AUTODISMISS_INTERVAL })
+    }
+
+  }, [ state.error ])
 
   // Helpers - Get parameters values
   const getParametersFromInputValues = (): Record<string, any> => {
     const inputChildrens = childrenElements.filter(({ id }) => id.includes('input'))
-    const abiMethodInputs = getAbiMethodInputs(info.contract.contractAbi, methodName)
+    const abiMethodInputs = getAbiMethodInputs(info.contract.contractAbi, methodName, dispatch)
 
     if (!inputChildrens.length ) return { parameterValues: [] }
     const [ inputs ] = inputChildrens
@@ -86,7 +123,14 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
           Object.assign(abiMethodInputs, { [argumentName]: convertedValue })
         }
       } catch (err) {
-        console.warn('There may be an issue with your inputs')
+        dispatch({
+          type: ACTION_TYPES.malformedInputs,
+          status: {
+            error: true,
+            fetching: false,
+            msg: `There seems to be an error with your inputs? Argument Name: ${argumentName}`,
+          },
+        })
       }
 
       // TODO: Check if we need to re-assign the input value (with Drake)
@@ -103,14 +147,29 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
     return { parametersValues }
   }
 
+  // Return values to their orignal value when unmounted
+  // TODO: Do we want to do this also for all HTML?
+  useEffect(() => {
+    let rawValues = []
+
+    const inputChildrens = childrenElements.filter(({ id }) => id.includes('input'))
+    const getOriginalValues = () => {
+      const [ inputs ] = inputChildrens
+      rawValues = inputs.element.map(({ element }) => ({ element, rawValue: element.value }))
+    }
+
+    if (inputChildrens.length) getOriginalValues()
+    return (): void => {
+      for (const el of rawValues) {
+        el.element.value = el.rawValue
+      }
+      return null
+    }
+
+  }, [])
+
   // -> Handlers
-  const handleRunMethod = async (event = null, shouldClearInput = false): Promise<void> => {
-
-    // Return early if the read and write instances aren't ready
-    // if (!readEnabled && !writeEnabled) return null
-
-    const { parametersValues } = getParametersFromInputValues()
-
+  const handleRunMethod = async (event = null, shouldClearInput = false, isPolling = false): Promise<void> => {
     if (event) {
       try {
         event.preventDefault()
@@ -118,9 +177,23 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
       } catch (err) {}
     }
 
+    // Return early if the read and write instances aren't ready
+    // if (!readEnabled && !writeEnabled) return null
+
+    const { parametersValues } = getParametersFromInputValues()
+
     if (hasInputs) {
       const isParametersFilled = Boolean(parametersValues.filter(Boolean).join(''))
-      if (!isParametersFilled) console.error(`You must define your parameters first`)
+      if (!isParametersFilled) {
+        dispatch({
+          type: ACTION_TYPES.parametersUndefined,
+          status: {
+            error: false,
+            fetching: false,
+            msg: `There appear to be no parameters provided.`,
+          },
+        })
+      } // TODO: Add Dispatch for State instead of Console.error
     }
 
     try {
@@ -139,10 +212,11 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
           methodParams,
           value,
           notify: notify(blockNativeApiKey, chainId),
+          dispatch,
         })
         setResult(methodHash)
-      } else if (readEnabled && !isTransaction) {
-        const methodResult = await callMethod({ readContract, methodName, methodParams, infoToast })
+      } else if (readEnabled && !isTransaction && !state.error ) {
+        const methodResult = await callMethod({ readContract, methodName, methodParams, dispatch, isPolling })
         setResult(methodResult)
       }
 
@@ -156,8 +230,15 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
       }
 
     } catch (err) {
-      logger.error('Custom Contract handleRun method failed\n', err)
-      errorToast({ message: 'Error. Check the Console.' })
+      dispatch({
+        type: ACTION_TYPES.confirmed,
+        status: {
+          msg: 'An error has occured when interacting with your contract.',
+          error: err,
+          fetching: false,
+          inFlight: false,
+        },
+      })
     }
   }
 
@@ -175,6 +256,8 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
     readContract,
     readChainId,
     POLLING_INTERVAL,
+    writeAddress: address,
+    setAutoInterval,
   })
 
   // Display new results in the UI
