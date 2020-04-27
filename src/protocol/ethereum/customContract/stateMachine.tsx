@@ -43,6 +43,5 @@ export const stateReducer = (state, action) => {
     default:
       return { ...state }
   }
-
 }
 

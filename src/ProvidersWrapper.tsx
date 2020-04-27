@@ -46,14 +46,13 @@ export const ProvidersWrapper: React.FC = () => {
   }, [ configuration ])
 
   if (domElements != null) {
+
     return (
       <EmitterProvider>
         <CookiesProvider>
           <ToastProvider>
             <EthereumContext.Provider value={ethereum}>
-
               <Activator configuration={configuration} domElements={domElements} retriggerEngine={retriggerEngine} />
-
             </EthereumContext.Provider>
           </ToastProvider>
         </CookiesProvider>

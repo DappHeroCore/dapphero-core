@@ -10,29 +10,43 @@ export const sendTx = async ({ writeContract, dispatch, provider, methodName, me
   let estimatedGas
 
   const tempOverride = { value: ethers.utils.parseEther(value) }
+  // TODO: Allow users to set Gas Price
 
   dispatch({
     type: ACTION_TYPES.txUserSignatureRequested,
     status: {
-      msg: 'User Signature Requested',
+      ...methodDetails,
+      msg: 'Estimate Gas Cost of Transaction',
       error: false,
       fetching: true,
       inFlight: false,
-      ...methodDetails,
     },
   })
 
   try {
     estimatedGas = await estimateMethod(...methodParams, tempOverride)
+
+    dispatch({
+      type: ACTION_TYPES.txUserSignatureRequested,
+      status: {
+        ...methodDetails,
+        msg: 'Estimate Gas Cost of Transaction Succedded',
+        error: false,
+        fetching: true,
+        inFlight: false,
+        estimatedGas: estimatedGas.toString(),
+      },
+    })
+
   } catch (error) {
     dispatch({
       type: ACTION_TYPES.estimateGasError,
       status: {
-        msg: 'Error estimating the gas cost for this transaction.',
+        ...methodDetails,
+        msg: 'Estimate Gas Cost of Transaction Failed',
         error,
         fetching: false,
         inFlight: false,
-        ...methodDetails,
       },
     } )
   }
@@ -44,7 +58,19 @@ export const sendTx = async ({ writeContract, dispatch, provider, methodName, me
   }
   let methodResult
 
+  dispatch({
+    type: ACTION_TYPES.txUserSignatureRequested,
+    status: {
+      ...methodDetails,
+      msg: 'User signature requsted',
+      error: false,
+      fetching: true,
+      inFlight: false,
+    },
+  })
+
   try {
+
     methodResult = await method(...methodParams, overrides)
 
     dispatch({
@@ -63,16 +89,18 @@ export const sendTx = async ({ writeContract, dispatch, provider, methodName, me
       dispatch({
         type: ACTION_TYPES.confirmed,
         status: {
-          msg: 'TX Confirmed.',
+          ...methodDetails,
+          msg: `Transaction confirmed. Hash: ${methodResult.hash}`,
           error: false,
           fetching: false,
           inFlight: false,
-          ...methodDetails,
+          receipt,
         },
       })
     })
+
     // BlockNative Toaster to track tx
-    const { emitter } = notify.hash(methodResult.hash)
+    notify.hash(methodResult.hash)
 
     // Set Result on State
     return methodResult.hash
@@ -81,11 +109,11 @@ export const sendTx = async ({ writeContract, dispatch, provider, methodName, me
     dispatch({
       type: ACTION_TYPES.txError,
       status: {
+        ...methodDetails,
         msg: 'Transaction failed. Check console for more details.',
         error,
         inFlight: false,
         fetching: false,
-        ...methodDetails,
       },
     } )
   }

@@ -7,26 +7,40 @@ export const callMethod = async ({ readContract, methodName, methodParams, dispa
   dispatch({
     type: ACTION_TYPES.callMethod,
     status: {
+      ...methodDetails,
       msg: `Calling public method { ${methodName} }`,
       error: false,
-      ...methodDetails,
       fetching: true,
       isPolling,
-
     },
   })
+
   try {
     const methodResult = await method(...methodParams)
+
+    dispatch({
+      type: ACTION_TYPES.callMethod,
+      status: {
+        ...methodDetails,
+        msg: `Calling public method { ${methodName} } success.`,
+        error: false,
+        fetching: false,
+        isPolling,
+        methodResult,
+      },
+    })
+
     return methodResult
   } catch (error) {
+
     dispatch({
       type: ACTION_TYPES.callMethodError,
       status: {
+        ...methodDetails,
         msg: `Error calling method { ${methodName} } on your contract. Is your Web3 provider on Network: ${readContract.provider._network.name}? Check console for more details.`,
         isPolling,
         fetching: false,
         error,
-        ...methodDetails,
       },
     } )
   }

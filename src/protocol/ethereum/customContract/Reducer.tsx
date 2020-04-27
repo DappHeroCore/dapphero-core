@@ -89,7 +89,6 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
 
   useEffect(() => {
     const { msg, error, info } = state
-    console.log('Reducer -> state', state)
     if (error) {
       logger.error(msg, error)
       addToast(msg, { appearance: 'error', autoDismiss: true, autoDismissTimeout: consts.global.REACT_TOAST_AUTODISMISS_INTERVAL })
@@ -140,24 +139,24 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
   }
 
   // Return values to their orignal value when unmounted
-  // TODO: Ask @lndgalante if this is doing what I think it's doing.
-  const [ originalValues, setOriginalValues ] = useState([])
+  // TODO: Do we want to do this also for all HTML?
   useEffect(() => {
+    let rawValues = []
+
     const inputChildrens = childrenElements.filter(({ id }) => id.includes('input'))
     const getOriginalValues = () => {
       const [ inputs ] = inputChildrens
-      const rawValues = inputs.element.map(({ element }) => ({ element, rawValue: element.value }))
-
-      setOriginalValues(rawValues)
-
-      return (): void => {
-        for (const el of originalValues) {
-          el.element.value = el.rawValue
-        }
-        return null
-      }
+      rawValues = inputs.element.map(({ element }) => ({ element, rawValue: element.value }))
     }
+
     if (inputChildrens.length) getOriginalValues()
+    return (): void => {
+      for (const el of rawValues) {
+        el.element.value = el.rawValue
+      }
+      return null
+    }
+
   }, [])
 
   // -> Handlers
@@ -176,7 +175,7 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
 
     if (hasInputs) {
       const isParametersFilled = Boolean(parametersValues.filter(Boolean).join(''))
-      if (!isParametersFilled) console.error(`You must define your parameters first`)
+      if (!isParametersFilled) console.error(`You must define your parameters first`) // TODO: Add Dispatch for State instead of Console.error
     }
 
     try {
@@ -199,7 +198,6 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
         })
         setResult(methodHash)
       } else if (readEnabled && !isTransaction && !state.error ) {
-        if (methodParams.length) console.log('VIEW PARAMS: ', methodParams)
         const methodResult = await callMethod({ readContract, methodName, methodParams, dispatch, isPolling })
         setResult(methodResult)
       }

@@ -65,7 +65,6 @@ export const Activator = ({ configuration, retriggerEngine, domElements }: Activ
   }, [ AppReady ])
 
   if (!AppReady || !domElementsFilteredForContracts) return null
-
   return (
     <>
       {domElementsFilteredForContracts
