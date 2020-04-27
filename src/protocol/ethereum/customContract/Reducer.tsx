@@ -28,6 +28,7 @@ const getAbiMethodInputs = (abi, methodName, dispatch): Record<string, any> => {
   const parseName = (value: string): string => (value === '' ? emptyString : value)
 
   const method = abi.find(({ name }) => name === methodName)
+
   if (!method) {
     dispatch({
       type: ACTION_TYPES.malformedInputName,
@@ -38,6 +39,7 @@ const getAbiMethodInputs = (abi, methodName, dispatch): Record<string, any> => {
     })
     return null
   }
+
   const parsedMethod = Object.assign(method, { inputs: method.inputs.map((input) => ({ ...input, name: parseName(input.name) })) })
 
   const output = parsedMethod.inputs.reduce((acc, { name }) => ({ ...acc, [name]: '' }), [])
@@ -48,7 +50,7 @@ const getAbiMethodInputs = (abi, methodName, dispatch): Record<string, any> => {
 export const Reducer = ({ info, readContract, writeContract, readEnabled, readChainId, writeEnabled }) => {
 
   const [ state, dispatch ] = useReducer(stateReducer, {})
-  state.isPolling || !state.msg ? null : console.log('State Change: (omitting polling)', { status: null, val: null })
+  state.isPolling || !state.msg ? null : console.log('State Change: (omitting polling)', state)
 
   const {
     childrenElements,
@@ -73,13 +75,9 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
 
   // Toast Notifications
   const { addToast } = useToasts()
-  const errorToast = ({ message }): void => addToast(message, { appearance: 'error' })
-  const infoToast = ({ message }): void => addToast(message, { appearance: 'info' })
 
   // React hooks
   const [ result, setResult ] = useState(null)
-  const [ parametersValues, setParametersValues ] = useState([])
-  const [ preventAutoInvoke, setPreventAutoInvoke ] = useState(false)
   const [ autoInterval, setAutoInterval ] = useState(null)
 
   // Stop AutoInvoke if the call is not working
@@ -94,11 +92,11 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
     console.log('Reducer -> state', state)
     if (error) {
       logger.error(msg, error)
-      addToast(msg, { appearance: 'error' })
+      addToast(msg, { appearance: 'error', autoDismiss: true, autoDismissTimeout: consts.global.REACT_TOAST_AUTODISMISS_INTERVAL })
     }
     if (info) {
       logger.info(msg, info)
-      addToast(msg, { appearance: 'info' })
+      addToast(msg, { appearance: 'info', autoDismiss: true, autoDismissTimeout: consts.global.REACT_TOAST_AUTODISMISS_INTERVAL })
     }
 
   }, [ state.error ])
@@ -243,8 +241,6 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
     readChainId,
     POLLING_INTERVAL,
     writeAddress: address,
-    parametersValues,
-    preventAutoInvoke,
     setAutoInterval,
   })
 

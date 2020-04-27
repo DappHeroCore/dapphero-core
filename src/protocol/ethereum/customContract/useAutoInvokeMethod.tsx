@@ -11,13 +11,11 @@ export const useAutoInvokeMethod = ({
   readChainId,
   POLLING_INTERVAL,
   writeAddress,
-  parametersValues,
-  preventAutoInvoke,
   setAutoInterval,
 }): void => {
 
   useEffect(() => {
-    if (!preventAutoInvoke && autoInvokeKey && readChainId === info?.contract?.networkId) {
+    if (autoInvokeKey && readChainId === info?.contract?.networkId) {
       const { value: autoInvokeValue } = autoInvokeKey || { value: false }
       const autoClearValue = autoClearKey?.value || false
 
@@ -27,7 +25,7 @@ export const useAutoInvokeMethod = ({
         return (): void => clearInterval(intervalId)
       }
     }
-  }, [ readEnabled, readContract, writeAddress, parametersValues, preventAutoInvoke ])
+  }, [ readEnabled, readContract, writeAddress ])
 
   return null
 }

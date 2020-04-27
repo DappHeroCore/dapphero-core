@@ -88,6 +88,5 @@ export const sendTx = async ({ writeContract, dispatch, provider, methodName, me
         ...methodDetails,
       },
     } )
-    // logger.info('invoke contract method failed in transaction', error)
   }
 }
