@@ -121,7 +121,14 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
           Object.assign(abiMethodInputs, { [argumentName]: convertedValue })
         }
       } catch (err) {
-        console.warn('There may be an issue with your inputs')
+        dispatch({
+          type: ACTION_TYPES.malformedInputs,
+          status: {
+            error: true,
+            fetching: false,
+            msg: `There seems to be an error with your inputs? Argument Name: ${argumentName}`,
+          },
+        })
       }
 
       // TODO: Check if we need to re-assign the input value (with Drake)
@@ -175,7 +182,16 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
 
     if (hasInputs) {
       const isParametersFilled = Boolean(parametersValues.filter(Boolean).join(''))
-      if (!isParametersFilled) console.error(`You must define your parameters first`) // TODO: Add Dispatch for State instead of Console.error
+      if (!isParametersFilled) {
+        dispatch({
+          type: ACTION_TYPES.parametersUndefined,
+          status: {
+            error: false,
+            fetching: false,
+            msg: `There appear to be no parameters provided.`,
+          },
+        })
+      } // TODO: Add Dispatch for State instead of Console.error
     }
 
     try {
@@ -186,7 +202,7 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
         value = ethValue
       }
 
-      if (writeEnabled && isTransaction && !state.error) {
+      if (writeEnabled && isTransaction) {
         const methodHash = await sendTx({
           writeContract,
           provider,

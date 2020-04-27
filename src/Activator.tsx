@@ -23,7 +23,6 @@ type ActivatorProps = {
 }
 
 export const Activator = ({ configuration, retriggerEngine, domElements, setConfig, supportedNetworks }: ActivatorProps) => {
-  console.log('Activator -> configuration', configuration)
 
   // Ethereum
   const ethereum = useContext(contexts.EthereumContext)

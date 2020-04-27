@@ -14,10 +14,16 @@ export const ACTION_TYPES = {
   confirmed: 'CONFIRMED',
   txUpdate: 'TX_UPDATE',
   genericContractError: 'GENERIC_CONTRACT_ERROR',
+  malformedInputs: 'MALFORMED_INPUTS',
+  parametersUndefined: 'PARAMETERS_UNDEFINED',
 }
 
 export const stateReducer = (state, action) => {
   switch (action.type) {
+    case ACTION_TYPES.parametersUndefined:
+      return { ...action.status }
+    case ACTION_TYPES.malformedInputs:
+      return { ...action.status }
     case ACTION_TYPES.callMethod:
       return { ...action.status }
     case ACTION_TYPES.callMethodError:
