@@ -11,7 +11,7 @@ type ContractMethod = {
   id: string;
 }
 
-type ListOfContractMethods = ContractMethods[];
+type ListOfContractMethods = ContractMethod[];
 
 type Contract = any;
 

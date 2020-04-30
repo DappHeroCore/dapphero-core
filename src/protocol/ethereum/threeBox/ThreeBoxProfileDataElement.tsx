@@ -1,7 +1,7 @@
 import { FunctionComponent, useMemo } from 'react'
 
 interface ThreeBoxProfileDataElementProps {
-  element: HTMLElement;
+  element: any;
   profileData: string;
 }
 

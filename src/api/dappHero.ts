@@ -1,6 +1,6 @@
 import Axios from 'axios'
 import { logger } from 'logger/customLogger'
-import abi from '../abi/DappHeroTest.json' // eslint-disable-line
+
 const axios = Axios.create({ headers: { 'content-type': 'application/json' } })
 
 // Refactor when this is more fleshed out

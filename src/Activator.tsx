@@ -19,6 +19,9 @@ loggerTest()
 // TODO: Type configuration
 type ActivatorProps = {
   configuration: any;
+  domElements: any;
+  setConfig: any;
+  supportedNetworks: any;
   retriggerEngine: () => void;
 }
 

@@ -161,10 +161,9 @@ export const Reducer = ({ info, element }) => {
     if (!iframeTokenIdsElement) return
 
     // TODO: [DEV-255] Does 'getAttribute' exist on type node? In NFT reducer
-    const iframeSrc = iframeTokenIdsElement.getAttribute('src')
-    const updatedSrc = iframeSrc.replace('$THIS_TokenID', info.id)
-
-    iframeTokenIdsElement.setAttribute('src', updatedSrc)
+    const iframeSrc = (iframeTokenIdsElement as any).getAttribute('src')
+    const updatedSrc = iframeSrc.replace('$THIS_TokenID', info.id);
+    (iframeTokenIdsElement as any).setAttribute('src', updatedSrc)
   }, [ info ])
 
   // Replace iframe elements having $THIS_TokenID as a text content to their respective token id
@@ -182,10 +181,9 @@ export const Reducer = ({ info, element }) => {
 
     if (!iframeContractAddressElement) return
 
-    const iframeSrc = iframeContractAddressElement.getAttribute('src')
-    const updatedSrc = iframeSrc.replace('$THIS_ContractAddress', assetOwnerAddress)
-
-    iframeContractAddressElement.setAttribute('src', updatedSrc)
+    const iframeSrc = (iframeContractAddressElement as any).getAttribute('src')
+    const updatedSrc = iframeSrc.replace('$THIS_ContractAddress', assetOwnerAddress);
+    (iframeContractAddressElement as any).setAttribute('src', updatedSrc)
   }, [ info ])
 
   // Replace label elements in their "for" attribute having $THIS_ContractAddress value

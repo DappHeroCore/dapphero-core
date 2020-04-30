@@ -6,7 +6,7 @@ import { providerSchema } from '../consts'
 
 export const useWeb3Provider = (polling, web3provider = null, providerTypeName = null) => {
   const [ ethereum, setEthereum ] = useState(providerSchema.providerSchema)
-  const [ details, setDetails ] = useState({ address: null, chainId: null })
+  const [ details, setDetails ] = useState<any>({ address: null, chainId: null })
 
   // If no providers return early the provider schema with all null values
   if (!web3provider && !window.ethereum && !window.web3?.currentProvider) return providerSchema.providerSchema
