@@ -1,8 +1,10 @@
 declare global {
   interface Window {
+    web3?: any;
     ethereum: any;
-    dappHero: {
+    dappHero?: {
       enabled: true;
+      contracts: any;
       domElements: Element[];
       configuration: {
         [key: string]: any;

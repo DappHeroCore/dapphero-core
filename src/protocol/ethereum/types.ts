@@ -15,6 +15,7 @@ export type ABI = {
 }
 
 export type Configuration = {
+  contracts: any;
   contractName: string;
   contractAddress: string;
   contractAbi: ABI[];

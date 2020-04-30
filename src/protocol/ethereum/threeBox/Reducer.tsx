@@ -10,7 +10,7 @@ const get3boxProfile = getProfile
 
 const ipfsRoot = 'https://cloudflare-ipfs.com/ipfs/'
 interface ReducerProps {
-  element: HTMLElement;
+  element: Element;
   info: any;
 }
 
