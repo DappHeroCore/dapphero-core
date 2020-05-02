@@ -1,6 +1,8 @@
 import { useEffect } from 'react'
 
-export const useAddInvokeTrigger = ({ info, autoClearKey, handleRunMethod }): void => {
+import { EVENT_NAMES, EVENT_STATUS } from 'providers/EmitterProvider/constants'
+
+export const useAddInvokeTrigger = ({ info, autoClearKey, handleRunMethod, emitToEvent }): void => {
   const { childrenElements } = info
 
   useEffect(() => {
@@ -10,6 +12,7 @@ export const useAddInvokeTrigger = ({ info, autoClearKey, handleRunMethod }): vo
 
     if (invokeButtons) {
       invokeButtons.forEach(({ element }) => {
+        emitToEvent(EVENT_NAMES.contract.invokeTrigger, { element, step: 'Add invoke trigger to elements.', status: EVENT_STATUS.resolved })
         element.removeEventListener('click', onRunMethod)
         element.addEventListener('click', onRunMethod)
       })

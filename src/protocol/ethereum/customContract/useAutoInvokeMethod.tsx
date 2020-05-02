@@ -1,5 +1,7 @@
 import { useEffect } from 'react'
 
+import { EVENT_NAMES, EVENT_STATUS } from 'providers/EmitterProvider/constants'
+
 export const useAutoInvokeMethod = ({
   info,
   autoInvokeKey,
@@ -12,6 +14,7 @@ export const useAutoInvokeMethod = ({
   POLLING_INTERVAL,
   writeAddress,
   setAutoInterval,
+  emitToEvent,
 }): void => {
 
   useEffect(() => {
@@ -20,8 +23,13 @@ export const useAutoInvokeMethod = ({
       const autoClearValue = autoClearKey?.value || false
 
       if (autoInvokeValue === 'true' && !isTransaction) {
-        const intervalId = setInterval(() => handleRunMethod(null, autoClearValue, true), POLLING_INTERVAL)
+        const intervalId = setInterval(() => {
+          emitToEvent(EVENT_NAMES.contract.invokeTrigger, { value: null, step: 'Auto invoke transtacion method.', status: EVENT_STATUS.resolved })
+          handleRunMethod(null, autoClearValue, true)
+        }, POLLING_INTERVAL)
+
         setAutoInterval(intervalId)
+
         return (): void => clearInterval(intervalId)
       }
     }

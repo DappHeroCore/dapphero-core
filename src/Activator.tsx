@@ -68,6 +68,9 @@ export const Activator = ({ configuration, retriggerEngine, domElements, setConf
         highlightDomElements(dappHero.highlightEnabled, domElements)
       },
       listenToContractOutputChange: (cb): void => listenToEvent(EVENT_NAMES.contract.outputUpdated, cb),
+      listenToContractAutoInvokeChange: (cb): void => listenToEvent(EVENT_NAMES.contract.autoInvoke, cb),
+      listenToTransactionStatusChange: (cb): void => listenToEvent(EVENT_NAMES.contract.statusChange, cb),
+      listenToContractInvokeTriggerChange: (cb): void => listenToEvent(EVENT_NAMES.contract.invokeTrigger, cb),
     }
 
     const event = new CustomEvent('dappHeroConfigLoaded', { detail: dappHero })

@@ -8,6 +8,7 @@ import * as utils from 'utils'
 import * as consts from 'consts'
 import * as contexts from 'contexts'
 import { EmitterContext } from 'providers/EmitterProvider/context'
+import { EVENT_NAMES, EVENT_STATUS } from 'providers/EmitterProvider/constants'
 
 import { useAddInvokeTrigger } from './useAddInvokeTrigger'
 import { useAutoInvokeMethod } from './useAutoInvokeMethod'
@@ -52,7 +53,7 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
   const [ state, dispatch ] = useReducer(stateReducer, {})
   if (!(state.isPolling || !state.msg)) {
     console.log('State Change: (omitting polling)', state)
-  };
+  }
 
   const {
     childrenElements,
@@ -86,20 +87,22 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
   useEffect(() => {
     if (autoInterval && state.error) {
       clearInterval(autoInterval)
+      emitToEvent(EVENT_NAMES.contract.statusChange, { value: state.error, step: 'Auto invoke method', status: EVENT_STATUS.rejected })
     }
   }, [ autoInterval, state.error ])
 
   useEffect(() => {
-    const { msg, error, info } = state
+    const { msg, error, info: stateInfo } = state
+
     if (error) {
       logger.error(msg, error)
       addToast(msg, { appearance: 'error', autoDismiss: true, autoDismissTimeout: consts.global.REACT_TOAST_AUTODISMISS_INTERVAL })
     }
-    if (info) {
-      logger.info(msg, info)
+
+    if (stateInfo) {
+      logger.info(msg, stateInfo)
       addToast(msg, { appearance: 'info', autoDismiss: true, autoDismissTimeout: consts.global.REACT_TOAST_AUTODISMISS_INTERVAL })
     }
-
   }, [ state.error ])
 
   // Helpers - Get parameters values
@@ -180,7 +183,9 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
     // Return early if the read and write instances aren't ready
     // if (!readEnabled && !writeEnabled) return null
 
+    emitToEvent(EVENT_NAMES.contract.statusChange, { value: null, step: 'Getting and parsing parameters.', status: EVENT_STATUS.pending })
     const { parametersValues } = getParametersFromInputValues()
+    emitToEvent(EVENT_NAMES.contract.statusChange, { value: parametersValues, step: 'Getting and parsing parameters.', status: EVENT_STATUS.resolved })
 
     if (hasInputs) {
       const isParametersFilled = Boolean(parametersValues.filter(Boolean).join(''))
@@ -205,6 +210,8 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
       }
 
       if (writeEnabled && isTransaction) {
+        emitToEvent(EVENT_NAMES.contract.statusChange, { value: null, step: 'Triggering write transaction.', status: EVENT_STATUS.pending })
+
         const methodHash = await sendTx({
           writeContract,
           provider,
@@ -215,9 +222,15 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
           dispatch,
         })
         setResult(methodHash)
+
+        emitToEvent(EVENT_NAMES.contract.statusChange, { value: methodHash, step: 'Triggering write transaction.', status: EVENT_STATUS.pending })
       } else if (readEnabled && !isTransaction && !state.error ) {
+        emitToEvent(EVENT_NAMES.contract.statusChange, { value: null, step: 'Triggering read transaction.', status: EVENT_STATUS.pending })
+
         const methodResult = await callMethod({ readContract, methodName, methodParams, dispatch, isPolling })
         setResult(methodResult)
+
+        emitToEvent(EVENT_NAMES.contract.statusChange, { value: methodResult, step: 'Triggering read transaction.', status: EVENT_STATUS.resolved })
       }
 
       const [ input ] = childrenElements.filter(({ id }) => id.includes('input'))
@@ -228,8 +241,8 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
       if (shouldClearAllInputValues) {
         input.element.forEach(({ element }) => Object.assign(element, { value: '' }))
       }
-
     } catch (err) {
+      emitToEvent(EVENT_NAMES.contract.statusChange, { value: err, step: 'Triggering read/write transaction.', status: EVENT_STATUS.rejected })
       dispatch({
         type: ACTION_TYPES.confirmed,
         status: {
@@ -243,7 +256,7 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
   }
 
   // Add trigger to invoke buttons
-  useAddInvokeTrigger({ info, autoClearKey, handleRunMethod })
+  useAddInvokeTrigger({ info, autoClearKey, handleRunMethod, emitToEvent })
 
   // Auto invoke method
   useAutoInvokeMethod({
@@ -258,6 +271,7 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
     POLLING_INTERVAL,
     writeAddress: address,
     setAutoInterval,
+    emitToEvent,
   })
 
   // Display new results in the UI
