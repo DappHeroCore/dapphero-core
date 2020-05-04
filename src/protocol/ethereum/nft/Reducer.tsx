@@ -128,45 +128,7 @@ export const Reducer = ({ info, element }) => {
     if (nextButton) nextButton.addEventListener('click', handleNextButton)
   }, [])
 
-  // Replace span elements having $THIS_TokenID as a text content to their respective token id
-  useEffect(() => {
-    if (!info) return
-
-    const spanTokenIdsPaths = document.evaluate(
-      "//span[contains(., '$THIS_TokenID')]",
-      info.element,
-      null,
-      XPathResult.ANY_TYPE,
-      null,
-    )
-    const spanTokenIdsElement = spanTokenIdsPaths.iterateNext()
-
-    if (!spanTokenIdsElement) return
-    Object.assign(spanTokenIdsElement, { textContent: info.id })
-  }, [ info ])
-
-  // Replace iframe elements having $THIS_TokenID as a text content to their respective token id
-  useEffect(() => {
-    if (!info) return
-
-    const iframeTokenIdsPaths = document.evaluate(
-      "//iframe[contains(@src, '$THIS_TokenID')]",
-      info.element,
-      null,
-      XPathResult.ANY_TYPE,
-      null,
-    )
-    const iframeTokenIdsElement = iframeTokenIdsPaths.iterateNext()
-
-    if (!iframeTokenIdsElement) return
-
-    // TODO: [DEV-255] Does 'getAttribute' exist on type node? In NFT reducer
-    const iframeSrc = (iframeTokenIdsElement as any).getAttribute('src')
-    const updatedSrc = iframeSrc.replace('$THIS_TokenID', info.id);
-    (iframeTokenIdsElement as any).setAttribute('src', updatedSrc)
-  }, [ info ])
-
-  // Replace iframe elements having $THIS_TokenID as a text content to their respective token id
+  // Replace iframe elements having $THIS_ContractAddress as a text content to their respective contract address
   useEffect(() => {
     if (!info) return
 
