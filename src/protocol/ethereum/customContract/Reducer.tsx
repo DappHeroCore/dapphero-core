@@ -220,10 +220,11 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
           value,
           notify: notify(blockNativeApiKey, chainId),
           dispatch,
+          emitToEvent,
         })
         setResult(methodHash)
 
-        emitToEvent(EVENT_NAMES.contract.statusChange, { value: methodHash, step: 'Triggering write transaction.', status: EVENT_STATUS.pending })
+        emitToEvent(EVENT_NAMES.contract.statusChange, { value: methodHash, step: 'Triggering write transaction.', status: EVENT_STATUS.resolved })
       } else if (readEnabled && !isTransaction && !state.error ) {
         emitToEvent(EVENT_NAMES.contract.statusChange, { value: null, step: 'Triggering read transaction.', status: EVENT_STATUS.pending })
 

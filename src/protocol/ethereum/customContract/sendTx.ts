@@ -1,7 +1,8 @@
 import { ethers } from 'ethers'
+import { EVENT_NAMES, EVENT_STATUS } from 'providers/EmitterProvider/constants'
 import { ACTION_TYPES } from './stateMachine'
 
-export const sendTx = async ({ writeContract, dispatch, provider, methodName, methodParams, value, notify }): Promise<void> => {
+export const sendTx = async ({ writeContract, dispatch, provider, methodName, methodParams, value, notify, emitToEvent }): Promise<void> => {
 
   const methodDetails = { methodName, methodParams, contractAddress: writeContract.address, contractNetwork: writeContract.provider._network.name }
   const method = writeContract.functions[methodName]
@@ -100,7 +101,17 @@ export const sendTx = async ({ writeContract, dispatch, provider, methodName, me
     })
 
     // BlockNative Toaster to track tx
-    notify.hash(methodResult.hash)
+    const { emitter } = notify.hash(methodResult.hash)
+
+    emitter.on('txRequest', () => emitToEvent(EVENT_NAMES.contract.statusChange, { value: null, step: 'Waiting approval from the user', status: EVENT_STATUS.pending }) )
+    emitter.on('txSendFail', () => emitToEvent(EVENT_NAMES.contract.statusChange, { value: null, step: 'Waiting approval from the user', status: EVENT_STATUS.rejected }) )
+
+    emitter.on('txSent', () => {
+      emitToEvent(EVENT_NAMES.contract.statusChange, { value: null, step: 'Waiting approval from the user', status: EVENT_STATUS.resolved })
+      emitToEvent(EVENT_NAMES.contract.statusChange, { value: null, step: 'Transaction has been sent to the network', status: EVENT_STATUS.pending })
+    })
+    emitter.on('txError', () => emitToEvent(EVENT_NAMES.contract.statusChange, { value: null, step: 'Transaction has been sent to the network', status: EVENT_STATUS.rejected }) )
+    emitter.on('txConfirmed', () => emitToEvent(EVENT_NAMES.contract.statusChange, { value: null, step: 'Transaction has been sent to the network', status: EVENT_STATUS.resolved }) )
 
     // Set Result on State
     return methodResult.hash
