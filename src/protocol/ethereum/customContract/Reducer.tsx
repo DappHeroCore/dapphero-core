@@ -51,9 +51,9 @@ const getAbiMethodInputs = (abi, methodName, dispatch): Record<string, any> => {
 export const Reducer = ({ info, readContract, writeContract, readEnabled, readChainId, writeEnabled }) => {
 
   const [ state, dispatch ] = useReducer(stateReducer, {})
-  if (!(state.isPolling || !state.msg)) {
-    console.log('State Change: (omitting polling)', state)
-  }
+  // if (!(state.isPolling || !state.msg)) {
+  //   console.log('State Change: (omitting polling)', state)
+  // }
 
   const {
     childrenElements,
