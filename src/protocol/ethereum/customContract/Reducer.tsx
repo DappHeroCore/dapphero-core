@@ -63,7 +63,6 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
   } = info
 
   // TODO Check for Overloaded Functions
-  const autoClearKey = properties.find(({ key }) => key === 'autoClear')
   const autoInvokeKey = properties.find(({ key }) => key === 'autoInvoke')
   const methodNameKey = properties.find(({ key }) => key === 'methodName')
   const ethValueKey = properties.find((property) => property.key === 'ethValue')
@@ -172,7 +171,7 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
   }, [])
 
   // -> Handlers
-  const handleRunMethod = async (event = null, shouldClearInput = false, isPolling = false): Promise<void> => {
+  const handleRunMethod = async (event = null, isPolling = false): Promise<void> => {
     if (event) {
       try {
         event.preventDefault()
@@ -234,13 +233,15 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
         emitToEvent(EVENT_NAMES.contract.statusChange, { value: methodResult, step: 'Triggering read transaction.', status: EVENT_STATUS.resolved })
       }
 
-      const [ input ] = childrenElements.filter(({ id }) => id.includes('input'))
+      const [ inputs ] = childrenElements.filter(({ id }) => id.includes('input'))
       const { value: autoInvokeValue } = autoInvokeKey || { value: false }
       const shouldAutoInvoke = autoInvokeValue === 'true'
-      const shouldClearAllInputValues = input?.element && !shouldAutoInvoke && shouldClearInput
+      const shouldClearAllInputValues = inputs?.element && !shouldAutoInvoke
 
       if (shouldClearAllInputValues) {
-        input.element.forEach(({ element }) => Object.assign(element, { value: '' }))
+        inputs.element.forEach(({ element, shouldAutoClear }) => {
+          if (shouldAutoClear) Object.assign(element, { value: '' })
+        })
       }
     } catch (err) {
       emitToEvent(EVENT_NAMES.contract.statusChange, { value: err, step: 'Triggering read/write transaction.', status: EVENT_STATUS.rejected })
@@ -257,13 +258,12 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
   }
 
   // Add trigger to invoke buttons
-  useAddInvokeTrigger({ info, autoClearKey, handleRunMethod, emitToEvent })
+  useAddInvokeTrigger({ info, handleRunMethod, emitToEvent })
 
   // Auto invoke method
   useAutoInvokeMethod({
     info,
     autoInvokeKey,
-    autoClearKey,
     isTransaction,
     handleRunMethod,
     readEnabled,
