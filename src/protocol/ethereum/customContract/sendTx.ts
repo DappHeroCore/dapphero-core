@@ -1,7 +1,8 @@
 import { ethers } from 'ethers'
+import { EVENT_NAMES, EVENT_STATUS } from 'providers/EmitterProvider/constants'
 import { ACTION_TYPES } from './stateMachine'
 
-export const sendTx = async ({ writeContract, dispatch, provider, methodName, methodParams, value, notify }): Promise<void> => {
+export const sendTx = async ({ writeContract, dispatch, provider, methodName, methodParams, value, notify, emitToEvent }): Promise<void> => {
 
   const methodDetails = { methodName, methodParams, contractAddress: writeContract.address, contractNetwork: writeContract.provider._network.name }
   const method = writeContract.functions[methodName]
@@ -99,8 +100,14 @@ export const sendTx = async ({ writeContract, dispatch, provider, methodName, me
       })
     })
 
-    // BlockNative Toaster to track tx
-    notify.hash(methodResult.hash)
+    // // BlockNative Toaster to track tx
+    const { emitter } = notify.hash(methodResult.hash)
+
+    emitter.on('txSent', (data) => {
+      emitToEvent(EVENT_NAMES.contract.statusChange, { value: data, step: 'Transaction has been sent to the network', status: EVENT_STATUS.pending })
+    })
+    emitter.on('txFailed', (data) => emitToEvent(EVENT_NAMES.contract.statusChange, { value: data, step: 'Transaction failed', status: EVENT_STATUS.rejected }) )
+    emitter.on('txConfirmed', (data) => emitToEvent(EVENT_NAMES.contract.statusChange, { value: data, step: 'Transaction has been sent to the network', status: EVENT_STATUS.resolved }) )
 
     // Set Result on State
     return methodResult.hash
