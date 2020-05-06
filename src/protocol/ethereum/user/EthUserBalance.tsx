@@ -49,7 +49,7 @@ export const EthUserBalance: FunctionComponent<EthUserBalanceProps> = ({ element
       }
     }
 
-    if (address && isEnabled) { getBalance() } else { element.innerHTML = memoizedValue }
+    if (address && isEnabled && balance) { getBalance() } else { element.innerHTML = memoizedValue }
   }, [ address, isEnabled, balance ])
 
   return null
