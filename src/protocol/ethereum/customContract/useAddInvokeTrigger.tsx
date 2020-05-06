@@ -2,13 +2,12 @@ import { useEffect } from 'react'
 
 import { EVENT_NAMES, EVENT_STATUS } from 'providers/EmitterProvider/constants'
 
-export const useAddInvokeTrigger = ({ info, autoClearKey, handleRunMethod, emitToEvent }): void => {
+export const useAddInvokeTrigger = ({ info, handleRunMethod, emitToEvent }): void => {
   const { childrenElements } = info
 
   useEffect(() => {
-    const autoClearValue = autoClearKey?.value || false
     const invokeButtons = childrenElements.filter(({ id }) => id.includes('invoke'))
-    const onRunMethod = (event): Promise<void> => handleRunMethod(event, autoClearValue)
+    const onRunMethod = (event): Promise<void> => handleRunMethod(event)
 
     if (invokeButtons) {
       invokeButtons.forEach(({ element }) => {
