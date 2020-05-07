@@ -13,6 +13,8 @@ import { FeatureReducer } from './protocol/ethereum/featureReducer'
 import { highlightDomElements } from './utils/highlightDomElements'
 import { logger } from './logger/customLogger'
 
+import { openSeaApi as nftApi } from './protocol/ethereum/nft/api'
+
 // Log tests and Startup Logs
 loggerTest()
 
@@ -58,6 +60,7 @@ export const Activator = ({ configuration, retriggerEngine, domElements, setConf
       highlightEnabled: false,
       domElements,
       configuration,
+      collectibles: { nftApi },
       contracts: {},
       addClientSideContract,
       retriggerEngine,
