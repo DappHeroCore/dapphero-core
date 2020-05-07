@@ -72,12 +72,11 @@ export const Activator = ({ configuration, retriggerEngine, domElements, setConf
       listenToTransactionStatusChange: (cb): void => listenToEvent(EVENT_NAMES.contract.statusChange, cb),
       listenToContractInvokeTriggerChange: (cb): void => listenToEvent(EVENT_NAMES.contract.invokeTrigger, cb),
     }
-
-    const event = new CustomEvent('dappHeroConfigLoaded', { detail: dappHero })
-
     Object.assign(window, { dappHero })
+
     // Dispatch the event.
-    window.dispatchEvent(event)
+    const event = new CustomEvent('dappHeroConfigLoaded', { detail: dappHero })
+    document.dispatchEvent(event)
   }, [ AppReady ])
 
   if (!AppReady || !domElementsFilteredForContracts) return null
