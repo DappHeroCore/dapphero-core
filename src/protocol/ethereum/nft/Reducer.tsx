@@ -117,6 +117,16 @@ export const Reducer = ({ info, element }) => {
 
   // Render NFTs
   useRenderNfts({ nfts: (tokensFromOwnerAddress.nfts || tokensFromContractAddress.nfts), item, element, getAssetElements })
+  // Attach NFTS to window object
+  useEffect(() => {
+    if (window.dappHero) {
+      const key = info.properties_.tagId;
+      const value = tokensFromOwnerAddress.nfts || tokensFromContractAddress.nfts || null;
+      const tagId = { [key]: value };
+      
+    Object.assign(window.dappHero.collectibles, { tagId });
+   }
+  }, [ tokensFromContractAddress, tokensFromOwnerAddress ])
 
   // Add event listeners to prev and next buttons
   useEffect(() => {
