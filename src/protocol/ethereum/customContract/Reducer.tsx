@@ -224,23 +224,24 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
           { value: null, step: 'Triggering write transaction.', status: EVENT_STATUS.pending, methodNameKey },
         )
 
-        const methodHash = await sendTx({
-          writeContract,
-          provider,
-          methodName,
-          methodParams,
-          value,
-          notify: notify(blockNativeApiKey, chainId),
-          dispatch,
-          emitToEvent,
-          methodNameKey,
-        })
-        setResult(methodHash)
+        try {
 
-        emitToEvent(
-          EVENT_NAMES.contract.statusChange,
-          { value: methodHash, step: 'Triggering write transaction.', status: EVENT_STATUS.resolved, methodNameKey },
-        )
+          const methodHash = await sendTx({
+            writeContract,
+            provider,
+            methodName,
+            methodParams,
+            value,
+            notify: notify(blockNativeApiKey, chainId),
+            dispatch,
+            emitToEvent,
+            methodNameKey,
+          })
+          setResult(methodHash)
+        } catch (error) {
+          // Do we need to do anything with this error? Maybe no....
+        }
+
       } else if (readEnabled && !isTransaction && !state.error ) {
         emitToEvent(
           EVENT_NAMES.contract.statusChange,

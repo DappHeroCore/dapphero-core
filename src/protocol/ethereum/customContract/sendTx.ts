@@ -111,7 +111,7 @@ export const sendTx = async ({ writeContract, dispatch, provider, methodName, me
     })
     emitter.on('txFailed', (data) => emitToEvent(
       EVENT_NAMES.contract.statusChange,
-      { value: data, step: 'Transaction failed', status: EVENT_STATUS.rejected, methodNameKey },
+      { value: data, step: 'Transaction sent to network but failed to be mined.', status: EVENT_STATUS.rejected, methodNameKey },
     ) )
     emitter.on('txConfirmed', (data) => emitToEvent(
       EVENT_NAMES.contract.statusChange,
@@ -122,6 +122,10 @@ export const sendTx = async ({ writeContract, dispatch, provider, methodName, me
     return methodResult.hash
 
   } catch (error) {
+    emitToEvent(
+      EVENT_NAMES.contract.statusChange,
+      { value: error, step: 'Transaction failed to be broadcast/executed', status: EVENT_STATUS.rejected, methodNameKey },
+    )
     dispatch({
       type: ACTION_TYPES.txError,
       status: {
