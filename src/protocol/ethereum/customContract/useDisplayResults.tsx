@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import * as utils from 'utils'
 import { EVENT_NAMES } from 'providers/EmitterProvider/constants'
 
-export const useDisplayResults = ({ childrenElements, result, emitToEvent }): void => {
+export const useDisplayResults = ({ childrenElements, result, emitToEvent, methodNameKey }): void => {
   useEffect(() => {
     if (result) {
       const parsedValue = result
@@ -34,10 +34,10 @@ export const useDisplayResults = ({ childrenElements, result, emitToEvent }): vo
               Object.assign(element, { textContent: convertedValue })
             }
 
-            emitToEvent(EVENT_NAMES.contract.outputUpdated, { value: convertedValue, element })
+            emitToEvent(EVENT_NAMES.contract.outputUpdated, { value: convertedValue, element, methodNameKey })
           } else {
             Object.assign(element, { textContent: parsedValue })
-            emitToEvent(EVENT_NAMES.contract.outputUpdated, { value: parsedValue, element })
+            emitToEvent(EVENT_NAMES.contract.outputUpdated, { value: parsedValue, element, methodNameKey })
           }
 
         })

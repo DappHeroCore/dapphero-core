@@ -2,7 +2,7 @@ import { ethers } from 'ethers'
 import { EVENT_NAMES, EVENT_STATUS } from 'providers/EmitterProvider/constants'
 import { ACTION_TYPES } from './stateMachine'
 
-export const sendTx = async ({ writeContract, dispatch, provider, methodName, methodParams, value, notify, emitToEvent }): Promise<void> => {
+export const sendTx = async ({ writeContract, dispatch, provider, methodName, methodParams, value, notify, emitToEvent, methodNameKey }): Promise<void> => {
 
   const methodDetails = { methodName, methodParams, contractAddress: writeContract.address, contractNetwork: writeContract.provider._network.name }
   const method = writeContract.functions[methodName]
@@ -104,15 +104,28 @@ export const sendTx = async ({ writeContract, dispatch, provider, methodName, me
     const { emitter } = notify.hash(methodResult.hash)
 
     emitter.on('txSent', (data) => {
-      emitToEvent(EVENT_NAMES.contract.statusChange, { value: data, step: 'Transaction has been sent to the network', status: EVENT_STATUS.pending })
+      emitToEvent(
+        EVENT_NAMES.contract.statusChange,
+        { value: data, step: 'Transaction has been sent to the network', status: EVENT_STATUS.pending, methodNameKey },
+      )
     })
-    emitter.on('txFailed', (data) => emitToEvent(EVENT_NAMES.contract.statusChange, { value: data, step: 'Transaction failed', status: EVENT_STATUS.rejected }) )
-    emitter.on('txConfirmed', (data) => emitToEvent(EVENT_NAMES.contract.statusChange, { value: data, step: 'Transaction has been sent to the network', status: EVENT_STATUS.resolved }) )
+    emitter.on('txFailed', (data) => emitToEvent(
+      EVENT_NAMES.contract.statusChange,
+      { value: data, step: 'Transaction sent to network but failed to be mined.', status: EVENT_STATUS.rejected, methodNameKey },
+    ) )
+    emitter.on('txConfirmed', (data) => emitToEvent(
+      EVENT_NAMES.contract.statusChange,
+      { value: data, step: 'Transaction has been sent to the network', status: EVENT_STATUS.resolved, methodNameKey },
+    ) )
 
     // Set Result on State
     return methodResult.hash
 
   } catch (error) {
+    emitToEvent(
+      EVENT_NAMES.contract.statusChange,
+      { value: error, step: 'Transaction failed to be broadcast/executed', status: EVENT_STATUS.rejected, methodNameKey },
+    )
     dispatch({
       type: ACTION_TYPES.txError,
       status: {
