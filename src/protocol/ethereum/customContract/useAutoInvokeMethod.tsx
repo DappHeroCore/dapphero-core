@@ -14,6 +14,7 @@ export const useAutoInvokeMethod = ({
   writeAddress,
   setAutoInterval,
   emitToEvent,
+  methodNameKey,
 }): void => {
 
   useEffect(() => {
@@ -22,7 +23,10 @@ export const useAutoInvokeMethod = ({
 
       if (autoInvokeValue === 'true' && !isTransaction) {
         const intervalId = setInterval(() => {
-          emitToEvent(EVENT_NAMES.contract.invokeTrigger, { value: null, step: 'Auto invoke transtacion method.', status: EVENT_STATUS.resolved })
+          emitToEvent(
+            EVENT_NAMES.contract.invokeTrigger,
+            { value: null, step: 'Auto invoke transtacion method.', status: EVENT_STATUS.resolved, methodNameKey },
+          )
           handleRunMethod(null, true)
         }, POLLING_INTERVAL)
 

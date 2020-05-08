@@ -86,7 +86,10 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
   useEffect(() => {
     if (autoInterval && state.error) {
       clearInterval(autoInterval)
-      emitToEvent(EVENT_NAMES.contract.statusChange, { value: state.error, step: 'Auto invoke method', status: EVENT_STATUS.rejected })
+      emitToEvent(
+        EVENT_NAMES.contract.statusChange,
+        { value: state.error, step: 'Auto invoke method', status: EVENT_STATUS.rejected, methodNameKey },
+      )
     }
   }, [ autoInterval, state.error ])
 
@@ -131,6 +134,7 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
             error: true,
             fetching: false,
             msg: `There seems to be an error with your inputs? Argument Name: ${argumentName}`,
+            methodNameKey,
           },
         })
       }
@@ -182,9 +186,15 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
     // Return early if the read and write instances aren't ready
     // if (!readEnabled && !writeEnabled) return null
 
-    emitToEvent(EVENT_NAMES.contract.statusChange, { value: null, step: 'Getting and parsing parameters.', status: EVENT_STATUS.pending })
+    emitToEvent(
+      EVENT_NAMES.contract.statusChange,
+      { value: null, step: 'Getting and parsing parameters.', status: EVENT_STATUS.pending, methodNameKey },
+    )
     const { parametersValues } = getParametersFromInputValues()
-    emitToEvent(EVENT_NAMES.contract.statusChange, { value: parametersValues, step: 'Getting and parsing parameters.', status: EVENT_STATUS.resolved })
+    emitToEvent(
+      EVENT_NAMES.contract.statusChange,
+      { value: parametersValues, step: 'Getting and parsing parameters.', status: EVENT_STATUS.resolved, methodNameKey },
+    )
 
     if (hasInputs) {
       const isParametersFilled = Boolean(parametersValues.filter(Boolean).join(''))
@@ -209,7 +219,10 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
       }
 
       if (writeEnabled && isTransaction) {
-        emitToEvent(EVENT_NAMES.contract.statusChange, { value: null, step: 'Triggering write transaction.', status: EVENT_STATUS.pending })
+        emitToEvent(
+          EVENT_NAMES.contract.statusChange,
+          { value: null, step: 'Triggering write transaction.', status: EVENT_STATUS.pending, methodNameKey },
+        )
 
         const methodHash = await sendTx({
           writeContract,
@@ -220,17 +233,27 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
           notify: notify(blockNativeApiKey, chainId),
           dispatch,
           emitToEvent,
+          methodNameKey,
         })
         setResult(methodHash)
 
-        emitToEvent(EVENT_NAMES.contract.statusChange, { value: methodHash, step: 'Triggering write transaction.', status: EVENT_STATUS.resolved })
+        emitToEvent(
+          EVENT_NAMES.contract.statusChange,
+          { value: methodHash, step: 'Triggering write transaction.', status: EVENT_STATUS.resolved, methodNameKey },
+        )
       } else if (readEnabled && !isTransaction && !state.error ) {
-        emitToEvent(EVENT_NAMES.contract.statusChange, { value: null, step: 'Triggering read transaction.', status: EVENT_STATUS.pending })
+        emitToEvent(
+          EVENT_NAMES.contract.statusChange,
+          { value: null, step: 'Triggering read transaction.', status: EVENT_STATUS.pending, methodNameKey },
+        )
 
         const methodResult = await callMethod({ readContract, methodName, methodParams, dispatch, isPolling })
         setResult(methodResult)
 
-        emitToEvent(EVENT_NAMES.contract.statusChange, { value: methodResult, step: 'Triggering read transaction.', status: EVENT_STATUS.resolved })
+        emitToEvent(
+          EVENT_NAMES.contract.statusChange,
+          { value: methodResult, step: 'Triggering read transaction.', status: EVENT_STATUS.resolved, methodNameKey },
+        )
       }
 
       const [ inputs ] = childrenElements.filter(({ id }) => id.includes('input'))
@@ -244,7 +267,10 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
         })
       }
     } catch (err) {
-      emitToEvent(EVENT_NAMES.contract.statusChange, { value: err, step: 'Triggering read/write transaction.', status: EVENT_STATUS.rejected })
+      emitToEvent(
+        EVENT_NAMES.contract.statusChange,
+        { value: err, step: 'Triggering read/write transaction.', status: EVENT_STATUS.rejected, methodNameKey },
+      )
       dispatch({
         type: ACTION_TYPES.confirmed,
         status: {
@@ -258,7 +284,7 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
   }
 
   // Add trigger to invoke buttons
-  useAddInvokeTrigger({ info, handleRunMethod, emitToEvent })
+  useAddInvokeTrigger({ info, handleRunMethod, emitToEvent, methodNameKey })
 
   // Auto invoke method
   useAutoInvokeMethod({
@@ -273,10 +299,11 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
     writeAddress: address,
     setAutoInterval,
     emitToEvent,
+    methodNameKey,
   })
 
   // Display new results in the UI
-  useDisplayResults({ childrenElements, result, emitToEvent })
+  useDisplayResults({ childrenElements, result, emitToEvent, methodNameKey })
 
   return null
 }
