@@ -1,17 +1,14 @@
-import React, { useContext, useEffect, useState, Fragment } from 'react'
+import React, { useContext, useEffect } from 'react'
 
 import * as consts from 'consts'
 import * as contexts from 'contexts'
 import { loggerTest } from 'logger/loggerTest'
-import { ethers } from 'ethers'
 
 import { EVENT_NAMES } from 'providers/EmitterProvider/constants'
 import { EmitterContext } from 'providers/EmitterProvider/context'
-import { EtherscanProvider } from 'ethers/providers'
 import { FeatureReducer } from './protocol/ethereum/featureReducer'
 
 import { highlightDomElements } from './utils/highlightDomElements'
-import { logger } from './logger/customLogger'
 
 import { openSeaApi as nftApi } from './protocol/ethereum/nft/api'
 

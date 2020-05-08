@@ -16,16 +16,23 @@ export const ProvidersWrapper: React.FC = () => {
   const [ domElements, setDomElements ] = useState(null)
   const [ timestamp, setTimestamp ] = useState(+new Date())
   const [ supportedNetworks, setSupportedNetworks ] = useState([])
+  const [ paused, setPaused ] = useState(false)
 
   const retriggerEngine = (): void => setTimestamp(+new Date())
   const ethereum = useWeb3Provider(consts.global.POLLING_INTERVAL) // This sets refresh speed of the whole app
 
-  // load contracts effects
+  // load contracts effects only if not paused
   useEffect(() => {
-    (async () => {
-      const newConfig = { contracts: await api.dappHero.getContractsByProjectKey(consts.global.apiKey) }
-      setConfig(newConfig)
-    })()
+    const getConfig = async () => {
+      const res = await api.dappHero.getContractsByProjectKey(consts.global.apiKey)
+      const newConfig = { contracts: res.formattedOutput }
+      const { paused } = res
+      // eslint-disable-next-line no-unused-expressions
+      paused ? console.log('This DappHero project has been Paused (check Admin interface)') : setConfig(newConfig)
+      setPaused(paused)
+    }
+
+    getConfig()
   }, [])
 
   // Figure out the networks the dapp supports by contracts
