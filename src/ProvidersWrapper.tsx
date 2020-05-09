@@ -16,7 +16,7 @@ export const ProvidersWrapper: React.FC = () => {
   const [ domElements, setDomElements ] = useState(null)
   const [ timestamp, setTimestamp ] = useState(+new Date())
   const [ supportedNetworks, setSupportedNetworks ] = useState([])
-  const [ paused, setPaused ] = useState(false)
+  const [ isPaused, setPaused ] = useState(false)
 
   const retriggerEngine = (): void => setTimestamp(+new Date())
   const ethereum = useWeb3Provider(consts.global.POLLING_INTERVAL) // This sets refresh speed of the whole app
@@ -25,8 +25,8 @@ export const ProvidersWrapper: React.FC = () => {
   useEffect(() => {
     const getConfig = async () => {
       const res = await api.dappHero.getContractsByProjectKey(consts.global.apiKey)
-      const newConfig = { contracts: res.formattedOutput }
-      const { paused } = res
+      const { formattedOutput, paused } = res
+      const newConfig = { contracts: formattedOutput }
       // eslint-disable-next-line no-unused-expressions
       paused ? console.log('This DappHero project has been Paused (check Admin interface)') : setConfig(newConfig)
       setPaused(paused)
