@@ -5,6 +5,9 @@ import * as consts from 'consts'
 import { ethers } from 'ethers'
 import { useWeb3Provider } from 'hooks'
 
+import { EmitterContext } from 'providers/EmitterProvider/context'
+import { EVENT_NAMES, EVENT_STATUS } from 'providers/EmitterProvider/constants'
+
 import { Reducer as CustomContractReducer } from './Reducer'
 
 type ContractMethod = {
@@ -29,6 +32,8 @@ export const Router = ({ listOfContractMethods, contract }: RouterProps) => {
   const [ readContract, setReadContract ] = useState(null)
   const [ writeContract, setWriteContract ] = useState(null)
 
+  const { actions: { emitToEvent } } = useContext(EmitterContext)
+
   // Set this on the window object
   useEffect(() => {
 
@@ -50,6 +55,10 @@ export const Router = ({ listOfContractMethods, contract }: RouterProps) => {
   useEffect(() => {
     const makeReadContract = (): void => {
       const readContractInstance = new ethers.Contract(contractAddress, contractAbi, readOnlyProvider)
+      readContractInstance.on('*', (data) => emitToEvent(
+        EVENT_NAMES.contract.contractEvent,
+        { value: data, step: 'Contract has emitted a Contract Event', status: EVENT_STATUS.resolved, methodNameKey: null },
+      ))
       setReadContract(readContractInstance)
     }
 

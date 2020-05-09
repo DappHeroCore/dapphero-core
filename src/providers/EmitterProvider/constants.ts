@@ -4,6 +4,7 @@ export const EVENT_NAMES = {
     outputUpdated: 'contract:outputUpdated',
     autoInvoke: 'contract:autoInvokeChange',
     invokeTrigger: 'contract:invokeTriggerChange',
+    contractEvent: 'contract:contractEvent',
   },
 }
 
