@@ -59,6 +59,13 @@
         data-dh-property-asset-item="true"
         class="asset"
       >
+      <form action="/action_page.php">
+        <label for="$THIS_ContractAddress">First name:</label>
+        <input type="text" id="fname" name="fname" value="$THIS_TokenID"><br><br>
+        <label for="lname">Last name:</label>
+        <input type="text" id="$THIS_TokenID" name="$THIS_ContractAddress"><br><br>
+        <input type="submit" value="Submit">
+      </form>
         <a
           href="./singleNFT.html?assetTokenId=$THIS_TokenID&assetContractAddress=$THIS_ContractAddress"
           ><img data-dh-property-asset-json-path="image_url" class="token"
@@ -74,7 +81,7 @@
     
     <!-- Imporant: This demo is using a pre-release script, so please change the DappHero tag: "main.js" to the nightly build "main-05-09-2020.js" for the latest features -->
     <script
-      src="https://package.dapphero.io/main-05-09-2020.js"
+      src=""
       id="dh-apiKey"
       data-api="1589032410701x116022831009497090"
     ></script>

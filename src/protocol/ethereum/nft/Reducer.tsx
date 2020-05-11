@@ -120,12 +120,12 @@ export const Reducer = ({ info, element }) => {
   // Attach NFTS to window object
   useEffect(() => {
     if (window.dappHero) {
-      const key = info.properties_.tagId;
-      const value = tokensFromOwnerAddress.nfts || tokensFromContractAddress.nfts || null;
-      const tagId = { [key]: value };
-      
-    Object.assign(window.dappHero.collectibles, { tagId });
-   }
+      const key = info.properties_.tagId
+      const value = tokensFromOwnerAddress.nfts || tokensFromContractAddress.nfts || null
+      const tagId = { [key]: value }
+
+      Object.assign(window.dappHero.collectibles, { tagId })
+    }
   }, [ tokensFromContractAddress, tokensFromOwnerAddress ])
 
   // Add event listeners to prev and next buttons
@@ -156,49 +156,6 @@ export const Reducer = ({ info, element }) => {
     const iframeSrc = (iframeContractAddressElement as any).getAttribute('src')
     const updatedSrc = iframeSrc.replace('$THIS_ContractAddress', assetOwnerAddress);
     (iframeContractAddressElement as any).setAttribute('src', updatedSrc)
-  }, [ info ])
-
-  // Replace label elements in their "for" attribute having $THIS_ContractAddress value
-  useEffect(() => {
-    if (!info) return
-
-    const labels = info.element.querySelectorAll('label[for="$THIS_ContractAddress"')
-
-    labels.forEach((label) => {
-      const labelSrc = label.getAttribute('for')
-      const updatedSrc = labelSrc.replace('$THIS_ContractAddress', assetOwnerAddress)
-
-      label.setAttribute('src', updatedSrc)
-    })
-  }, [ info ])
-
-  // Replace input elements in their "for" attribute having $THIS_ContractAddress value
-  useEffect(() => {
-    if (!info) return
-
-    const inputsIds = info.element.querySelectorAll('input[id="$THIS_ContractAddress"')
-    inputsIds.forEach((input) => {
-      const inputSrc = input.getAttribute('id')
-      const updatedSrc = inputSrc.replace('$THIS_ContractAddress', assetOwnerAddress)
-
-      input.setAttribute('id', updatedSrc)
-    })
-
-    const inputsValuesAddress = info.element.querySelectorAll('input[value="$THIS_ContractAddress"')
-    inputsValuesAddress.forEach((input) => {
-      const inputSrc = input.getAttribute('value')
-      const updatedSrc = inputSrc.replace('$THIS_ContractAddress', assetOwnerAddress)
-
-      input.setAttribute('value', updatedSrc)
-    })
-
-    const inputsValuesTokens = info.element.querySelectorAll('input[value="$THIS_TokenID"')
-    inputsValuesTokens.forEach((input) => {
-      const inputSrc = input.getAttribute('value')
-      const updatedSrc = inputSrc.replace('$THIS_TokenID', info.id)
-
-      input.setAttribute('value', updatedSrc)
-    })
   }, [ info ])
 
   return null

@@ -1,48 +1,6 @@
-import { useEffect } from 'react'
+import { useEffect, Children } from 'react'
 import get from 'lodash.get'
 import { ELEMENT_TYPES, TAG_TYPES, DATA_PROPERTY } from '@dapphero/dapphero-dom'
-
-// function displayTokenIdsOnAnchorLinks(element, tokenId): void {
-//   const anchors = Array.from(element.querySelectorAll('a'))
-//   anchors.forEach((anchor: Element) => {
-//     const href = anchor.getAttribute('href')
-//     if (href.includes('$THIS_TokenID')) {
-//       anchor.setAttribute('href', href.replace('$THIS_TokenID', tokenId))
-//     }
-//   })
-// }
-
-// function displayTokenIdsOnSpanText(element, tokenId): void {
-//   const spanTokenIdsPaths = document.evaluate(
-//     "//span[contains(., '$THIS_TokenID')]",
-//     element,
-//     null,
-//     XPathResult.ANY_TYPE,
-//     null,
-//   )
-//   const spanTokenIdsElement = spanTokenIdsPaths.iterateNext()
-
-//   if (!spanTokenIdsElement) return
-//   Object.assign(spanTokenIdsElement, { textContent: tokenId })
-// }
-
-// function displayTokenIdsOnIframe(element, tokenId): void {
-//   const iframeTokenIdsPaths = document.evaluate(
-//     "//iframe[contains(@src, '$THIS_TokenID')]",
-//     element,
-//     null,
-//     XPathResult.ANY_TYPE,
-//     null,
-//   )
-//   const iframeTokenIdsElement = iframeTokenIdsPaths.iterateNext()
-
-//   if (!iframeTokenIdsElement) return
-
-//   // TODO: [DEV-255] Does 'getAttribute' exist on type node? In NFT reducer
-//   const iframeSrc = (iframeTokenIdsElement as any).getAttribute('src')
-//   const updatedSrc = iframeSrc.replace('$THIS_TokenID', tokenId);
-//   (iframeTokenIdsElement as any).setAttribute('src', updatedSrc)
-// }
 
 function displayValueOnAnchorLinks(element, key, value): void {
   const anchors = Array.from(element.querySelectorAll('a'))
@@ -85,13 +43,50 @@ function displayKeyValueOnIframe(element, key, value): void {
   (iframeKeyValueElement as any).setAttribute('src', updatedSrc)
 }
 
+function displayValueOnFormFor(element, key, value): void {
+  const formFORs = Array.from(element.querySelectorAll(`label[for="${key}"`))
+  formFORs.forEach((formFor: Element) => {
+    const attribute = formFor.getAttribute('for')
+    if (attribute.includes(key)) {
+      formFor.setAttribute('for', attribute.replace(key, value))
+    }
+  })
+}
+
+function displayValueOnFormInput(element, key, value, selectedAttribute): void {
+  const formValues = Array.from(element.querySelectorAll(`input[${selectedAttribute}="${key}"`))
+  formValues.forEach((formValue: Element) => {
+    const attribute = formValue.getAttribute(selectedAttribute)
+    if (attribute.includes(key)) {
+      formValue.setAttribute(selectedAttribute, attribute.replace(key, value))
+    }
+  })
+}
+
 export const useRenderNfts = ({ nfts, item, element, getAssetElements }) => {
+
+  // Replace label elements in their "for" attribute having $THIS_ContractAddress value
+  useEffect(() => {
+    if (!nfts) return
+
+    nfts.forEach((nft, index) => {
+      item.childrens.forEach((childrenItem) => {
+        const labels = childrenItem.element.querySelectorAll('label[for="$THIS_ContractAddress"')
+
+        labels.forEach((label) => {
+          const labelSrc = label.getAttribute('for')
+          const updatedSrc = labelSrc.replace('$THIS_ContractAddress', nft?.asset_contract.address)
+
+          label.setAttribute('src', updatedSrc)
+        })
+      })
+    })
+  }, [ nfts ])
 
   useEffect(() => {
     if (!nfts) return
 
     nfts.forEach((nft, index) => {
-      console.log('useRenderNfts -> nft', nft)
       item.childrens.forEach((childrenItem) => {
         const { element: childNode, jsonPath } = childrenItem
 
@@ -113,20 +108,36 @@ export const useRenderNfts = ({ nfts, item, element, getAssetElements }) => {
 
       // Replace $THIS_TokenID/ContractAddress/OwnerAddress on Anchor links, Spans or Iframes.
 
-      // displayTokenIdsOnAnchorLinks(clonedItem, nft?.token_id)
+      // displayTokenInfoOnAnchorLinks(clonedItem, nft?.token_id)
       displayValueOnAnchorLinks(clonedItem, '$THIS_TokenID', nft?.token_id)
       displayValueOnAnchorLinks(clonedItem, '$THIS_ContractAddress', nft?.asset_contract.address)
       displayValueOnAnchorLinks(clonedItem, '$THIS_OwnerAddress', nft?.owner.address)
 
-      // displayTokenIdsOnSpanText(clonedItem, nft?.token_id)
+      // displayTokenInfoOnSpanText(clonedItem, nft?.token_id)
       displayKeyValueOnSpanText(clonedItem, '$THIS_TokenID', nft?.token_id)
       displayKeyValueOnSpanText(clonedItem, '$THIS_ContractAddress', nft?.asset_contract.address)
       displayKeyValueOnSpanText(clonedItem, '$THIS_OwnerAddress', nft?.owner.address)
 
-      // displayTokenIdsOnIframe(clonedItem, nft?.token_id)
+      // displayTokenInfoOnIframe(clonedItem, nft?.token_id)
       displayKeyValueOnIframe(clonedItem, '$THIS_TokenID', nft?.token_id)
       displayKeyValueOnIframe(clonedItem, '$THIS_ContractAddress', nft?.asset_contract.address)
       displayKeyValueOnIframe(clonedItem, '$THIS_OwnerAddress', nft?.owner.address)
+
+      // Substitution $THIS Keyword in Forms:
+
+      // First we substitute any Form Labels, "<label for=...></label>"
+      displayValueOnFormFor(clonedItem, '$THIS_TokenID', nft?.token_id)
+      displayValueOnFormFor(clonedItem, '$THIS_ContractAddress', nft?.asset_contract.address)
+      displayValueOnFormFor(clonedItem, '$THIS_OwnerAddress', nft?.owner.address)
+
+      // Then we substitute all attributes on Input Types, which are stored in the below Array
+      const formAttributes = [ 'value', 'id', 'name' ]
+
+      formAttributes.forEach((attribute) => {
+        displayValueOnFormInput(clonedItem, '$THIS_TokenID', nft?.token_id, attribute)
+        displayValueOnFormInput(clonedItem, '$THIS_ContractAddress', nft?.asset_contract.address, attribute)
+        displayValueOnFormInput(clonedItem, '$THIS_OwnerAddress', nft?.owner.address, attribute)
+      })
 
       // Replace root with first cloned item
       if (index === 0) {
