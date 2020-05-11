@@ -139,24 +139,24 @@ export const Reducer = ({ info, element }) => {
   }, [])
 
   // Replace iframe elements having $THIS_ContractAddress as a text content to their respective contract address
-  useEffect(() => {
-    if (!info) return
+  // useEffect(() => {
+  //   if (!info) return
 
-    const iframeContractAddressPaths = document.evaluate(
-      "//iframe[contains(@src, '$THIS_ContractAddress')]",
-      info.element,
-      null,
-      XPathResult.ANY_TYPE,
-      null,
-    )
-    const iframeContractAddressElement = iframeContractAddressPaths.iterateNext()
+  //   const iframeContractAddressPaths = document.evaluate(
+  //     "//iframe[contains(@src, '$THIS_ContractAddress')]",
+  //     info.element,
+  //     null,
+  //     XPathResult.ANY_TYPE,
+  //     null,
+  //   )
+  //   const iframeContractAddressElement = iframeContractAddressPaths.iterateNext()
 
-    if (!iframeContractAddressElement) return
+  //   if (!iframeContractAddressElement) return
 
-    const iframeSrc = (iframeContractAddressElement as any).getAttribute('src')
-    const updatedSrc = iframeSrc.replace('$THIS_ContractAddress', assetOwnerAddress);
-    (iframeContractAddressElement as any).setAttribute('src', updatedSrc)
-  }, [ info ])
+  //   const iframeSrc = (iframeContractAddressElement as any).getAttribute('src')
+  //   const updatedSrc = iframeSrc.replace('$THIS_ContractAddress', assetOwnerAddress);
+  //   (iframeContractAddressElement as any).setAttribute('src', updatedSrc)
+  // }, [ info ])
 
   return null
 }
