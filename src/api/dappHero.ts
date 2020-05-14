@@ -55,8 +55,8 @@ export const getContractsByProjectKeyV2 = async (projectId) => {
       url: `${BACKEND_URL}/projects/${projectId}/contracts/`,
     })
     const responseData = axiosResponse.data
-    const output = responseData
-    const formattedOutput = output.map((contract) => {
+    const { data: contracts, paused } = responseData.response
+    const formattedOutput = JSON.parse(contracts).map((contract) => {
       const { contractABI, networkid, projectid, ...rest } = contract
       return {
         ...rest,
@@ -87,15 +87,14 @@ export const getContractsByProjectKey = async (projectId) => {
 
   const body = { projectId }
   try {
-    const startTime = new Date().getTime()
     const axiosResponse = (await axios({
       method: 'post',
       url: BASE_URL,
       data: body,
     }))
-    const responseData = axiosResponse.data.response.data
-    const { paused } = axiosResponse.data.response
-    const output = JSON.parse(responseData)
+    const responseData = axiosResponse.data
+    const { paused, data: contracts } = responseData.response
+    const output = JSON.parse(contracts)
     const formattedOutput = output.map((contract) => {
       const { contractABI, networkid, projectid, ...rest } = contract
       return {
