@@ -12,35 +12,18 @@ function displayValueOnAnchorLinks(element, key, value): void {
   })
 }
 
-function displayKeyValueOnSpanText(element, key, value): void {
-  const spanTokenIdsPaths = document.evaluate(
-    `//span[contains(., '${key}')]`,
-    element,
-    null,
-    XPathResult.ANY_TYPE,
-    null,
-  )
-  const spanTokenIdsElement = spanTokenIdsPaths.iterateNext()
+// function displayKeyValueElementInnerText2(element, key, value, selectedAttribute, elementType): void {
+//   const matchingElements = Array.from(element.querySelectorAll(elementType))
+//   matchingElements.forEach((el: Element) => {
+//     // TODO: Understand why this eliminated images
+//     if (element.innerText.includes(key)) {
+//       element.innerText = element.innerText.replace(key, value)
+//     }
+//   })
+// }
 
-  if (!spanTokenIdsElement) return
-  Object.assign(spanTokenIdsElement, { textContent: value })
-}
-
-function displayKeyValueInnerTextButton(element, key, value): void {
-  const spanTokenIdsPaths = document.evaluate(
-    `//button[contains(., '${key}')]`,
-    element,
-    null,
-    XPathResult.ANY_TYPE,
-    null,
-  )
-  const spanTokenIdsElement = spanTokenIdsPaths.iterateNext()
-
-  if (!spanTokenIdsElement) return
-  Object.assign(spanTokenIdsElement, { textContent: value })
-}
-
-function displayKeyValueInnerElement(element, key, value, elementType): void {
+// TODO: [DEV-291] Prevent from Deleting Nested Elements
+function displayKeyValueElementInnerText(element, key, value, elementType): void {
   const spanTokenIdsPaths = document.evaluate(
     `//${elementType}[contains(., '${key}')]`,
     element,
@@ -49,13 +32,11 @@ function displayKeyValueInnerElement(element, key, value, elementType): void {
     null,
   )
   const spanTokenIdsElement = spanTokenIdsPaths.iterateNext()
-
   if (!spanTokenIdsElement) return
   Object.assign(spanTokenIdsElement, { textContent: value }) // TODO: Can we get original value as well? So "hello $THIS_TokenID" keeps Hello as well?
 }
 
 function displayValueOnElementAttribute(element, key, value, selectedAttribute, elementType): void {
-  console.log('functiondisplayValueOnElementAttribute -> selectedAttribute, elementType', selectedAttribute, elementType)
   const values = Array.from(element.querySelectorAll(`${elementType}[${selectedAttribute}="${key}"`))
   values.forEach((formValue: Element) => {
     const attribute = formValue.getAttribute(selectedAttribute)
@@ -65,43 +46,23 @@ function displayValueOnElementAttribute(element, key, value, selectedAttribute, 
   })
 }
 
-function displayKeyValueOnIframe(element, key, value): void {
-  const iframeKeyValuePaths = document.evaluate(
-    `//iframe[contains(@src, '${key}')]`,
-    element,
-    null,
-    XPathResult.ANY_TYPE,
-    null,
-  )
-  const iframeKeyValueElement = iframeKeyValuePaths.iterateNext()
+// function displayKeyValueOnIframe(element, key, value): void {
+//   const iframeKeyValuePaths = document.evaluate(
+//     `//iframe[contains(@src, '${key}')]`,
+//     element,
+//     null,
+//     XPathResult.ANY_TYPE,
+//     null,
+//   )
+//   const iframeKeyValueElement = iframeKeyValuePaths.iterateNext()
 
-  if (!iframeKeyValueElement) return
+//   if (!iframeKeyValueElement) return
 
-  // TODO: [DEV-255] Does 'getAttribute' exist on type node? In NFT reducer
-  const iframeSrc = (iframeKeyValueElement as any).getAttribute('src')
-  const updatedSrc = iframeSrc.replace(key, value);
-  (iframeKeyValueElement as any).setAttribute('src', updatedSrc)
-}
-
-function displayValueOnFormFor(element, key, value): void {
-  const formFORs = Array.from(element.querySelectorAll(`label[for="${key}"`))
-  formFORs.forEach((formFor: Element) => {
-    const attribute = formFor.getAttribute('for')
-    if (attribute.includes(key)) {
-      formFor.setAttribute('for', attribute.replace(key, value))
-    }
-  })
-}
-
-function displayValueOnFormInput(element, key, value, selectedAttribute): void {
-  const formValues = Array.from(element.querySelectorAll(`input[${selectedAttribute}="${key}"`))
-  formValues.forEach((formValue: Element) => {
-    const attribute = formValue.getAttribute(selectedAttribute)
-    if (attribute.includes(key)) {
-      formValue.setAttribute(selectedAttribute, attribute.replace(key, value))
-    }
-  })
-}
+//   // TODO: [DEV-255] Does 'getAttribute' exist on type node? In NFT reducer
+//   const iframeSrc = (iframeKeyValueElement as any).getAttribute('src')
+//   const updatedSrc = iframeSrc.replace(key, value);
+//   (iframeKeyValueElement as any).setAttribute('src', updatedSrc)
+// }
 
 export const useRenderNfts = ({ nfts, item, element, getAssetElements }) => {
 
@@ -144,65 +105,36 @@ export const useRenderNfts = ({ nfts, item, element, getAssetElements }) => {
         }
       })
 
-      // /////
+      //
 
       const clonedItem = item.root.cloneNode(true)
 
-      // Replace $THIS_TokenID/ContractAddress/OwnerAddress on Anchor links, Spans or Iframes.
-
-      // // displayKeyValueInnerTextButton
-      // displayKeyValueInnerTextButton(clonedItem, '$THIS_TokenID', nft?.token_id)
-      // displayKeyValueInnerTextButton(clonedItem, '$THIS_ContractAddress', nft?.asset_contract.address)
-      // displayKeyValueInnerTextButton(clonedItem, '$THIS_OwnerAddress', nft?.owner.address)
-
-      // // displayTokenInfoOnAnchorLinks(clonedItem, nft?.token_id)
+      // // // displayTokenInfoOnAnchorLinks(clonedItem, nft?.token_id)
       displayValueOnAnchorLinks(clonedItem, '$THIS_TokenID', nft?.token_id)
       displayValueOnAnchorLinks(clonedItem, '$THIS_ContractAddress', nft?.asset_contract.address)
       displayValueOnAnchorLinks(clonedItem, '$THIS_OwnerAddress', nft?.owner.address)
 
-      // // displayTokenInfoOnSpanText(clonedItem, nft?.token_id)
-      // displayKeyValueOnSpanText(clonedItem, '$THIS_TokenID', nft?.token_id)
-      // displayKeyValueOnSpanText(clonedItem, '$THIS_ContractAddress', nft?.asset_contract.address)
-      // displayKeyValueOnSpanText(clonedItem, '$THIS_OwnerAddress', nft?.owner.address)
-
-      // // displayTokenInfoOnIframe(clonedItem, nft?.token_id)
-      // displayKeyValueOnIframe(clonedItem, '$THIS_TokenID', nft?.token_id)
-      // displayKeyValueOnIframe(clonedItem, '$THIS_ContractAddress', nft?.asset_contract.address)
-      // displayKeyValueOnIframe(clonedItem, '$THIS_OwnerAddress', nft?.owner.address)
-
-      // // Substitution $THIS Keyword in Forms:
-
-      // // First we substitute any Form Labels, "<label for=...></label>"
-      // displayValueOnFormFor(clonedItem, '$THIS_TokenID', nft?.token_id)
-      // displayValueOnFormFor(clonedItem, '$THIS_ContractAddress', nft?.asset_contract.address)
-      // displayValueOnFormFor(clonedItem, '$THIS_OwnerAddress', nft?.owner.address)
-
       // Array of attributes for whih we can substitute our $THIS value
-      const attributes = [ 'value', 'for',
+      const attributes = [ 'value', 'for', 'placeholder',
         'id', 'name', 'data-dh-property-tag-id',
-        'data-dh-property-method-id',
-        'data-dh-property-asset-contract-address' ]
+        'data-dh-property-method-id', 'data-dh-property-asset-contract-address' ]
 
-      // attributes.forEach((attribute) => {
-      //   displayValueOnFormInput(clonedItem, '$THIS_TokenID', nft?.token_id, attribute)
-      //   displayValueOnFormInput(clonedItem, '$THIS_ContractAddress', nft?.asset_contract.address, attribute)
-      //   displayValueOnFormInput(clonedItem, '$THIS_OwnerAddress', nft?.owner.address, attribute)
+      // Replace the Inner text for any element type.
+      // Array.from(item.root.children).forEach((element) => {
+      //   displayKeyValueElementInnerText(clonedItem, '$THIS_TokenID', nft?.token_id, element.nodeName)
+      //   displayKeyValueElementInnerText(clonedItem, '$THIS_ContractAddress', nft?.asset_contract.address, element.nodeName)
+      //   displayKeyValueElementInnerText(clonedItem, '$THIS_OwnerAddress', nft?.owner.address, element.nodeName)
       // })
 
-      // // Replace the Inner text for any element type.
-      Array.from(item.root.children).forEach((element) => {
-        displayKeyValueInnerElement(clonedItem, '$THIS_TokenID', nft?.token_id, element.nodeName)
-        displayKeyValueInnerElement(clonedItem, '$THIS_ContractAddress', nft?.asset_contract.address, element.nodeName)
-        displayKeyValueInnerElement(clonedItem, '$THIS_OwnerAddress', nft?.owner.address, element.nodeName)
-      })
-
       // Substitute the $THIS value on any attribute from array above, for any child element.
+      console.log(item.root.children)
       Array.from(item.root.children).forEach((element) => {
         attributes.forEach((attribute) => {
           displayValueOnElementAttribute(clonedItem, '$THIS_TokenID', nft?.token_id, attribute, element.nodeName)
           displayValueOnElementAttribute(clonedItem, '$THIS_ContractAddress', nft?.asset_contract.address, attribute, element.nodeName)
           displayValueOnElementAttribute(clonedItem, '$THIS_OwnerAddress', nft?.owner.address, attribute, element.nodeName)
         })
+
       })
 
       // Replace root with first cloned item
