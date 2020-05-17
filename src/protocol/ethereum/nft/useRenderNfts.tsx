@@ -25,6 +25,21 @@ function displayKeyValueOnSpanText(element, key, value): void {
   if (!spanTokenIdsElement) return
   Object.assign(spanTokenIdsElement, { textContent: value })
 }
+
+function displayKeyValueInnerTextButton(element, key, value): void {
+  const spanTokenIdsPaths = document.evaluate(
+    `//button[contains(., '${key}')]`,
+    element,
+    null,
+    XPathResult.ANY_TYPE,
+    null,
+  )
+  const spanTokenIdsElement = spanTokenIdsPaths.iterateNext()
+
+  if (!spanTokenIdsElement) return
+  Object.assign(spanTokenIdsElement, { textContent: value })
+}
+
 function displayKeyValueOnIframe(element, key, value): void {
   const iframeKeyValuePaths = document.evaluate(
     `//iframe[contains(@src, '${key}')]`,
@@ -108,6 +123,11 @@ export const useRenderNfts = ({ nfts, item, element, getAssetElements }) => {
 
       // Replace $THIS_TokenID/ContractAddress/OwnerAddress on Anchor links, Spans or Iframes.
 
+      // displayKeyValueInnerTextButton
+      displayKeyValueInnerTextButton(clonedItem, '$THIS_TokenID', nft?.token_id)
+      displayKeyValueInnerTextButton(clonedItem, '$THIS_ContractAddress', nft?.asset_contract.address)
+      displayKeyValueInnerTextButton(clonedItem, '$THIS_OwnerAddress', nft?.owner.address)
+
       // displayTokenInfoOnAnchorLinks(clonedItem, nft?.token_id)
       displayValueOnAnchorLinks(clonedItem, '$THIS_TokenID', nft?.token_id)
       displayValueOnAnchorLinks(clonedItem, '$THIS_ContractAddress', nft?.asset_contract.address)
@@ -131,7 +151,7 @@ export const useRenderNfts = ({ nfts, item, element, getAssetElements }) => {
       displayValueOnFormFor(clonedItem, '$THIS_OwnerAddress', nft?.owner.address)
 
       // Then we substitute all attributes on Input Types, which are stored in the below Array
-      const formAttributes = [ 'value', 'id', 'name' ]
+      const formAttributes = [ 'value', 'id', 'name', 'data-dh-property-tag-id', 'data-dh-property-method-id' ]
 
       formAttributes.forEach((attribute) => {
         displayValueOnFormInput(clonedItem, '$THIS_TokenID', nft?.token_id, attribute)
