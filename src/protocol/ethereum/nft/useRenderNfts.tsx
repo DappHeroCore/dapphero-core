@@ -40,6 +40,31 @@ function displayKeyValueInnerTextButton(element, key, value): void {
   Object.assign(spanTokenIdsElement, { textContent: value })
 }
 
+function displayKeyValueInnerElement(element, key, value, elementType): void {
+  const spanTokenIdsPaths = document.evaluate(
+    `//${elementType}[contains(., '${key}')]`,
+    element,
+    null,
+    XPathResult.ANY_TYPE,
+    null,
+  )
+  const spanTokenIdsElement = spanTokenIdsPaths.iterateNext()
+
+  if (!spanTokenIdsElement) return
+  Object.assign(spanTokenIdsElement, { textContent: value }) // TODO: Can we get original value as well? So "hello $THIS_TokenID" keeps Hello as well?
+}
+
+function displayValueOnElementAttribute(element, key, value, selectedAttribute, elementType): void {
+  console.log('functiondisplayValueOnElementAttribute -> selectedAttribute, elementType', selectedAttribute, elementType)
+  const values = Array.from(element.querySelectorAll(`${elementType}[${selectedAttribute}="${key}"`))
+  values.forEach((formValue: Element) => {
+    const attribute = formValue.getAttribute(selectedAttribute)
+    if (attribute.includes(key)) {
+      formValue.setAttribute(selectedAttribute, attribute.replace(key, value))
+    }
+  })
+}
+
 function displayKeyValueOnIframe(element, key, value): void {
   const iframeKeyValuePaths = document.evaluate(
     `//iframe[contains(@src, '${key}')]`,
@@ -119,44 +144,65 @@ export const useRenderNfts = ({ nfts, item, element, getAssetElements }) => {
         }
       })
 
+      // /////
+
       const clonedItem = item.root.cloneNode(true)
 
       // Replace $THIS_TokenID/ContractAddress/OwnerAddress on Anchor links, Spans or Iframes.
 
-      // displayKeyValueInnerTextButton
-      displayKeyValueInnerTextButton(clonedItem, '$THIS_TokenID', nft?.token_id)
-      displayKeyValueInnerTextButton(clonedItem, '$THIS_ContractAddress', nft?.asset_contract.address)
-      displayKeyValueInnerTextButton(clonedItem, '$THIS_OwnerAddress', nft?.owner.address)
+      // // displayKeyValueInnerTextButton
+      // displayKeyValueInnerTextButton(clonedItem, '$THIS_TokenID', nft?.token_id)
+      // displayKeyValueInnerTextButton(clonedItem, '$THIS_ContractAddress', nft?.asset_contract.address)
+      // displayKeyValueInnerTextButton(clonedItem, '$THIS_OwnerAddress', nft?.owner.address)
 
-      // displayTokenInfoOnAnchorLinks(clonedItem, nft?.token_id)
+      // // displayTokenInfoOnAnchorLinks(clonedItem, nft?.token_id)
       displayValueOnAnchorLinks(clonedItem, '$THIS_TokenID', nft?.token_id)
       displayValueOnAnchorLinks(clonedItem, '$THIS_ContractAddress', nft?.asset_contract.address)
       displayValueOnAnchorLinks(clonedItem, '$THIS_OwnerAddress', nft?.owner.address)
 
-      // displayTokenInfoOnSpanText(clonedItem, nft?.token_id)
-      displayKeyValueOnSpanText(clonedItem, '$THIS_TokenID', nft?.token_id)
-      displayKeyValueOnSpanText(clonedItem, '$THIS_ContractAddress', nft?.asset_contract.address)
-      displayKeyValueOnSpanText(clonedItem, '$THIS_OwnerAddress', nft?.owner.address)
+      // // displayTokenInfoOnSpanText(clonedItem, nft?.token_id)
+      // displayKeyValueOnSpanText(clonedItem, '$THIS_TokenID', nft?.token_id)
+      // displayKeyValueOnSpanText(clonedItem, '$THIS_ContractAddress', nft?.asset_contract.address)
+      // displayKeyValueOnSpanText(clonedItem, '$THIS_OwnerAddress', nft?.owner.address)
 
-      // displayTokenInfoOnIframe(clonedItem, nft?.token_id)
-      displayKeyValueOnIframe(clonedItem, '$THIS_TokenID', nft?.token_id)
-      displayKeyValueOnIframe(clonedItem, '$THIS_ContractAddress', nft?.asset_contract.address)
-      displayKeyValueOnIframe(clonedItem, '$THIS_OwnerAddress', nft?.owner.address)
+      // // displayTokenInfoOnIframe(clonedItem, nft?.token_id)
+      // displayKeyValueOnIframe(clonedItem, '$THIS_TokenID', nft?.token_id)
+      // displayKeyValueOnIframe(clonedItem, '$THIS_ContractAddress', nft?.asset_contract.address)
+      // displayKeyValueOnIframe(clonedItem, '$THIS_OwnerAddress', nft?.owner.address)
 
-      // Substitution $THIS Keyword in Forms:
+      // // Substitution $THIS Keyword in Forms:
 
-      // First we substitute any Form Labels, "<label for=...></label>"
-      displayValueOnFormFor(clonedItem, '$THIS_TokenID', nft?.token_id)
-      displayValueOnFormFor(clonedItem, '$THIS_ContractAddress', nft?.asset_contract.address)
-      displayValueOnFormFor(clonedItem, '$THIS_OwnerAddress', nft?.owner.address)
+      // // First we substitute any Form Labels, "<label for=...></label>"
+      // displayValueOnFormFor(clonedItem, '$THIS_TokenID', nft?.token_id)
+      // displayValueOnFormFor(clonedItem, '$THIS_ContractAddress', nft?.asset_contract.address)
+      // displayValueOnFormFor(clonedItem, '$THIS_OwnerAddress', nft?.owner.address)
 
-      // Then we substitute all attributes on Input Types, which are stored in the below Array
-      const formAttributes = [ 'value', 'id', 'name', 'data-dh-property-tag-id', 'data-dh-property-method-id' ]
+      // Array of attributes for whih we can substitute our $THIS value
+      const attributes = [ 'value', 'for',
+        'id', 'name', 'data-dh-property-tag-id',
+        'data-dh-property-method-id',
+        'data-dh-property-asset-contract-address' ]
 
-      formAttributes.forEach((attribute) => {
-        displayValueOnFormInput(clonedItem, '$THIS_TokenID', nft?.token_id, attribute)
-        displayValueOnFormInput(clonedItem, '$THIS_ContractAddress', nft?.asset_contract.address, attribute)
-        displayValueOnFormInput(clonedItem, '$THIS_OwnerAddress', nft?.owner.address, attribute)
+      // attributes.forEach((attribute) => {
+      //   displayValueOnFormInput(clonedItem, '$THIS_TokenID', nft?.token_id, attribute)
+      //   displayValueOnFormInput(clonedItem, '$THIS_ContractAddress', nft?.asset_contract.address, attribute)
+      //   displayValueOnFormInput(clonedItem, '$THIS_OwnerAddress', nft?.owner.address, attribute)
+      // })
+
+      // // Replace the Inner text for any element type.
+      Array.from(item.root.children).forEach((element) => {
+        displayKeyValueInnerElement(clonedItem, '$THIS_TokenID', nft?.token_id, element.nodeName)
+        displayKeyValueInnerElement(clonedItem, '$THIS_ContractAddress', nft?.asset_contract.address, element.nodeName)
+        displayKeyValueInnerElement(clonedItem, '$THIS_OwnerAddress', nft?.owner.address, element.nodeName)
+      })
+
+      // Substitute the $THIS value on any attribute from array above, for any child element.
+      Array.from(item.root.children).forEach((element) => {
+        attributes.forEach((attribute) => {
+          displayValueOnElementAttribute(clonedItem, '$THIS_TokenID', nft?.token_id, attribute, element.nodeName)
+          displayValueOnElementAttribute(clonedItem, '$THIS_ContractAddress', nft?.asset_contract.address, attribute, element.nodeName)
+          displayValueOnElementAttribute(clonedItem, '$THIS_OwnerAddress', nft?.owner.address, attribute, element.nodeName)
+        })
       })
 
       // Replace root with first cloned item

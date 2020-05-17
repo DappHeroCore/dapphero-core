@@ -9,164 +9,80 @@
     <!-- import the webpage's stylesheet -->
     <link rel="stylesheet" href="/style.css" />
 
-    <!-- import the webpage's javascript file -->
+    <!-- import the webpage's fonts file -->
+    <link rel="stylesheet" href="https://use.typekit.net/uxx6oco.css" />
   </head>
   <body>
-    <h1>Wrapped Eth!</h1>
+    <h1>Preview of DappHero Collectible Functionality for Alpha V2.</h1>
 
     <p>
-      My address:
-      <span data-dh-feature="user" data-dh-property-address="true">...</span>
+      This page is powered via DappHero. We're using the nightly build of the
+      DappHero Script.<br />
+      To build your own NFT project, copy this Glitch and replace it with your
+      own Script Tag from <a href="https://www.dapphero.io">DappHero.io</a>.
+      <br />Documentation can be found at
+      <a href="https://docs.dapphero.io">docs.dapphero.io</a>.<br />
+      The latest NFT functionality is enabled in the nightly build
+      main-05-09-2020.js.
     </p>
 
-    <p>
-      My balance:
-      <span
-        data-dh-feature="user"
-        data-dh-property-balance="true"
-        data-dh-modifier-units="ether"
-        data-dh-modifier-decimals="2"
-        >...</span
-      >
-    </p>
-
-    <p>
-      ERC20 Contract Name:
-      <span data-dh-property-method-id="000" data-dh-property-outputs="true"
-        >...</span
-      >
-    </p>
-
-    <p>
-      <span data-dh-property-method-id="000" data-dh-property-outputs="true"
-        >...</span
-      >
-      balance:
-      <span
-        data-dh-property-method-id="001"
-        data-dh-property-outputs="true"
-        data-dh-modifier-contract-units="wei"
-        data-dh-modifier-display-units="ether"
-        data-dh-modifier-decimals="2"
-        >...</span
-      >
-    </p>
-    <input
-      data-dh-property-method-id="001"
-      data-dh-property-input-name="$true"
-      value="$CURRENT_USER"
-      style="display:none;"
-      
-    />
-    <button data-dh-property-method-id="001" data-dh-property-invoke="true">
-      Get balance
+    <!-- These buttons allow you to page through results -->
+    <button class="myButton"
+      data-dh-property-pagination-prev="true"
+      data-dh-property-tag-id="000"
+    >
+      Previous
     </button>
-    <button data-dh-property-method-id="001" data-dh-property-invoke="true">
-      Get balance
+    <button class="myButton"
+      data-dh-property-pagination-next="true"
+      data-dh-property-tag-id="000"
+    >
+      Next
     </button>
-    <button data-dh-property-method-id="001" data-dh-property-invoke="true">
-      Get balance
-    </button>
-
-    <p>
-      Wrap Eth
-    </p>
-
-    <input
-      data-dh-property-method-id="002"
-      data-dh-property-input-name="EthValue"
-           
-    />
-    <button data-dh-property-method-id="002" data-dh-property-invoke="true">
-      Wrap!
-    </button>
-
-    <input
-    data-dh-property-method-id="002"
-    data-dh-property-input-name="EthValue"
-         
-  />
-  <button data-dh-property-method-id="002" data-dh-property-invoke="true">
-    Wrap!
-  </button>
-  
-    <p>
-      UnWrap
-    </p>
-    <input
-      data-dh-property-method-id="003"
-      data-dh-property-input-name="wad"
-      data-dh-modifier-display-units="ether"
-      data-dh-modifier-contract-units="wei"
-    />
-    <button data-dh-property-method-id="003" data-dh-property-invoke="true">
-      UnWrap!
-    </button>
-
-    <!---Smart Contract-->
-
-    <!-- Get the contract Name -->
+    
+    <!-- This is the method instance, the "parent" of the NFT object -->
+    <!-- Replace 'property-asset-contract-address' with the NFT collectible contract address of your choice.  -->
+    <!-- The address "0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0" is the Rarible NFT contract address. -->
+    
     <div
-      data-dh-feature="customContract"
-      data-dh-property-contract-name="wrapped-eth"
-      data-dh-property-method-name="name"
-      data-dh-property-method-id="000"
-      data-dh-property-auto-invoke="false"
-    ></div>
+      data-dh-feature="nft"
+      data-dh-property-tag-id="000"
+      data-dh-property-asset-contract-address="0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0" 
+      data-dh-property-pagination-limit="30"
+      data-dh-property-pagination-offset="30"
+      class="container"
+    >
+      <!-- This is the container, it is linked by the "property-tag-id" to the method instance, and will display the NFT Inside -->
+      <!-- This is also the item that will be repeated as many times as there are NFTS to display-->
+      <div
+        data-dh-property-tag-id="000"
+        data-dh-property-asset-item="true"
+        class="asset"
+      >
+        <a
+          href="./singleNFT.html?assetTokenId=$THIS_TokenID&assetContractAddress=$THIS_ContractAddress"
+          ><img data-dh-property-asset-json-path="image_url" class="token"
+        /></a>
+        <h3 data-dh-property-asset-json-path="name"></h3>
+        <h2>$THIS_ContractAddress</h2>
+        <span>Next span should be token ID:</span>
+        <span>$THIS_TokenID</span>
+        <label for="$THIS_TokenID">First name:</label>
+        <input id="$THIS_TokenID" value="$THIS_TokenID"data-dh-property-asset-contract-address="$THIS_ContractAddress"/>
+        <button data-dh-property-asset-contract-address="$THIS_ContractAddress">$THIS_TokenID</button>
+      </div>
+    </div>
+    
 
-    <!-- Get the users balance -->
-    <div
-      data-dh-feature="customContract"
-      data-dh-property-contract-name="wrapped-eth"
-      data-dh-property-method-name="balanceOf"
-      data-dh-property-method-id="001"
-      data-dh-property-auto-invoke="false"
-      data-dh-property-auto-clear="false"
-    ></div>
-
-    <!-- Deposit ETH to Wrap -->
-    <div
-      data-dh-feature="customContract"
-      data-dh-property-contract-name="wrapped-eth"
-      data-dh-property-method-name="deposit"
-      data-dh-property-method-id="002"
-         data-dh-property-auto-clear="true"
-    ></div>
-
-    <!-- Unwrap ETH -->
-    <div
-      data-dh-feature="customContract"
-      data-dh-property-contract-name="wrapped-eth"
-      data-dh-property-method-name="withdraw"
-      data-dh-property-method-id="003"
-    ></div>
-
-    <button data-dh-feature="network" data-dh-property-enable="true">
-      Enable Web3
-    </button>
-
-    <script>
-      document.addEventListener(
-        "dappHeroConfigLoaded",
-        ({ detail: dappHero }) => {
-          // Inside here you can listen to any event you want
-          console.log("It's loaded");
-          dappHero.listenToTransactionStatusChange(data => {
-            console.log("Listening to transtaction status change", data);
-          });
-          dappHero.listenToSmartContractBlockchainEvent(data => {
-            console.log("The blockChain Events: ", data)
-          })
-        }
-      );
-    </script>
     <!-- include the Glitch button to show what the webpage is about and
           to make it easier for folks to view source and remix -->
     <div class="glitchButton" style="position:fixed;top:20px;right:20px;"></div>
+    
+    <!-- Imporant: This demo is using a pre-release script, so please change the DappHero tag: "main.js" to the nightly build "main-05-09-2020.js" for the latest features -->
     <script
       src=""
       id="dh-apiKey"
-      data-api="1586288625489x991636521145335800"
+      data-api="1589032410701x116022831009497090"
     ></script>
   </body>
 </html>
