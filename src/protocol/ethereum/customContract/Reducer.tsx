@@ -49,7 +49,6 @@ const getAbiMethodInputs = (abi, methodName, dispatch): Record<string, any> => {
 
 // Reducer Component
 export const Reducer = ({ info, readContract, writeContract, readEnabled, readChainId, writeEnabled, timeStamp }) => {
-  console.log('Reducer -> timeStamp', timeStamp)
 
   const [ state, dispatch ] = useReducer(stateReducer, {})
 

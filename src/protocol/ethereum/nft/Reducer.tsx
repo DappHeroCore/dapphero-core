@@ -8,7 +8,13 @@ import { useGetTokensForContractAddress } from './useGetTokensForContractAddress
 import { useGetTokensFromOwner } from './useGetTokensFromOwner'
 import { useRenderNfts } from './useRenderNfts'
 
-export const Reducer = ({ info, element, retriggerEngine }) => {
+type nftReducerProps = {
+info: any;
+element: HTMLElement;
+retriggerEngine?: any;
+}
+
+export const Reducer: React.FunctionComponent<nftReducerProps> = ({ info, element, retriggerEngine }) => {
   // Get NFTs properties
   const { nft, properties_ } = info
   const { item, tokens = [], pagination } = nft

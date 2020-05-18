@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { ToastProvider } from 'react-toast-notifications'
 import { CookiesProvider } from 'react-cookie'
 import { getDomElements } from '@dapphero/dapphero-dom'
@@ -18,7 +18,8 @@ export const ProvidersWrapper: React.FC = () => {
   const [ supportedNetworks, setSupportedNetworks ] = useState([])
   const [ isPaused, setPaused ] = useState(false)
 
-  const retriggerEngine = (): void => setTimestamp(+new Date())
+  const retriggerEngine = useCallback(() => { setTimestamp(+new Date()) }, [])
+
   const ethereum = useWeb3Provider(consts.global.POLLING_INTERVAL) // This sets refresh speed of the whole app
 
   // load contracts effects only if not paused
@@ -53,28 +54,27 @@ export const ProvidersWrapper: React.FC = () => {
     // TODO: Here is where we end up waiting for Config to load project
     if (configuration) {
       const domElements = getDomElements(configuration)
+      console.log('domElements', domElements)
 
       setDomElements(domElements)
     }
   }, [ configuration ])
 
   const [ smartcontractElements, setSmartContractElements ] = useState({ contractElements: null, domElementsFilteredForContracts: null })
-  console.log('smartcontractElements', smartcontractElements)
 
   useEffect(() => {
-
     const run = (): void => {
-      const contractElements = domElements.filter((element) => element.feature === 'customContract')
-      const getDomContractElements = () => {
-        const filteredForContracts = domElements.filter((element) => element.feature !== 'customContract')
+      const domElements2 = getDomElements(configuration)
+      const contractElements = domElements2.filter((element) => element.feature === 'customContract')
+      const getDomContractElements = (): Array<any> => {
+        const filteredForContracts = domElements2.filter((element) => element.feature !== 'customContract')
         return contractElements.length ? [ ...filteredForContracts, { id: contractElements[0].id, feature: 'customContract' } ] : filteredForContracts
       }
       const domElementsFilteredForContracts = getDomContractElements()
       setSmartContractElements({ contractElements, domElementsFilteredForContracts })
     }
-
-    if (domElements) run()
-  }, [ domElements ])
+    if (domElements && configuration) run()
+  }, [ domElements, configuration, timestamp ])
 
   if (domElements != null) {
 

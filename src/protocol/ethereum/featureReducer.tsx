@@ -10,7 +10,15 @@ import { Router as CustomContractRouter } from './customContract/Router'
 // Types
 import { FeatureReducerProps } from './types'
 
-export const FeatureReducer = ({ feature, element, configuration, info, customContractElements, retriggerEngine, timeStamp }: FeatureReducerProps) => {
+export const FeatureReducer: React.FunctionComponent<FeatureReducerProps> = ({
+  feature,
+  element,
+  configuration,
+  info,
+  customContractElements,
+  retriggerEngine,
+  timeStamp,
+}: FeatureReducerProps) => {
 
   const featureType = feature
 
@@ -23,6 +31,7 @@ export const FeatureReducer = ({ feature, element, configuration, info, customCo
 
   switch (featureType) {
     case 'nft': {
+      console.log('Rendering NFT')
       // TODO add some sort of delay here
       return <NftReducer element={element} info={info} retriggerEngine={retriggerEngine} />
     }
