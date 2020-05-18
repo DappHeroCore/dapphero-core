@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 
 // Reducers
 import { Reducer as NetworkReducer } from './network/Reducer'
@@ -10,7 +10,7 @@ import { Router as CustomContractRouter } from './customContract/Router'
 // Types
 import { FeatureReducerProps } from './types'
 
-export const FeatureReducer = ({ feature, element, configuration, info, customContractElements }: FeatureReducerProps) => {
+export const FeatureReducer = ({ feature, element, configuration, info, customContractElements, retriggerEngine, timeStamp }: FeatureReducerProps) => {
 
   const featureType = feature
 
@@ -24,7 +24,7 @@ export const FeatureReducer = ({ feature, element, configuration, info, customCo
   switch (featureType) {
     case 'nft': {
       // TODO add some sort of delay here
-      return <NftReducer element={element} info={info} />
+      return <NftReducer element={element} info={info} retriggerEngine={retriggerEngine} />
     }
 
     case 'user': {
@@ -45,7 +45,7 @@ export const FeatureReducer = ({ feature, element, configuration, info, customCo
         const methodsByContractAsElements = customContractElements.filter((element) => element.contract.contractName === contractName)
         // console.log("Contract Branches", methodsByContractAsElements)
         const contract = configuration.contracts.filter((contract) => (contract.contractName === contractName))[0]
-        return <CustomContractRouter listOfContractMethods={methodsByContractAsElements} contract={contract} />
+        return <CustomContractRouter listOfContractMethods={methodsByContractAsElements} contract={contract} timeStamp={timeStamp} retriggerEngine={retriggerEngine} />
       }
 
       return null

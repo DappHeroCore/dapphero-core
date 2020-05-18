@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect, useReducer } from 'react'
+import React, { useState, useContext, useEffect, useReducer } from 'react'
 import { useToasts } from 'react-toast-notifications'
 import { logger } from 'logger/customLogger'
 import Notify from 'bnc-notify'
@@ -48,12 +48,10 @@ const getAbiMethodInputs = (abi, methodName, dispatch): Record<string, any> => {
 }
 
 // Reducer Component
-export const Reducer = ({ info, readContract, writeContract, readEnabled, readChainId, writeEnabled }) => {
+export const Reducer = ({ info, readContract, writeContract, readEnabled, readChainId, writeEnabled, timeStamp }) => {
+  console.log('Reducer -> timeStamp', timeStamp)
 
   const [ state, dispatch ] = useReducer(stateReducer, {})
-  // if (!(state.isPolling || !state.msg)) {
-  //   console.log('State Change: (omitting polling)', state)
-  // }
 
   const {
     childrenElements,
@@ -307,4 +305,10 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
   useDisplayResults({ childrenElements, result, emitToEvent, methodNameKey })
 
   return null
+  // return (
+  //   <div>
+  //   Custom Contract last updated:
+  //     {timeStamp}
+  //   </div>
+  // )
 }

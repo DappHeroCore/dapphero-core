@@ -8,7 +8,7 @@ import { useGetTokensForContractAddress } from './useGetTokensForContractAddress
 import { useGetTokensFromOwner } from './useGetTokensFromOwner'
 import { useRenderNfts } from './useRenderNfts'
 
-export const Reducer = ({ info, element }) => {
+export const Reducer = ({ info, element, retriggerEngine }) => {
   // Get NFTs properties
   const { nft, properties_ } = info
   const { item, tokens = [], pagination } = nft
@@ -75,11 +75,13 @@ export const Reducer = ({ info, element }) => {
 
     removeAssetElements()
     setOffset((prevOffset) => prevOffset - 1)
+    retriggerEngine()
   }
 
   const handleNextButton = (): void => {
     removeAssetElements()
     setOffset((prevOffset) => prevOffset + 1)
+    retriggerEngine()
   }
 
   // Get tokens from owner address

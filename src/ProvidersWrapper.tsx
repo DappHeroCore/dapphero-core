@@ -47,9 +47,34 @@ export const ProvidersWrapper: React.FC = () => {
     if (configuration?.contracts) getSupportedNetworks()
   }, [ configuration ])
 
+  // This needs to filter for Unique Contracts
+
   useEffect(() => {
-    if (configuration) setDomElements(getDomElements(configuration))
+    // TODO: Here is where we end up waiting for Config to load project
+    if (configuration) {
+      const domElements = getDomElements(configuration)
+
+      setDomElements(domElements)
+    }
   }, [ configuration ])
+
+  const [ smartcontractElements, setSmartContractElements ] = useState({ contractElements: null, domElementsFilteredForContracts: null })
+  console.log('smartcontractElements', smartcontractElements)
+
+  useEffect(() => {
+
+    const run = (): void => {
+      const contractElements = domElements.filter((element) => element.feature === 'customContract')
+      const getDomContractElements = () => {
+        const filteredForContracts = domElements.filter((element) => element.feature !== 'customContract')
+        return contractElements.length ? [ ...filteredForContracts, { id: contractElements[0].id, feature: 'customContract' } ] : filteredForContracts
+      }
+      const domElementsFilteredForContracts = getDomContractElements()
+      setSmartContractElements({ contractElements, domElementsFilteredForContracts })
+    }
+
+    if (domElements) run()
+  }, [ domElements ])
 
   if (domElements != null) {
 
@@ -63,7 +88,10 @@ export const ProvidersWrapper: React.FC = () => {
                 setConfig={setConfig}
                 domElements={domElements}
                 retriggerEngine={retriggerEngine}
+                timeStamp={timestamp}
                 supportedNetworks={supportedNetworks}
+                domElementsFilteredForContracts={smartcontractElements.domElementsFilteredForContracts}
+                contractElements={smartcontractElements.contractElements}
               />
             </EthereumContext.Provider>
           </ToastProvider>
