@@ -54,7 +54,6 @@ export const ProvidersWrapper: React.FC = () => {
     // TODO: Here is where we end up waiting for Config to load project
     if (configuration) {
       const domElements = getDomElements(configuration)
-      console.log('domElements', domElements)
 
       setDomElements(domElements)
     }
@@ -65,7 +64,6 @@ export const ProvidersWrapper: React.FC = () => {
   useEffect(() => {
     const run = (): void => {
 
-      console.log('Here in Run for Dom Elements!')
       const domElements2 = getDomElements(configuration)
       const contractElements = domElements2.filter((element) => element.feature === 'customContract')
       console.log('contractElements', contractElements)

@@ -31,8 +31,6 @@ export const FeatureReducer: React.FunctionComponent<FeatureReducerProps> = ({
 
   switch (featureType) {
     case 'nft': {
-      console.log('Rendering NFT')
-      // TODO add some sort of delay here
       return <NftReducer element={element} info={info} />
     }
 
