@@ -5,8 +5,9 @@ import * as consts from 'consts'
 const axios = Axios.create({ headers: { 'content-type': 'application/json' } })
 
 const BUBBLE_ENDPOINT = false
-const BASE_URL = process.env.NODE_ENV === 'production' ? consts.global.BUBBLE_PROD_URL : consts.global.BUBBLE_DEV_URL
-const BACKEND_URL = process.env.NODE_ENV === 'production' ? consts.global.BACKEND_PROD_URL : consts.global.BACKEND_DEV_URL
+const isProduction = process.env.NODE_ENV === 'production'
+const BASE_URL = isProduction ? consts.global.BUBBLE_PROD_URL : consts.global.BUBBLE_DEV_URL
+const BACKEND_URL = isProduction ? consts.global.BACKEND_PROD_URL : consts.global.BACKEND_DEV_URL
 
 const POST = 'post'
 const GET = 'get'
