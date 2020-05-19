@@ -6,6 +6,7 @@ declare global {
       enabled: true;
       contracts: any;
       domElements: Element[];
+      collectibles: any;
       configuration: {
         [key: string]: any;
         contracts: any[];
