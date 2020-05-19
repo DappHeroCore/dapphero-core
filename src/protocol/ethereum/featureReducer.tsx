@@ -32,7 +32,7 @@ export const FeatureReducer: React.FunctionComponent<FeatureReducerProps> = ({
 
   switch (featureType) {
     case 'nft': {
-      return <NftReducer element={element} info={info} />
+      return <NftReducer element={element} info={info} retriggerEngine={retriggerEngine} />
     }
 
     case 'user': {
@@ -57,9 +57,15 @@ export const FeatureReducer: React.FunctionComponent<FeatureReducerProps> = ({
         console.log('contractName', contractName)
         console.log('Custom Contract Elements: ', customContractElements)
         const methodsByContractAsElements = contractElements.filter((element) => element.contract.contractName === contractName)
-        // console.log("Contract Branches", methodsByContractAsElements)
-        const contract = configuration.contracts.filter((contract) => (contract.contractName === contractName))[0]
-        return <CustomContractRouter listOfContractMethods={methodsByContractAsElements} contract={contract} timeStamp={timeStamp} retriggerEngine={retriggerEngine} />
+        const contract = configuration.contracts.filter((thisContract) => (thisContract.contractName === contractName))[0]
+        return (
+          <CustomContractRouter
+            listOfContractMethods={methodsByContractAsElements}
+            contract={contract}
+            timeStamp={timeStamp}
+            retriggerEngine={retriggerEngine}
+          />
+        )
       }
 
       return null
