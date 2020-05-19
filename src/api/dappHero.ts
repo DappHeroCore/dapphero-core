@@ -1,20 +1,13 @@
 import Axios from 'axios'
 import { logger } from 'logger/customLogger'
+import * as consts from 'consts'
 
 const axios = Axios.create({ headers: { 'content-type': 'application/json' } })
 
-// Refactor when this is more fleshed out
-const BUBBLE_DEV_URL = 'https://dapphero-admin.bubbleapps.io/api/1.1/wf/contracts'
-const BUBBLE_PROD_URL = 'https://dapphero-admin.bubbleapps.io/api/1.1/wf/contracts'
-
-const BASE_URL = process.env.NODE_ENV === 'production' ? BUBBLE_PROD_URL : BUBBLE_DEV_URL
-
 const BUBBLE_ENDPOINT = false
-
-const BACKEND_DEV_URL = 'https://api.dapphero.io'
-const BACKEND_PROD_URL = 'https://api.dapphero.io'
-
-const BACKEND_URL = process.env.NODE_ENV === 'production' ? BACKEND_PROD_URL : BACKEND_DEV_URL
+const isProduction = process.env.NODE_ENV === 'production'
+const BASE_URL = isProduction ? consts.global.BUBBLE_PROD_URL : consts.global.BUBBLE_DEV_URL
+const BACKEND_URL = isProduction ? consts.global.BACKEND_PROD_URL : consts.global.BACKEND_DEV_URL
 
 const POST = 'post'
 const GET = 'get'
@@ -41,7 +34,7 @@ export const postLogToDappHeroBackend = (payload) => {
 export const postLogToBubbleBackend = (payload) => {
   axios({
     method: POST,
-    url: `BUBBLE_ENDPOINT`,
+    url: `${BUBBLE_ENDPOINT}`,
     data: payload,
   }).catch((e) => {
     console.log(e)
