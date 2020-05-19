@@ -45,7 +45,7 @@
     </div>
   </div>
 
-  
+
     <!-- These buttons allow you to page through results -->
     <button class="myButton"
       data-dh-property-pagination-prev="true"
@@ -90,46 +90,19 @@
         data-dh-feature="customContract"
         data-dh-property-contract-name="dappherotest"
         data-dh-property-method-name="hello"
-        data-dh-property-method-id="000"
+        data-dh-property-method-id="$THIS_TokenID"
         data-dh-property-auto-invoke="false"
         data-dh-property-auto-clear="false"
       >
-        <button data-dh-property-method-id="000" data-dh-property-invoke class="w-button" id="fooBar">
+        <button data-dh-property-method-id="$THIS_TokenID" data-dh-property-invoke class="w-button" id="fooBar">
           Submit
         </button>
 
-        <div data-dh-property-method-id="000" data-dh-property-outputs data-dh-modifier-contract-units="bytes32" data-dh-modifier-display-units="ascii" class="component-div">
+        <div data-dh-property-method-id="$THIS_TokenID" data-dh-property-outputs data-dh-modifier-contract-units="bytes32" data-dh-modifier-display-units="ascii" class="component-div">
           *Return value: -*
         </div>
       </div>
       <h1>Break:</h1>
-
-        <div
-        id="dh"
-        data-dh-feature="customContract"
-        data-dh-property-contract-name="dappherotest"
-        data-dh-property-method-name="sendEthWithArgs"
-        data-dh-property-method-id="001a"
-        data-dh-property-eth-value=".15"
-      >
-        <input
-          data-dh-property-method-id="001a"
-          data-dh-property-input-name="simpleMessage"
-          class="w-input"
-          placeholder="Message:"
-        />
-
-        <button data-dh-property-method-id="001a" data-dh-property-invoke class="w-button">
-          Submit
-        </button>
-
-        <div data-dh-property-method-id="001a" data-dh-property-outputs class="component-div">
-          *Return value: -*
-        </div>
-      </div>
-
-
-
 
       </div>
     </div>

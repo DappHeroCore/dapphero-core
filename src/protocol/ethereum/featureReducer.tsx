@@ -33,7 +33,7 @@ export const FeatureReducer: React.FunctionComponent<FeatureReducerProps> = ({
     case 'nft': {
       console.log('Rendering NFT')
       // TODO add some sort of delay here
-      return <NftReducer element={element} info={info} retriggerEngine={retriggerEngine} />
+      return <NftReducer element={element} info={info} />
     }
 
     case 'user': {

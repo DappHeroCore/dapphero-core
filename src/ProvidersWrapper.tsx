@@ -64,8 +64,11 @@ export const ProvidersWrapper: React.FC = () => {
 
   useEffect(() => {
     const run = (): void => {
+
+      console.log('Here in Run for Dom Elements!')
       const domElements2 = getDomElements(configuration)
       const contractElements = domElements2.filter((element) => element.feature === 'customContract')
+      console.log('contractElements', contractElements)
       const getDomContractElements = (): Array<any> => {
         const filteredForContracts = domElements2.filter((element) => element.feature !== 'customContract')
         return contractElements.length ? [ ...filteredForContracts, { id: contractElements[0].id, feature: 'customContract' } ] : filteredForContracts
