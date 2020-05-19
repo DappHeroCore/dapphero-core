@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
 // Reducers
+import { getDomElements } from '@dapphero/dapphero-dom'
 import { Reducer as NetworkReducer } from './network/Reducer'
 import { Reducer as UserReducer } from './user/Reducer'
 import { Reducer as ThreeBoxReducer } from './threeBox/Reducer'
@@ -49,7 +50,13 @@ export const FeatureReducer: React.FunctionComponent<FeatureReducerProps> = ({
     case 'customContract': {
       // FIXME: We're going to remove !isProduction conditional when Dappeteer library gets updated with chainId support
       for (const contractName of uniqueContractNames) {
-        const methodsByContractAsElements = customContractElements.filter((element) => element.contract.contractName === contractName)
+
+        const domElements2 = getDomElements(configuration)
+        const contractElements = domElements2.filter((element) => element.feature === 'customContract')
+        console.log('contractElements', contractElements)
+        console.log('contractName', contractName)
+        console.log('Custom Contract Elements: ', customContractElements)
+        const methodsByContractAsElements = contractElements.filter((element) => element.contract.contractName === contractName)
         // console.log("Contract Branches", methodsByContractAsElements)
         const contract = configuration.contracts.filter((contract) => (contract.contractName === contractName))[0]
         return <CustomContractRouter listOfContractMethods={methodsByContractAsElements} contract={contract} timeStamp={timeStamp} retriggerEngine={retriggerEngine} />
