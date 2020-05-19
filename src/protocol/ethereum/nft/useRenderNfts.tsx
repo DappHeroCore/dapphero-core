@@ -1,6 +1,8 @@
-import { useEffect, Children } from 'react'
+import { useEffect, useContext } from 'react'
 import get from 'lodash.get'
 import { ELEMENT_TYPES, TAG_TYPES, DATA_PROPERTY } from '@dapphero/dapphero-dom'
+
+import { EmitterContext } from 'providers/EmitterProvider/context'
 
 function displayValueOnAnchorLinks(element, key, value): void {
   const anchors = Array.from(element.querySelectorAll('a'))
@@ -65,6 +67,9 @@ function displayValueOnElementAttribute(element, key, value, selectedAttribute):
 // }
 
 export const useRenderNfts = ({ nfts, item, element, getAssetElements }) => {
+
+  // Event support
+  const { actions: { emitToEvent, listenToEvent } } = useContext(EmitterContext)
 
   // Replace label elements in their "for" attribute having $THIS_ContractAddress value
   useEffect(() => {
@@ -155,6 +160,8 @@ export const useRenderNfts = ({ nfts, item, element, getAssetElements }) => {
         if (beforeElement) (beforeElement as HTMLElement).insertAdjacentElement('afterend', clonedItem)
       }
     })
+
+    emitToEvent('nftsUpdated', Date.now())
   }, [ nfts ])
 
 }

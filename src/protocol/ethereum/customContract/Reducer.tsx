@@ -47,8 +47,17 @@ const getAbiMethodInputs = (abi, methodName, dispatch): Record<string, any> => {
   return output
 }
 
+export type ReducerProps = {
+info: any;
+readContract: any;
+writeContract: any;
+readEnabled: any;
+readChainId: any;
+writeEnabled: any;
+timestamp: number;
+}
 // Reducer Component
-export const Reducer = ({ info, readContract, writeContract, readEnabled, readChainId, writeEnabled, timeStamp }) => {
+export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContract, writeContract, readEnabled, readChainId, writeEnabled, timestamp }) => {
 
   const [ state, dispatch ] = useReducer(stateReducer, {})
 
@@ -303,11 +312,10 @@ export const Reducer = ({ info, readContract, writeContract, readEnabled, readCh
   // Display new results in the UI
   useDisplayResults({ childrenElements, result, emitToEvent, methodNameKey })
 
-  return null
-  // return (
-  //   <div>
-  //   Custom Contract last updated:
-  //     {timeStamp}
-  //   </div>
-  // )
+  return (
+    <div style={{ display: 'none' }}>
+    Custom Contract last updated:
+      {timestamp}
+    </div>
+  )
 }

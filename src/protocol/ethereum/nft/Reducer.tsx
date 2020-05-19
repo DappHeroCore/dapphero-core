@@ -82,13 +82,11 @@ export const Reducer: React.FunctionComponent<nftReducerProps> = ({ info, elemen
 
     removeAssetElements()
     setOffset((prevOffset) => prevOffset - 1)
-    // retrigger()
   }
 
   const handleNextButton = (): void => {
     removeAssetElements()
     setOffset((prevOffset) => prevOffset + 1)
-    // retrigger()
   }
 
   // Get tokens from owner address

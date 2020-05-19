@@ -21,11 +21,10 @@ type Contract = any;
 type RouterProps = {
   listOfContractMethods: ListOfContractMethods;
   contract: Contract;
-  retriggerEngine: () => void;
-  timeStamp: number;
+  timestamp: number;
 }
 
-export const Router = ({ listOfContractMethods, contract, retriggerEngine, timeStamp }: RouterProps) => {
+export const Router: React.FunctionComponent<RouterProps> = ({ listOfContractMethods, contract, timestamp }) => {
 
   const ethereum = useContext(contexts.EthereumContext)
   const { signer, isEnabled: writeEnabled, chainId: writeChainId } = ethereum
@@ -92,7 +91,7 @@ export const Router = ({ listOfContractMethods, contract, retriggerEngine, timeS
           writeEnabled={writeEnabled}
           info={contractMethodElement}
           key={contractMethodElement.id}
-          timeStamp={timeStamp}
+          timestamp={timestamp}
         />
       ))}
     </>

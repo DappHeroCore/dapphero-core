@@ -16,9 +16,10 @@ export const ProvidersWrapper: React.FC = () => {
   const [ domElements, setDomElements ] = useState(null)
   const [ timestamp, setTimestamp ] = useState(+new Date())
   const [ supportedNetworks, setSupportedNetworks ] = useState([])
+  // TODO: [DEV-295] Correctly implement the pause behavior (Stop app from running)
   const [ isPaused, setPaused ] = useState(false)
 
-  const retriggerEngine = useCallback(() => { setTimestamp(+new Date()) }, [])
+  const retriggerEngine = (): void => { setTimestamp(+new Date()) }
 
   const ethereum = useWeb3Provider(consts.global.POLLING_INTERVAL) // This sets refresh speed of the whole app
 
@@ -53,9 +54,7 @@ export const ProvidersWrapper: React.FC = () => {
   useEffect(() => {
     // TODO: Here is where we end up waiting for Config to load project
     if (configuration) {
-      const domElements = getDomElements(configuration)
-
-      setDomElements(domElements)
+      setDomElements(getDomElements(configuration))
     }
   }, [ configuration ])
 
