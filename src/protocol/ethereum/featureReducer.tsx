@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 
 // Reducers
 import { Reducer as NetworkReducer } from './network/Reducer'
@@ -17,7 +17,6 @@ export const FeatureReducer: React.FunctionComponent<FeatureReducerProps> = ({
   info,
   customContractElements,
   retriggerEngine,
-  timeStamp,
 }: FeatureReducerProps) => {
 
   const featureType = feature
