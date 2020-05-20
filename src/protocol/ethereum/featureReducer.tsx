@@ -1,16 +1,23 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 
 // Reducers
 import { Reducer as NetworkReducer } from './network/Reducer'
 import { Reducer as UserReducer } from './user/Reducer'
 import { Reducer as ThreeBoxReducer } from './threeBox/Reducer'
 import { Reducer as NftReducer } from './nft/Reducer'
-import { Router as CustomContractRouter } from './customContract/Router'
+import { Manager } from './customContract/Manager'
 
 // Types
 import { FeatureReducerProps } from './types'
 
-export const FeatureReducer = ({ feature, element, configuration, info, customContractElements }: FeatureReducerProps) => {
+export const FeatureReducer: React.FunctionComponent<FeatureReducerProps> = ({
+  feature,
+  element,
+  configuration,
+  info,
+  customContractElements,
+  retriggerEngine,
+}: FeatureReducerProps) => {
 
   const featureType = feature
 
@@ -19,12 +26,9 @@ export const FeatureReducer = ({ feature, element, configuration, info, customCo
   // sort customContractElements => Array of different Contracts.
   // case'customContract' maps through this array, and renders a router for each contract.
 
-  const uniqueContractNames = new Set([ ...customContractElements.map(({ contract }) => contract.contractName) ])
-
   switch (featureType) {
     case 'nft': {
-      // TODO add some sort of delay here
-      return <NftReducer element={element} info={info} />
+      return <NftReducer element={element} info={info} retriggerEngine={retriggerEngine} />
     }
 
     case 'user': {
@@ -40,15 +44,9 @@ export const FeatureReducer = ({ feature, element, configuration, info, customCo
     }
 
     case 'customContract': {
-      // FIXME: We're going to remove !isProduction conditional when Dappeteer library gets updated with chainId support
-      for (const contractName of uniqueContractNames) {
-        const methodsByContractAsElements = customContractElements.filter((element) => element.contract.contractName === contractName)
-        // console.log("Contract Branches", methodsByContractAsElements)
-        const contract = configuration.contracts.filter((contract) => (contract.contractName === contractName))[0]
-        return <CustomContractRouter listOfContractMethods={methodsByContractAsElements} contract={contract} />
-      }
-
-      return null
+      return (
+        <Manager customContractElements={customContractElements} configuration={configuration} />
+      )
     }
 
     default:

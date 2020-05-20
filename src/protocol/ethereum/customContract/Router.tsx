@@ -21,9 +21,10 @@ type Contract = any;
 type RouterProps = {
   listOfContractMethods: ListOfContractMethods;
   contract: Contract;
+  timestamp: number;
 }
 
-export const Router = ({ listOfContractMethods, contract }: RouterProps) => {
+export const Router: React.FunctionComponent<RouterProps> = ({ listOfContractMethods, contract, timestamp }) => {
 
   const ethereum = useContext(contexts.EthereumContext)
   const { signer, isEnabled: writeEnabled, chainId: writeChainId } = ethereum
@@ -90,6 +91,7 @@ export const Router = ({ listOfContractMethods, contract }: RouterProps) => {
           writeEnabled={writeEnabled}
           info={contractMethodElement}
           key={contractMethodElement.id}
+          timestamp={timestamp}
         />
       ))}
     </>

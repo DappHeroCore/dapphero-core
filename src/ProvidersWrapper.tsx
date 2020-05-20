@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { ToastProvider } from 'react-toast-notifications'
 import { CookiesProvider } from 'react-cookie'
 import { getDomElements } from '@dapphero/dapphero-dom'
@@ -16,9 +16,11 @@ export const ProvidersWrapper: React.FC = () => {
   const [ domElements, setDomElements ] = useState(null)
   const [ timestamp, setTimestamp ] = useState(+new Date())
   const [ supportedNetworks, setSupportedNetworks ] = useState([])
+  // TODO: [DEV-295] Correctly implement the pause behavior (Stop app from running)
   const [ isPaused, setPaused ] = useState(false)
 
-  const retriggerEngine = (): void => setTimestamp(+new Date())
+  const retriggerEngine = (): void => { setTimestamp(+new Date()) }
+
   const ethereum = useWeb3Provider(consts.global.POLLING_INTERVAL) // This sets refresh speed of the whole app
 
   // load contracts effects only if not paused
@@ -47,9 +49,31 @@ export const ProvidersWrapper: React.FC = () => {
     if (configuration?.contracts) getSupportedNetworks()
   }, [ configuration ])
 
+  // This needs to filter for Unique Contracts
+
   useEffect(() => {
-    if (configuration) setDomElements(getDomElements(configuration))
+    // TODO: Here is where we end up waiting for Config to load project
+    if (configuration) {
+      setDomElements(getDomElements(configuration))
+    }
   }, [ configuration ])
+
+  const [ smartcontractElements, setSmartContractElements ] = useState({ contractElements: null, domElementsFilteredForContracts: null })
+
+  useEffect(() => {
+    const run = (): void => {
+
+      const newDomElements = getDomElements(configuration)
+      const contractElements = newDomElements.filter((element) => element.feature === 'customContract')
+      const getDomContractElements = (): Array<any> => {
+        const filteredForContracts = newDomElements.filter((element) => element.feature !== 'customContract')
+        return contractElements.length ? [ ...filteredForContracts, { id: contractElements[0].id, feature: 'customContract' } ] : filteredForContracts
+      }
+      const domElementsFilteredForContracts = getDomContractElements()
+      setSmartContractElements({ contractElements, domElementsFilteredForContracts })
+    }
+    if (domElements && configuration) run()
+  }, [ domElements, configuration, timestamp ])
 
   if (domElements != null) {
 
@@ -63,7 +87,10 @@ export const ProvidersWrapper: React.FC = () => {
                 setConfig={setConfig}
                 domElements={domElements}
                 retriggerEngine={retriggerEngine}
+                timeStamp={timestamp}
                 supportedNetworks={supportedNetworks}
+                domElementsFilteredForContracts={smartcontractElements.domElementsFilteredForContracts}
+                contractElements={smartcontractElements.contractElements}
               />
             </EthereumContext.Provider>
           </ToastProvider>

@@ -31,5 +31,7 @@ export type FeatureReducerProps = {
   index?: number;
   info?: any;
   customContractElements?: any;
+  retriggerEngine?: any;
+  timeStamp?: number;
 }
 

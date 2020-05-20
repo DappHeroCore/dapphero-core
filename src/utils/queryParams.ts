@@ -31,9 +31,10 @@ export const getQueryParameterValue = (value: string, key: string, userAddress?:
   const queryParameter = queryParameters[key]
 
   // Validate user address from url
-  if (value === CURRENT_USER && !isAddress(userAddress)) logger.info(`Invalid user address ${userAddress} defined in URL`)
+  if (value === CURRENT_USER && !isAddress(userAddress) && Object.keys(queryParameters).length) logger.info(`Invalid user address ${userAddress} defined in URL`)
 
-  if (!queryParameter) logger.info(`No query parameter ${key} defined in URL`)
+  // TODO: [DEV-293] Should this instead be inside an Event emitter for state?
+  // if (!queryParameter) logger.info(`No query parameter ${key} defined in URL`)
 
   return queryParameter || ''
 }

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 
 import * as consts from 'consts'
 import * as contexts from 'contexts'
@@ -6,6 +6,7 @@ import { loggerTest } from 'logger/loggerTest'
 
 import { EVENT_NAMES } from 'providers/EmitterProvider/constants'
 import { EmitterContext } from 'providers/EmitterProvider/context'
+
 import { FeatureReducer } from './protocol/ethereum/featureReducer'
 
 import { highlightDomElements } from './utils/highlightDomElements'
@@ -22,22 +23,24 @@ type ActivatorProps = {
   setConfig: any;
   supportedNetworks: any;
   retriggerEngine: () => void;
+  timeStamp: any;
+  contractElements: any;
+  domElementsFilteredForContracts: any;
 }
 
-export const Activator = ({ configuration, retriggerEngine, domElements, setConfig, supportedNetworks }: ActivatorProps) => {
+export const Activator: React.FC<ActivatorProps> = ({
+  configuration,
+  retriggerEngine,
+  timeStamp,
+  domElements,
+  setConfig,
+  supportedNetworks,
+  contractElements,
+  domElementsFilteredForContracts,
+}: ActivatorProps) => {
 
   // Ethereum
   const ethereum = useContext(contexts.EthereumContext)
-
-  // This needs to filter for Unique Contracts
-  const contractElements = domElements.filter((element) => element.feature === 'customContract')
-
-  const getDomContractElements = () => {
-    const filteredForContracts = domElements.filter((element) => element.feature !== 'customContract')
-    return contractElements.length ? [ ...filteredForContracts, { id: contractElements[0].id, feature: 'customContract' } ] : filteredForContracts
-  }
-
-  const domElementsFilteredForContracts = getDomContractElements()
 
   // TODO: [DEV-248] We should make this an app level state later.
   const AppReady = true
@@ -92,6 +95,8 @@ export const Activator = ({ configuration, retriggerEngine, domElements, setConf
               configuration={configuration}
               info={domElement}
               customContractElements={contractElements}
+              retriggerEngine={retriggerEngine}
+              timeStamp={timeStamp}
             />
           ))}
     </>

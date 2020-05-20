@@ -76,7 +76,7 @@ export const useWeb3Provider = (polling, web3provider = null, providerTypeName =
               const signerAddress = await signer.getAddress()
               return signerAddress
             } catch (error) {
-              console.log('This error: ', error)
+              // TODO: [DEV-294] Make a note in State that there is no assigned address
               return ''
             }
           }

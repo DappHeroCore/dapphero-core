@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext, useCallback } from 'react'
 import { useToasts } from 'react-toast-notifications'
 import * as contexts from 'contexts'
 import { DATA_PROPERTY } from '@dapphero/dapphero-dom'
@@ -8,7 +8,13 @@ import { useGetTokensForContractAddress } from './useGetTokensForContractAddress
 import { useGetTokensFromOwner } from './useGetTokensFromOwner'
 import { useRenderNfts } from './useRenderNfts'
 
-export const Reducer = ({ info, element }) => {
+type nftReducerProps = {
+info: any;
+element: HTMLElement | Element;
+retriggerEngine?: any;
+}
+
+export const Reducer: React.FunctionComponent<nftReducerProps> = ({ info, element, retriggerEngine }) => {
   // Get NFTs properties
   const { nft, properties_ } = info
   const { item, tokens = [], pagination } = nft

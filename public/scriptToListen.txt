@@ -1,0 +1,15 @@
+    <script>
+      document.addEventListener(
+        "dappHeroConfigLoaded",
+        ({ detail: dappHero }) => {
+          // Inside here you can listen to any event you want
+          console.log("It's loaded");
+          dappHero.listenToTransactionStatusChange(data => {
+            console.log("Listening to transtaction status change", data);
+          });
+          dappHero.listenToSmartContractBlockchainEvent(data => {
+            console.log("The blockChain Events: ", data)
+          })
+        }
+      );
+    </script>
