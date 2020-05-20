@@ -5,35 +5,29 @@
   "dependencies": {
     "3box": "^1.16.2",
     "@babel/core": "7.7.4",
-    "@dapphero/dapphero-dom": "^0.2.0",
-    "@ethersproject/providers": "^5.0.0-beta.152",
-    "@openzeppelin/network": "^0.2.10",
+    "@dapphero/dapphero-dom": "^0.4.5",
     "@sentry/browser": "^5.12.1",
     "@svgr/webpack": "4.3.3",
     "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.4.0",
-    "@testing-library/user-event": "^7.2.1",
-    "@types/jest": "^24.9.1",
+    "@types/jest": "^25.1.2",
     "@types/node": "^12.12.26",
+    "@types/query-string": "^6.3.0",
     "@types/react": "^16.9.19",
     "@types/react-dom": "^16.9.5",
-    "@types/web3": "^1.2.2",
     "@web3-react/core": "^6.0.7",
-    "@web3-react/injected-connector": "^6.0.7",
     "axios": "^0.19.2",
     "babel-eslint": "10.0.3",
     "babel-jest": "^24.9.0",
     "babel-loader": "8.0.6",
     "babel-plugin-named-asset-import": "^0.3.6",
     "babel-preset-react-app": "^9.1.1",
-    "bignumber.js": "^9.0.0",
-    "bn.js": "^5.1.1",
+    "beautiful-react-hooks": "^0.23.1",
     "bnc-notify": "^1.0.12",
     "camelcase": "^5.3.1",
     "case-sensitive-paths-webpack-plugin": "2.2.0",
     "css-loader": "3.2.0",
     "cuid": "^2.1.8",
-    "dompurify": "^2.0.8",
+    "dappeteer": "0.6.0",
     "dotenv": "8.2.0",
     "dotenv-expand": "5.1.0",
     "eslint": "^6.6.0",
@@ -51,15 +45,14 @@
     "identity-obj-proxy": "3.0.0",
     "jest": "24.9.0",
     "jest-environment-jsdom-fourteen": "0.1.0",
+    "jest-puppeteer": "4.4.0",
     "jest-resolve": "24.9.0",
     "jest-watch-typeahead": "0.4.2",
-    "jquery": "^3.4.1",
-    "lodash": "^4.17.15",
+    "lodash.get": "^4.4.2",
     "lodash.omit": "^4.5.0",
     "logger": "0.0.1",
-    "loggly-jslogger": "^2.2.2",
-    "logrocket": "^1.0.6",
     "mini-css-extract-plugin": "0.8.0",
+    "mitt": "^1.2.0",
     "multicodec": "^0.5.7",
     "optimize-css-assets-webpack-plugin": "5.0.3",
     "pnp-webpack-plugin": "1.5.0",
@@ -69,17 +62,16 @@
     "postcss-preset-env": "6.7.0",
     "postcss-safe-parser": "4.0.1",
     "profile-hover": "^1.1.1",
-    "prop-types": "^15.7.2",
+    "puppeteer": "1.16.0",
+    "query-string": "^6.11.1",
     "react": "^16.12.0",
     "react-app-polyfill": "^1.0.6",
     "react-cookie": "^4.0.3",
-    "react-dev-utils": "^10.1.0",
+    "react-dev-utils": "10.0.0",
     "react-device-detect": "^1.11.14",
     "react-dom": "^16.12.0",
-    "react-error-boundary": "^1.2.5",
     "react-toast-notifications": "^2.4.0",
     "react-tooltip": "^3.11.6",
-    "request": "^2.88.0",
     "resolve": "1.12.2",
     "resolve-url-loader": "3.1.1",
     "sass-loader": "8.0.0",
@@ -90,20 +82,17 @@
     "ts-pnp": "1.1.5",
     "typescript": "^3.7.5",
     "url-loader": "2.3.0",
-    "web3": "^1.2.6",
-    "web3-react": "^5.0.5",
-    "web3-utils": "^1.2.6",
     "webpack": "4.41.2",
     "webpack-dev-server": "3.9.0",
     "webpack-manifest-plugin": "2.2.0",
-    "winston": "^3.2.1",
-    "winston-loggly-bulk": "^3.0.1",
     "workbox-webpack-plugin": "4.3.1"
   },
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node --max-old-space-size=4096 scripts/build.js",
     "test": "node scripts/test.js",
+    "build-dev-deploy": "node dev-deploy",
+    "test:e2e": "jest src/e2e",
     "deploy": "npm run build && aws s3 cp ./build/static/js/main.js s3://package.dapphero.io/ --acl public-read",
     "serve": "serve -s build"
   },
@@ -130,57 +119,9 @@
     "eslint-plugin-react": "^7.17.0",
     "eslint-plugin-react-hooks": "^1.7.0",
     "husky": "^3.1.0",
-    "lint-staged": "^9.5.0"
-  },
-  "jest": {
-    "roots": [
-      "<rootDir>/src"
-    ],
-    "collectCoverageFrom": [
-      "src/**/*.{js,jsx,ts,tsx}",
-      "!src/**/*.d.ts"
-    ],
-    "setupFiles": [
-      "react-app-polyfill/jsdom"
-    ],
-    "setupFilesAfterEnv": [
-      "<rootDir>/src/setupTests.ts"
-    ],
-    "testMatch": [
-      "<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}",
-      "<rootDir>/src/**/*.{spec,test}.{js,jsx,ts,tsx}"
-    ],
-    "testEnvironment": "jest-environment-jsdom-fourteen",
-    "transform": {
-      "^.+\\.(js|jsx|ts|tsx)$": "<rootDir>/node_modules/babel-jest",
-      "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
-      "^(?!.*\\.(js|jsx|ts|tsx|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
-    },
-    "transformIgnorePatterns": [
-      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|ts|tsx)$",
-      "^.+\\.module\\.(css|sass|scss)$"
-    ],
-    "modulePaths": [],
-    "moduleNameMapper": {
-      "^react-native$": "react-native-web",
-      "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy"
-    },
-    "moduleFileExtensions": [
-      "web.js",
-      "js",
-      "web.ts",
-      "ts",
-      "web.tsx",
-      "tsx",
-      "json",
-      "web.jsx",
-      "jsx",
-      "node"
-    ],
-    "watchPlugins": [
-      "jest-watch-typeahead/filename",
-      "jest-watch-typeahead/testname"
-    ]
+    "lint-staged": "^9.5.0",
+    "moment": "^2.24.0",
+    "ts-jest": "^25.2.0"
   },
   "babel": {
     "presets": [

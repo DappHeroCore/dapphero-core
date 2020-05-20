@@ -1,42 +1,105 @@
-import React, { useContext } from 'react'
-import * as hooks from 'hooks'
-import { logger } from 'logger/customLogger'
-import { loggerTest } from 'logger/loggerTest'
-import * as contexts from 'contexts'
+import React, { useContext, useEffect, useState } from 'react'
+
 import * as consts from 'consts'
+import * as contexts from 'contexts'
+import { loggerTest } from 'logger/loggerTest'
+
+import { EVENT_NAMES } from 'providers/EmitterProvider/constants'
+import { EmitterContext } from 'providers/EmitterProvider/context'
+
 import { FeatureReducer } from './protocol/ethereum/featureReducer'
+
+import { highlightDomElements } from './utils/highlightDomElements'
+
+import { openSeaApi as nftApi } from './protocol/ethereum/nft/api'
 
 // Log tests and Startup Logs
 loggerTest()
 
-export const Activator = ({ configuration }) => {
-  const domElements = useContext(contexts.DomElementsContext)
+// TODO: Type configuration
+type ActivatorProps = {
+  configuration: any;
+  domElements: any;
+  setConfig: any;
+  supportedNetworks: any;
+  retriggerEngine: () => void;
+  timeStamp: any;
+  contractElements: any;
+  domElementsFilteredForContracts: any;
+}
 
-  const attemptedEagerConnect = hooks.useEagerConnect()
+export const Activator: React.FC<ActivatorProps> = ({
+  configuration,
+  retriggerEngine,
+  timeStamp,
+  domElements,
+  setConfig,
+  supportedNetworks,
+  contractElements,
+  domElementsFilteredForContracts,
+}: ActivatorProps) => {
 
-  window.dappHero = {
-    enabled: true,
-    domElements,
-    configuration,
-    projectId: consts.global.apiKey,
-    debug: false,
+  // Ethereum
+  const ethereum = useContext(contexts.EthereumContext)
+
+  // TODO: [DEV-248] We should make this an app level state later.
+  const AppReady = true
+
+  const { actions: { listenToEvent } } = useContext(EmitterContext)
+
+  // Allow users to add contracts using Javascript
+  const addClientSideContract = ({ contractName, contractAddress, contractAbi, networkId }) => {
+    const existingContracts = configuration.contracts
+    setConfig({ contracts: [ ...existingContracts, { contractName, contractAddress, contractAbi, networkId } ] })
   }
 
-  if (attemptedEagerConnect) {
-    return (
-      <>
-        {domElements
-          && domElements.map((domElement) => (
+  useEffect(() => {
+    const dappHero = {
+      debug: false,
+      enabled: true,
+      highlightEnabled: false,
+      domElements,
+      configuration,
+      collectibles: { nftApi },
+      contracts: {},
+      addClientSideContract,
+      retriggerEngine,
+      projectId: consts.global.apiKey,
+      provider: ethereum,
+      toggleHighlight(): void {
+        dappHero.highlightEnabled = !dappHero.highlightEnabled
+        highlightDomElements(dappHero.highlightEnabled, domElements)
+      },
+      listenToContractOutputChange: (cb): void => listenToEvent(EVENT_NAMES.contract.outputUpdated, cb),
+      listenToContractAutoInvokeChange: (cb): void => listenToEvent(EVENT_NAMES.contract.autoInvoke, cb),
+      listenToTransactionStatusChange: (cb): void => listenToEvent(EVENT_NAMES.contract.statusChange, cb),
+      listenToContractInvokeTriggerChange: (cb): void => listenToEvent(EVENT_NAMES.contract.invokeTrigger, cb),
+      listenToSmartContractBlockchainEvent: (cb): void => listenToEvent(EVENT_NAMES.contract.contractEvent, cb),
+    }
+    Object.assign(window, { dappHero })
+
+    // Dispatch the event.
+    const event = new CustomEvent('dappHeroConfigLoaded', { detail: dappHero })
+    document.dispatchEvent(event)
+  }, [ AppReady ])
+
+  if (!AppReady || !domElementsFilteredForContracts) return null
+  return (
+    <>
+      {domElementsFilteredForContracts
+          && domElementsFilteredForContracts.map((domElement) => (
             <FeatureReducer
               key={domElement.id}
               element={domElement.element}
               feature={domElement.feature}
               configuration={configuration}
               info={domElement}
+              customContractElements={contractElements}
+              retriggerEngine={retriggerEngine}
+              timeStamp={timeStamp}
             />
           ))}
-      </>
-    )
-  }
-  return null
+    </>
+  )
+
 }

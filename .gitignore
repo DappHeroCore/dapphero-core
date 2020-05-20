@@ -26,3 +26,5 @@ yarn.lock
 #vscode settings
 .vscode
 
+# env
+.env

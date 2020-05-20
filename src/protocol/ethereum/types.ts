@@ -15,6 +15,7 @@ export type ABI = {
 }
 
 export type Configuration = {
+  contracts: any;
   contractName: string;
   contractAddress: string;
   contractAbi: ABI[];
@@ -29,5 +30,8 @@ export type FeatureReducerProps = {
   key?: string;
   index?: number;
   info?: any;
+  customContractElements?: any;
+  retriggerEngine?: any;
+  timeStamp?: number;
 }
 

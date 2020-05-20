@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { EthUserBalance } from './EthUserBalance'
 import { EthUserAddress } from './EthUserAddress'
 
@@ -9,24 +10,24 @@ export const Reducer = ({ element, info }) => {
   const [ displayFormat ] = info?.modifiers?.filter((modifier) => modifier.key === 'display') ?? null
 
   switch (info?.properties[0]?.key) {
-  case 'address': {
-    return (
-      <EthUserAddress
-        element={element}
-        displayFormat={displayFormat?.value}
-      />
-    )
-  }
-  case 'balance': {
-    return (
-      <EthUserBalance
-        element={element}
-        units={units?.value}
-        decimals={decimals?.value}
-      />
-    )
-  }
-  default:
-    return null
+    case 'address': {
+      return (
+        <EthUserAddress
+          element={element}
+          displayFormat={displayFormat?.value}
+        />
+      )
+    }
+    case 'balance': {
+      return (
+        <EthUserBalance
+          element={element}
+          units={units?.value}
+          decimals={decimals?.value}
+        />
+      )
+    }
+    default:
+      return null
   }
 }

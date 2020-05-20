@@ -1,36 +1,16 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import * as hooks from 'hooks'
-import * as consts from 'consts'
+import * as contexts from 'contexts'
+import { logger } from 'logger/customLogger'
 import { EthEnable } from './EthEnable'
 import { EthNetworkInfo } from './EthNetworkInfo'
 import { EthTransfer } from './EthTransfer'
 
 export const Reducer = ({ element, info }) => {
-  // const injected = hooks.useDappHeroWeb3()
-  const injectedContext = useWeb3React()
   const domElements = hooks.useDomElements()
-  const { chainId } = injectedContext
-  const networkName = consts.global.ethNetworkName[chainId]
-  const defaultInfoObj = {
-    networkId: 0,
-    networkName: 'Unknown',
-    providerName: 'Unknown',
-  }
-
-  const [ infoValue, setInfoValue ] = useState(defaultInfoObj)
-
-  useEffect(() => {
-
-    const isMetamask = (typeof window.ethereum !== 'undefined' && window.ethereum.isMetaMask) ? 'metamask' : null
-
-    const infoValueObj = {
-      networkId: chainId ?? 0,
-      networkName: networkName ?? 'Unknown',
-      providerName: isMetamask ?? 'Unknown',
-    }
-    setInfoValue(infoValueObj)
-  }, [ chainId, networkName ])
+  const ethereum = useContext(contexts.EthereumContext)
+  const { chainId, networkName, providerType, isEnabled } = ethereum
 
   switch (info?.properties[0]?.key) {
     case ('enable'): { // TODO: Drake- we need to settle on if we are going to use this style or not so we can be consistent
@@ -44,7 +24,7 @@ export const Reducer = ({ element, info }) => {
       return (
         <EthNetworkInfo
           element={element}
-          infoValue={infoValue.networkId.toString()}
+          infoValue={chainId ? chainId.toString() : null}
         />
       )
     }
@@ -52,7 +32,7 @@ export const Reducer = ({ element, info }) => {
       return (
         <EthNetworkInfo
           element={element}
-          infoValue={infoValue.networkName}
+          infoValue={networkName}
         />
       )
     }
@@ -60,7 +40,7 @@ export const Reducer = ({ element, info }) => {
       return (
         <EthNetworkInfo
           element={element}
-          infoValue={infoValue.providerName}
+          infoValue={providerType}
         />
       )
     }

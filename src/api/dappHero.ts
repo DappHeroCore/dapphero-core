@@ -1,15 +1,13 @@
 import Axios from 'axios'
 import { logger } from 'logger/customLogger'
-import abi from '../abi/DappHeroTest.json' // eslint-disable-line
+import * as consts from 'consts'
+
 const axios = Axios.create({ headers: { 'content-type': 'application/json' } })
 
-// Refactor when this is more fleshed out
-const DEV_URL = 'https://dapphero-admin.bubbleapps.io/api/1.1/wf/contracts'
-const PROD_URL = 'https://dapphero-admin.bubbleapps.io/api/1.1/wf/contracts'
-
-const BASE_URL = process.env.NODE_ENV === 'production' ? PROD_URL : DEV_URL
-
 const BUBBLE_ENDPOINT = false
+const isProduction = process.env.NODE_ENV === 'production'
+const BASE_URL = isProduction ? consts.global.BUBBLE_PROD_URL : consts.global.BUBBLE_DEV_URL
+const BACKEND_URL = isProduction ? consts.global.BACKEND_PROD_URL : consts.global.BACKEND_DEV_URL
 
 const POST = 'post'
 const GET = 'get'
@@ -36,11 +34,45 @@ export const postLogToDappHeroBackend = (payload) => {
 export const postLogToBubbleBackend = (payload) => {
   axios({
     method: POST,
-    url: `BUBBLE_ENDPOINT`,
+    url: `${BUBBLE_ENDPOINT}`,
     data: payload,
   }).catch((e) => {
     console.log(e)
   })
+}
+
+export const getContractsByProjectKeyV2 = async (projectId) => {
+  try {
+    const axiosResponse = await axios({
+      method: GET,
+      url: `${BACKEND_URL}/projects/${projectId}/contracts/`,
+    })
+    const responseData = axiosResponse.data
+    const { data: contracts, paused } = responseData.response
+    const formattedOutput = JSON.parse(contracts).map((contract) => {
+      const { contractABI, networkid, projectid, ...rest } = contract
+      return {
+        ...rest,
+        contractAbi: JSON.parse(contractABI),
+        networkId: networkid,
+        projectId: projectid,
+      }
+    })
+    return formattedOutput
+  } catch (err) {
+    logger.error('Error in dappHero api, getContractsByProjectKeyV2', err)
+    throw new Error(err)
+  }
+}
+
+const compareResponses = async (originalOutput, projectId) => {
+  const compareOutput = await getContractsByProjectKeyV2(projectId)
+  const isEqual = !!(JSON.stringify(originalOutput) === JSON.stringify(compareOutput))
+  logger.info(`Get Contracts Comparison isEqual: ${isEqual.toString()}`)
+  if (!isEqual) {
+    logger.info('compareResponses -> compareOutput', compareOutput)
+    logger.info('compareResponses -> originalOutput', originalOutput)
+  }
 }
 
 export const getContractsByProjectKey = async (projectId) => {
@@ -53,8 +85,9 @@ export const getContractsByProjectKey = async (projectId) => {
       url: BASE_URL,
       data: body,
     }))
-    const responseData = axiosResponse.data.response.data
-    const output = JSON.parse(responseData)
+    const responseData = axiosResponse.data
+    const { paused, data: contracts } = responseData.response
+    const output = JSON.parse(contracts)
     const formattedOutput = output.map((contract) => {
       const { contractABI, networkid, projectid, ...rest } = contract
       return {
@@ -64,9 +97,16 @@ export const getContractsByProjectKey = async (projectId) => {
         projectId: projectid,
       }
     })
-    return formattedOutput
+
+    try {
+      compareResponses(formattedOutput, projectId)
+    } catch (err) {
+      // handle error
+    }
+    return { formattedOutput, paused }
   } catch (err) {
     logger.error('Error in dappHero api, getContractsByProjectKey', err)
     throw new Error(err)
   }
 }
+

@@ -1,9 +1,7 @@
-import React, { useEffect, useState, FunctionComponent } from 'react'
+import React, { useEffect, useState, useContext, FunctionComponent, useMemo } from 'react'
 import { logger } from 'logger/customLogger'
-import * as hooks from 'hooks'
-import * as connectors from 'connectors'
+import * as contexts from 'contexts'
 import ReactTooltip from 'react-tooltip'
-import { useWeb3React } from '@web3-react/core'
 
 interface EthEnableProps {
   element: HTMLElement;
@@ -14,30 +12,35 @@ interface EthEnableProps {
  * @param props From props we use only injected and request.
  */
 export const EthEnable: FunctionComponent<EthEnableProps> = ({ element }) => {
-  // const injected = hooks.useDappHeroWeb3()
-  const injected = useWeb3React()
+  const memoizedValue = useMemo(
+    () => element.innerText
+    , [],
+  )
+  const ethereum = useContext(contexts.EthereumContext)
+  const { isEnabled, enable } = ethereum
 
-  const message = injected.active ? 'Succesfully Connected' : 'Click Connect to MetaMask'
+  const message = isEnabled ? 'Succesfully Connected' : 'Click Connect to MetaMask'
   element.setAttribute('data-tip', message)
 
   const [ buttonStatus, setButtonStatus ] = useState(element.innerText || 'Enable MetaMask')
 
   useEffect(() => {
-    if (injected.active) {
+    if (isEnabled) {
       setButtonStatus('Connected')
+    } else {
+      setButtonStatus(memoizedValue)
     }
-  }, [ injected.active ])
+  }, [ isEnabled ])
 
   useEffect(() => {
     try {
-      const clickHandler = () => { injected.activate(connectors.injected) }
-      element.addEventListener('click', clickHandler, true)
+      element.addEventListener('click', enable, true)
 
-      return (() => element.removeEventListener('click', clickHandler, true))
+      return (() => element.removeEventListener('click', enable, true))
     } catch (e) {
       logger.log(e)
     }
-  }, [ injected.active ])
+  }, [ isEnabled ])
 
   element.innerText = buttonStatus
 

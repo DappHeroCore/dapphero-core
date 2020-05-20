@@ -1,5 +1,5 @@
 import { logger } from 'logger/customLogger'
-import { FunctionComponent } from 'react'
+import { FunctionComponent, useMemo } from 'react'
 
 interface EthNetworkInfoProps {
   infoValue: string;
@@ -7,10 +7,11 @@ interface EthNetworkInfoProps {
 }
 
 export const EthNetworkInfo: FunctionComponent<EthNetworkInfoProps> = ({ element, infoValue }) => { // eslint-disable-line
-  try {
-    element.innerHTML = infoValue
-  } catch (e) {
-    logger.log(e)
-  }
+  const memoizedValue = useMemo(
+    () => element.innerText
+    , [],
+  )
+
+  element.innerHTML = infoValue || memoizedValue
   return null
 }
