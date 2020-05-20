@@ -9,7 +9,6 @@ export type ManagerProps = {
   }
 
 export const Manager: React.FunctionComponent<ManagerProps> = ({ customContractElements, configuration }) => {
-  console.log('customContractElements', customContractElements)
 
   const { actions: { emitToEvent, listenToEvent } } = useContext(EmitterContext)
 
@@ -25,6 +24,7 @@ export const Manager: React.FunctionComponent<ManagerProps> = ({ customContractE
   for (const contractName of uniqueContractNames) {
 
     const domElements2 = getDomElements(configuration)
+    console.log('domElements2', domElements2)
     const contractElements = domElements2.filter((element) => element.feature === 'customContract')
     const methodsByContractAsElements = contractElements.filter((element) => element.contract.contractName === contractName)
     const contract = configuration.contracts.filter((thisContract) => (thisContract.contractName === contractName))[0]

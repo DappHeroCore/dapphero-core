@@ -225,6 +225,7 @@ export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContr
       }
 
       if (writeEnabled && isTransaction) {
+        console.log('writeEnabled && isTransaction', writeEnabled, isTransaction)
         emitToEvent(
           EVENT_NAMES.contract.statusChange,
           { value: null, step: 'Triggering write transaction.', status: EVENT_STATUS.pending, methodNameKey },
