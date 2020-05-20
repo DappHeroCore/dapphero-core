@@ -16,9 +16,7 @@ export const Manager: React.FunctionComponent<ManagerProps> = ({ customContractE
 
   const [ timestamp, setTimestamp ] = useState(Date.now())
   useEffect(() => {
-    listenToEvent('nftsUpdated', (data) => {
-      setTimestamp(data)
-    })
+    listenToEvent('nftsUpdated', setTimestamp);
   }, [])
 
   for (const contractName of uniqueContractNames) {
@@ -37,4 +35,3 @@ export const Manager: React.FunctionComponent<ManagerProps> = ({ customContractE
     )
   }
 }
-
