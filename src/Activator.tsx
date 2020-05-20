@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 
 import * as consts from 'consts'
 import * as contexts from 'contexts'
@@ -11,6 +11,7 @@ import { FeatureReducer } from './protocol/ethereum/featureReducer'
 import { highlightDomElements } from './utils/highlightDomElements'
 
 import { openSeaApi as nftApi } from './protocol/ethereum/nft/api'
+import { pinata } from './api/pinata'
 
 // Log tests and Startup Logs
 loggerTest()
@@ -50,6 +51,17 @@ export const Activator = ({ configuration, retriggerEngine, domElements, setConf
     setConfig({ contracts: [ ...existingContracts, { contractName, contractAddress, contractAbi, networkId } ] })
   }
 
+  const [ thisPinata, setPinata ] = useState(pinata)
+  useEffect(() => {
+    thisPinata.testAuthentication().then((result) => {
+      // handle successful authentication here
+      console.log(result)
+    }).catch((err) => {
+      // handle error here
+      console.log(err)
+    })
+  }, [])
+
   useEffect(() => {
     const dappHero = {
       debug: false,
@@ -63,6 +75,7 @@ export const Activator = ({ configuration, retriggerEngine, domElements, setConf
       retriggerEngine,
       projectId: consts.global.apiKey,
       provider: ethereum,
+      pinataIPFS: thisPinata,
       toggleHighlight(): void {
         dappHero.highlightEnabled = !dappHero.highlightEnabled
         highlightDomElements(dappHero.highlightEnabled, domElements)

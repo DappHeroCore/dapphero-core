@@ -3,12 +3,12 @@ import * as contexts from 'contexts'
 import { useWeb3React } from '@web3-react/core'
 import { logger } from 'logger/customLogger'
 import { getProfile } from '3box/lib/api'
+import * as constants from '../../../consts'
 import { ThreeBoxProfileDataElement } from './ThreeBoxProfileDataElement'
 import { ThreeBoxProfileImgElement } from './ThreeBoxProfileImgElement'
 
 const get3boxProfile = getProfile
 
-const ipfsRoot = 'https://cloudflare-ipfs.com/ipfs/'
 interface ReducerProps {
   element: Element;
   info: any;
@@ -59,7 +59,7 @@ export const Reducer: FunctionComponent<ReducerProps> = ({ element, info }) => {
     case 'image': {
       const imageHash = threeBoxProfile?.image?.[0]?.contentUrl?.['/'] ?? null
       if (imageHash && isEnabled) {
-        const imgSrc = `${ipfsRoot}${threeBoxProfile.image[0].contentUrl['/']}`
+        const imgSrc = `${constants.global.ipfsRoot}${threeBoxProfile.image[0].contentUrl['/']}`
         return <ThreeBoxProfileImgElement element={element} imgSrc={imgSrc} />
       }
       return <ThreeBoxProfileImgElement element={element} imgSrc={null} />

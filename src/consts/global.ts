@@ -21,3 +21,5 @@ export const BUBBLE_PROD_URL = 'https://dapphero-admin.bubbleapps.io/api/1.1/wf/
 
 export const BACKEND_DEV_URL = 'https://api.dapphero.io'
 export const BACKEND_PROD_URL = 'https://api.dapphero.io'
+
+export const ipfsRoot = 'https://cloudflare-ipfs.com/ipfs/'
