@@ -23,7 +23,6 @@ export const Reducer: React.FunctionComponent<nftReducerProps> = ({ info, elemen
   // React hooks
   const [ offset, setOffset ] = useState(defaultOffset)
 
-  const retrigger = useCallback(() => retriggerEngine(), [])
   // Custom hooks
   const { addToast } = useToasts()
 
@@ -144,10 +143,6 @@ export const Reducer: React.FunctionComponent<nftReducerProps> = ({ info, elemen
     if (prevButton) prevButton.addEventListener('click', handlePrevButton)
     if (nextButton) nextButton.addEventListener('click', handleNextButton)
   }, [])
-
-  useEffect(() => {
-    // retrigger()
-  }, [] )
 
   // Replace iframe elements having $THIS_ContractAddress as a text content to their respective contract address
   // useEffect(() => {
