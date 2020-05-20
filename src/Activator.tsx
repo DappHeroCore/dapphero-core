@@ -6,6 +6,7 @@ import { loggerTest } from 'logger/loggerTest'
 
 import { EVENT_NAMES } from 'providers/EmitterProvider/constants'
 import { EmitterContext } from 'providers/EmitterProvider/context'
+import { getProfile } from '3box/lib/api'
 import { FeatureReducer } from './protocol/ethereum/featureReducer'
 
 import { highlightDomElements } from './utils/highlightDomElements'
@@ -51,6 +52,7 @@ export const Activator = ({ configuration, retriggerEngine, domElements, setConf
     setConfig({ contracts: [ ...existingContracts, { contractName, contractAddress, contractAbi, networkId } ] })
   }
 
+  // Create Pinata Instance
   const [ thisPinata, setPinata ] = useState(pinata)
   useEffect(() => {
     thisPinata.testAuthentication().then((result) => {
@@ -74,8 +76,9 @@ export const Activator = ({ configuration, retriggerEngine, domElements, setConf
       addClientSideContract,
       retriggerEngine,
       projectId: consts.global.apiKey,
-      provider: ethereum,
-      pinataIPFS: thisPinata,
+      provider: ethereum, // Add Ethereum Provider
+      pinataIPFS: thisPinata, // Add Pinata IPFS
+      threeBox: { getProfile }, // Add ThreeBox
       toggleHighlight(): void {
         dappHero.highlightEnabled = !dappHero.highlightEnabled
         highlightDomElements(dappHero.highlightEnabled, domElements)

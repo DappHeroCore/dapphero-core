@@ -1,6 +1,5 @@
 import React, { FunctionComponent, useEffect, useState, useContext } from 'react'
 import * as contexts from 'contexts'
-import { useWeb3React } from '@web3-react/core'
 import { logger } from 'logger/customLogger'
 import { getProfile } from '3box/lib/api'
 import * as constants from '../../../consts'
@@ -39,6 +38,11 @@ export const Reducer: FunctionComponent<ReducerProps> = ({ element, info }) => {
       { contentUrl: { '/': null } },
     ],
   })
+
+  // Attach 3Box to window
+  useEffect(() => {
+    window.dappHero.threebox = { getProfile }
+  }, [])
 
   const ethereum = useContext(contexts.EthereumContext)
   const { address, isEnabled } = ethereum
