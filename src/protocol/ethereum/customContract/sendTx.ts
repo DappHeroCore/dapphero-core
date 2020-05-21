@@ -1,5 +1,6 @@
 import { ethers } from 'ethers'
 import { EVENT_NAMES, EVENT_STATUS } from 'providers/EmitterProvider/constants'
+import { write } from 'fs'
 import { ACTION_TYPES } from './stateMachine'
 
 export const sendTx = async ({ writeContract, dispatch, provider, methodName, methodParams, value, notify, emitToEvent, methodNameKey }): Promise<void> => {
@@ -7,11 +8,12 @@ export const sendTx = async ({ writeContract, dispatch, provider, methodName, me
   const methodDetails = { methodName, methodParams, contractAddress: writeContract.address, contractNetwork: writeContract.provider._network.name }
   const method = writeContract.functions[methodName]
   const gasPrice = await provider.getGasPrice()
-  const estimateMethod = writeContract.estimate[methodName]
+  const estimateMethod = writeContract.estimateGas[methodName]
   let estimatedGas
 
   const tempOverride = { value: ethers.utils.parseEther(value) }
   // TODO: Allow users to set Gas Price
+  // console.log("tempOverride", tempOverride)
 
   dispatch({
     type: ACTION_TYPES.txUserSignatureRequested,
@@ -24,8 +26,21 @@ export const sendTx = async ({ writeContract, dispatch, provider, methodName, me
     },
   })
 
+  // CallStatic first
+  let callStatic
   try {
-    estimatedGas = await estimateMethod(...methodParams, tempOverride)
+    console.log('Calling Static')
+    callStatic = await writeContract.callStatic[methodName](...methodParams)
+    console.log('callStatic result', callStatic)
+  } catch (error) {
+    console.log('Error Reason:', error.reason)
+
+  }
+
+  try {
+    estimatedGas = await estimateMethod(...methodParams)
+    // const valueStatic = await method(...methodParams, tempOverride)
+    // console.log('valueStatic', valueStatic)
 
     dispatch({
       type: ACTION_TYPES.txUserSignatureRequested,
@@ -40,6 +55,7 @@ export const sendTx = async ({ writeContract, dispatch, provider, methodName, me
     })
 
   } catch (error) {
+    console.log('Estimate gas error', error)
     dispatch({
       type: ACTION_TYPES.estimateGasError,
       status: {
@@ -71,8 +87,10 @@ export const sendTx = async ({ writeContract, dispatch, provider, methodName, me
   })
 
   try {
-
-    methodResult = await method(...methodParams, overrides)
+    // console.log('MethodNAme: ', methodName)
+    // console.log('contract: ', writeContract.functions)
+    // const method = writeContract.functions[methodName]
+    methodResult = await method(...methodParams)
 
     dispatch({
       type: ACTION_TYPES.txReceipt,
@@ -122,6 +140,8 @@ export const sendTx = async ({ writeContract, dispatch, provider, methodName, me
     return methodResult.hash
 
   } catch (error) {
+    console.log(Object.keys(error))
+    console.log(JSON.stringify(error, null, 2))
     emitToEvent(
       EVENT_NAMES.contract.statusChange,
       { value: error, step: 'Transaction failed to be broadcast/executed', status: EVENT_STATUS.rejected, methodNameKey },

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Web3Provider } from 'ethers/providers'
 import { useInterval } from 'beautiful-react-hooks'
+import { ethers } from 'ethers'
 import { logger } from '../logger/customLogger'
 import { providerSchema } from '../consts'
 
@@ -10,7 +11,7 @@ export const useWeb3Provider = (polling, web3provider = null, providerTypeName =
 
   // If no providers return early the provider schema with all null values
   if (!web3provider && !window.ethereum && !window.web3?.currentProvider) return providerSchema.providerSchema
-  const provider = web3provider || new Web3Provider(window.ethereum || window?.web3?.currentProvider)
+  const provider = web3provider || new ethers.providers.Web3Provider(window.ethereum || window?.web3?.currentProvider)
 
   // find the provider type
   let providerType
@@ -66,7 +67,7 @@ export const useWeb3Provider = (polling, web3provider = null, providerTypeName =
   useInterval(() => {
     const poll = async () => {
       try {
-        const provider = web3provider || new Web3Provider(window.ethereum || window?.web3?.currentProvider)
+        const provider = web3provider || new ethers.providers.Web3Provider(window.ethereum || window?.web3?.currentProvider)
         const ready = await provider.ready
         const signer = provider?.getSigner ? provider.getSigner() : null
         let address = null
