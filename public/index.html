@@ -20,15 +20,15 @@
 
     <div
       data-dh-feature="customContract"
-      data-dh-property-contract-name="SimpleVote"
-      data-dh-property-method-name="votes"
+      data-dh-property-contract-name="DH-ForceRevertTest"
+      data-dh-property-method-name="shouldRevert"
       data-dh-property-method-id="0000"
-      data-dh-property-auto-invoke="false"
     >
       <input
         data-dh-property-method-id="0000"
-        data-dh-property-input-name="$true"
+        data-dh-property-input-name="_message"
         data-dh-property-auto-clear="false"
+        placeholder="The String you want to send:"
       />
       <!-- <div data-dh-property-method-id="0000" data-dh-property-outputs>
         *-Placeholder for returned data-*
@@ -36,10 +36,74 @@
       <span data-dh-property-method-id="0000" data-dh-property-outputs="true"
       >..output here..</span>
       <button data-dh-property-method-id="0000" data-dh-property-invoke="true">
-        Click Here to Call Your Smart Contract!
+        Should revert
       </button>
     </div>
 
+    <div
+    data-dh-feature="customContract"
+    data-dh-property-contract-name="DH-ForceRevertTest"
+    data-dh-property-method-name="shouldNotRevert"
+    data-dh-property-method-id="1111"
+  >
+    <input
+      data-dh-property-method-id="1111"
+      data-dh-property-input-name="_message"
+      data-dh-property-auto-clear="false"
+      placeholder="The String you want to send:"
+    />
+    <!-- <div data-dh-property-method-id="1111" data-dh-property-outputs>
+      *-Placeholder for returned data-*
+    </div> -->
+    <span data-dh-property-method-id="1111" data-dh-property-outputs="true"
+    >..output here..</span>
+    <button data-dh-property-method-id="1111" data-dh-property-invoke="true">
+     Should not revert
+    </button>
+  </div>
+
+
+    <!-- [
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_message",
+				"type": "string"
+			}
+		],
+		"name": "shouldNotRevert",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_message",
+				"type": "string"
+			}
+		],
+		"name": "shouldRevert",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "message",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+] -->
 
     <!-- This is the method instance, the "parent" of the NFT object -->
     <!-- Replace 'property-asset-contract-address' with the NFT collectible contract address of your choice.  -->
@@ -53,7 +117,7 @@
     <script
       src=""
       id="dh-apiKey"
-      data-api="1589977001904x535637299413385200"
+      data-api="1590083625422x322180146733514750"
     ></script>
 <!-- 
     <script>
