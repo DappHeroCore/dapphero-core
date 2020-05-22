@@ -12,23 +12,12 @@ export const sendTx = async ({ writeContract, dispatch, provider, methodName, me
   const estimateMethod = writeContract.estimateGas[methodName]
   let estimatedGas
 
-  dispatch({
-    type: ACTION_TYPES.txUserSignatureRequested,
-    status: {
-      ...methodDetails,
-      msg: 'Estimate Gas Cost of Transaction',
-      error: false,
-      fetching: true,
-      inFlight: false,
-    },
-  })
-
   // Call Static to see if it's going to Fail and get Error Message
   let transactionValid = true
+  const tempOverride = { value: ethers.utils.parseEther(value) }
 
   try {
     if (value !== '0') {
-      const tempOverride = { value: ethers.utils.parseEther(value) }
       await writeContract.callStatic[methodName](...methodParams, tempOverride)
     } else {
       await writeContract.callStatic[methodName](...methodParams)
@@ -52,8 +41,20 @@ export const sendTx = async ({ writeContract, dispatch, provider, methodName, me
   }
 
   // If the Contract would revert, block execution
-  if (transactionValid) {
-    // Estimate Gas for Transaction
+  const runTx = async (): Promise<void> => {
+  // Estimate Gas for Transaction
+
+    dispatch({
+      type: ACTION_TYPES.txUserSignatureRequested,
+      status: {
+        ...methodDetails,
+        msg: 'Estimate Gas Cost of Transaction',
+        error: false,
+        fetching: true,
+        inFlight: false,
+      },
+    })
+
     try {
       if (value !== '0') {
         estimatedGas = await estimateMethod(...methodParams, tempOverride)
@@ -177,6 +178,12 @@ export const sendTx = async ({ writeContract, dispatch, provider, methodName, me
         },
       })
     }
+  }
+  if (transactionValid) {
+    runTx()
+  } else {
+    // TODO: Allow users to run this function anyway, perhaps by clicking on Toast?
+    // console.log("The function: ", runTx)
   }
 
 }
