@@ -13,6 +13,7 @@ export const sendTx = async ({ writeContract, dispatch, provider, methodName, me
 
   const tempOverride = { value: ethers.utils.parseEther(value) }
   // TODO: Allow users to set Gas Price
+  console.log('value', value)
   // console.log("tempOverride", tempOverride)
 
   dispatch({
@@ -30,7 +31,7 @@ export const sendTx = async ({ writeContract, dispatch, provider, methodName, me
   let callStatic
   try {
     console.log('Calling Static')
-    callStatic = await writeContract.callStatic[methodName](...methodParams)
+    callStatic = await writeContract.callStatic[methodName](...methodParams, tempOverride)
     console.log('callStatic result', callStatic)
   } catch (error) {
     console.log('Error Reason:', error.reason)
@@ -38,7 +39,7 @@ export const sendTx = async ({ writeContract, dispatch, provider, methodName, me
   }
 
   try {
-    estimatedGas = await estimateMethod(...methodParams)
+    estimatedGas = await estimateMethod(...methodParams, tempOverride)
     // const valueStatic = await method(...methodParams, tempOverride)
     // console.log('valueStatic', valueStatic)
 
@@ -90,7 +91,10 @@ export const sendTx = async ({ writeContract, dispatch, provider, methodName, me
     // console.log('MethodNAme: ', methodName)
     // console.log('contract: ', writeContract.functions)
     // const method = writeContract.functions[methodName]
-    methodResult = await method(...methodParams)
+    console.log('The Overrides: ', overrides)
+    console.log('The methodParams: ', methodParams)
+    methodResult = await writeContract.functions[methodName](...methodParams, overrides)
+    console.log('methodParams', methodParams)
 
     dispatch({
       type: ACTION_TYPES.txReceipt,

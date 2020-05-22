@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Hello!</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- import the webpage's stylesheet -->
+    <link rel="stylesheet" href="/style.css" />
+
+    <!-- import the webpage's fonts file -->
+    <link rel="stylesheet" href="https://use.typekit.net/uxx6oco.css" />
+  </head>
+  <body>
+    <h1>Preview of DappHero Collectible Functionality for Alpha V2.</h1>
+    <button data-dh-feature="network" data-dh-property-enable="true">
+      Enable Web3
+    </button>
+
+    <div
+      data-dh-feature="customContract"
+      data-dh-property-contract-name="DH-ForceRevertTest"
+      data-dh-property-method-name="shouldRevert"
+      data-dh-property-method-id="0000"
+    >
+      <input
+        data-dh-property-method-id="0000"
+        data-dh-property-input-name="_message"
+        data-dh-property-auto-clear="false"
+        placeholder="The String you want to send:"
+      />
+      <!-- <div data-dh-property-method-id="0000" data-dh-property-outputs>
+        *-Placeholder for returned data-*
+      </div> -->
+      <span data-dh-property-method-id="0000" data-dh-property-outputs="true"
+      >..output here..</span>
+      <button data-dh-property-method-id="0000" data-dh-property-invoke="true">
+        Should revert
+      </button>
+    </div>
+
+    <div
+    data-dh-feature="customContract"
+    data-dh-property-contract-name="DH-ForceRevertTest"
+    data-dh-property-method-name="shouldNotRevert"
+    data-dh-property-method-id="1111"
+  >
+    <input
+      data-dh-property-method-id="1111"
+      data-dh-property-input-name="_message"
+      data-dh-property-auto-clear="false"
+      placeholder="The String you want to send:"
+    />
+    <!-- <div data-dh-property-method-id="1111" data-dh-property-outputs>
+      *-Placeholder for returned data-*
+    </div> -->
+    <span data-dh-property-method-id="1111" data-dh-property-outputs="true"
+    >..output here..</span>
+    <button data-dh-property-method-id="1111" data-dh-property-invoke="true">
+     Should not revert
+    </button>
+  </div>
+
+
+    <!-- [
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_message",
+				"type": "string"
+			}
+		],
+		"name": "shouldNotRevert",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_message",
+				"type": "string"
+			}
+		],
+		"name": "shouldRevert",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "message",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+] -->
+
+    <!-- This is the method instance, the "parent" of the NFT object -->
+    <!-- Replace 'property-asset-contract-address' with the NFT collectible contract address of your choice.  -->
+    <!-- The address "0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0" is the Rarible NFT contract address. -->
+
+    <!-- include the Glitch button to show what the webpage is about and
+          to make it easier for folks to view source and remix -->
+    <div class="glitchButton" style="position:fixed;top:20px;right:20px;"></div>
+
+    <!-- Imporant: This demo is using a pre-release script, so please change the DappHero tag: "main.js" to the nightly build "main-05-09-2020.js" for the latest features -->
+    <script
+      src=""
+      id="dh-apiKey"
+      data-api="1590083625422x322180146733514750"
+    ></script>
+<!-- 
+    <script>
+      document.addEventListener(
+        "dappHeroConfigLoaded",
+        ({ detail: dappHero }) => {
+          // Inside here you can listen to any event you want
+          console.log("It's loaded");
+          dappHero.listenToTransactionStatusChange(data => {
+            console.log("Listening to transtaction status change", data);
+          });
+          dappHero.listenToSmartContractBlockchainEvent(data => {
+            console.log("The blockChain Events: ", data)
+          })
+        }
+      );
+    </script> -->
+
+    <!-- This is just to track if people find this usefull -->
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+  </body>
+</html>
