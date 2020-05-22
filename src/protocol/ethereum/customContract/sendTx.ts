@@ -4,14 +4,13 @@ import { write } from 'fs'
 import { ACTION_TYPES } from './stateMachine'
 
 export const sendTx = async ({ writeContract, dispatch, provider, methodName, methodParams, value, notify, emitToEvent, methodNameKey }): Promise<void> => {
+  console.log('writeContract', writeContract)
 
   const methodDetails = { methodName, methodParams, contractAddress: writeContract.address, contractNetwork: writeContract.provider._network.name }
   const method = writeContract.functions[methodName]
   const gasPrice = await provider.getGasPrice()
   const estimateMethod = writeContract.estimateGas[methodName]
   let estimatedGas
-
-  const tempOverride = { value: ethers.utils.parseEther(value) }
 
   dispatch({
     type: ACTION_TYPES.txUserSignatureRequested,
@@ -29,6 +28,7 @@ export const sendTx = async ({ writeContract, dispatch, provider, methodName, me
 
   try {
     if (value !== '0') {
+      const tempOverride = { value: ethers.utils.parseEther(value) }
       await writeContract.callStatic[methodName](...methodParams, tempOverride)
     } else {
       await writeContract.callStatic[methodName](...methodParams)
