@@ -30,6 +30,7 @@ export const ProvidersWrapper: React.FC = () => {
       const { formattedOutput, paused } = res
       const newConfig = { contracts: formattedOutput }
       // eslint-disable-next-line no-unused-expressions
+      console.log('getConfig -> newConfig', newConfig)
       paused ? console.log('This DappHero project has been Paused (check Admin interface)') : setConfig(newConfig)
       setPaused(paused)
     }

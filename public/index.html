@@ -1,79 +1,127 @@
 <!DOCTYPE html>
+
 <html lang="en">
-  <head>
-    <title>Hello!</title>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <!-- import the webpage's stylesheet -->
-    <link rel="stylesheet" href="/style.css" />
+<head>
+  <title>DappHero HTML Generation</title>
 
-    <!-- import the webpage's fonts file -->
-    <link rel="stylesheet" href="https://use.typekit.net/uxx6oco.css" />
-  </head>
-  <body>
-    <h1>Preview of DappHero Collectible Functionality for Alpha V2.</h1>
-    <button data-dh-feature="network" data-dh-property-enable="true">
-      Enable Web3
-    </button>
+  <meta charset="UTF-8" />
+  <meta name="author" content="DappHero" />
+  <meta name="description" content="DappHero" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
 
-    <div
-      data-dh-feature="customContract"
-      data-dh-property-contract-name="SimpleVote"
-      data-dh-property-method-name="votes"
-      data-dh-property-method-id="0000"
-      data-dh-property-auto-invoke="false"
-    >
-      <input
-        data-dh-property-method-id="0000"
-        data-dh-property-input-name="$true"
-        data-dh-property-auto-clear="false"
-      />
-      <!-- <div data-dh-property-method-id="0000" data-dh-property-outputs>
-        *-Placeholder for returned data-*
-      </div> -->
-      <span data-dh-property-method-id="0000" data-dh-property-outputs="true"
-      >..output here..</span>
-      <button data-dh-property-method-id="0000" data-dh-property-invoke="true">
-        Click Here to Call Your Smart Contract!
-      </button>
-    </div>
+<body>
+   
+        <header>
+          <div data-dh-feature="customContract" data-dh-property-method-id="5l9s" data-dh-property-auto-invoke="false"
+            data-dh-property-contract-name="wrapped-eth" data-dh-property-method-name="allowance">
+            <h3>Method <mark>"allowance"</mark></h3>
+            <section>
+              <aside>
+                <section>
+                  Input name: <i>anonymous input</i>
+                  <input type="text" placeholder="address" data-dh-property-method-id="5l9s"
+                    data-dh-property-input-name="[0]" />
+                </section>
+                <section>
+                  Input name: <i>anonymous input</i>
+                  <input type="text" placeholder="address" data-dh-property-method-id="5l9s"
+                    data-dh-property-input-name="[1]" />
+                </section>
+                <div data-dh-property-method-id="5l9s" data-dh-property-outputs="true">
+                  <pre>Output...</pre>
+                </div>
 
+                <button data-dh-property-invoke="true" data-dh-property-method-id="5l9s">
+                  allowance
+                </button>
+              </aside>
+            </section>
+          </div>
+        </header>
+      </section>
+    </header>
+    <header>
+      <div
+        data-dh-feature="customContract"
+        data-dh-property-method-id="RWzF"
+        data-dh-property-auto-invoke="false"
+        data-dh-property-contract-name="wrapped-eth"
+        data-dh-property-method-name="transfer"
+      >
+        <h3>Method <mark>"transfer"</mark></h3>
+        <section>
+          <aside>
+            <section>
+              Input name: <i>dst</i>
+              <input
+                type="text"
+                placeholder="address"
+                data-dh-property-method-id="RWzF"
+                data-dh-property-input-name="dst"
+              />
+            </section>
+            <section>
+              Input name: <i>wad</i>
+              <input
+                type="text"
+                placeholder="uint256"
+                data-dh-property-method-id="RWzF"
+                data-dh-property-input-name="wad"
+              />
+            </section>
+            <div
+              data-dh-property-method-id="RWzF"
+              data-dh-property-outputs="true"
+              data-dh-property-outputs="true"
+            >
+              <pre>Output...</pre>
+            </div>
 
-    <!-- This is the method instance, the "parent" of the NFT object -->
-    <!-- Replace 'property-asset-contract-address' with the NFT collectible contract address of your choice.  -->
-    <!-- The address "0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0" is the Rarible NFT contract address. -->
+            <button
+              data-dh-property-invoke="true"
+              data-dh-property-method-id="RWzF"
+            >
+              transfer
+            </button>
+          </aside>
+        </section>
+      </div>
+    </header>
+  </div>
+  <script id="dh-apiKey" data-api="1586288625489x991636521145335800" src=""></script>
+  <link rel="stylesheet" href="https://unpkg.com/mvp.css" />
+  <style>
+    form {
+      margin: 30px;
+    }
+  </style>
 
-    <!-- include the Glitch button to show what the webpage is about and
-          to make it easier for folks to view source and remix -->
-    <div class="glitchButton" style="position:fixed;top:20px;right:20px;"></div>
+  <script>
+    document.addEventListener(
+      "dappHeroConfigLoaded",
+      ({ detail: dappHero }) => {
+        // Inside here you can listen to any event you want
+        console.log("DappHero Has Loaded!");
 
-    <!-- Imporant: This demo is using a pre-release script, so please change the DappHero tag: "main.js" to the nightly build "main-05-09-2020.js" for the latest features -->
-    <script
-      src=""
-      id="dh-apiKey"
-      data-api="1589977001904x535637299413385200"
-    ></script>
-<!-- 
-    <script>
-      document.addEventListener(
-        "dappHeroConfigLoaded",
-        ({ detail: dappHero }) => {
-          // Inside here you can listen to any event you want
-          console.log("It's loaded");
-          dappHero.listenToTransactionStatusChange(data => {
-            console.log("Listening to transtaction status change", data);
-          });
-          dappHero.listenToSmartContractBlockchainEvent(data => {
-            console.log("The blockChain Events: ", data)
-          })
-        }
-      );
-    </script> -->
+        // For projects with auto-invoked method, you will want to filter on events
+        // dappHero.listenToTransactionStatusChange(data => {
+        //   console.log("Listening to transtaction status change", data);
+        // });
 
-    <!-- This is just to track if people find this usefull -->
-    <!-- Global site tag (gtag.js) - Google Analytics -->
+        // // This is how you can listen to any events your smart contract emits
+        // dappHero.listenToSmartContractBlockchainEvent((data) => {
+        //   console.log("The blockChain Events: ", data);
+        // });
 
-  </body>
+        //This is an example method for alerting your users they are on the wrong network
+        // if (window.dappHero.provider.chainId !== 1) {
+        //   alert("Wrong network! You should be on mainnet");
+        // }
+      }
+    );
+  </script>
+</body>
+
 </html>
