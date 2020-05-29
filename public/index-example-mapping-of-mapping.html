@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+  <title>DappHero HTML Generation</title>
+
+  <meta charset="UTF-8" />
+  <meta name="author" content="DappHero" />
+  <meta name="description" content="DappHero" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+
+<body>
+   
+        <header>
+          <div data-dh-feature="customContract" data-dh-property-method-id="5l9s" data-dh-property-auto-invoke="false"
+            data-dh-property-contract-name="wrapped-eth" data-dh-property-method-name="allowance">
+            <h3>Method <mark>"allowance"</mark></h3>
+            <section>
+              <aside>
+                <section>
+                  Input name: <i>anonymous input</i>
+                  <input type="text" placeholder="address" data-dh-property-method-id="5l9s"
+                  value="0x32a5bbE726C7b2e8746E5A508A08870f0Ad3d1f2"
+                    data-dh-property-input-name="[1]" />
+                </section>
+                <section>
+                  Input name: <i>anonymous input</i>
+                  <input type="text" placeholder="address" data-dh-property-method-id="5l9s"
+                  value="0xE8D848debB3A3e12AA815b15900c8E020B863F31"
+                    data-dh-property-input-name="[0]" />
+                </section>
+                <div data-dh-property-method-id="5l9s" data-dh-property-outputs="true">
+                  <pre>Output...</pre>
+                </div>
+
+                <button data-dh-property-invoke="true" data-dh-property-method-id="5l9s">
+                  allowance
+                </button>
+              </aside>
+            </section>
+          </div>
+        </header>
+      </section>
+    </header>
+    <header>
+      <div
+        data-dh-feature="customContract"
+        data-dh-property-method-id="02yo"
+        data-dh-property-auto-invoke="false"
+        data-dh-property-contract-name="wrapped-eth"
+        data-dh-property-method-name="balanceOf"
+      >
+        <h3>Method <mark>"balanceOf"</mark></h3>
+        <section>
+          <aside>
+            <section>
+              Input name: <i>anonymous input</i>
+              <input
+                type="text"
+                placeholder="address"
+                data-dh-property-method-id="02yo"
+                data-dh-property-input-name="$true"
+              />
+            </section>
+            <div
+              data-dh-property-method-id="02yo"
+              data-dh-property-outputs="true"
+            >
+              <pre>Output...</pre>
+            </div>
+
+            <button
+              data-dh-property-invoke="true"
+              data-dh-property-method-id="02yo"
+            >
+              balanceOf
+            </button>
+          </aside>
+        </section>
+      </div>
+    </header>
+    <header>
+      <div
+        data-dh-feature="customContract"
+        data-dh-property-method-id="RWzF"
+        data-dh-property-auto-invoke="false"
+        data-dh-property-contract-name="wrapped-eth"
+        data-dh-property-method-name="transfer"
+      >
+        <h3>Method <mark>"transfer"</mark></h3>
+        <section>
+          <aside>
+            <section>
+              Input name: <i>dst</i>
+              <input
+                type="text"
+                placeholder="address"
+                data-dh-property-method-id="RWzF"
+                data-dh-property-input-name="dst"
+              />
+            </section>
+            <section>
+              Input name: <i>wad</i>
+              <input
+                type="text"
+                placeholder="uint256"
+                data-dh-property-method-id="RWzF"
+                data-dh-property-input-name="wad"
+              />
+            </section>
+            <div
+              data-dh-property-method-id="RWzF"
+              data-dh-property-outputs="true"
+              data-dh-property-outputs="true"
+            >
+              <pre>Output...</pre>
+            </div>
+
+            <button
+              data-dh-property-invoke="true"
+              data-dh-property-method-id="RWzF"
+            >
+              transfer
+            </button>
+          </aside>
+        </section>
+      </div>
+    </header>
+  </div>
+  <script id="dh-apiKey" data-api="1586288625489x991636521145335800" src=""></script>
+  <link rel="stylesheet" href="https://unpkg.com/mvp.css" />
+  <style>
+    form {
+      margin: 30px;
+    }
+  </style>
+
+  <script>
+    document.addEventListener(
+      "dappHeroConfigLoaded",
+      ({ detail: dappHero }) => {
+        // Inside here you can listen to any event you want
+        console.log("DappHero Has Loaded!");
+
+        // For projects with auto-invoked method, you will want to filter on events
+        // dappHero.listenToTransactionStatusChange(data => {
+        //   console.log("Listening to transtaction status change", data);
+        // });
+
+        // // This is how you can listen to any events your smart contract emits
+        // dappHero.listenToSmartContractBlockchainEvent((data) => {
+        //   console.log("The blockChain Events: ", data);
+        // });
+
+        //This is an example method for alerting your users they are on the wrong network
+        // if (window.dappHero.provider.chainId !== 1) {
+        //   alert("Wrong network! You should be on mainnet");
+        // }
+      }
+    );
+  </script>
+</body>
+
+</html>
