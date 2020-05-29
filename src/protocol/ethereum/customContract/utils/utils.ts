@@ -45,6 +45,7 @@ export const getAbiMethodInputs = (abi, methodName, dispatch): Record<string, an
 // Helpers - Get parameters values
 export const getParametersFromInputValues = ({ info, methodName, dispatch, address, methodNameKey, ethValue }): Record<string, any> => {
 
+  let newEthValue = ethValue
   const { childrenElements } = info
 
   const inputChildrens = childrenElements.filter(({ id }) => id.includes('input'))
@@ -82,11 +83,11 @@ export const getParametersFromInputValues = ({ info, methodName, dispatch, addre
   })
 
   if (abiMethodInputs?.EthValue) {
-    ethValue = abiMethodInputs?.EthValue
+    newEthValue = abiMethodInputs?.EthValue
   }
 
   const parsedParameters = omit(abiMethodInputs, 'EthValue')
   const parametersValues = Object.values(parsedParameters)
 
-  return { parametersValues }
+  return { parametersValues, newEthValue }
 }

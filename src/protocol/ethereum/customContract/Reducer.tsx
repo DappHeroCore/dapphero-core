@@ -21,13 +21,13 @@ const blockNativeApiKey = process.env.REACT_APP_BLOCKNATIVE_API
 const { AUTO_INVOKE_INTERVAL: POLLING_INTERVAL } = consts.global
 
 export type ReducerProps = {
-info: any;
-readContract: any;
-writeContract: any;
-readEnabled: any;
-readChainId: any;
-writeEnabled: any;
-timestamp: number;
+  info: any;
+  readContract: any;
+  writeContract: any;
+  readEnabled: any;
+  readChainId: any;
+  writeEnabled: any;
+  timestamp: number;
 }
 // Reducer Component
 export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContract, writeContract, readEnabled, readChainId, writeEnabled, timestamp }) => {
@@ -113,7 +113,7 @@ export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContr
       try {
         event.preventDefault()
         event.stopPropagation()
-      } catch (err) {}
+      } catch (err) { }
     }
 
     // Return early if the read and write instances aren't ready
@@ -124,7 +124,7 @@ export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContr
       { value: null, step: 'Getting and parsing parameters.', status: EVENT_STATUS.pending, methodNameKey },
     )
 
-    const { parametersValues } = getParametersFromInputValues({ info, methodName, dispatch, address, methodNameKey, ethValue })
+    const { parametersValues, newEthValue } = getParametersFromInputValues({ info, methodName, dispatch, address, methodNameKey, ethValue })
 
     emitToEvent(
       EVENT_NAMES.contract.statusChange,
@@ -150,8 +150,8 @@ export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContr
       let value = '0'
       const methodParams = [ ...(hasInputs ? parametersValues : []) ]
 
-      if (ethValue) {
-        value = ethValue
+      if (newEthValue) {
+        value = newEthValue
       }
 
       if (writeEnabled && isTransaction) {
@@ -178,7 +178,7 @@ export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContr
           // Do we need to do anything with this error? Maybe no....
         }
 
-      } else if (readEnabled && !isTransaction && !state.error ) {
+      } else if (readEnabled && !isTransaction && !state.error) {
         emitToEvent(
           EVENT_NAMES.contract.statusChange,
           { value: null, step: 'Triggering read transaction.', status: EVENT_STATUS.pending, methodNameKey },
@@ -244,7 +244,7 @@ export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContr
 
   return (
     <div style={{ display: 'none' }}>
-    Custom Contract last updated:
+      Custom Contract last updated:
       {timestamp}
     </div>
   )
