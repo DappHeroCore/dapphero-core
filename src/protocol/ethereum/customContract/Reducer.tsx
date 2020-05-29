@@ -125,7 +125,6 @@ export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContr
     )
 
     const { parametersValues } = getParametersFromInputValues({ info, methodName, dispatch, address, methodNameKey, ethValue })
-    console.log('parametersValues', parametersValues)
 
     emitToEvent(
       EVENT_NAMES.contract.statusChange,
@@ -134,6 +133,7 @@ export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContr
 
     if (hasInputs) {
       const isParametersFilled = Boolean(parametersValues.filter(Boolean).join(''))
+
       if (!isParametersFilled) {
         dispatch({
           type: ACTION_TYPES.parametersUndefined,

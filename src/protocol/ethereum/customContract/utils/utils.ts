@@ -13,7 +13,6 @@ export const getAbiMethodInputs = (abi, methodName, dispatch): Record<string, an
   const parseName = (value: string): string => (value === '' ? emptyString : value)
 
   const method = abi.find(({ name }) => name === methodName)
-
   if (!method) {
     dispatch({
       type: ACTION_TYPES.malformedInputName,
@@ -25,9 +24,21 @@ export const getAbiMethodInputs = (abi, methodName, dispatch): Record<string, an
     return null
   }
 
-  const parsedMethod = Object.assign(method, { inputs: method.inputs.map((input) => ({ ...input, name: parseName(input.name) })) })
+  const parsedMethod = Object.assign(method, {
+    inputs: method.inputs.map((input) => {
+      const anonInputCount = method.inputs.filter((el) => el.name === '').length
 
-  const output = parsedMethod.inputs.reduce((acc, { name }) => ({ ...acc, [name]: '' }), [])
+      if (anonInputCount > 1) return ({ ...input, name: input.name })
+
+      return ({ ...input, name: parseName(input.name) })
+    }),
+  })
+
+  const output = parsedMethod.inputs.reduce((acc, input, index) => {
+    const { name } = input
+    return ({ ...acc, [name || `[${index}]`]: '' })
+  }, [])
+
   return output
 }
 
