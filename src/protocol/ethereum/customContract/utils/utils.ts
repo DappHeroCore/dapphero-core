@@ -62,10 +62,10 @@ export const getParametersFromInputValues = ({ info, methodName, dispatch, addre
       const displayUnits = element.getAttribute('data-dh-modifier-display-units')
       const contractUnits = element.getAttribute('data-dh-modifier-contract-units')
       const convertedValue = value && (displayUnits || contractUnits) ? utils.convertUnits(displayUnits, contractUnits, value) : value
-
       if (convertedValue) {
         Object.assign(abiMethodInputs, { [argumentName]: convertedValue })
       }
+
     } catch (err) {
       dispatch({
         type: ACTION_TYPES.malformedInputs,
@@ -87,7 +87,17 @@ export const getParametersFromInputValues = ({ info, methodName, dispatch, addre
   }
 
   const parsedParameters = omit(abiMethodInputs, 'EthValue')
-  const parametersValues = Object.values(parsedParameters)
+  const parametersEntries = Object.entries(parsedParameters)
+  let parametersValues = Object.values(parsedParameters)
+  if (Object.keys(parsedParameters).includes('[')) {
+    parametersValues = [ ...parametersEntries ].sort((a, b) => {
+      const [ keyA, valueA ] = a
+      const [ keyB, valueB ] = b
+      const [ positionA ] = keyA.match(/\d+/g) || [ 0 ]
+      const [ positionB ] = keyB.match(/\d+/g) || [ 0 ]
+      return Number(positionA) - Number(positionB)
+    })
+  }
 
   return { parametersValues, newEthValue }
 }
