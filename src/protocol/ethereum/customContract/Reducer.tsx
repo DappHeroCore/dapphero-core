@@ -171,6 +171,7 @@ export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContr
             dispatch,
             emitToEvent,
             methodNameKey,
+            addToast,
           })
 
           setResult(methodHash)
