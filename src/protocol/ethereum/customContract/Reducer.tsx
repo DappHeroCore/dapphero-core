@@ -115,7 +115,6 @@ export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContr
         event.stopPropagation()
       } catch (err) { }
     }
-
     // Return early if the read and write instances aren't ready
     // if (!readEnabled && !writeEnabled) return null
 
@@ -173,8 +172,10 @@ export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContr
             emitToEvent,
             methodNameKey,
           })
+
           setResult(methodHash)
         } catch (error) {
+          console.log('In here: ', error)
           // Do we need to do anything with this error? Maybe no....
         }
 

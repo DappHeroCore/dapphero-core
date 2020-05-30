@@ -1,55 +1,35 @@
 import { ethers } from 'ethers'
 import { EVENT_NAMES, EVENT_STATUS } from 'providers/EmitterProvider/constants'
-import { ACTION_TYPES } from './stateMachine'
+import { ACTION_TYPES, dsp } from './stateMachine'
 
 export const sendTx = async ({ writeContract, dispatch, provider, methodName, methodParams, value, notify, emitToEvent, methodNameKey }): Promise<void> => {
 
   const methodDetails = { methodName, methodParams, contractAddress: writeContract.address, contractNetwork: writeContract.provider._network.name }
   const method = writeContract.functions[methodName]
+
   const gasPrice = await provider.getGasPrice()
-  const estimateMethod = writeContract.estimate[methodName]
+  const estimateMethod = writeContract.estimateGas[methodName]
   let estimatedGas
 
   const tempOverride = { value: ethers.utils.parseEther(value) }
   // TODO: Allow users to set Gas Price
 
-  dispatch({
-    type: ACTION_TYPES.txUserSignatureRequested,
-    status: {
-      ...methodDetails,
-      msg: 'Estimate Gas Cost of Transaction',
-      error: false,
-      fetching: true,
-      inFlight: false,
-    },
-  })
+  dsp.estimateGas.start({ methodDetails, dispatch })
+
+  // Test if tx will work, run the rest only if success
+  const willTxRevert = false
+  try {
+    const result = await writeContract.callStatic[methodName](...methodParams, tempOverride)
+    console.log('Worked? ', Boolean(result))
+  } catch (error) {
+    console.log('Didnt work: ', error)
+  }
 
   try {
     estimatedGas = await estimateMethod(...methodParams, tempOverride)
-
-    dispatch({
-      type: ACTION_TYPES.txUserSignatureRequested,
-      status: {
-        ...methodDetails,
-        msg: 'Estimate Gas Cost of Transaction Succedded',
-        error: false,
-        fetching: true,
-        inFlight: false,
-        estimatedGas: estimatedGas.toString(),
-      },
-    })
-
+    dsp.estimateGas.finish({ methodDetails, dispatch, estimatedGas })
   } catch (error) {
-    dispatch({
-      type: ACTION_TYPES.estimateGasError,
-      status: {
-        ...methodDetails,
-        msg: 'Estimate Gas Cost of Transaction Failed',
-        error,
-        fetching: false,
-        inFlight: false,
-      },
-    } )
+    dsp.estimateGas.error({ methodDetails, dispatch, error })
   }
 
   const overrides = {
@@ -59,45 +39,17 @@ export const sendTx = async ({ writeContract, dispatch, provider, methodName, me
   }
   let methodResult
 
-  dispatch({
-    type: ACTION_TYPES.txUserSignatureRequested,
-    status: {
-      ...methodDetails,
-      msg: 'User signature requsted',
-      error: false,
-      fetching: true,
-      inFlight: false,
-    },
-  })
+  dsp.txFlow.sigRequested({ methodDetails, dispatch })
 
   try {
 
     methodResult = await method(...methodParams, overrides)
 
-    dispatch({
-      type: ACTION_TYPES.txReceipt,
-      status: {
-        msg: `TX Broadcast.`,
-        error: false,
-        fetching: true,
-        inFlight: true,
-        txReceipt: methodResult.hash,
-        ...methodDetails,
-      },
-    })
+    dsp.txFlow.txBroadcast({ methodDetails, dispatch, methodResult })
 
     provider.once(methodResult.hash, (receipt) => {
-      dispatch({
-        type: ACTION_TYPES.confirmed,
-        status: {
-          ...methodDetails,
-          msg: `Transaction confirmed. Hash: ${methodResult.hash}`,
-          error: false,
-          fetching: false,
-          inFlight: false,
-          receipt,
-        },
-      })
+      dsp.txFlow.txConfirmed({ methodDetails, dispatch, methodResult, receipt })
+
     })
 
     // // BlockNative Toaster to track tx
@@ -126,15 +78,6 @@ export const sendTx = async ({ writeContract, dispatch, provider, methodName, me
       EVENT_NAMES.contract.statusChange,
       { value: error, step: 'Transaction failed to be broadcast/executed', status: EVENT_STATUS.rejected, methodNameKey },
     )
-    dispatch({
-      type: ACTION_TYPES.txError,
-      status: {
-        ...methodDetails,
-        msg: 'Transaction failed. Check console for more details.',
-        error,
-        inFlight: false,
-        fetching: false,
-      },
-    } )
+    dsp.txFlow.txError({ methodDetails, dispatch, error })
   }
 }
