@@ -20,32 +20,32 @@ export const FeatureReducer: React.FunctionComponent<FeatureReducerProps> = ({
   retriggerEngine,
 }: FeatureReducerProps) => {
 
-  // Select the node that will be observed for mutations
-  const targetNode = document.getElementById('thisContainer')
+  // // Select the node that will be observed for mutations
+  // const targetNode = document.getElementById('thisContainer')
 
-  // Options for the observer (which mutations to observe)
-  const config = { attributes: true, childList: true, subtree: true }
+  // // Options for the observer (which mutations to observe)
+  // const config = { attributes: true, childList: true, subtree: true }
 
-  // Callback function to execute when mutations are observed
-  const throttledCallBack = useThrottledFn((mutationsList, observer) => {
-    // Use traditional 'for loops' for IE 11
-    for (const mutation of mutationsList) {
-      if (mutation.type === 'childList') {
+  // // Callback function to execute when mutations are observed
+  // const throttledCallBack = useThrottledFn((mutationsList, observer) => {
+  //   // Use traditional 'for loops' for IE 11
+  //   for (const mutation of mutationsList) {
+  //     if (mutation.type === 'childList') {
 
-        // When a node has been added or removed, we need to add or remove the custom contract event listeners.
-        console.log('A child node has been added or removed.')
-      } else if (mutation.type === 'attributes') {
-        console.log('The ' + mutation.attributeName + ' attribute was modified.')
-      }
-    }
+  //       // When a node has been added or removed, we need to add or remove the custom contract event listeners.
+  //       console.log('A child node has been added or removed.')
+  //     } else if (mutation.type === 'attributes') {
+  //       console.log('The ' + mutation.attributeName + ' attribute was modified.')
+  //     }
+  //   }
 
-  }, 250)
+  // }, 250)
 
-  // Create an observer instance linked to the callback function
-  const observer = new MutationObserver(throttledCallBack)
+  // // Create an observer instance linked to the callback function
+  // const observer = new MutationObserver(throttledCallBack)
 
-  // Start observing the target node for configured mutations
-  observer.observe(targetNode, config)
+  // // Start observing the target node for configured mutations
+  // observer.observe(targetNode, config)
 
   const featureType = feature
 
