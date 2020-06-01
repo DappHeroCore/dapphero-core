@@ -8,16 +8,20 @@ export type ManagerProps = {
     configuration?: any;
   }
 
-export const Manager: React.FunctionComponent<ManagerProps> = ({ customContractElements, configuration }) => {
+export const Manager: React.FunctionComponent<ManagerProps> = ({ customContractElements, configuration: appConfig }) => {
+  console.log('configuration', appConfig)
 
   const { actions: { listenToEvent } } = useContext(EmitterContext)
 
-  const uniqueContractNames = new Set([ ...customContractElements.map(({ contract }) => contract.contractName) ])
-
   const [ timestamp, setTimestamp ] = useState(Date.now())
+  const [ configuration, setConfiguration ] = useState(appConfig)
+  const [ uniqueContractNames, setUniqueContractNames ] = useState(new Set([ ...customContractElements.map(({ contract }) => contract.contractName) ]))
+
   useEffect(() => {
-    listenToEvent('nftsUpdated', setTimestamp);
+    listenToEvent('nftsUpdated', setTimestamp)
   }, [])
+
+  // TODO: [DEV-318] Create a function to add a new contract name and add a new configuration
 
   for (const contractName of uniqueContractNames) {
 

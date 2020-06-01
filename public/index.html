@@ -12,94 +12,31 @@
 </head>
 
 <body>
-  <header>
-    <nav>
-      <img alt="Logo" src="//s3.amazonaws.com/appforest_uf/f1580782353653x261239071988881950/noun_Sandwich_3059105.png"
-        height="70" />
-      <ul>
-        <li>Menu Item 1</li>
-        <li><a href="#">Menu Item 2</a></li>
-        <li>
-          <a href="#">Dropdown Menu Item</a>
-          <ul>
-            <li><a href="#">Sublink with a long name</a></li>
-            <li><a href="#">Short sublink</a></li>
-          </ul>
-        </li>
-      </ul>
-    </nav>
-    <h1>DH-ContractRevertTest</h1>
-    <p>
-      <mark>Powered by <a href="https://www.dapphero.io">DappHero.io</a></mark>
-    </p>
-    <p>
-      This is a description of what you are trying to do with your project.
-      Edit it so you have something snazzy!
-    </p>
-    <br />
-    <p>
-      <button data-dh-feature="network" data-dh-property-enable="true">
-        Enable Web3
-      </button>
-    </p>
-  </header>
-  <div>
-    <section>
-      <h2>DH-ForceRevertTest</h2>
-    </section>
-    <header>
-      <section>
-        <section>
-          <h2>Public Methods</h2>
-        </section>
+   
         <header>
-          <div data-dh-feature="customContract" data-dh-property-method-id="GS6D" data-dh-property-auto-invoke="true"
-            data-dh-property-contract-name="DH-ForceRevertTest" data-dh-property-method-name="message">
-            <h3>Method <mark>"message"</mark></h3>
+          <div data-dh-feature="customContract" data-dh-property-method-id="5l9s" data-dh-property-auto-invoke="false"
+            data-dh-property-contract-name="wrapped-eth" data-dh-property-method-name="allowance">
+            <h3>Method <mark>"allowance"</mark></h3>
             <section>
               <aside>
-                <div data-dh-property-method-id="GS6D" data-dh-property-outputs="true">
+                <section>
+                  Input name: <i>anonymous input</i>
+                  <input type="text" placeholder="address" data-dh-property-method-id="5l9s"
+                  value="0x32a5bbE726C7b2e8746E5A508A08870f0Ad3d1f2"
+                    data-dh-property-input-name="[1]" />
+                </section>
+                <section>
+                  Input name: <i>anonymous input</i>
+                  <input type="text" placeholder="address" data-dh-property-method-id="5l9s"
+                  value="0xE8D848debB3A3e12AA815b15900c8E020B863F31"
+                    data-dh-property-input-name="[0]" />
+                </section>
+                <div data-dh-property-method-id="5l9s" data-dh-property-outputs="true">
                   <pre>Output...</pre>
                 </div>
 
-                <button data-dh-property-invoke="true" data-dh-property-method-id="GS6D">
-                  message
-                </button>
-              </aside>
-            </section>
-          </div>
-        </header>
-        ,
-        <header>
-          <div data-dh-feature="customContract" data-dh-property-method-id="b2TB" data-dh-property-auto-invoke="true"
-            data-dh-property-contract-name="DH-ForceRevertTest" data-dh-property-method-name="x">
-            <h3>Method <mark>"x"</mark></h3>
-            <section>
-              <aside>
-                <div data-dh-property-method-id="b2TB" data-dh-property-outputs="true">
-                  <pre>Output...</pre>
-                </div>
-
-                <button data-dh-property-invoke="true" data-dh-property-method-id="b2TB">
-                  x
-                </button>
-              </aside>
-            </section>
-          </div>
-        </header>
-        ,
-        <header>
-          <div data-dh-feature="customContract" data-dh-property-method-id="o3Vz" data-dh-property-auto-invoke="true"
-            data-dh-property-contract-name="DH-ForceRevertTest" data-dh-property-method-name="y">
-            <h3>Method <mark>"y"</mark></h3>
-            <section>
-              <aside>
-                <div data-dh-property-method-id="o3Vz" data-dh-property-outputs="true">
-                  <pre>Output...</pre>
-                </div>
-
-                <button data-dh-property-invoke="true" data-dh-property-method-id="o3Vz">
-                  y
+                <button data-dh-property-invoke="true" data-dh-property-method-id="5l9s">
+                  allowance
                 </button>
               </aside>
             </section>
@@ -108,107 +45,95 @@
       </section>
     </header>
     <header>
-      <section>
+      <div
+        data-dh-feature="customContract"
+        data-dh-property-method-id="02yo"
+        data-dh-property-auto-invoke="false"
+        data-dh-property-contract-name="wrapped-eth"
+        data-dh-property-method-name="balanceOf"
+      >
+        <h3>Method <mark>"balanceOf"</mark></h3>
         <section>
-          <h2>Transaction Methods</h2>
+          <aside>
+            <section>
+              Input name: <i>anonymous input</i>
+              <input
+                type="text"
+                placeholder="address"
+                data-dh-property-method-id="02yo"
+                data-dh-property-input-name="$true"
+              />
+            </section>
+            <div
+              data-dh-property-method-id="02yo"
+              data-dh-property-outputs="true"
+            >
+              <pre>Output...</pre>
+            </div>
+
+            <button
+              data-dh-property-invoke="true"
+              data-dh-property-method-id="02yo"
+            >
+              balanceOf
+            </button>
+          </aside>
         </section>
-        <header>
-          <div data-dh-feature="customContract" data-dh-property-method-id="llRA" data-dh-property-auto-invoke="false"
-            data-dh-property-contract-name="DH-ForceRevertTest" data-dh-property-method-name="shouldNotRevert">
-            <h3>Method <mark>"shouldNotRevert"</mark></h3>
+      </div>
+    </header>
+    <header>
+      <div
+        data-dh-feature="customContract"
+        data-dh-property-method-id="RWzF"
+        data-dh-property-auto-invoke="false"
+        data-dh-property-contract-name="wrapped-eth"
+        data-dh-property-method-name="transfer"
+      >
+        <h3>Method <mark>"transfer"</mark></h3>
+        <section>
+          <aside>
             <section>
-              <aside>
-                <section>
-                  Input name: <i>_message</i>
-                  <input type="text" placeholder="string" data-dh-property-method-id="llRA"
-                    data-dh-property-input-name="_message" />
-                </section>
-
-                <button data-dh-property-invoke="true" data-dh-property-method-id="llRA">
-                  shouldNotRevert
-                </button>
-              </aside>
+              Input name: <i>dst</i>
+              <input
+                type="text"
+                placeholder="address"
+                data-dh-property-method-id="RWzF"
+                data-dh-property-input-name="dst"
+              />
             </section>
-          </div>
-        </header>
-        ,
-        <header>
-          <div data-dh-feature="customContract" data-dh-property-method-id="-GCL" data-dh-property-auto-invoke="false"
-            data-dh-property-contract-name="DH-ForceRevertTest" data-dh-property-method-name="shouldNotRevertPayable">
-            <h3>Method <mark>"shouldNotRevertPayable"</mark></h3>
             <section>
-              <aside>
-                <section>
-                  Input name: <i>_message</i>
-                  <input type="text" placeholder="string" data-dh-property-method-id="-GCL"
-                    data-dh-property-input-name="_message" />
-                </section>
-                <section>
-                  Input name: <i>EthValue</i>
-                  <input type="text" placeholder="EthValue" data-dh-property-method-id="-GCL"
-                    data-dh-property-input-name="EthValue" />
-                </section>
-
-                <button data-dh-property-invoke="true" data-dh-property-method-id="-GCL">
-                  shouldNotRevertPayable
-                </button>
-              </aside>
+              Input name: <i>wad</i>
+              <input
+                type="text"
+                placeholder="uint256"
+                data-dh-property-method-id="RWzF"
+                data-dh-property-input-name="wad"
+              />
             </section>
-          </div>
-        </header>
-        ,
-        <header>
-          <div data-dh-feature="customContract" data-dh-property-method-id="Alxh" data-dh-property-auto-invoke="false"
-            data-dh-property-contract-name="DH-ForceRevertTest" data-dh-property-method-name="shouldRevert">
-            <h3>Method <mark>"shouldRevert"</mark></h3>
-            <section>
-              <aside>
-                <section>
-                  Input name: <i>_message</i>
-                  <input type="text" placeholder="string" data-dh-property-method-id="Alxh"
-                    data-dh-property-input-name="_message" />
-                </section>
+            <div
+              data-dh-property-method-id="RWzF"
+              data-dh-property-outputs="true"
+              data-dh-property-outputs="true"
+            >
+              <pre>Output...</pre>
+            </div>
 
-                <button data-dh-property-invoke="true" data-dh-property-method-id="Alxh">
-                  shouldRevert
-                </button>
-              </aside>
-            </section>
-          </div>
-        </header>
-        ,
-        <header>
-          <div data-dh-feature="customContract" data-dh-property-method-id="RIrJ" data-dh-property-auto-invoke="false"
-            data-dh-property-contract-name="DH-ForceRevertTest" data-dh-property-method-name="shouldRevertPayable">
-            <h3>Method <mark>"shouldRevertPayable"</mark></h3>
-            <section>
-              <aside>
-                <section>
-                  Input name: <i>_message</i>
-                  <input type="text" placeholder="string" data-dh-property-method-id="RIrJ"
-                    data-dh-property-input-name="_message" />
-                </section>
-                <section>
-                  Input name: <i>EthValue</i>
-                  <input type="text" placeholder="EthValue" data-dh-property-method-id="RIrJ"
-                    data-dh-property-input-name="EthValue" />
-                </section>
-
-                <button data-dh-property-invoke="true" data-dh-property-method-id="RIrJ">
-                  shouldRevertPayable
-                </button>
-              </aside>
-            </section>
-          </div>
-        </header>
-      </section>
+            <button
+              data-dh-property-invoke="true"
+              data-dh-property-method-id="RWzF"
+            >
+              transfer
+            </button>
+          </aside>
+        </section>
+      </div>
     </header>
   </div>
-  <script id="dh-apiKey" data-api="1590083625422x322180146733514750" src=""></script>
+  <script id="dh-apiKey" data-api="1586288625489x991636521145335800" src=""></script>
   <link rel="stylesheet" href="https://unpkg.com/mvp.css" />
   <style>
     form {
-      margin: 40px;
+      margin: 30px;
     }
   </style>
 
@@ -219,19 +144,19 @@
         // Inside here you can listen to any event you want
         console.log("DappHero Has Loaded!");
 
-        // // For projects with auto-invoked method, you will want to filter on events
+        // For projects with auto-invoked method, you will want to filter on events
         // dappHero.listenToTransactionStatusChange(data => {
         //   console.log("Listening to transtaction status change", data);
         // });
 
-        // This is how you can listen to any events your smart contract emits
-        dappHero.listenToSmartContractBlockchainEvent((data) => {
-          console.log("The blockChain Events: ", data);
-        });
+        // // This is how you can listen to any events your smart contract emits
+        // dappHero.listenToSmartContractBlockchainEvent((data) => {
+        //   console.log("The blockChain Events: ", data);
+        // });
 
-        // //This is an example method for alerting your users they are on the wrong network
-        // if (window.dappHero.provider.chainId !== 4) {
-        //   alert("Wrong network! You should be on rinkeby");
+        //This is an example method for alerting your users they are on the wrong network
+        // if (window.dappHero.provider.chainId !== 1) {
+        //   alert("Wrong network! You should be on mainnet");
         // }
       }
     );
