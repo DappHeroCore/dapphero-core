@@ -17,6 +17,7 @@ export const callMethod = async ({ readContract, correctedMethodName: methodName
 
   try {
     const methodResult = await method(...methodParams)
+    console.log('methodResult', methodResult)
 
     dispatch({
       type: ACTION_TYPES.callMethod,
