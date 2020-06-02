@@ -26,11 +26,8 @@ export const getAbiMethodInputs = (abi, methodName, dispatch): Record<string, an
 
   const parsedMethod = Object.assign(method, {
     inputs: method.inputs.map((input) => {
-      const anonInputCount = method.inputs.filter((el) => el.name === '').length
-
-      if (anonInputCount > 1) return ({ ...input, name: input.name })
-
-      return ({ ...input, name: parseName(input.name) })
+      const anonymousInputCount = method.inputs.filter(({ name }) => name === '').length
+      return { ...input, name: anonymousInputCount ? input.name : parseName(input.name) }
     }),
   })
 
