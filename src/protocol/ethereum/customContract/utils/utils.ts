@@ -89,12 +89,14 @@ export const getParametersFromInputValues = ({ info, methodName, dispatch, addre
   const parsedParameters = omit(abiMethodInputs, 'EthValue')
   const parametersEntries = Object.entries(parsedParameters)
   let parametersValues = Object.values(parsedParameters)
+  
+  const getKeyPosition = key => key.match(/\d+/g) || [ 0 ];
+  
   if (Object.keys(parsedParameters).includes('[')) {
     parametersValues = [ ...parametersEntries ].sort((a, b) => {
-      const [ keyA, valueA ] = a
-      const [ keyB, valueB ] = b
-      const [ positionA ] = keyA.match(/\d+/g) || [ 0 ]
-      const [ positionB ] = keyB.match(/\d+/g) || [ 0 ]
+      const [ keyA, keyB ] = [a, b]
+      const [ positionA, positionB ] = [ getKeyPosition(keyA), getKeyPosition(keyB) ]
+      
       return Number(positionA) - Number(positionB)
     })
   }
