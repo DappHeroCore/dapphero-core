@@ -5,9 +5,16 @@ import * as consts from 'consts'
 import { dsp } from './stateMachine'
 
 export const sendTx = async ({
-  writeContract, dispatch,
-  provider, methodName, methodParams,
-  value, notify, emitToEvent, methodNameKey, addToast,
+  writeContract,
+  dispatch,
+  provider,
+  correctedMethodName: methodName,
+  methodParams,
+  value,
+  notify,
+  emitToEvent,
+  methodNameKey,
+  addToast,
 }): Promise<void> => {
 
   const methodDetails = { methodName, methodParams, contractAddress: writeContract.address, contractNetwork: writeContract.provider._network.name }

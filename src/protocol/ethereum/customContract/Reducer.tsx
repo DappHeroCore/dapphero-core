@@ -15,7 +15,7 @@ import { stateReducer, ACTION_TYPES } from './stateMachine'
 import { sendTx } from './sendTx'
 import { callMethod } from './callMethod'
 
-import { notify, getParametersFromInputValues } from './utils/utils'
+import { notify, getParametersFromInputValues, findReplaceOverloadedMethods } from './utils/utils'
 
 const blockNativeApiKey = process.env.REACT_APP_BLOCKNATIVE_API
 const { AUTO_INVOKE_INTERVAL: POLLING_INTERVAL } = consts.global
@@ -28,9 +28,10 @@ export type ReducerProps = {
   readChainId: any;
   writeEnabled: any;
   timestamp: number;
+  contractAbi: any;
 }
 // Reducer Component
-export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContract, writeContract, readEnabled, readChainId, writeEnabled, timestamp }) => {
+export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContract, writeContract, readEnabled, readChainId, writeEnabled, timestamp, contractAbi }) => {
 
   const [ state, dispatch ] = useReducer(stateReducer, {})
 
@@ -132,7 +133,6 @@ export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContr
 
     if (hasInputs) {
       const isParametersFilled = Boolean(parametersValues.filter(Boolean).join(''))
-
       if (!isParametersFilled) {
         dispatch({
           type: ACTION_TYPES.parametersUndefined,
@@ -144,6 +144,9 @@ export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContr
         })
       } // TODO: Add Dispatch for State instead of Console.error
     }
+
+    // Figure out if method is overloaded and which method we should call in that case.
+    const correctedMethodName = findReplaceOverloadedMethods({ methodName, contractAbi, parametersValues })
 
     try {
       let value = '0'
@@ -164,7 +167,7 @@ export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContr
           const methodHash = await sendTx({
             writeContract,
             provider,
-            methodName,
+            correctedMethodName,
             methodParams,
             value,
             notify: notify(blockNativeApiKey, chainId),
@@ -186,7 +189,7 @@ export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContr
           { value: null, step: 'Triggering read transaction.', status: EVENT_STATUS.pending, methodNameKey },
         )
 
-        const methodResult = await callMethod({ readContract, methodName, methodParams, dispatch, isPolling })
+        const methodResult = await callMethod({ readContract, correctedMethodName, methodParams, dispatch, isPolling })
         setResult(methodResult)
 
         emitToEvent(

@@ -9,7 +9,6 @@ export type ManagerProps = {
   }
 
 export const Manager: React.FunctionComponent<ManagerProps> = ({ customContractElements, configuration: appConfig }) => {
-  console.log('configuration', appConfig)
 
   const { actions: { listenToEvent } } = useContext(EmitterContext)
 
