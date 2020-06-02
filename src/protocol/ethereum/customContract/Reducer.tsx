@@ -179,7 +179,6 @@ export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContr
 
           setResult(methodHash)
         } catch (error) {
-          console.log('In here: ', error)
           // Do we need to do anything with this error? Maybe no....
         }
 
