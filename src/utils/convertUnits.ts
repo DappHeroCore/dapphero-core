@@ -20,9 +20,11 @@ export const convertUnits = (inputValueType, outputValueType, value) => {
     }
     case ('bytes32'): {
       if (outputValueType === 'ascii') {
-        return (
-          Array.isArray(value) ? ethers.utils.parseBytes32String(value[0]) : ethers.utils.parseBytes32String(value)
-        )
+        return ethers.utils.parseBytes32String(value)
+        // This is a reference to when arrays are returned.
+        // return (
+        //   Array.isArray(value) ? ethers.utils.parseBytes32String(value[0]) : ethers.utils.parseBytes32String(value)
+        // )
       }
       if (outputValueType === 'bytes32') return value
       break
