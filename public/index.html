@@ -1,79 +1,100 @@
 <!DOCTYPE html>
-<html lang="en">
+<!--  This site was created in Webflow. http://www.webflow.com  -->
+<!--  Last Published: Sat Jan 18 2020 14:45:04 GMT+0000 (Coordinated Universal Time)  -->
+<html>
   <head>
-    <title>Hello!</title>
     <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-    <!-- import the webpage's stylesheet -->
-    <link rel="stylesheet" href="/style.css" />
-
-    <!-- import the webpage's fonts file -->
-    <link rel="stylesheet" href="https://use.typekit.net/uxx6oco.css" />
+    <title>DappHero: Components</title>
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <link href="css/dapphero-components.webflow.css" rel="stylesheet" type="text/css" />
   </head>
-  <body>
-    <h1>Preview of DappHero Collectible Functionality for Alpha V2.</h1>
-    <button data-dh-feature="network" data-dh-property-enable="true">
-      Enable Web3
-    </button>
 
-    <div
-      data-dh-feature="customContract"
-      data-dh-property-contract-name="SimpleVote"
-      data-dh-property-method-name="votes"
-      data-dh-property-method-id="0000"
-      data-dh-property-auto-invoke="false"
-    >
-      <input
-        data-dh-property-method-id="0000"
-        data-dh-property-input-name="$true"
-        data-dh-property-auto-clear="false"
-      />
-      <!-- <div data-dh-property-method-id="0000" data-dh-property-outputs>
-        *-Placeholder for returned data-*
-      </div> -->
-      <span data-dh-property-method-id="0000" data-dh-property-outputs="true"
-      >..output here..</span>
-      <button data-dh-property-method-id="0000" data-dh-property-invoke="true">
-        Click Here to Call Your Smart Contract!
-      </button>
-    </div>
+  <body class="body">
+    <div class="page-div">
+      <!-- Network Feature -->
 
 
-    <!-- This is the method instance, the "parent" of the NFT object -->
-    <!-- Replace 'property-asset-contract-address' with the NFT collectible contract address of your choice.  -->
-    <!-- The address "0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0" is the Rarible NFT contract address. -->
 
-    <!-- include the Glitch button to show what the webpage is about and
-          to make it easier for folks to view source and remix -->
-    <div class="glitchButton" style="position:fixed;top:20px;right:20px;"></div>
+      <!-- Method "viewNoArgsMultipleReturn" -->
+      <div class="headline">Method: "viewNoArgsMultipleReturn"</div>
+      <div class="headline">Payable: false - StateMutability: "view"</div>
+      <div class="headline">
+        <p>Inputs</p>
+        <ul>
+          <li>none</li>
+        </ul>
 
-    <!-- Imporant: This demo is using a pre-release script, so please change the DappHero tag: "main.js" to the nightly build "main-05-09-2020.js" for the latest features -->
+        <p>Outputs</p>
+        <ul>
+          <li>importantNumber - uint256 (should be zero)</li>
+          <li>hello - bytes32</li>
+        </ul>
+      </div>
+
+      <div
+        id="dh"
+        data-dh-feature="customContract"
+        data-dh-property-contract-name="dappherotest"
+        data-dh-property-method-name="viewNoArgsMultipleReturn"
+        data-dh-property-method-id="005"
+      >
+        <button data-dh-property-method-id="005" data-dh-property-invoke class="w-button">
+          Submit
+        </button> -->
+
+          All the args are returned in one, and in their respective output
+          <div
+            class="component-div"
+            data-dh-property-method-id="005"
+            data-dh-modifier-contract-units="bytes32"
+            data-dh-modifier-display-units="ascii"
+            data-dh-property-output-name="sayHello"
+          >
+            A greeting here in bytes32
+          </div>
+          <div
+            class="component-div"
+            data-dh-property-method-id="005"
+
+            data-dh-property-output-name="sayHello"
+          >
+            A greeting here in bytes32
+          </div>
+
+          <div class="component-div"
+          data-dh-property-method-id="005" 
+          data-dh-property-output-name="importantNumber" 
+          data-dh-modifier-decimals="3" >Important Number here</div>
+
+          <div data-dh-property-method-id="005" data-dh-property-outputs="[0]" data-dh-modifier-contract-units="wei"
+          data-dh-modifier-display-units="ether" data-dh-modifier-decimals="10" class="component-div">
+          *Return value: -*
+        </div>
+          <div data-dh-property-method-id="005" 
+          data-dh-property-outputs="[1]" 
+          data-dh-modifier-contract-units="bytes32"
+          data-dh-modifier-display-units="ascii"
+          class="component-div">
+          *Return value: -*
+        </div>
+      </div>
+
+      <hr style="margin-bottom: 65px" />
+
+
+    <!-- <script
+      src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.4.1.min.220afd743d.js"
+      type="text/javascript"
+      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+      crossorigin="anonymous"
+    ></script> -->
+
     <script
       src=""
+      type="text/javascript"
       id="dh-apiKey"
-      data-api="1589977001904x535637299413385200"
+      data-api="1581368358384x830713010847744000"
     ></script>
-<!-- 
-    <script>
-      document.addEventListener(
-        "dappHeroConfigLoaded",
-        ({ detail: dappHero }) => {
-          // Inside here you can listen to any event you want
-          console.log("It's loaded");
-          dappHero.listenToTransactionStatusChange(data => {
-            console.log("Listening to transtaction status change", data);
-          });
-          dappHero.listenToSmartContractBlockchainEvent(data => {
-            console.log("The blockChain Events: ", data)
-          })
-        }
-      );
-    </script> -->
-
-    <!-- This is just to track if people find this usefull -->
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-
   </body>
+  <!-- [if lte IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/placeholders/3.0.2/placeholders.min.js"></script><![endif] -->
 </html>
