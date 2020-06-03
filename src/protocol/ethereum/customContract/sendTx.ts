@@ -18,7 +18,7 @@ export const sendTx = async ({
 }): Promise<void> => {
 
   const methodDetails = { methodName, methodParams, contractAddress: writeContract.address, contractNetwork: writeContract.provider._network.name }
-  const method = writeContract.functions[methodName]
+  const method = writeContract[methodName]
 
   const gasPrice = await provider.getGasPrice()
   const estimateMethod = writeContract.estimateGas[methodName]
