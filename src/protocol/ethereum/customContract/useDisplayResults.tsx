@@ -30,9 +30,10 @@ export const useDisplayResults = ({ childrenElements, result, emitToEvent, metho
             const doConvertValue = ({ displayUnits, contractUnits, arrayIndiceValue, result }) => {
               // TODO: Notes, that arrayIndiceValue can return a "0" which does not equal "false", however it also returns "false"
               const value = (arrayIndiceValue !== false) ? result[arrayIndiceValue] : result
-              return (value && (displayUnits || contractUnits)
-                ? utils.convertUnits(contractUnits, displayUnits, value)
-                : value)
+const shouldConvertUnits = value && (displayUnits || contractUnits)
+
+return shouldConvertUnits ? utils.convertUnits(contractUnits, displayUnits, value) : value
+
             }
             const convertedValue = doConvertValue({ displayUnits, contractUnits, arrayIndiceValue, result })
 
