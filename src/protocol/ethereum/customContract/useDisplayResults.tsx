@@ -27,14 +27,13 @@ export const useDisplayResults = ({ childrenElements, result, emitToEvent, metho
             const arrayIndiceValue = getStringFormattedArrayIndiceValue(dataSetValue)
 
             // This function either returns the full object, or the specific index of the object, and converts it if required.
-            const doConvertValue = ({ displayUnits, contractUnits, arrayIndiceValue, result }) => {
+            const convertedValue = (): any => {
               // TODO: Notes, that arrayIndiceValue can return a "0" which does not equal "false", however it also returns "false"
               const value = (arrayIndiceValue !== false) ? result[arrayIndiceValue] : result
               return (value && (displayUnits || contractUnits)
                 ? utils.convertUnits(contractUnits, displayUnits, value)
                 : value)
             }
-            const convertedValue = doConvertValue({ displayUnits, contractUnits, arrayIndiceValue, result })
 
             const isNumber = !Number.isNaN(Number(convertedValue))
             if (decimals && isNumber) {
