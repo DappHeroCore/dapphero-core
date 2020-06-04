@@ -160,12 +160,9 @@ export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContr
       // If the constants are in the params we should not invoke a transaction, nor a call method.
 
       // TODO: [DEV-328] We need to organize consts in one place.
-      const doParamsContainUnformatedConstant = methodParams.find((paramValue) => {
-        if (paramValue === '$CURRENT_USER') return false
-        return true
-      })
+      const doParamsContainUnformatedConstant = Boolean(methodParams.find((paramValue) => paramValue === '$CURRENT_USER'))
 
-      if (writeEnabled && isTransaction && doParamsContainUnformatedConstant) {
+      if (writeEnabled && isTransaction && !doParamsContainUnformatedConstant) {
         emitToEvent(
           EVENT_NAMES.contract.statusChange,
           { value: null, step: 'Triggering write transaction.', status: EVENT_STATUS.pending, methodNameKey },
@@ -191,7 +188,7 @@ export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContr
           // Do we need to do anything with this error? Maybe no....
         }
 
-      } else if (readEnabled && !isTransaction && !state.error && doParamsContainUnformatedConstant) {
+      } else if (readEnabled && !isTransaction && !state.error && !doParamsContainUnformatedConstant) {
         emitToEvent(
           EVENT_NAMES.contract.statusChange,
           { value: null, step: 'Triggering read transaction.', status: EVENT_STATUS.pending, methodNameKey },
