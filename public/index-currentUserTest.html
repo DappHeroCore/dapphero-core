@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <title>DappHero HTML Generation</title>
+
+    <meta charset="UTF-8" />
+    <meta name="author" content="DappHero" />
+    <meta name="description" content="DappHero" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  </head>
+
+  <body>
+    <header>
+      <nav>
+        <img
+          alt="Logo"
+          src="//s3.amazonaws.com/appforest_uf/f1580782353653x261239071988881950/noun_Sandwich_3059105.png"
+          height="70"
+        />
+        <ul>
+          <li>Menu Item 1</li>
+          <li><a href="#">Menu Item 2</a></li>
+          <li>
+            <a href="#">Dropdown Menu Item</a>
+            <ul>
+              <li><a href="#">Sublink with a long name</a></li>
+              <li><a href="#">Short sublink</a></li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <h1>SnakeGameTest</h1>
+      <p>
+        <mark
+          >Powered by <a href="https://www.dapphero.io">DappHero.io</a></mark
+        >
+      </p>
+      <p>SnakeGameTest</p>
+      <br />
+      <p>
+        <button data-dh-feature="network" data-dh-property-enable="true">
+          Enable Web3
+        </button>
+      </p>
+    </header>
+    <div>
+
+          <section><h2>Transaction Methods</h2></section>
+
+
+          <span
+        style="display: none;"
+        data-dh-feature="customContract"
+        data-dh-property-contract-name="SnakeGameTest"
+        data-dh-property-method-name="userChallenge"
+        data-dh-property-method-id="003"
+        data-dh-property-auto-invoke="true"
+      ></span>
+      <!-- <input
+        data-dh-property-method-id="003"
+        data-dh-property-input-name="$true"
+        value="0xE8D848debB3A3e12AA815b15900c8E020B863F31"
+      /> -->
+      <input
+      data-dh-property-method-id="003"
+      data-dh-property-input-name="[0]"
+      value="$CURRENT_USER"
+    />
+      <button
+        id="get-status-btn"
+        style="display: none"
+        data-dh-property-method-id="003"
+        data-dh-property-invoke="true"
+      >
+        Get Status
+      </button>
+      <div
+        id="status"
+        style="display: none;"
+        data-dh-property-method-id="003"
+        data-dh-property-output-name="status"
+      >STATUS</div>
+
+          <header>
+            <div
+              data-dh-feature="customContract"
+              data-dh-property-method-id="10cw"
+              data-dh-property-auto-invoke="false"
+              data-dh-property-contract-name="SnakeGameTest"
+              data-dh-property-method-name="newChallenge"
+            >
+              <h3>Method <mark>"newChallenge"</mark></h3>
+              <section>
+                <aside>
+                  <section>
+                    Input name: <i>EthValue</i>
+                    <input
+                      type="text"
+                      placeholder="EthValue"
+                      data-dh-property-method-id="10cw"
+                      data-dh-property-input-name="EthValue"
+                    />
+                  </section>
+
+                  <button
+                    data-dh-property-invoke="true"
+                    data-dh-property-method-id="10cw"
+                  >
+                    newChallenge
+                  </button>
+                </aside>
+              </section>
+            </div>
+          </header>
+        </section>
+      </header>
+
+      <button style="margin-left: 12em; border-radius: 0.5em; cursor: pointer;" 
+      data-dh-property-method-id="002" 
+      data-dh-property-invoke="true">
+        Deposit .001 ETH and PLAY!
+      </button>
+      
+      <!-- <input
+      type="text"
+      placeholder="EthValue"
+      data-dh-property-method-id="002"
+      data-dh-property-input-name="EthValue"
+      
+    /> -->
+  </section>
+      <span style="display: none;" 
+      data-dh-feature="customContract" 
+      data-dh-property-contract-name="SnakeGameTest" 
+      data-dh-property-method-name="newChallenge" 
+      data-dh-property-method-id="002" 
+      data-dh-property-eth-value="0.001"
+      >
+      </span>
+
+
+    </div>
+    <script
+      id="dh-apiKey"
+      data-api="1591277469706x454502458176831500"
+      src=""
+    ></script>
+    <link rel="stylesheet" href="https://unpkg.com/mvp.css" />
+    <style>
+      form {
+        margin: 40px;
+      }
+    </style>
+
+    <script>
+      document.addEventListener(
+        "dappHeroConfigLoaded",
+        ({ detail: dappHero }) => {
+          // Inside here you can listen to any event you want
+          console.log("DappHero Has Loaded!");
+
+          // For projects with auto-invoked method, you will want to filter on events
+          // dappHero.listenToTransactionStatusChange(data => {
+          //   console.log("Listening to transtaction status change", data);
+          // });
+
+          // This is how you can listen to any events your smart contract emits
+          dappHero.listenToSmartContractBlockchainEvent((data) => {
+            console.log("The blockChain Events: ", data);
+          });
+
+          //This is an example method for alerting your users they are on the wrong network
+          //if(window.dappHero.provider.chainId !== 4){
+          //  alert("Wrong network! You should be on rinkeby")
+          //}
+        }
+      );
+    </script>
+  </body>
+</html>
