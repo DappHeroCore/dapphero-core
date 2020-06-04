@@ -1,10 +1,7 @@
 import React, { useState, useContext, useEffect, useReducer } from 'react'
 import { useToasts } from 'react-toast-notifications'
 import { logger } from 'logger/customLogger'
-import Notify from 'bnc-notify'
-import omit from 'lodash.omit'
 
-import * as utils from 'utils'
 import * as consts from 'consts'
 import * as contexts from 'contexts'
 import { EmitterContext } from 'providers/EmitterProvider/context'
@@ -18,43 +15,19 @@ import { stateReducer, ACTION_TYPES } from './stateMachine'
 import { sendTx } from './sendTx'
 import { callMethod } from './callMethod'
 
+import { notify, getParametersFromInputValues } from './utils/utils'
+
 const blockNativeApiKey = process.env.REACT_APP_BLOCKNATIVE_API
 const { AUTO_INVOKE_INTERVAL: POLLING_INTERVAL } = consts.global
 
-// Utils
-const notify = (apiKey, chainId) => Notify({ dappId: apiKey, networkId: chainId })
-
-const getAbiMethodInputs = (abi, methodName, dispatch): Record<string, any> => {
-  const emptyString = '$true'
-  const parseName = (value: string): string => (value === '' ? emptyString : value)
-
-  const method = abi.find(({ name }) => name === methodName)
-
-  if (!method) {
-    dispatch({
-      type: ACTION_TYPES.malformedInputName,
-      status: {
-        error: true,
-        msg: `The method name: { ${methodName} } is incorrect. Perhaps a typo in your html?`,
-      },
-    })
-    return null
-  }
-
-  const parsedMethod = Object.assign(method, { inputs: method.inputs.map((input) => ({ ...input, name: parseName(input.name) })) })
-
-  const output = parsedMethod.inputs.reduce((acc, { name }) => ({ ...acc, [name]: '' }), [])
-  return output
-}
-
 export type ReducerProps = {
-info: any;
-readContract: any;
-writeContract: any;
-readEnabled: any;
-readChainId: any;
-writeEnabled: any;
-timestamp: number;
+  info: any;
+  readContract: any;
+  writeContract: any;
+  readEnabled: any;
+  readChainId: any;
+  writeEnabled: any;
+  timestamp: number;
 }
 // Reducer Component
 export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContract, writeContract, readEnabled, readChainId, writeEnabled, timestamp }) => {
@@ -73,7 +46,7 @@ export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContr
   const methodNameKey = properties.find(({ key }) => key === 'methodName')
   const ethValueKey = properties.find((property) => property.key === 'ethValue')
 
-  let ethValue = ethValueKey?.value
+  const ethValue = ethValueKey?.value
   const { value: methodName } = methodNameKey
 
   const { actions: { emitToEvent } } = useContext(EmitterContext)
@@ -99,6 +72,7 @@ export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContr
     }
   }, [ autoInterval, state.error ])
 
+  // Display Error Messages
   useEffect(() => {
     const { msg, error, info: stateInfo } = state
 
@@ -113,54 +87,7 @@ export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContr
     }
   }, [ state.error ])
 
-  // Helpers - Get parameters values
-  const getParametersFromInputValues = (): Record<string, any> => {
-    const inputChildrens = childrenElements.filter(({ id }) => id.includes('input'))
-    const abiMethodInputs = getAbiMethodInputs(info.contract.contractAbi, methodName, dispatch)
-
-    if (!inputChildrens.length ) return { parameterValues: [] }
-    const [ inputs ] = inputChildrens
-
-    inputs.element.forEach(({ element, argumentName }) => {
-      const rawValue = element.value
-      const value = address ? (rawValue.replace(consts.clientSide.currentUser, address) ?? rawValue) : rawValue
-
-      try {
-        const displayUnits = element.getAttribute('data-dh-modifier-display-units')
-        const contractUnits = element.getAttribute('data-dh-modifier-contract-units')
-        const convertedValue = value && (displayUnits || contractUnits) ? utils.convertUnits(displayUnits, contractUnits, value) : value
-
-        if (convertedValue) {
-          Object.assign(abiMethodInputs, { [argumentName]: convertedValue })
-        }
-      } catch (err) {
-        dispatch({
-          type: ACTION_TYPES.malformedInputs,
-          status: {
-            error: true,
-            fetching: false,
-            msg: `There seems to be an error with your inputs? Argument Name: ${argumentName}`,
-            methodNameKey,
-          },
-        })
-      }
-
-      // TODO: Check if we need to re-assign the input value (with Drake)
-      element.value = value
-    })
-
-    if (abiMethodInputs?.EthValue) {
-      ethValue = abiMethodInputs?.EthValue
-    }
-
-    const parsedParameters = omit(abiMethodInputs, 'EthValue')
-    const parametersValues = Object.values(parsedParameters)
-
-    return { parametersValues }
-  }
-
   // Return values to their orignal value when unmounted
-  // TODO: Do we want to do this also for all HTML?
   useEffect(() => {
     let rawValues = []
 
@@ -186,7 +113,7 @@ export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContr
       try {
         event.preventDefault()
         event.stopPropagation()
-      } catch (err) {}
+      } catch (err) { }
     }
 
     // Return early if the read and write instances aren't ready
@@ -196,7 +123,9 @@ export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContr
       EVENT_NAMES.contract.statusChange,
       { value: null, step: 'Getting and parsing parameters.', status: EVENT_STATUS.pending, methodNameKey },
     )
-    const { parametersValues } = getParametersFromInputValues()
+
+    const { parametersValues, newEthValue } = getParametersFromInputValues({ info, methodName, dispatch, address, methodNameKey, ethValue })
+
     emitToEvent(
       EVENT_NAMES.contract.statusChange,
       { value: parametersValues, step: 'Getting and parsing parameters.', status: EVENT_STATUS.resolved, methodNameKey },
@@ -204,6 +133,7 @@ export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContr
 
     if (hasInputs) {
       const isParametersFilled = Boolean(parametersValues.filter(Boolean).join(''))
+
       if (!isParametersFilled) {
         dispatch({
           type: ACTION_TYPES.parametersUndefined,
@@ -220,8 +150,8 @@ export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContr
       let value = '0'
       const methodParams = [ ...(hasInputs ? parametersValues : []) ]
 
-      if (ethValue) {
-        value = ethValue
+      if (newEthValue) {
+        value = newEthValue
       }
 
       if (writeEnabled && isTransaction) {
@@ -248,7 +178,7 @@ export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContr
           // Do we need to do anything with this error? Maybe no....
         }
 
-      } else if (readEnabled && !isTransaction && !state.error ) {
+      } else if (readEnabled && !isTransaction && !state.error) {
         emitToEvent(
           EVENT_NAMES.contract.statusChange,
           { value: null, step: 'Triggering read transaction.', status: EVENT_STATUS.pending, methodNameKey },
@@ -314,7 +244,7 @@ export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContr
 
   return (
     <div style={{ display: 'none' }}>
-    Custom Contract last updated:
+      Custom Contract last updated:
       {timestamp}
     </div>
   )

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+
+<html lang="en">
+ <head>
+   <title>DappHero HTML Generation</title>
+
+   <meta charset="UTF-8" />
+   <meta name="author" content="DappHero" />
+   <meta name="description" content="DappHero" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+ </head>
+
+ <body>
+   <header>
+     <nav>
+       <img
+         alt="Logo"
+         src="https://media2.giphy.com/media/b5WqMx1eiFv6U/giphy_s.gif?cid=fe6502e17a0e53c0e9644261e8f37f533fd9f82ae80e3e23&rid=giphy_s.gif"
+         height="70"
+       />
+       <ul>
+         <li>Menu Item 1</li>
+         <li><a href="#">Menu Item 2</a></li>
+         <li>
+           <a href="#">Dropdown Menu Item</a>
+           <ul>
+             <li><a href="#">Sublink with a long name</a></li>
+             <li><a href="#">Short sublink</a></li>
+           </ul>
+         </li>
+       </ul>
+     </nav>
+     <h1>WrappedEth</h1>
+     <p>
+       <mark
+         >Powered by <a href="https://www.dapphero.io">DappHero.io</a></mark
+       >
+     </p>
+     <p>
+       This is a description of what you are trying to do with your project.
+       Edit it so you have something snazzy!
+     </p>
+     <br />
+     <p>
+       <button data-dh-feature="network" data-dh-property-enable="true">
+         Enable Web3
+       </button>
+     </p>
+   </header>
+   <div>
+     <section><h2>wrapped-eth</h2></section>
+     <header>
+      <div
+        data-dh-feature="customContract"
+        data-dh-property-method-id="mrcB"
+        data-dh-property-auto-invoke="true"
+        data-dh-property-contract-name="wrapped-eth"
+        data-dh-property-method-name="totalSupply"
+      >
+        <h3>Method <mark>"totalSupply"</mark></h3>
+        <section>
+          <aside>
+            <div
+              data-dh-property-method-id="mrcB"
+              data-dh-property-outputs="true"
+              data-dh-modifier-contract-units="wei"
+              data-dh-modifier-display-units="ether"
+            >
+              <pre>Output...</pre>
+            </div>
+
+            <button
+              data-dh-property-invoke="true"
+              data-dh-property-method-id="mrcB"
+            >
+              totalSupply
+            </button>
+          </aside>
+        </section>
+      </div>
+    </header> <header>
+      <div
+        data-dh-feature="customContract"
+        data-dh-property-method-id="mrcB"
+        data-dh-property-auto-invoke="true"
+        data-dh-property-contract-name="wrapped-eth"
+        data-dh-property-method-name="totalSupply"
+        
+      >
+        <h3>Method <mark>"totalSupply"</mark></h3>
+        <section>
+          <aside>
+            <div
+              data-dh-property-method-id="mrcB"
+              data-dh-property-outputs="true"
+              data-dh-modifier-contract-units="1"
+              data-dh-modifier-display-units="1000000000000000000"
+              data-dh-modifier-decimal-units="2"
+            >
+              <pre>Output...</pre>
+            </div>
+
+            <button
+              data-dh-property-invoke="true"
+              data-dh-property-method-id="mrcB"
+            >
+              totalSupply
+            </button>
+          </aside>
+        </section>
+      </div>
+    </header>
+   </div>
+   <script
+     id="dh-apiKey"
+     data-api="1586288625489x991636521145335800"
+     src=""
+   ></script>
+   <link rel="stylesheet" href="https://unpkg.com/mvp.css" />
+   <style>
+     form {
+       margin: 40px;
+     }
+   </style>
+
+   <script>
+     document.addEventListener(
+       "dappHeroConfigLoaded",
+       ({ detail: dappHero }) => {
+         // Inside here you can listen to any event you want
+         console.log("DappHero Has Loaded!");
+
+         // For projects with auto-invoked method, you will want to filter on events
+         // dappHero.listenToTransactionStatusChange(data => {
+         //   console.log("Listening to transtaction status change", data);
+         // });
+
+         // This is how you can listen to any events your smart contract emits
+         dappHero.listenToSmartContractBlockchainEvent((data) => {
+           console.log("The blockChain Events: ", data);
+         });
+
+       }
+     );
+   </script>
+ </body>
+</html>
