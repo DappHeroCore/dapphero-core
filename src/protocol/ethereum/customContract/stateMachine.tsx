@@ -1,3 +1,4 @@
+import { VoidSigner } from 'ethers'
 
 export const ACTION_TYPES = {
   malformedInputName: 'MALFORMED_INPUT_NAME',
@@ -51,3 +52,83 @@ export const stateReducer = (state, action) => {
   }
 }
 
+export const dsp = {
+
+  estimateGas: {
+    start: ({ methodDetails, dispatch }): VoidFunction => dispatch({
+      type: ACTION_TYPES.txUserSignatureRequested,
+      status: {
+        ...methodDetails,
+        msg: 'Estimate Gas Cost of Transaction',
+        error: false,
+        fetching: true,
+        inFlight: false,
+      },
+    }),
+    finish: ({ methodDetails, dispatch, estimatedGas }): VoidFunction => dispatch({
+      type: ACTION_TYPES.txUserSignatureRequested,
+      status: {
+        ...methodDetails,
+        msg: 'Estimate Gas Cost of Transaction Succedded',
+        error: false,
+        fetching: true,
+        inFlight: false,
+        estimatedGas: estimatedGas.toString(),
+      },
+    }),
+    error: ({ methodDetails, dispatch, error }): VoidFunction => dispatch({
+      type: ACTION_TYPES.estimateGasError,
+      status: {
+        ...methodDetails,
+        msg: 'Estimate Gas Cost of Transaction Failed',
+        error,
+        fetching: false,
+        inFlight: false,
+      },
+    }),
+  },
+  txFlow: {
+    sigRequested: ({ methodDetails, dispatch }): VoidFunction => dispatch({
+      type: ACTION_TYPES.txUserSignatureRequested,
+      status: {
+        ...methodDetails,
+        msg: 'User signature requsted',
+        error: false,
+        fetching: true,
+        inFlight: false,
+      },
+    }),
+    txBroadcast: ({ methodDetails, dispatch, methodResult }): VoidFunction => dispatch({
+      type: ACTION_TYPES.txReceipt,
+      status: {
+        msg: `TX Broadcast.`,
+        error: false,
+        fetching: true,
+        inFlight: true,
+        txReceipt: methodResult.hash,
+        ...methodDetails,
+      },
+    }),
+    txConfirmed: ({ methodDetails, dispatch, methodResult, receipt }): VoidFunction => dispatch({
+      type: ACTION_TYPES.confirmed,
+      status: {
+        ...methodDetails,
+        msg: `Transaction confirmed. Hash: ${methodResult.hash}`,
+        error: false,
+        fetching: false,
+        inFlight: false,
+        receipt,
+      },
+    }),
+    txError: ({ methodDetails, dispatch, error }): VoidFunction => dispatch({
+      type: ACTION_TYPES.txError,
+      status: {
+        ...methodDetails,
+        msg: 'Transaction failed. Check console for more details.',
+        error,
+        inFlight: false,
+        fetching: false,
+      },
+    } ),
+  },
+}
