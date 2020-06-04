@@ -11,6 +11,95 @@
 
   <body class="body">
     <div class="page-div">
+      <!-- Network Feature -->
+
+      <h2 style="margin-bottom: 25px">Network Features</h2>
+
+         <!-- Method GetID -->
+      <div class="headline">Network: Get ID</div>
+      <h2 style="margin-bottom: 25px" data-dh-feature="network" data-dh-property-id>NetworkID should be here</h2>
+
+
+       <!-- ============================================================================================================================================ -->
+       <!-- Method Network GetName -->
+       <!-- ============================================================================================================================================ -->
+       <div class="headline">Network: Get Name</div>
+       <div class="headline" data-dh-feature="network" data-dh-property-name>Network ID should be here</div>
+       <!-- ============================================================================================================================================ -->
+
+
+
+       <!-- ============================================================================================================================================ -->
+       <!-- Method Network GetProvider-->
+       <!-- ============================================================================================================================================ -->
+       <div class="headline">Network: Get Provider</div>
+       <div class="headline" data-dh-feature="network" data-dh-property-provider>Network provider should be here</div>
+       <!-- ============================================================================================================================================ -->
+
+
+
+        <!-- ============================================================================================================================================ -->
+        <!-- Method Network Transfer -->
+        <!-- ============================================================================================================================================ -->
+        <div class="headline">Network: Transfer - (unfinished)</div>
+        <input data-dh-feature="network" data-dh-property-transfer="input" data-dh-property-input-name="amount" data-dh-modifier-display-units="ether" placeholder="amount in wei"></input>
+        <input data-dh-feature="network" data-dh-property-transfer="input" data-dh-property-input-name="address" placeholder="address"></input>
+        <button data-dh-feature="network" data-dh-property-transfer="invoke">Transfer Now</button>
+        <div class="headline" data-dh-feature="network" data-dh-property-transfer="output"></div>
+        <!-- ============================================================================================================================================ -->
+
+
+
+        <!-- ============================================================================================================================================ -->
+        <!-- Method Network GetProvider -->
+        <!-- ============================================================================================================================================ -->
+        <div class="headline">Network: Get Provider</div>
+        <div class="headline" data-dh-feature="network" data-dh-property-provider>Network provider should be here</div>
+        <!-- ============================================================================================================================================ -->
+
+
+        <!-- ============================================================================================================================================ -->
+        <!-- Method Enable Network EthEnable -->
+        <!-- ============================================================================================================================================ -->
+        <div class="headline">Network: Enable Button (unfinished)</div>
+        <button data-dh-feature="network" data-dh-property-enable>Enable</button>
+        <!-- ============================================================================================================================================ -->
+
+
+
+    <h2 style="margin-bottom: 25px">User Features</h2>
+
+        <!-- Method GetAddress -->
+       <div class="headline">User: Account Adddress</div>
+       <h2 style="margin-bottom: 25px" data-dh-feature="user" data-dh-property-address="fd">User Address Should be Here</h2>
+
+        <!-- Method GetAddressShort -->
+        <div class="headline">User: Account Adddress Short</div>
+        <h2 style="margin-bottom: 25px" data-dh-feature="user" data-dh-property-address data-dh-modifier-display="short">User Address Should be Here</h2>
+
+         <!-- Method GetBalance -->
+         <div class="headline">User: Get Balance</div>
+         <h2 style="margin-bottom: 25px" data-dh-feature="user" data-dh-property-balance  data-dh-modifier-units="ether" data-dh-modifier-decimals="3">User Address Should be Here</h2>
+
+
+    <h2 style="margin-bottom: 25px">3Box Features</h2>
+
+         <!-- Method GetName-->
+        <div class="headline">3Box: UserName</div>
+        <h2 style="margin-bottom: 25px" data-dh-feature="threebox" data-dh-property-name>3box name</h2>
+
+        <div class="headline">3Box: Website</div>
+        <h2 style="margin-bottom: 25px" data-dh-feature="threebox" data-dh-property-website>3box website</h2>
+
+      <!--
+        ==================================================================================================================
+        Show 3Box Image
+        ==================================================================================================================
+      -->
+      <img src="https://assets.website-files.com/5e306749b7083242f07b24e7/5e36d27d12126763acc00e1a_noun_punk_320426%20(2).png" srcset="https://assets.website-files.com/5e306749b7083242f07b24e7/5e36d27d12126763acc00e1a_noun_punk_320426%20(2)-p-500.png 500w, https://assets.website-files.com/5e306749b7083242f07b24e7/5e36d27d12126763acc00e1a_noun_punk_320426%20(2).png 512w" sizes="100px" data-dh-feature="threebox" data-dh-property-image="true" alt="" class="profile-image">
+
+
+
 
 
 
@@ -45,7 +134,7 @@
         data-dh-property-contract-name="dappherotest"
         data-dh-property-method-name="hello"
         data-dh-property-method-id="000"
-        data-dh-property-auto-invoke="false"
+        data-dh-property-auto-invoke="true"
         data-dh-property-auto-clear="false"
       >
         <button data-dh-property-method-id="000" data-dh-property-invoke class="w-button">
