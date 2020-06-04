@@ -1,7 +1,7 @@
 import { ACTION_TYPES } from './stateMachine'
 
-export const callMethod = async ({ readContract, methodName, methodParams, dispatch, isPolling }): Promise<void> => {
-  const method = readContract.functions[methodName]
+export const callMethod = async ({ readContract, correctedMethodName: methodName, methodParams, dispatch, isPolling }): Promise<void> => {
+  const method = readContract[methodName]
   const methodDetails = { methodName, methodParams, contractAddress: readContract.address, contractNetwork: readContract.provider._network.name }
 
   dispatch({
@@ -17,6 +17,7 @@ export const callMethod = async ({ readContract, methodName, methodParams, dispa
 
   try {
     const methodResult = await method(...methodParams)
+    console.log('methodResult', methodResult)
 
     dispatch({
       type: ACTION_TYPES.callMethod,

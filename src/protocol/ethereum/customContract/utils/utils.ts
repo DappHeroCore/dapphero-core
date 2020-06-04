@@ -100,3 +100,16 @@ export const getParametersFromInputValues = ({ info, methodName, dispatch, addre
 
   return { parametersValues, newEthValue }
 }
+
+// Determin if function is overloaded
+
+export const findReplaceOverloadedMethods = ({ methodName, contractAbi, parametersValues }) => {
+  // If contract is not overloaded, return the methodName
+  if (contractAbi.filter((el) => el.name === methodName).length <= 1) return methodName
+
+  // Now we know we are overloaded and we need to find what the inputs should be.
+  const selectedMethod = contractAbi.find((el) => el.inputs.length === parametersValues.length)
+
+  // now we need to map through the abi inputs returning the value of internalType, and concatinating.
+  return `${methodName}(${selectedMethod.inputs.map((input) => input.internalType)})`
+}

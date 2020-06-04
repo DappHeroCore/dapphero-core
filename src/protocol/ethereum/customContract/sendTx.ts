@@ -5,13 +5,20 @@ import * as consts from 'consts'
 import { dsp } from './stateMachine'
 
 export const sendTx = async ({
-  writeContract, dispatch,
-  provider, methodName, methodParams,
-  value, notify, emitToEvent, methodNameKey, addToast,
+  writeContract,
+  dispatch,
+  provider,
+  correctedMethodName: methodName,
+  methodParams,
+  value,
+  notify,
+  emitToEvent,
+  methodNameKey,
+  addToast,
 }): Promise<void> => {
 
   const methodDetails = { methodName, methodParams, contractAddress: writeContract.address, contractNetwork: writeContract.provider._network.name }
-  const method = writeContract.functions[methodName]
+  const method = writeContract[methodName]
 
   const gasPrice = await provider.getGasPrice()
   const estimateMethod = writeContract.estimateGas[methodName]
@@ -27,6 +34,8 @@ export const sendTx = async ({
   try {
     await writeContract.callStatic[methodName](...methodParams, tempOverride)
   } catch (error) {
+
+    // TODO: [DEV-319] Add dispatch Error
     addToast(
       `Transaction will fail. Reason: ${error.reason}`,
       {
@@ -38,6 +47,7 @@ export const sendTx = async ({
     willTxRevert = true
   }
 
+  // TODO: [DEV-320] Give users the option to force send a failed transaction anyway
   // Only run the rest of the code if we know it won't revert, or give users the option to force the tx anyway.
   if (!willTxRevert) {
     try {
