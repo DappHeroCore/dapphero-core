@@ -1,140 +1,109 @@
 import { ethers } from 'ethers'
+import { useToasts } from 'react-toast-notifications'
 import { EVENT_NAMES, EVENT_STATUS } from 'providers/EmitterProvider/constants'
-import { ACTION_TYPES } from './stateMachine'
+import * as consts from 'consts'
+import { dsp } from './stateMachine'
 
-export const sendTx = async ({ writeContract, dispatch, provider, methodName, methodParams, value, notify, emitToEvent, methodNameKey }): Promise<void> => {
+export const sendTx = async ({
+  writeContract,
+  dispatch,
+  provider,
+  correctedMethodName: methodName,
+  methodParams,
+  value,
+  notify,
+  emitToEvent,
+  methodNameKey,
+  addToast,
+}): Promise<void> => {
 
   const methodDetails = { methodName, methodParams, contractAddress: writeContract.address, contractNetwork: writeContract.provider._network.name }
-  const method = writeContract.functions[methodName]
+  const method = writeContract[methodName]
+
   const gasPrice = await provider.getGasPrice()
-  const estimateMethod = writeContract.estimate[methodName]
+  const estimateMethod = writeContract.estimateGas[methodName]
   let estimatedGas
 
   const tempOverride = { value: ethers.utils.parseEther(value) }
   // TODO: Allow users to set Gas Price
 
-  dispatch({
-    type: ACTION_TYPES.txUserSignatureRequested,
-    status: {
-      ...methodDetails,
-      msg: 'Estimate Gas Cost of Transaction',
-      error: false,
-      fetching: true,
-      inFlight: false,
-    },
-  })
+  dsp.estimateGas.start({ methodDetails, dispatch })
 
+  // Test if tx will work, run the rest only if success
+  let willTxRevert = false
   try {
-    estimatedGas = await estimateMethod(...methodParams, tempOverride)
-
-    dispatch({
-      type: ACTION_TYPES.txUserSignatureRequested,
-      status: {
-        ...methodDetails,
-        msg: 'Estimate Gas Cost of Transaction Succedded',
-        error: false,
-        fetching: true,
-        inFlight: false,
-        estimatedGas: estimatedGas.toString(),
-      },
-    })
-
+    await writeContract.callStatic[methodName](...methodParams, tempOverride)
   } catch (error) {
-    dispatch({
-      type: ACTION_TYPES.estimateGasError,
-      status: {
-        ...methodDetails,
-        msg: 'Estimate Gas Cost of Transaction Failed',
-        error,
-        fetching: false,
-        inFlight: false,
+
+    // TODO: [DEV-319] Add dispatch Error
+    addToast(
+      `Transaction will fail. Reason: ${error.reason}`,
+      {
+        appearance: 'error',
+        autoDismiss: true,
+        autoDismissTimeout: consts.global.REACT_TOAST_AUTODISMISS_INTERVAL,
       },
-    } )
+    )
+    willTxRevert = true
   }
 
-  const overrides = {
-    gasLimit: estimatedGas,
-    gasPrice,
-    value: ethers.utils.parseEther(value),
-  }
-  let methodResult
+  // TODO: [DEV-320] Give users the option to force send a failed transaction anyway
+  // Only run the rest of the code if we know it won't revert, or give users the option to force the tx anyway.
+  if (!willTxRevert) {
+    try {
+      estimatedGas = await estimateMethod(...methodParams, tempOverride)
+      dsp.estimateGas.finish({ methodDetails, dispatch, estimatedGas })
+    } catch (error) {
+      dsp.estimateGas.error({ methodDetails, dispatch, error })
+    }
 
-  dispatch({
-    type: ACTION_TYPES.txUserSignatureRequested,
-    status: {
-      ...methodDetails,
-      msg: 'User signature requsted',
-      error: false,
-      fetching: true,
-      inFlight: false,
-    },
-  })
+    const overrides = {
+      gasLimit: estimatedGas,
+      gasPrice,
+      value: ethers.utils.parseEther(value),
+    }
+    let methodResult
 
-  try {
+    dsp.txFlow.sigRequested({ methodDetails, dispatch })
 
-    methodResult = await method(...methodParams, overrides)
+    try {
 
-    dispatch({
-      type: ACTION_TYPES.txReceipt,
-      status: {
-        msg: `TX Broadcast.`,
-        error: false,
-        fetching: true,
-        inFlight: true,
-        txReceipt: methodResult.hash,
-        ...methodDetails,
-      },
-    })
+      methodResult = await method(...methodParams, overrides)
 
-    provider.once(methodResult.hash, (receipt) => {
-      dispatch({
-        type: ACTION_TYPES.confirmed,
-        status: {
-          ...methodDetails,
-          msg: `Transaction confirmed. Hash: ${methodResult.hash}`,
-          error: false,
-          fetching: false,
-          inFlight: false,
-          receipt,
-        },
+      dsp.txFlow.txBroadcast({ methodDetails, dispatch, methodResult })
+
+      provider.once(methodResult.hash, (receipt) => {
+        dsp.txFlow.txConfirmed({ methodDetails, dispatch, methodResult, receipt })
+
       })
-    })
 
-    // // BlockNative Toaster to track tx
-    const { emitter } = notify.hash(methodResult.hash)
+      // // BlockNative Toaster to track tx
+      const { emitter } = notify.hash(methodResult.hash)
 
-    emitter.on('txSent', (data) => {
+      emitter.on('txSent', (data) => {
+        emitToEvent(
+          EVENT_NAMES.contract.statusChange,
+          { value: data, step: 'Transaction has been sent to the network', status: EVENT_STATUS.pending, methodNameKey },
+        )
+      })
+      emitter.on('txFailed', (data) => emitToEvent(
+        EVENT_NAMES.contract.statusChange,
+        { value: data, step: 'Transaction sent to network but failed to be mined.', status: EVENT_STATUS.rejected, methodNameKey },
+      ) )
+      emitter.on('txConfirmed', (data) => emitToEvent(
+        EVENT_NAMES.contract.statusChange,
+        { value: data, step: 'Transaction has been sent to the network', status: EVENT_STATUS.resolved, methodNameKey },
+      ) )
+
+      // Set Result on State
+      return methodResult.hash
+
+    } catch (error) {
       emitToEvent(
         EVENT_NAMES.contract.statusChange,
-        { value: data, step: 'Transaction has been sent to the network', status: EVENT_STATUS.pending, methodNameKey },
+        { value: error, step: 'Transaction failed to be broadcast/executed', status: EVENT_STATUS.rejected, methodNameKey },
       )
-    })
-    emitter.on('txFailed', (data) => emitToEvent(
-      EVENT_NAMES.contract.statusChange,
-      { value: data, step: 'Transaction sent to network but failed to be mined.', status: EVENT_STATUS.rejected, methodNameKey },
-    ) )
-    emitter.on('txConfirmed', (data) => emitToEvent(
-      EVENT_NAMES.contract.statusChange,
-      { value: data, step: 'Transaction has been sent to the network', status: EVENT_STATUS.resolved, methodNameKey },
-    ) )
-
-    // Set Result on State
-    return methodResult.hash
-
-  } catch (error) {
-    emitToEvent(
-      EVENT_NAMES.contract.statusChange,
-      { value: error, step: 'Transaction failed to be broadcast/executed', status: EVENT_STATUS.rejected, methodNameKey },
-    )
-    dispatch({
-      type: ACTION_TYPES.txError,
-      status: {
-        ...methodDetails,
-        msg: 'Transaction failed. Check console for more details.',
-        error,
-        inFlight: false,
-        fetching: false,
-      },
-    } )
+      dsp.txFlow.txError({ methodDetails, dispatch, error })
+    }
   }
 }

@@ -92,6 +92,7 @@ export const Router: React.FunctionComponent<RouterProps> = ({ listOfContractMet
           info={contractMethodElement}
           key={contractMethodElement.id}
           timestamp={timestamp}
+          contractAbi={contractAbi}
         />
       ))}
     </>

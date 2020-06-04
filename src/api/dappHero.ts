@@ -68,7 +68,7 @@ export const getContractsByProjectKeyV2 = async (projectId) => {
 const compareResponses = async (originalOutput, projectId) => {
   const compareOutput = await getContractsByProjectKeyV2(projectId)
   const isEqual = !!(JSON.stringify(originalOutput) === JSON.stringify(compareOutput))
-  // logger.info(`Get Contracts Comparison isEqual: ${isEqual.toString()}`)
+  // logger.info(`Cache Check isEqual: ${isEqual.toString()}`)
   if (!isEqual) {
     logger.info('compareResponses -> compareOutput', compareOutput)
     logger.info('compareResponses -> originalOutput', originalOutput)
