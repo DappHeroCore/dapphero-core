@@ -2,9 +2,6 @@ import { ethers } from 'ethers'
 import { logger } from 'logger/customLogger'
 
 export const convertUnits = (inputValueType, outputValueType, value) => {
-  console.log('Input Value Type: ', inputValueType)
-  console.log('OutputValue type: ', outputValueType)
-  console.log('Value: ', value)
 
   switch (inputValueType) {
     case ('wei'): {
