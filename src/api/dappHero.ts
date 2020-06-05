@@ -70,8 +70,8 @@ const compareResponses = async (originalOutput, projectId) => {
   const isEqual = !!(JSON.stringify(originalOutput) === JSON.stringify(compareOutput))
   // logger.info(`Cache Check isEqual: ${isEqual.toString()}`)
   if (!isEqual) {
-    logger.info('compareResponses -> compareOutput', compareOutput)
-    logger.info('compareResponses -> originalOutput', originalOutput)
+    logger.info('', compareOutput)
+    logger.info('', originalOutput)
   }
 }
 

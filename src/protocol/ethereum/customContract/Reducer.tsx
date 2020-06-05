@@ -227,6 +227,7 @@ export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContr
         })
       }
     } catch (err) {
+      console.log('err', err)
       emitToEvent(
         EVENT_NAMES.contract.statusChange,
         { value: err, step: 'Triggering read/write transaction.', status: EVENT_STATUS.rejected, methodNameKey },

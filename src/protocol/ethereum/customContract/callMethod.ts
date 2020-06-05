@@ -5,7 +5,7 @@ export const callMethod = async ({ readContract, correctedMethodName: methodName
   if (!readContract) return null
 
   const method = readContract[methodName]
-  const methodDetails = { methodName, methodParams, contractAddress: readContract.address, contractNetwork: readContract.provider._network.name }
+  const methodDetails = { methodName, methodParams, contractAddress: readContract.address, contractNetwork: readContract.provider?.network?.name }
 
   dispatch({
     type: ACTION_TYPES.callMethod,
