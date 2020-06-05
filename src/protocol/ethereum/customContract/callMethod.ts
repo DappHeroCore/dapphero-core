@@ -1,6 +1,9 @@
 import { ACTION_TYPES } from './stateMachine'
 
 export const callMethod = async ({ readContract, correctedMethodName: methodName, methodParams, dispatch, isPolling }): Promise<void> => {
+  // If there is no readContract (yet) then return null
+  if (!readContract) return null
+
   const method = readContract[methodName]
   const methodDetails = { methodName, methodParams, contractAddress: readContract.address, contractNetwork: readContract.provider._network.name }
 

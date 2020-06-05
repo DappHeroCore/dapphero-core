@@ -119,8 +119,6 @@ export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContr
     // Return early if the read and write instances aren't ready
     // if (!readEnabled && !writeEnabled) return null
 
-    console.log('HERE!*!*!')
-
     emitToEvent(
       EVENT_NAMES.contract.statusChange,
       { value: null, step: 'Getting and parsing parameters.', status: EVENT_STATUS.pending, methodNameKey },
