@@ -45,11 +45,12 @@ export const Router: React.FunctionComponent<RouterProps> = ({ listOfContractMet
 
   // WE CAN CHECK HERE IF WE ARE ON THE RIGHT NETWORK WITH THE PROVIDER
   const contractNetwork = consts.global.ethNetworkName[networkId].toLowerCase()
+  console.log('contractNetwork', contractNetwork)
 
   // Create the Read Provider
   const { provider: readOnlyProvider, chainId: readChainId, isEnabled: readEnabled } = useWeb3Provider(
     consts.global.POLLING_INTERVAL,
-    ethers.getDefaultProvider(contractNetwork),
+    new ethers.providers.JsonRpcProvider(consts.providerSchema.readProviders[contractNetwork].http),
     `dh-${contractNetwork}`,
   )
 
