@@ -35,15 +35,20 @@ export const callMethod = async ({ readContract, correctedMethodName: methodName
 
     return methodResult
   } catch (error) {
-    dispatch({
-      type: ACTION_TYPES.callMethodError,
-      status: {
-        ...methodDetails,
-        msg: `Error calling method { ${methodName} } on your contract. Is your Web3 provider on Network: ${readContract.provider._network.name}? Check console for more details.`,
-        isPolling,
-        fetching: false,
-        error,
-      },
-    } )
+    if (error.reason === 'underlying network changed') {
+      console.log('We need to reload the page')
+    } else {
+    // Lets check
+      dispatch({
+        type: ACTION_TYPES.callMethodError,
+        status: {
+          ...methodDetails,
+          msg: `Error calling method { ${methodName} } on your contract. Is your Web3 provider on Network: ${readContract.provider._network.name}? Check console for more details.`,
+          isPolling,
+          fetching: false,
+          error,
+        },
+      } )
+    }
   }
 }

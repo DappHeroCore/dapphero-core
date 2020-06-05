@@ -27,7 +27,6 @@ type RouterProps = {
 export const Router: React.FunctionComponent<RouterProps> = ({ listOfContractMethods, contract, timestamp }) => {
 
   const ethereum = useContext(contexts.EthereumContext)
-  console.log('ethereum', ethereum)
   const { signer, isEnabled: writeEnabled, chainId: writeChainId, provider } = ethereum
   const { contractAddress, contractAbi, networkId } = contract
 
