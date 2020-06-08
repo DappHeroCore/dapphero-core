@@ -146,7 +146,7 @@ export const dsp = {
       type: ACTION_TYPES.txError,
       status: {
         ...methodDetails,
-        msg: 'Transaction failed. Check console for more details.',
+        msg: `Transaction failed. ${error.message}`,
         error,
         inFlight: false,
         fetching: false,

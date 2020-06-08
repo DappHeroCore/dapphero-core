@@ -149,9 +149,7 @@ export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContr
 
     // If this is a transaction, but we don't have a write provider, you can stop here.
     if (isTransaction && !writeEnabled) {
-      console.log('No write provider noppers!')
       dsp.txFlow.txNoWriteProviderEnabled({ dispatch })
-      console.log('passed!')
       emitToEvent(
         EVENT_NAMES.contract.statusChange,
         { value: parametersValues, step: 'No write provider enabled.', status: EVENT_STATUS.resolved, methodNameKey },
