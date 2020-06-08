@@ -179,7 +179,7 @@ export const dsp = {
       type: ACTION_TYPES.callMethodError,
       status: {
         ...methodDetails,
-        msg: `Error calling method { ${methodDetails.methodName} } on your contract. Is your Web3 provider on Network: ${readContract.provider._network.name}? Check console for more details.`,
+        msg: `Error calling method { ${methodDetails.methodName} } on your contract. Check the console for more details.`,
         isPolling,
         fetching: false,
         error,
