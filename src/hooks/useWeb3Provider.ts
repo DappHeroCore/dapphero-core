@@ -1,12 +1,19 @@
 import { useState, useEffect } from 'react'
 import { ethers } from 'ethers'
 import { useInterval } from 'beautiful-react-hooks'
+import { useNetworkStatus } from 'react-adaptive-hooks/network'
 import { logger } from '../logger/customLogger'
 import { providerSchema } from '../consts'
+import { AUTO_INVOKE_DYNAMIC } from '../consts/global'
 
 export const useWeb3Provider = (polling, web3provider = null, providerTypeName = null) => {
   const [ ethereum, setEthereum ] = useState(providerSchema.providerSchema)
   const [ details, setDetails ] = useState<any>({ address: null, chainId: null })
+
+  // Inside of a functional React component
+  const initialEffectiveConnectionType = '4g'
+  const { effectiveConnectionType } = useNetworkStatus(initialEffectiveConnectionType)
+  console.log('useWeb3Provider -> effectiveConnectionType', effectiveConnectionType)
 
   // If no providers return early the provider schema with all null values
   if (!web3provider && !window.ethereum && !window.web3?.currentProvider) return providerSchema.providerSchema
