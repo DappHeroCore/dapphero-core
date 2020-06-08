@@ -11,6 +11,7 @@ export const ACTION_TYPES = {
   callMethodError: 'CALL_METHOD_ERROR',
   callMethodInvalidArguement: 'CALL_METHOD_INVALID_ARG',
   sendtx: 'SEND_TX',
+  txNoWriteProviderEnabled: 'TX_NO_WRITE_PROVIDER_ENABLED',
   txUserSignatureRequested: 'TX_USER_SIGNATURE_REQUESTED',
   txError: 'TX_ERROR',
   txReceipt: 'TX_RECEIPT',
@@ -55,6 +56,8 @@ export const stateReducer = (state, action) => {
     case ACTION_TYPES.malformedInputName:
       return { ...action.status }
     case ACTION_TYPES.genericContractError:
+      return { ...action.status }
+    case ACTION_TYPES.txNoWriteProviderEnabled:
       return { ...action.status }
     default:
       return { ...state }
@@ -104,6 +107,16 @@ export const dsp = {
         msg: 'User signature requsted',
         error: false,
         fetching: true,
+        inFlight: false,
+      },
+    }),
+    txNoWriteProviderEnabled: ({ dispatch }): VoidFunction => dispatch({
+      type: ACTION_TYPES.txNoWriteProviderEnabled,
+      status: {
+        msg: 'No blockchain write provider enabled',
+        error: false,
+        info: true,
+        fetching: false,
         inFlight: false,
       },
     }),
