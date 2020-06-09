@@ -22,7 +22,6 @@ export const callMethod = async ({ readContract, correctedMethodName: methodName
       return 'error... check the console'
     }
     // Lets check
-    console.log(JSON.stringify(error, null, 1))
     dsp.callFlow.callMethodError({ methodDetails, dispatch, isPolling, readContract, error })
     return 'error... check the console'
 
