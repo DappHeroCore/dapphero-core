@@ -10,7 +10,7 @@ import { EVENT_NAMES, EVENT_STATUS } from 'providers/EmitterProvider/constants'
 import { useAddInvokeTrigger } from './useAddInvokeTrigger'
 import { useAutoInvokeMethod } from './useAutoInvokeMethod'
 import { useDisplayResults } from './useDisplayResults'
-import { stateReducer, ACTION_TYPES } from './stateMachine'
+import { stateReducer, ACTION_TYPES, dsp } from './stateMachine'
 
 import { sendTx } from './sendTx'
 import { callMethod } from './callMethod'
@@ -76,7 +76,6 @@ export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContr
   // Display Error Messages
   useEffect(() => {
     const { msg, error, info: stateInfo } = state
-
     if (error) {
       logger.error(msg, error)
       addToast(msg, { appearance: 'error', autoDismiss: true, autoDismissTimeout: consts.global.REACT_TOAST_AUTODISMISS_INTERVAL })
@@ -86,7 +85,7 @@ export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContr
       logger.info(msg, stateInfo)
       addToast(msg, { appearance: 'info', autoDismiss: true, autoDismissTimeout: consts.global.REACT_TOAST_AUTODISMISS_INTERVAL })
     }
-  }, [ state.error ])
+  }, [ state.error, state.info ])
 
   // Return values to their orignal value when unmounted
   useEffect(() => {
@@ -148,6 +147,16 @@ export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContr
     // Figure out if method is overloaded and which method we should call in that case.
     const correctedMethodName = findReplaceOverloadedMethods({ methodName, contractAbi, parametersValues })
 
+    // If this is a transaction, but we don't have a write provider, you can stop here.
+    if (isTransaction && !writeEnabled) {
+      dsp.txFlow.txNoWriteProviderEnabled({ dispatch })
+      emitToEvent(
+        EVENT_NAMES.contract.statusChange,
+        { value: parametersValues, step: 'No write provider enabled.', status: EVENT_STATUS.resolved, methodNameKey },
+      )
+      return null
+    }
+
     try {
       let value = '0'
       const methodParams = [ ...(hasInputs ? parametersValues : []) ]
@@ -164,16 +173,6 @@ export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContr
 
       // Send the user information that their write provider is not connected
       // We need to also check if the write provider is on the right network of the transaction
-
-      if (isTransaction && !writeEnabled) {
-        console.log('No write provider connected')
-
-        emitToEvent(
-          EVENT_NAMES.contract.statusChange,
-          { value: parametersValues, step: 'Getting and parsing parameters.', status: EVENT_STATUS.resolved, methodNameKey },
-        )
-
-      }
 
       if (writeEnabled && isTransaction && !doParamsContainUnformatedConstant) {
         emitToEvent(

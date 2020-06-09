@@ -11,6 +11,7 @@ export const ACTION_TYPES = {
   callMethodError: 'CALL_METHOD_ERROR',
   callMethodInvalidArguement: 'CALL_METHOD_INVALID_ARG',
   sendtx: 'SEND_TX',
+  txNoWriteProviderEnabled: 'TX_NO_WRITE_PROVIDER_ENABLED',
   txUserSignatureRequested: 'TX_USER_SIGNATURE_REQUESTED',
   txError: 'TX_ERROR',
   txReceipt: 'TX_RECEIPT',
@@ -55,6 +56,8 @@ export const stateReducer = (state, action) => {
     case ACTION_TYPES.malformedInputName:
       return { ...action.status }
     case ACTION_TYPES.genericContractError:
+      return { ...action.status }
+    case ACTION_TYPES.txNoWriteProviderEnabled:
       return { ...action.status }
     default:
       return { ...state }
@@ -107,6 +110,16 @@ export const dsp = {
         inFlight: false,
       },
     }),
+    txNoWriteProviderEnabled: ({ dispatch }): VoidFunction => dispatch({
+      type: ACTION_TYPES.txNoWriteProviderEnabled,
+      status: {
+        msg: 'No blockchain write provider enabled',
+        error: false,
+        info: true,
+        fetching: false,
+        inFlight: false,
+      },
+    }),
     txBroadcast: ({ methodDetails, dispatch, methodResult }): VoidFunction => dispatch({
       type: ACTION_TYPES.txReceipt,
       status: {
@@ -133,7 +146,7 @@ export const dsp = {
       type: ACTION_TYPES.txError,
       status: {
         ...methodDetails,
-        msg: 'Transaction failed. Check console for more details.',
+        msg: `Transaction failed. ${error.message}`,
         error,
         inFlight: false,
         fetching: false,
@@ -166,7 +179,7 @@ export const dsp = {
       type: ACTION_TYPES.callMethodError,
       status: {
         ...methodDetails,
-        msg: `Error calling method { ${methodDetails.methodName} } on your contract. Is your Web3 provider on Network: ${readContract.provider._network.name}? Check console for more details.`,
+        msg: `Error calling method { ${methodDetails.methodName} } on your contract. Check the console for more details.`,
         isPolling,
         fetching: false,
         error,
