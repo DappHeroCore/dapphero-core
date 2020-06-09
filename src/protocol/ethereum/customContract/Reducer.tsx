@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect, useReducer } from 'react'
 import { useToasts } from 'react-toast-notifications'
 import { logger } from 'logger/customLogger'
+import { useNetworkStatus } from 'react-adaptive-hooks/network'
 
 import * as consts from 'consts'
 import * as contexts from 'contexts'
@@ -18,7 +19,6 @@ import { callMethod } from './callMethod'
 import { notify, getParametersFromInputValues, findReplaceOverloadedMethods } from './utils/utils'
 
 const blockNativeApiKey = process.env.REACT_APP_BLOCKNATIVE_API
-const { AUTO_INVOKE_INTERVAL: POLLING_INTERVAL } = consts.global
 
 export type ReducerProps = {
   info: any;
@@ -32,6 +32,10 @@ export type ReducerProps = {
 }
 // Reducer Component
 export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContract, writeContract, readEnabled, readChainId, writeEnabled, timestamp, contractAbi }) => {
+
+  const initialEffectiveConnectionType = '4g'
+  const { effectiveConnectionType } = useNetworkStatus(initialEffectiveConnectionType)
+  const POLLING_INTERVAL = consts.global.AUTO_INVOKE_DYNAMIC[effectiveConnectionType]
 
   const [ state, dispatch ] = useReducer(stateReducer, {})
 
