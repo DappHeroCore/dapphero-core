@@ -42,14 +42,14 @@ export const Router: React.FunctionComponent<RouterProps> = ({ listOfContractMet
   const [ readContract, setReadContract ] = useState(null)
   useEffect(() => {
     const makeReadContract = (): void => {
-      let readContractInstance
+      let readContractInstance = null
 
       // Make the contract instance from either the local provider or remote provider
       if (provider && contractNetwork === provider?._network?.name) {
-        console.log('Using local provider')
+        console.log('Using local provider for contract reads.')
         readContractInstance = new ethers.Contract(contractAddress, contractAbi, provider)
       } else {
-        console.log('Using DH-backend provider')
+        console.log('Using DH-backend provider for contract reads.')
         readContractInstance = new ethers.Contract(contractAddress, contractAbi, stableReadProvider)
       }
       readContractInstance.on('*', (data) => emitToEvent(

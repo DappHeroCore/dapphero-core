@@ -41,7 +41,7 @@ export const postLogToBubbleBackend = (payload) => {
   })
 }
 
-export const getContractsByProjectKeyV2 = async (projectId) => {
+export const getContractsByProjectKeyDappHero = async (projectId) => {
   try {
     const axiosResponse = await axios({
       method: GET,
@@ -58,7 +58,7 @@ export const getContractsByProjectKeyV2 = async (projectId) => {
         projectId: projectid,
       }
     })
-    return formattedOutput
+    return { formattedOutput, paused }
   } catch (err) {
     logger.error('Error in dappHero api, getContractsByProjectKeyV2', err)
     throw new Error(err)
@@ -75,7 +75,7 @@ const compareResponses = async (originalOutput, projectId) => {
   }
 }
 
-export const getContractsByProjectKey = async (projectId) => {
+export const getContractsByProjectKeyBubble = async (projectId) => {
   logger.log(`projectId: ${projectId}`)
 
   const body = { projectId }
@@ -98,11 +98,11 @@ export const getContractsByProjectKey = async (projectId) => {
       }
     })
 
-    try {
-      compareResponses(formattedOutput, projectId)
-    } catch (err) {
-      // handle error
-    }
+    // try {
+    //   compareResponses(formattedOutput, projectId)
+    // } catch (err) {
+    //   // handle error
+    // }
     return { formattedOutput, paused }
   } catch (err) {
     logger.error('Error in dappHero api, getContractsByProjectKey', err)
@@ -110,3 +110,17 @@ export const getContractsByProjectKey = async (projectId) => {
   }
 }
 
+export const getContractsByProjectKey = async (projectId) => {
+  try {
+    getContractsByProjectKeyBubble(projectId) // we are specifically NOT awaiting this. The purpose is to still see activity on bubble.
+    return (await getContractsByProjectKeyDappHero(projectId))
+  } catch (error) {
+    logger.error('Error in dappHero api, getContractsByProjectKeyV2', error)
+    try {
+      return ( await getContractsByProjectKeyBubble(projectId))
+    } catch (error) {
+      logger.error('Error in dappHero api, getContractsByProjectKeyV2', error)
+    }
+  }
+
+}
