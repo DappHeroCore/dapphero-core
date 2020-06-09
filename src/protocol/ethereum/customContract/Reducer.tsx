@@ -124,14 +124,14 @@ export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContr
 
     emitToEvent(
       EVENT_NAMES.contract.statusChange,
-      { value: null, step: 'Getting and parsing parameters.', status: EVENT_STATUS.pending, methodNameKey },
+      { value: null, step: 'Getting parameters.', status: EVENT_STATUS.pending, methodNameKey },
     )
 
     const { parametersValues, newEthValue } = getParametersFromInputValues({ info, methodName, dispatch, address, methodNameKey, ethValue })
 
     emitToEvent(
       EVENT_NAMES.contract.statusChange,
-      { value: parametersValues, step: 'Getting and parsing parameters.', status: EVENT_STATUS.resolved, methodNameKey },
+      { value: parametersValues, step: 'Parsing parameters.', status: EVENT_STATUS.resolved, methodNameKey },
     )
 
     if (hasInputs) {
@@ -145,6 +145,11 @@ export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContr
             msg: `There appear to be no parameters provided.`,
           },
         })
+
+        emitToEvent(
+          EVENT_NAMES.contract.statusChange,
+          { value: parametersValues, step: 'No paremeters provided.', status: EVENT_STATUS.resolved, methodNameKey },
+        )
       } // TODO: Add Dispatch for State instead of Console.error
     }
 
