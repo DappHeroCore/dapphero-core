@@ -6,7 +6,10 @@ export const ACTION_TYPES = {
   estimateGasError: 'ESTIMATE_GAS_ERROR',
   error: 'ERROR',
   callMethod: 'CALL_METHOD',
+  callMethodAutoInvokeFailure: 'CALL_METHOD_AUTO_INVOKE_ERROR',
+  callMethodSucces: 'CALL_METHOD_SUCCES',
   callMethodError: 'CALL_METHOD_ERROR',
+  callMethodInvalidArguement: 'CALL_METHOD_INVALID_ARG',
   sendtx: 'SEND_TX',
   txUserSignatureRequested: 'TX_USER_SIGNATURE_REQUESTED',
   txError: 'TX_ERROR',
@@ -26,6 +29,12 @@ export const stateReducer = (state, action) => {
     case ACTION_TYPES.malformedInputs:
       return { ...action.status }
     case ACTION_TYPES.callMethod:
+      return { ...action.status }
+    case ACTION_TYPES.callMethodSucces:
+      return { ...action.status }
+    case ACTION_TYPES.callMethodAutoInvokeFailure:
+      return { ...action.status }
+    case ACTION_TYPES.callMethodInvalidArguement:
       return { ...action.status }
     case ACTION_TYPES.callMethodError:
       return { ...action.status }
@@ -130,5 +139,58 @@ export const dsp = {
         fetching: false,
       },
     } ),
+  },
+  callFlow: {
+    callRequested: ({ methodDetails, dispatch, isPolling }): VoidFunction => dispatch({
+      type: ACTION_TYPES.callMethod,
+      status: {
+        ...methodDetails,
+        msg: `Calling public method { ${methodDetails.methodName} }`,
+        error: false,
+        fetching: true,
+        isPolling,
+      },
+    }),
+    callMethodSucces: ({ methodDetails, dispatch, isPolling, methodResult }): VoidFunction => dispatch({
+      type: ACTION_TYPES.callMethodSucces,
+      status: {
+        ...methodDetails,
+        msg: `Calling public method { ${methodDetails.methodName} } success.`,
+        error: false,
+        fetching: false,
+        isPolling,
+        methodResult,
+      },
+    }),
+    callMethodError: ({ methodDetails, dispatch, isPolling, readContract, error }): VoidFunction => dispatch({
+      type: ACTION_TYPES.callMethodError,
+      status: {
+        ...methodDetails,
+        msg: `Error calling method { ${methodDetails.methodName} } on your contract. Is your Web3 provider on Network: ${readContract.provider._network.name}? Check console for more details.`,
+        isPolling,
+        fetching: false,
+        error,
+      },
+    }),
+    callMethodAutoInvokeError: ({ methodDetails, dispatch, isPolling, error }): VoidFunction => dispatch({
+      type: ACTION_TYPES.callMethodAutoInvokeFailure,
+      status: {
+        ...methodDetails,
+        msg: `Error AutoInvoking { ${methodDetails.methodName} } on your contract with params: { ${methodDetails.methodParams} }. Check the console for more details.`,
+        isPolling,
+        fetching: false,
+        error,
+      },
+    }),
+    callMethodInvalidArguement: ({ methodDetails, dispatch, isPolling, error }): VoidFunction => dispatch({
+      type: ACTION_TYPES.callMethodInvalidArguement,
+      status: {
+        ...methodDetails,
+        msg: `Invalid argument { ${methodDetails.methodParams}} for method { ${methodDetails.methodName} }. Check the console for more details.`,
+        isPolling,
+        fetching: false,
+        error,
+      },
+    }),
   },
 }

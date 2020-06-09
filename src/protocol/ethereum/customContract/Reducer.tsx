@@ -201,7 +201,7 @@ export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContr
           // Do we need to do anything with this error? Maybe no....
         }
 
-      } else if (readEnabled && !isTransaction && !state.error && !doParamsContainUnformatedConstant) {
+      } else if (readEnabled && !isTransaction && !doParamsContainUnformatedConstant) {
         emitToEvent(
           EVENT_NAMES.contract.statusChange,
           { value: null, step: 'Triggering read transaction.', status: EVENT_STATUS.pending, methodNameKey },
@@ -227,7 +227,6 @@ export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContr
         })
       }
     } catch (err) {
-      console.log('err', err)
       emitToEvent(
         EVENT_NAMES.contract.statusChange,
         { value: err, step: 'Triggering read/write transaction.', status: EVENT_STATUS.rejected, methodNameKey },
@@ -236,7 +235,7 @@ export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContr
         type: ACTION_TYPES.confirmed,
         status: {
           msg: 'An error has occured when interacting with your contract.',
-          error: err,
+          information: err,
           fetching: false,
           inFlight: false,
         },
