@@ -162,6 +162,19 @@ export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContr
       // TODO: [DEV-328] We need to organize consts in one place.
       const doParamsContainUnformatedConstant = Boolean(methodParams.find((paramValue) => paramValue === '$CURRENT_USER'))
 
+      // Send the user information that their write provider is not connected
+      // We need to also check if the write provider is on the right network of the transaction
+
+      if (isTransaction && !writeEnabled) {
+        console.log('No write provider connected')
+
+        emitToEvent(
+          EVENT_NAMES.contract.statusChange,
+          { value: parametersValues, step: 'Getting and parsing parameters.', status: EVENT_STATUS.resolved, methodNameKey },
+        )
+
+      }
+
       if (writeEnabled && isTransaction && !doParamsContainUnformatedConstant) {
         emitToEvent(
           EVENT_NAMES.contract.statusChange,
@@ -214,6 +227,7 @@ export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContr
         })
       }
     } catch (err) {
+      console.log('err', err)
       emitToEvent(
         EVENT_NAMES.contract.statusChange,
         { value: err, step: 'Triggering read/write transaction.', status: EVENT_STATUS.rejected, methodNameKey },

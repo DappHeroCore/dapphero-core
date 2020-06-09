@@ -27,15 +27,18 @@ export const EthUserBalance: FunctionComponent<EthUserBalanceProps> = ({ element
   const [ balance, setBalance ] = useState(null)
 
   // TODO: [DEV-264] Feature: NotifyJS for UserBalance polling
-  useInterval(() => {
-    const poll = async () => {
-      try {
-        const balance = await provider.getBalance(address)
-        setBalance(balance)
-      } catch (error) {
-        logger.log(`Error getting balance: ${error}`)
-      }
+  const poll = async () => {
+    try {
+      const balance = await provider.getBalance(address)
+      setBalance(balance)
+    } catch (error) {
+      logger.log(`Error getting balance: ${error}`)
     }
+  }
+
+  if (address && isEnabled) poll()
+
+  useInterval(() => {
     if (address && isEnabled) poll()
   }, consts.global.AUTO_INVOKE_INTERVAL)
 

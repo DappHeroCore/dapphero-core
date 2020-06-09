@@ -1,8 +1,11 @@
 import { ACTION_TYPES } from './stateMachine'
 
 export const callMethod = async ({ readContract, correctedMethodName: methodName, methodParams, dispatch, isPolling }): Promise<void> => {
+  // If there is no readContract (yet) then return null
+  if (!readContract) return null
+
   const method = readContract[methodName]
-  const methodDetails = { methodName, methodParams, contractAddress: readContract.address, contractNetwork: readContract.provider._network.name }
+  const methodDetails = { methodName, methodParams, contractAddress: readContract.address, contractNetwork: readContract.provider?.network?.name }
 
   dispatch({
     type: ACTION_TYPES.callMethod,
@@ -32,15 +35,20 @@ export const callMethod = async ({ readContract, correctedMethodName: methodName
 
     return methodResult
   } catch (error) {
-    dispatch({
-      type: ACTION_TYPES.callMethodError,
-      status: {
-        ...methodDetails,
-        msg: `Error calling method { ${methodName} } on your contract. Is your Web3 provider on Network: ${readContract.provider._network.name}? Check console for more details.`,
-        isPolling,
-        fetching: false,
-        error,
-      },
-    } )
+    if (error.reason === 'underlying network changed') {
+      console.log('We need to reload the page')
+    } else {
+    // Lets check
+      dispatch({
+        type: ACTION_TYPES.callMethodError,
+        status: {
+          ...methodDetails,
+          msg: `Error calling method { ${methodName} } on your contract. Is your Web3 provider on Network: ${readContract.provider._network.name}? Check console for more details.`,
+          isPolling,
+          fetching: false,
+          error,
+        },
+      } )
+    }
   }
 }

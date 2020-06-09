@@ -4,7 +4,6 @@ import { EVENT_NAMES, EVENT_STATUS } from 'providers/EmitterProvider/constants'
 
 export const useAddInvokeTrigger = ({ info, handleRunMethod, emitToEvent, methodNameKey }): void => {
   const { childrenElements } = info
-
   useEffect(() => {
     const invokeButtons = childrenElements.filter(({ id }) => id.includes('invoke'))
     const onRunMethod = (event): Promise<void> => handleRunMethod(event)

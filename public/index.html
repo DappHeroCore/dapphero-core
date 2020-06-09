@@ -30,13 +30,13 @@
           </li>
         </ul>
       </nav>
-      <h1>SnakeGameTest</h1>
+      <h1>DH-Test-Contract-Providers</h1>
       <p>
         <mark
           >Powered by <a href="https://www.dapphero.io">DappHero.io</a></mark
         >
       </p>
-      <p>SnakeGameTest</p>
+      <p>Test all the main Ethereum networks</p>
       <br />
       <p>
         <button data-dh-feature="network" data-dh-property-enable="true">
@@ -45,73 +45,226 @@
       </p>
     </header>
     <div>
-
-          <section><h2>Transaction Methods</h2></section>
-
-
-          <span
-        style="display: none;"
-        data-dh-feature="customContract"
-        data-dh-property-contract-name="SnakeGameTest"
-        data-dh-property-method-name="userChallenge"
-        data-dh-property-method-id="003"
-        data-dh-property-auto-invoke="true"
-      ></span>
-      <input
-        data-dh-property-method-id="003"
-        data-dh-property-input-name="$true"
-        value="$CURRENT_USER"
-      />
-
-
-      <!-- <input
-      data-dh-property-method-id="003"
-      data-dh-property-input-name="[0]"
-      value="$CURRENT_USER"
-    /> -->
-
-
-      <button
-        id="get-status-btn"
-        style="display: none"
-        data-dh-property-method-id="003"
-        data-dh-property-invoke="true"
-      >
-        Get Status
-      </button>
-      <div
-        id="status"
-        style="display: none;"
-        data-dh-property-method-id="003"
-        data-dh-property-output-name="status"
-      >STATUS</div>
-
+      <section><h2>DH-Test-Goerli</h2></section>
+      <header>
+        <section>
+          <section><h2>Public Methods</h2></section>
           <header>
             <div
               data-dh-feature="customContract"
-              data-dh-property-method-id="10cw"
-              data-dh-property-auto-invoke="false"
-              data-dh-property-contract-name="SnakeGameTest"
-              data-dh-property-method-name="newChallenge"
+              data-dh-property-method-id="TwS1"
+              data-dh-property-auto-invoke="true"
+              data-dh-property-contract-name="DH-Test-Goerli"
+              data-dh-property-method-name="hello"
             >
-              <h3>Method <mark>"newChallenge"</mark></h3>
+              <h3>Method <mark>"hello"</mark></h3>
               <section>
                 <aside>
-                  <section>
-                    Input name: <i>EthValue</i>
-                    <input
-                      type="text"
-                      placeholder="EthValue"
-                      data-dh-property-method-id="10cw"
-                      data-dh-property-input-name="EthValue"
-                    />
-                  </section>
+                  <div
+                    data-dh-property-method-id="TwS1"
+                    data-dh-property-outputs="true"
+                  >
+                    <pre>Output...</pre>
+                  </div>
 
                   <button
                     data-dh-property-invoke="true"
-                    data-dh-property-method-id="10cw"
+                    data-dh-property-method-id="TwS1"
                   >
-                    newChallenge
+                    hello
+                  </button>
+                </aside>
+              </section>
+            </div>
+          </header>
+          ,
+          <header>
+            <div
+              data-dh-feature="customContract"
+              data-dh-property-method-id="F6tt"
+              data-dh-property-auto-invoke="false"
+              data-dh-property-contract-name="DH-Test-Goerli"
+              data-dh-property-method-name="viewMultipleArgsMultipleReturn"
+            >
+              <h3>Method <mark>"viewMultipleArgsMultipleReturn"</mark></h3>
+              <section>
+                <aside>
+                  <section>
+                    Input name: <i>fromAddress</i>
+                    <input
+                      type="text"
+                      placeholder="address"
+                      data-dh-property-method-id="F6tt"
+                      data-dh-property-input-name="fromAddress"
+                    />
+                  </section>
+                  <section>
+                    Input name: <i>amount</i>
+                    <input
+                      type="text"
+                      placeholder="uint256"
+                      data-dh-property-method-id="F6tt"
+                      data-dh-property-input-name="amount"
+                    />
+                  </section>
+                  <div
+                    data-dh-property-method-id="F6tt"
+                    data-dh-property-output-name="longInteger"
+                  >
+                    <pre>Output...</pre>
+                  </div>
+                  <div
+                    data-dh-property-method-id="F6tt"
+                    data-dh-property-output-name="sayHello"
+                  >
+                    <pre>Output...</pre>
+                  </div>
+
+                  <button
+                    data-dh-property-invoke="true"
+                    data-dh-property-method-id="F6tt"
+                  >
+                    viewMultipleArgsMultipleReturn
+                  </button>
+                </aside>
+              </section>
+            </div>
+          </header>
+          ,
+          <header>
+            <div
+              data-dh-feature="customContract"
+              data-dh-property-method-id="R4uv"
+              data-dh-property-auto-invoke="false"
+              data-dh-property-contract-name="DH-Test-Goerli"
+              data-dh-property-method-name="viewMultipleArgsSingleReturn"
+            >
+              <h3>Method <mark>"viewMultipleArgsSingleReturn"</mark></h3>
+              <section>
+                <aside>
+                  <section>
+                    Input name: <i>fromAddress</i>
+                    <input
+                      type="text"
+                      placeholder="address"
+                      data-dh-property-method-id="R4uv"
+                      data-dh-property-input-name="fromAddress"
+                    />
+                  </section>
+                  <section>
+                    Input name: <i>amount</i>
+                    <input
+                      type="text"
+                      placeholder="uint256"
+                      data-dh-property-method-id="R4uv"
+                      data-dh-property-input-name="amount"
+                    />
+                  </section>
+                  <div
+                    data-dh-property-method-id="R4uv"
+                    data-dh-property-output-name="singleInt"
+                  >
+                    <pre>Output...</pre>
+                  </div>
+
+                  <button
+                    data-dh-property-invoke="true"
+                    data-dh-property-method-id="R4uv"
+                  >
+                    viewMultipleArgsSingleReturn
+                  </button>
+                </aside>
+              </section>
+            </div>
+          </header>
+          ,
+          <header>
+            <div
+              data-dh-feature="customContract"
+              data-dh-property-method-id="7Dkf"
+              data-dh-property-auto-invoke="true"
+              data-dh-property-contract-name="DH-Test-Goerli"
+              data-dh-property-method-name="viewNoArgsMultipleReturn"
+            >
+              <h3>Method <mark>"viewNoArgsMultipleReturn"</mark></h3>
+              <section>
+                <aside>
+                  <div
+                    data-dh-property-method-id="7Dkf"
+                    data-dh-property-output-name="importantNumber"
+                  >
+                    <pre>Output...</pre>
+                  </div>
+                  <div
+                    data-dh-property-method-id="7Dkf"
+                    data-dh-property-output-name="sayHello"
+                  >
+                    <pre>Output...</pre>
+                  </div>
+
+                  <button
+                    data-dh-property-invoke="true"
+                    data-dh-property-method-id="7Dkf"
+                  >
+                    viewNoArgsMultipleReturn
+                  </button>
+                </aside>
+              </section>
+            </div>
+          </header>
+          ,
+          <header>
+            <div
+              data-dh-feature="customContract"
+              data-dh-property-method-id="X8T6"
+              data-dh-property-auto-invoke="true"
+              data-dh-property-contract-name="DH-Test-Goerli"
+              data-dh-property-method-name="important"
+            >
+              <h3>Method <mark>"important"</mark></h3>
+              <section>
+                <aside>
+                  <div
+                    data-dh-property-method-id="X8T6"
+                    data-dh-property-outputs="true"
+                  >
+                    <pre>Output...</pre>
+                  </div>
+
+                  <button
+                    data-dh-property-invoke="true"
+                    data-dh-property-method-id="X8T6"
+                  >
+                    important
+                  </button>
+                </aside>
+              </section>
+            </div>
+          </header>
+          ,
+          <header>
+            <div
+              data-dh-feature="customContract"
+              data-dh-property-method-id="5mux"
+              data-dh-property-auto-invoke="true"
+              data-dh-property-contract-name="DH-Test-Goerli"
+              data-dh-property-method-name="owner"
+            >
+              <h3>Method <mark>"owner"</mark></h3>
+              <section>
+                <aside>
+                  <div
+                    data-dh-property-method-id="5mux"
+                    data-dh-property-outputs="true"
+                  >
+                    <pre>Output...</pre>
+                  </div>
+
+                  <button
+                    data-dh-property-invoke="true"
+                    data-dh-property-method-id="5mux"
+                  >
+                    owner
                   </button>
                 </aside>
               </section>
@@ -119,35 +272,246 @@
           </header>
         </section>
       </header>
+      <header>
+        <section>
+          <section><h2>Transaction Methods</h2></section>
+          <header>
+            <div
+              data-dh-feature="customContract"
+              data-dh-property-method-id="5SUU"
+              data-dh-property-auto-invoke="false"
+              data-dh-property-contract-name="DH-Test-Goerli"
+              data-dh-property-method-name="sendMinimumTwoEthNoArgs"
+            >
+              <h3>Method <mark>"sendMinimumTwoEthNoArgs"</mark></h3>
+              <section>
+                <aside>
+                  <section>
+                    Input name: <i>EthValue</i>
+                    <input
+                      type="text"
+                      placeholder="EthValue"
+                      data-dh-property-method-id="5SUU"
+                      data-dh-property-input-name="EthValue"
+                    />
+                  </section>
 
-      <button style="margin-left: 12em; border-radius: 0.5em; cursor: pointer;" 
-      data-dh-property-method-id="002" 
-      data-dh-property-invoke="true">
-        Deposit .001 ETH and PLAY!
-      </button>
-      
-      <!-- <input
-      type="text"
-      placeholder="EthValue"
-      data-dh-property-method-id="002"
-      data-dh-property-input-name="EthValue"
-      
-    /> -->
-  </section>
-      <span style="display: none;" 
-      data-dh-feature="customContract" 
-      data-dh-property-contract-name="SnakeGameTest" 
-      data-dh-property-method-name="newChallenge" 
-      data-dh-property-method-id="002" 
-      data-dh-property-eth-value="0.001"
-      >
-      </span>
+                  <button
+                    data-dh-property-invoke="true"
+                    data-dh-property-method-id="5SUU"
+                  >
+                    sendMinimumTwoEthNoArgs
+                  </button>
+                </aside>
+              </section>
+            </div>
+          </header>
+          ,
+          <header>
+            <div
+              data-dh-feature="customContract"
+              data-dh-property-method-id="E8-i"
+              data-dh-property-auto-invoke="true"
+              data-dh-property-contract-name="DH-Test-Goerli"
+              data-dh-property-method-name="makeTxNoArgs"
+            >
+              <h3>Method <mark>"makeTxNoArgs"</mark></h3>
+              <section>
+                <aside>
+                  <button
+                    data-dh-property-invoke="true"
+                    data-dh-property-method-id="E8-i"
+                  >
+                    makeTxNoArgs
+                  </button>
+                </aside>
+              </section>
+            </div>
+          </header>
+          ,
+          <header>
+            <div
+              data-dh-feature="customContract"
+              data-dh-property-method-id="yrQ6"
+              data-dh-property-auto-invoke="false"
+              data-dh-property-contract-name="DH-Test-Goerli"
+              data-dh-property-method-name="sendEthWithArgs"
+            >
+              <h3>Method <mark>"sendEthWithArgs"</mark></h3>
+              <section>
+                <aside>
+                  <section>
+                    Input name: <i>simpleMessage</i>
+                    <input
+                      type="text"
+                      placeholder="bytes32"
+                      data-dh-property-method-id="yrQ6"
+                      data-dh-property-input-name="simpleMessage"
+                    />
+                  </section>
+                  <section>
+                    Input name: <i>EthValue</i>
+                    <input
+                      type="text"
+                      placeholder="EthValue"
+                      data-dh-property-method-id="yrQ6"
+                      data-dh-property-input-name="EthValue"
+                    />
+                  </section>
 
+                  <button
+                    data-dh-property-invoke="true"
+                    data-dh-property-method-id="yrQ6"
+                  >
+                    sendEthWithArgs
+                  </button>
+                </aside>
+              </section>
+            </div>
+          </header>
+          ,
+          <header>
+            <div
+              data-dh-feature="customContract"
+              data-dh-property-method-id="k72L"
+              data-dh-property-auto-invoke="false"
+              data-dh-property-contract-name="DH-Test-Goerli"
+              data-dh-property-method-name="makeTxWithArgs"
+            >
+              <h3>Method <mark>"makeTxWithArgs"</mark></h3>
+              <section>
+                <aside>
+                  <section>
+                    Input name: <i>myString</i>
+                    <input
+                      type="text"
+                      placeholder="string"
+                      data-dh-property-method-id="k72L"
+                      data-dh-property-input-name="myString"
+                    />
+                  </section>
 
+                  <button
+                    data-dh-property-invoke="true"
+                    data-dh-property-method-id="k72L"
+                  >
+                    makeTxWithArgs
+                  </button>
+                </aside>
+              </section>
+            </div>
+          </header>
+          ,
+          <header>
+            <div
+              data-dh-feature="customContract"
+              data-dh-property-method-id="wcQj"
+              data-dh-property-auto-invoke="false"
+              data-dh-property-contract-name="DH-Test-Goerli"
+              data-dh-property-method-name="sendEthNoArgs"
+            >
+              <h3>Method <mark>"sendEthNoArgs"</mark></h3>
+              <section>
+                <aside>
+                  <section>
+                    Input name: <i>EthValue</i>
+                    <input
+                      type="text"
+                      placeholder="EthValue"
+                      data-dh-property-method-id="wcQj"
+                      data-dh-property-input-name="EthValue"
+                    />
+                  </section>
+
+                  <button
+                    data-dh-property-invoke="true"
+                    data-dh-property-method-id="wcQj"
+                  >
+                    sendEthNoArgs
+                  </button>
+                </aside>
+              </section>
+            </div>
+          </header>
+          ,
+          <header>
+            <div
+              data-dh-feature="customContract"
+              data-dh-property-method-id="CaZu"
+              data-dh-property-auto-invoke="false"
+              data-dh-property-contract-name="DH-Test-Goerli"
+              data-dh-property-method-name="sendMinimumTwoEthWithArgs"
+            >
+              <h3>Method <mark>"sendMinimumTwoEthWithArgs"</mark></h3>
+              <section>
+                <aside>
+                  <section>
+                    Input name: <i>message</i>
+                    <input
+                      type="text"
+                      placeholder="bytes32"
+                      data-dh-property-method-id="CaZu"
+                      data-dh-property-input-name="message"
+                    />
+                  </section>
+                  <section>
+                    Input name: <i>EthValue</i>
+                    <input
+                      type="text"
+                      placeholder="EthValue"
+                      data-dh-property-method-id="CaZu"
+                      data-dh-property-input-name="EthValue"
+                    />
+                  </section>
+
+                  <button
+                    data-dh-property-invoke="true"
+                    data-dh-property-method-id="CaZu"
+                  >
+                    sendMinimumTwoEthWithArgs
+                  </button>
+                </aside>
+              </section>
+            </div>
+          </header>
+          ,
+          <header>
+            <div
+              data-dh-feature="customContract"
+              data-dh-property-method-id="ASTW"
+              data-dh-property-auto-invoke="false"
+              data-dh-property-contract-name="DH-Test-Goerli"
+              data-dh-property-method-name="triggerEvent"
+            >
+              <h3>Method <mark>"triggerEvent"</mark></h3>
+              <section>
+                <aside>
+                  <section>
+                    Input name: <i>anyInputValue</i>
+                    <input
+                      type="text"
+                      placeholder="uint256"
+                      data-dh-property-method-id="ASTW"
+                      data-dh-property-input-name="anyInputValue"
+                    />
+                  </section>
+
+                  <button
+                    data-dh-property-invoke="true"
+                    data-dh-property-method-id="ASTW"
+                  >
+                    triggerEvent
+                  </button>
+                </aside>
+              </section>
+            </div>
+          </header>
+        </section>
+      </header>
     </div>
     <script
       id="dh-apiKey"
-      data-api="1591277469706x454502458176831500"
+      data-api="1591385374295x157626237232087040"
       src=""
     ></script>
     <link rel="stylesheet" href="https://unpkg.com/mvp.css" />
@@ -175,8 +539,8 @@
           });
 
           //This is an example method for alerting your users they are on the wrong network
-          //if(window.dappHero.provider.chainId !== 4){
-          //  alert("Wrong network! You should be on rinkeby")
+          //if(window.dappHero.provider.chainId !== 5){
+          //  alert("Wrong network! You should be on goerli")
           //}
         }
       );
