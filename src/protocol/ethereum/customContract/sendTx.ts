@@ -31,8 +31,9 @@ export const sendTx = async ({
 
   // Test if tx will work, run the rest only if success
   let willTxRevert = false
+  let staticCall = null
   try {
-    await writeContract.callStatic[methodName](...methodParams, tempOverride)
+    staticCall = await writeContract.callStatic[methodName](...methodParams, tempOverride)
   } catch (error) {
 
     // TODO: [DEV-319] Add dispatch Error
@@ -54,6 +55,7 @@ export const sendTx = async ({
       estimatedGas = await estimateMethod(...methodParams, tempOverride)
       dsp.estimateGas.finish({ methodDetails, dispatch, estimatedGas })
     } catch (error) {
+      console.log('(DH-CORE) - Static call attempt returned: ', JSON.stringify(staticCall, null, 2))
       dsp.estimateGas.error({ methodDetails, dispatch, error })
     }
 
@@ -99,6 +101,8 @@ export const sendTx = async ({
       return methodResult.hash
 
     } catch (error) {
+      console.log('(DH-CORE) - Static call attempt returned: ', JSON.stringify(staticCall, null, 2))
+
       emitToEvent(
         EVENT_NAMES.contract.statusChange,
         { value: error, step: 'Transaction failed to be broadcast/executed', status: EVENT_STATUS.rejected, methodNameKey },
