@@ -4,7 +4,7 @@ export const callMethod = async ({ readContract, correctedMethodName: methodName
   // If there is no readContract (yet) then return null
   if (!readContract) return null
 
-  const method = readContract[methodName]
+  const method = readContract.functions[methodName]
   const methodDetails = { methodName, methodParams, contractAddress: readContract.address, contractNetwork: readContract.provider?.network?.name }
 
   dsp.callFlow.callRequested({ methodDetails, dispatch, isPolling })
