@@ -23,8 +23,8 @@ export const useAutoInvokeMethod = ({
 
       if (autoInvokeValue === 'true' && !isTransaction) {
 
-        // Call the run method instantly before starting to poll.
-        handleRunMethod(null, true)
+        // Call the run method instantly (100ms) before starting to poll.
+        const timeout = setTimeout(() => handleRunMethod(null, true), 100)
         const intervalId = setInterval(() => {
           emitToEvent(
             EVENT_NAMES.contract.invokeTrigger,
@@ -35,7 +35,11 @@ export const useAutoInvokeMethod = ({
 
         setAutoInterval(intervalId)
 
-        return (): void => clearInterval(intervalId)
+        const clear = (): void => {
+          clearInterval(intervalId)
+          clearTimeout(timeout)
+        }
+        return (): void => clear()
       }
     }
   }, [ readEnabled, readContract, writeAddress ])
