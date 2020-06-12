@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useContext, FunctionComponent, useMemo } from 'react'
+import { useToasts } from 'react-toast-notifications'
 import { logger } from 'logger/customLogger'
 import * as contexts from 'contexts'
+import * as consts from 'consts'
 import ReactTooltip from 'react-tooltip'
 
 interface EthEnableProps {
@@ -17,7 +19,11 @@ export const EthEnable: FunctionComponent<EthEnableProps> = ({ element }) => {
     , [],
   )
   const ethereum = useContext(contexts.EthereumContext)
+  const { addToast } = useToasts()
+
   const { isEnabled, enable } = ethereum
+
+  const noWeb3Provider = () => { addToast('No Web3 provider found.', { appearance: 'info', autoDismiss: true, autoDismissTimeout: consts.global.REACT_TOAST_AUTODISMISS_INTERVAL }) }
 
   const message = isEnabled ? 'Succesfully Connected' : 'Click Connect to MetaMask'
   element.setAttribute('data-tip', message)
@@ -34,13 +40,13 @@ export const EthEnable: FunctionComponent<EthEnableProps> = ({ element }) => {
 
   useEffect(() => {
     try {
-      element.addEventListener('click', enable, true)
+      element.addEventListener('click', enable || noWeb3Provider, true)
 
-      return (() => element.removeEventListener('click', enable, true))
+      return (() => element.removeEventListener('click', enable || noWeb3Provider, true))
     } catch (e) {
       logger.log(e)
     }
-  }, [ isEnabled ])
+  }, [ isEnabled, enable ])
 
   element.innerText = buttonStatus
 

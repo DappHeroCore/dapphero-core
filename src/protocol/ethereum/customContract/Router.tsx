@@ -39,11 +39,12 @@ export const Router: React.FunctionComponent<RouterProps> = ({ listOfContractMet
 
   const stableReadProvider = new ethers.providers.JsonRpcProvider(consts.providerSchema.readProviders[contractNetwork].http)
 
+  // TODO: [DEV-340] Mainnet will always load backend provider because ethers calls it "homestead"
   const [ readContract, setReadContract ] = useState(null)
   useEffect(() => {
     const makeReadContract = (): void => {
-      let readContractInstance = null
 
+      let readContractInstance = null
       // Make the contract instance from either the local provider or remote provider
       if (provider && contractNetwork === provider?._network?.name) {
         console.log('Using local provider for contract reads.')
@@ -59,7 +60,7 @@ export const Router: React.FunctionComponent<RouterProps> = ({ listOfContractMet
       setReadContract(readContractInstance)
     }
     makeReadContract()
-  }, [])
+  }, [ ])
 
   useEffect(() => {
     const makeWriteContract = (): void => {

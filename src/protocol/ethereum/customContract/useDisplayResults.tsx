@@ -23,6 +23,7 @@ export const useDisplayResults = ({ childrenElements, result, emitToEvent, metho
 
             // Check if the element has a dataset value
             const dataSetValue = element.dataset.dhPropertyOutputs
+            // This value is for example: output-name="[2]"
             // This will return either a number, or "false". It is possible to return "0", this is not "false".
             const arrayIndiceValue = getStringFormattedArrayIndiceValue(dataSetValue)
 
@@ -30,8 +31,9 @@ export const useDisplayResults = ({ childrenElements, result, emitToEvent, metho
             const convertedValue = ((): any => {
               // TODO: Notes, that arrayIndiceValue can return a "0" which does not equal "false", however it also returns "false"
               const value = (arrayIndiceValue !== false) ? result[arrayIndiceValue] : result
-              return (value && (displayUnits || contractUnits)
-                ? utils.convertUnits(contractUnits, displayUnits, value)
+              if (result.length > 1) return result
+              return (value[0] && (displayUnits || contractUnits)
+                ? utils.convertUnits(contractUnits, displayUnits, value[0])
                 : value)
             })()
 

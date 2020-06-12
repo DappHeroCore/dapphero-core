@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<!--  This site was created in Webflow. http://www.webflow.com  -->
+<!--  Last Published: Sat Jan 18 2020 14:45:04 GMT+0000 (Coordinated Universal Time)  -->
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>DappHero: Components</title>
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <link href="css/dapphero-components.webflow.css" rel="stylesheet" type="text/css" />
+  </head>
+
+  <body class="body">
+
+
+
+
+
+
+
+
+      <!-- Method "viewMultipleArgsMultipleReturn" -->
+      <div class="headline">Method: "viewMultipleArgsMultipleReturn"</div>
+      <div class="headline">Payable: false - StateMutability: "view"</div>
+      <div class="headline">
+        <p>Inputs</p>
+        <ul>
+          <li>from - address</li>
+          <li>multiplier - uint256</li>
+        </ul>
+
+        <p>Outputs</p>
+        <ul>
+          <li>_balanceMultiplied - uint256</li>
+          <li>_hello - bytes32</li>
+        </ul>
+      </div>
+
+      <div
+        id="dh"
+        data-dh-feature="customContract"
+        data-dh-property-contract-name="dappherotest"
+        data-dh-property-method-name="viewMultipleArgsMultipleReturn"
+        data-dh-property-method-id="002"
+      >
+        <input
+          data-dh-property-method-id="002"
+          data-dh-property-input-name="fromAddress"
+          class="w-input"
+          placeholder="From:"
+        />
+        <input
+          data-dh-property-method-id="002"
+          data-dh-property-input-name="amount"
+          class="w-input"
+          placeholder="Multiplier:"
+        />
+
+        <button data-dh-property-method-id="002" data-dh-property-invoke class="w-button">
+          Submit
+        </button>
+
+        <div data-dh-property-method-id="002" data-dh-property-outputs class="component-div" data-dh-modifier-displayDecimals="3">
+          *Return value: -*
+        </div>
+      </div>
+
+      <!-- <hr style="margin-bottom: 65px" /> -->
+
+      <!-- Method "sendVariableEthNoArgs" -->
+     
+
+      <!-- Method "viewMultipleArgsSingleReturn" -->
+      <div class="headline">Method: "viewMultipleArgsSingleReturn"</div>
+      <div class="headline">Payable: false - StateMutability: "view"</div>
+      <div class="headline">
+        <p>Inputs</p>
+        <ul>
+          <li>fromAddress - address</li>
+          <li>amount - uint256</li>
+        </ul>
+
+        <p>Outputs</p>
+        <ul>
+          <li>longInteger - uint256 : (Should be: 8989898989)</li>
+        </ul>
+      </div>
+
+      <div
+        id="dh"
+        data-dh-feature="customContract"
+        data-dh-property-contract-name="dappherotest"
+        data-dh-property-method-name="viewMultipleArgsSingleReturn"
+        data-dh-property-method-id="004"
+      >
+        <input
+          data-dh-property-method-id="004"
+          data-dh-property-input-name="fromAddress"
+          class="w-input"
+          placeholder="From:"
+        />
+
+        <input
+          data-dh-property-method-id="004"
+          data-dh-property-input-name="amount"
+          class="w-input"
+          placeholder="Multiplier:"
+        />
+
+        <button data-dh-property-method-id="004" data-dh-property-invoke class="w-button">
+          Submit
+        </button>
+
+        <div data-dh-property-method-id="004" data-dh-property-outputs data-dh-modifier-decimals="3" class="component-div">
+          *Return value: -*
+        </div>
+      </div>
+
+      <hr style="margin-bottom: 65px" />
+
+      <!-- Method "viewNoArgsMultipleReturn" -->
+      <div class="headline">Method: "viewNoArgsMultipleReturn"</div>
+      <div class="headline">Payable: false - StateMutability: "view"</div>
+      <div class="headline">
+        <p>Inputs</p>
+        <ul>
+          <li>none</li>
+        </ul>
+
+        <p>Outputs</p>
+        <ul>
+          <li>importantNumber - uint256 (should be zero)</li>
+          <li>hello - bytes32</li>
+        </ul>
+      </div>
+
+      <div
+        id="dh"
+        data-dh-feature="customContract"
+        data-dh-property-contract-name="dappherotest"
+        data-dh-property-method-name="viewNoArgsMultipleReturn"
+        data-dh-property-method-id="005"
+      >
+        <button data-dh-property-method-id="005" data-dh-property-invoke class="w-button">
+          Submit
+        </button> -->
+
+          All the args are returned in one, and in their respective output
+          <div
+            class="component-div"
+            data-dh-property-method-id="005"
+            data-dh-modifier-contract-units="bytes32"
+            data-dh-modifier-display-units="ascii"
+            data-dh-property-output-name="sayHello"
+          >
+            A greeting here in bytes32
+          </div>
+          <div
+            class="component-div"
+            data-dh-property-method-id="005"
+            data-dh-modifier-contract-units="bytes32"
+            data-dh-modifier-display-units="ascii"
+            data-dh-property-output-name="sayHello"
+          >
+            A greeting here in bytes32
+          </div>
+
+          <div class="component-div"data-dh-property-method-id="005" data-dh-property-output-name="importantNumber" data-dh-modifier-decimals="3" >Important Number here</div>
+
+          <div data-dh-property-method-id="005" data-dh-property-outputs class="component-div">
+          *Return value: -*
+        </div>
+          <div data-dh-property-method-id="005" data-dh-property-outputs class="component-div">
+          *Return value: -*
+        </div>
+      </div>
+
+      <hr style="margin-bottom: 65px" />
+
+      
+    <!-- <script
+      src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.4.1.min.220afd743d.js"
+      type="text/javascript"
+      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+      crossorigin="anonymous"
+    ></script> -->
+
+    <script
+      src=""
+      type="text/javascript"
+      id="dh-apiKey"
+      data-api="1581368358384x830713010847744000"
+    ></script>
+  </body>
+  <!-- [if lte IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/placeholders/3.0.2/placeholders.min.js"></script><![endif] -->
+</html>
