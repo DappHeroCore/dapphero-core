@@ -8,9 +8,10 @@ import * as consts from 'consts'
 import { DomElementsContext, EthereumContext } from 'contexts'
 import { EmitterProvider } from 'providers/EmitterProvider/provider'
 import { useWeb3Provider } from 'hooks'
-import userbase from 'userbase-js'
 import { Activator } from './Activator'
 import { UserBase as UBase } from './components/userBase/UserBase'
+
+import { DB } from './api/database'
 
 export const ProvidersWrapper: React.FC = () => {
   // react hooks
@@ -27,21 +28,19 @@ export const ProvidersWrapper: React.FC = () => {
 
   // load serBase
   const [ db, setDB ] = useState(null)
+  console.log('ProvidersWrapper:React.FC -> db', db)
   useEffect(() => {
 
-    userbase.init({ appId: process.env.REACT_APP_USERBASE_APP_ID }).then((session) => {
-      userbase.deleteUser = null
-      userbase.purchaseSubscription = null
-      userbase.cancelSubscription = null
-      userbase.resumeSubscription = null
-      userbase.updatePaymentMethod = null
-      // SDK initialized successfully
-      if (session.user) {
-        // there is a valid active session
-        // console.log(session.user.username)
-      }
-    }).catch((e) => console.error(e))
+    const makeDBConnection = async () => {
+      const db = await new DB({ appId: process.env.REACT_APP_USERBASE_APP_ID, projectId: consts.global.apiKey })
+      setDB(db)
+      // db.init().then((session) => {
+      //   setDB(db)
+      //   console.log('The session: ', session)
+      // }).catch((e) => console.error(e))
+    }
 
+    makeDBConnection()
   }, [])
 
   // load contracts effects only if not paused
@@ -103,7 +102,7 @@ export const ProvidersWrapper: React.FC = () => {
         <CookiesProvider>
           <ToastProvider>
             <EthereumContext.Provider value={ethereum}>
-              <UBase db={userbase} />
+              <UBase db={db} />
               <Activator
                 configuration={configuration}
                 setConfig={setConfig}
@@ -113,7 +112,7 @@ export const ProvidersWrapper: React.FC = () => {
                 supportedNetworks={supportedNetworks}
                 domElementsFilteredForContracts={smartcontractElements.domElementsFilteredForContracts}
                 contractElements={smartcontractElements.contractElements}
-                db={userbase}
+                db={db}
               />
             </EthereumContext.Provider>
           </ToastProvider>
