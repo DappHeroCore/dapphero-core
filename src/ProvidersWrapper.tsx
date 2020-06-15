@@ -31,8 +31,7 @@ export const ProvidersWrapper: React.FC = () => {
   useEffect(() => {
 
     const makeDBConnection = async () => {
-      const db = await new DB({ appId: process.env.REACT_APP_USERBASE_APP_ID, projectId: consts.global.apiKey })
-      setDB(db)
+      setDB(await new DB({ appId: process.env.REACT_APP_USERBASE_APP_ID, projectId: consts.global.apiKey }))
     }
     if (consts.global.apiKey) {
       makeDBConnection()
