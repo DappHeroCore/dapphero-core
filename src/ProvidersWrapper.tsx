@@ -28,19 +28,15 @@ export const ProvidersWrapper: React.FC = () => {
 
   // load serBase
   const [ db, setDB ] = useState(null)
-  console.log('ProvidersWrapper:React.FC -> db', db)
   useEffect(() => {
 
     const makeDBConnection = async () => {
       const db = await new DB({ appId: process.env.REACT_APP_USERBASE_APP_ID, projectId: consts.global.apiKey })
       setDB(db)
-      // db.init().then((session) => {
-      //   setDB(db)
-      //   console.log('The session: ', session)
-      // }).catch((e) => console.error(e))
     }
-
-    makeDBConnection()
+    if (consts.global.apiKey) {
+      makeDBConnection()
+    }
   }, [])
 
   // load contracts effects only if not paused

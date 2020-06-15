@@ -1,21 +1,18 @@
 import userbase from 'userbase-js'
 
 export class DB {
+  projectId: string
+
   constructor({ appId, projectId }) {
     this.projectId = projectId
     userbase.init({ appId })
   }
-
-  //   async init(): Promise<any> {
-  //     return this.userbase.init({ appId: this.appId })
-  //   }
 
   async signUp(details): Promise<any> {
     return userbase.signUp(details)
   }
 
   async signIn(details): Promise<any> {
-    console.log('details', details)
     return userbase.signIn({ ...details })
   }
 
