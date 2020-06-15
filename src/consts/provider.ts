@@ -34,5 +34,9 @@ export const readProviders = {
     http: 'https://dai.poa.network',
     ws: 'wss://dai-trace-ws.blockscout.com/ws',
   },
+  maticMumbai: {
+    http: `https://rpc-mumbai.matic.today`,
+    ws: '',
+  },
 
 }
