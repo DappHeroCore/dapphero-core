@@ -30,12 +30,12 @@ export const readProviders = {
     http: 'https://eth-goerli.alchemyapi.io/v2/mo2KeoBlZY6CAyc2o1i4BcBNioVN_wpJ',
     ws: 'wss://eth-goerli.ws.alchemyapi.io/v2/mo2KeoBlZY6CAyc2o1i4BcBNioVN_wpJ',
   },
-  xDai: {
+  xdai: {
     http: 'https://dai.poa.network',
     ws: 'wss://dai-trace-ws.blockscout.com/ws',
   },
-  maticMumbaiTestnet: {
-    http: `https://rpc-mumbai.matic.today`,
+  maticmumbaitestnet: {
+    http: 'https://rpc-mumbai.matic.today',
     ws: '',
   },
 

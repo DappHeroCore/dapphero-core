@@ -12,8 +12,6 @@ import userbase from 'userbase-js'
 import { Activator } from './Activator'
 import { UserBase as UBase } from './components/userBase/UserBase'
 
-console.log('userbase', userbase)
-
 export const ProvidersWrapper: React.FC = () => {
   // react hooks
   const [ configuration, setConfig ] = useState(null)
@@ -31,12 +29,11 @@ export const ProvidersWrapper: React.FC = () => {
   // const [ db, setDB ] = useState(null)
   useEffect(() => {
 
-    userbase.init({ appId: '133a735a-a754-4e59-9aa9-8bfd1786c4c6' }).then((session) => {
+    userbase.init({ appId: process.env.REACT_APP_USERBASE_APP_ID }).then((session) => {
       // SDK initialized successfully
-      console.log('The session', session)
       if (session.user) {
         // there is a valid active session
-        console.log(session.user.username)
+        // console.log(session.user.username)
       }
     }).catch((e) => console.error(e))
 
