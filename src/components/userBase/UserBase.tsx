@@ -30,7 +30,7 @@ export const UserBase = ({ db }) => {
 
   useEffect(() => {
     if (window.dappHero) {
-      window.dappHero.db = db
+      // window.dappHero.db = db
       window.dappHero.openModal = openModal
       window.dappHero.closeModal = closeModal
     }

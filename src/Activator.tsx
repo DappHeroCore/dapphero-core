@@ -26,6 +26,7 @@ type ActivatorProps = {
   timeStamp: any;
   contractElements: any;
   domElementsFilteredForContracts: any;
+  db: any;
 }
 
 export const Activator: React.FC<ActivatorProps> = ({
@@ -37,6 +38,7 @@ export const Activator: React.FC<ActivatorProps> = ({
   supportedNetworks,
   contractElements,
   domElementsFilteredForContracts,
+  db,
 }: ActivatorProps) => {
 
   // Ethereum
@@ -66,6 +68,7 @@ export const Activator: React.FC<ActivatorProps> = ({
       retriggerEngine,
       projectId: consts.global.apiKey,
       provider: ethereum,
+      db,
       toggleHighlight(): void {
         dappHero.highlightEnabled = !dappHero.highlightEnabled
         highlightDomElements(dappHero.highlightEnabled, domElements)

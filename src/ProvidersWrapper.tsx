@@ -111,6 +111,7 @@ export const ProvidersWrapper: React.FC = () => {
                 supportedNetworks={supportedNetworks}
                 domElementsFilteredForContracts={smartcontractElements.domElementsFilteredForContracts}
                 contractElements={smartcontractElements.contractElements}
+                db={userbase}
               />
             </EthereumContext.Provider>
           </ToastProvider>
