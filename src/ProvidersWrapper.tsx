@@ -8,7 +8,11 @@ import * as consts from 'consts'
 import { DomElementsContext, EthereumContext } from 'contexts'
 import { EmitterProvider } from 'providers/EmitterProvider/provider'
 import { useWeb3Provider } from 'hooks'
+import userbase from 'userbase-js'
 import { Activator } from './Activator'
+import { UserBase as UBase } from './components/userBase/UserBase'
+
+console.log('userbase', userbase)
 
 export const ProvidersWrapper: React.FC = () => {
   // react hooks
@@ -22,6 +26,21 @@ export const ProvidersWrapper: React.FC = () => {
   const retriggerEngine = (): void => { setTimestamp(+new Date()) }
 
   const ethereum = useWeb3Provider(consts.global.POLLING_INTERVAL) // This sets refresh speed of the whole app
+
+  // load serBase
+  // const [ db, setDB ] = useState(null)
+  useEffect(() => {
+
+    userbase.init({ appId: '133a735a-a754-4e59-9aa9-8bfd1786c4c6' }).then((session) => {
+      // SDK initialized successfully
+      console.log('The session', session)
+      if (session.user) {
+        // there is a valid active session
+        console.log(session.user.username)
+      }
+    }).catch((e) => console.error(e))
+
+  }, [])
 
   // load contracts effects only if not paused
   useEffect(() => {
@@ -82,6 +101,7 @@ export const ProvidersWrapper: React.FC = () => {
         <CookiesProvider>
           <ToastProvider>
             <EthereumContext.Provider value={ethereum}>
+              <UBase db={userbase} />
               <Activator
                 configuration={configuration}
                 setConfig={setConfig}
