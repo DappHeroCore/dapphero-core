@@ -111,16 +111,17 @@ export const getContractsByProjectKeyBubble = async (projectId) => {
 }
 
 export const getContractsByProjectKey = async (projectId) => {
+
+  // first try our cache server
   try {
-    getContractsByProjectKeyBubble(projectId) // we are specifically NOT awaiting this. The purpose is to still see activity on bubble.
     return (await getContractsByProjectKeyDappHero(projectId))
   } catch (error) {
-    logger.error('Error in dappHero api, getContractsByProjectKeyV2', error)
+  // If the error fails, then try bubble
+    logger.log('(DH-CORE) Error in Global Cache Network, re-trying...', error)
     try {
-      return ( await getContractsByProjectKeyBubble(projectId))
+      return (await getContractsByProjectKeyBubble(projectId) )
     } catch (error) {
-      logger.error('Error in dappHero api, getContractsByProjectKeyV2', error)
+      logger.log('(DH-CORE) Failure in project cache backend', error)
     }
   }
-
 }
