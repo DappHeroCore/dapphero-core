@@ -68,7 +68,7 @@ export const Activator: React.FC<ActivatorProps> = ({
       retriggerEngine,
       projectId: consts.global.apiKey,
       provider: ethereum,
-      db,
+      // db,
       toggleHighlight(): void {
         dappHero.highlightEnabled = !dappHero.highlightEnabled
         highlightDomElements(dappHero.highlightEnabled, domElements)

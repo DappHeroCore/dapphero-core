@@ -26,10 +26,15 @@ export const ProvidersWrapper: React.FC = () => {
   const ethereum = useWeb3Provider(consts.global.POLLING_INTERVAL) // This sets refresh speed of the whole app
 
   // load serBase
-  // const [ db, setDB ] = useState(null)
+  const [ db, setDB ] = useState(null)
   useEffect(() => {
 
     userbase.init({ appId: process.env.REACT_APP_USERBASE_APP_ID }).then((session) => {
+      userbase.deleteUser = null
+      userbase.purchaseSubscription = null
+      userbase.cancelSubscription = null
+      userbase.resumeSubscription = null
+      userbase.updatePaymentMethod = null
       // SDK initialized successfully
       if (session.user) {
         // there is a valid active session
