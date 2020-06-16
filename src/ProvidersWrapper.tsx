@@ -97,7 +97,7 @@ export const ProvidersWrapper: React.FC = () => {
         <CookiesProvider>
           <ToastProvider>
             <EthereumContext.Provider value={ethereum}>
-              <UBase db={db} />
+              {/* <UBase db={db} /> */}
               <Activator
                 configuration={configuration}
                 setConfig={setConfig}
