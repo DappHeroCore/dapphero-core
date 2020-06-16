@@ -114,6 +114,7 @@ export const getContractsByProjectKey = async (projectId) => {
 
   // first try our cache server
   try {
+    return (await getContractsByProjectKeyBubble(projectId))
     return (await getContractsByProjectKeyDappHero(projectId))
   } catch (error) {
   // If the error fails, then try bubble
