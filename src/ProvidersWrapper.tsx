@@ -16,7 +16,6 @@ import { DB } from './api/database'
 export const ProvidersWrapper: React.FC = () => {
   // react hooks
   const [ configuration, setConfig ] = useState(null)
-  console.log('ProvidersWrapper:React.FC -> configuration', configuration)
   const [ domElements, setDomElements ] = useState(null)
   const [ timestamp, setTimestamp ] = useState(+new Date())
   const [ supportedNetworks, setSupportedNetworks ] = useState([])

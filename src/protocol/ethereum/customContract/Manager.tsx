@@ -22,19 +22,24 @@ export const Manager: React.FunctionComponent<ManagerProps> = ({ customContractE
 
   // TODO: [DEV-318] Create a function to add a new contract name and add a new configuration
 
-  for (const contractName of uniqueContractNames) {
+  // for (const contractName of uniqueContractNames)
+  return (
+    <>
+      {Array.from(uniqueContractNames).map((contractName) => {
+        const newDomElements = getDomElements(configuration)
+        const contractElements = newDomElements.filter((element) => element.feature === 'customContract')
+        const methodsByContractAsElements = contractElements.filter((element) => element.contract.contractName === contractName)
+        const contract = configuration.contracts.filter((thisContract) => (thisContract.contractName === contractName))[0]
 
-    const newDomElements = getDomElements(configuration)
-    const contractElements = newDomElements.filter((element) => element.feature === 'customContract')
-    const methodsByContractAsElements = contractElements.filter((element) => element.contract.contractName === contractName)
-    const contract = configuration.contracts.filter((thisContract) => (thisContract.contractName === contractName))[0]
-
-    return (
-      <CustomContractRouter
-        listOfContractMethods={methodsByContractAsElements}
-        contract={contract}
-        timestamp={timestamp}
-      />
-    )
-  }
+        return (
+          <CustomContractRouter
+            key={contractName}
+            listOfContractMethods={methodsByContractAsElements}
+            contract={contract}
+            timestamp={timestamp}
+          />
+        )
+      })}
+    </>
+  )
 }
