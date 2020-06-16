@@ -28,13 +28,13 @@ export const UserBase = ({ db }) => {
     setIsOpen(false)
   }
 
-  useEffect(() => {
-    if (window.dappHero) {
-      // window.dappHero.db = db
-      window.dappHero.openModal = openModal
-      window.dappHero.closeModal = closeModal
-    }
-  }, [ window.dappHero, db ])
+  // useEffect(() => {
+  //   if (window.dappHero) {
+  //     // window.dappHero.db = db
+  //     window.dappHero.openModal = openModal
+  //     window.dappHero.closeModal = closeModal
+  //   }
+  // }, [ window.dappHero, db ])
 
   return (
     <div>

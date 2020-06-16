@@ -65,15 +65,15 @@ export const getContractsByProjectKeyDappHero = async (projectId) => {
   }
 }
 
-const compareResponses = async (originalOutput, projectId) => {
-  const compareOutput = await getContractsByProjectKeyV2(projectId)
-  const isEqual = !!(JSON.stringify(originalOutput) === JSON.stringify(compareOutput))
-  // logger.info(`Cache Check isEqual: ${isEqual.toString()}`)
-  if (!isEqual) {
-    logger.info('', compareOutput)
-    logger.info('', originalOutput)
-  }
-}
+// const compareResponses = async (originalOutput, projectId) => {
+//   const compareOutput = await getContractsByProjectKeyV2(projectId)
+//   const isEqual = !!(JSON.stringify(originalOutput) === JSON.stringify(compareOutput))
+//   // logger.info(`Cache Check isEqual: ${isEqual.toString()}`)
+//   if (!isEqual) {
+//     logger.info('', compareOutput)
+//     logger.info('', originalOutput)
+//   }
+// }
 
 export const getContractsByProjectKeyBubble = async (projectId) => {
   logger.log(`projectId: ${projectId}`)
