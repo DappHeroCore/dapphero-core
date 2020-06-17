@@ -80,6 +80,9 @@ export const Activator: React.FC<ActivatorProps> = ({
       listenToSmartContractBlockchainEvent: (cb): void => listenToEvent(EVENT_NAMES.contract.contractEvent, cb),
       listenToUserAddressChange: (cb): void => listenToEvent(EVENT_NAMES.user.addressStatusChange, cb),
       listenToUserBalanceChange: (cb): void => listenToEvent(EVENT_NAMES.user.balanceStatusChange, cb),
+      listenToNFTLoadSingleToken: (cb): void => listenToEvent(EVENT_NAMES.nft.loadSingleToken, cb),
+      listenToNFTLoadMultipleToken: (cb): void => listenToEvent(EVENT_NAMES.nft.loadMultipleTokens, cb),
+      listenToNFTLoadAllToken: (cb): void => listenToEvent(EVENT_NAMES.nft.loadAllTokens, cb),
     }
     Object.assign(window, { dappHero })
 

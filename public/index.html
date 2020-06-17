@@ -842,8 +842,8 @@
           console.log("It's loaded");
 
           console.log("dapphero: ", dappHero)
-          dappHero.listenToUserBalanceChange(data => {
-            console.log("Listening to balance change", data);
+          dappHero.listenToNFTLoadAllToken(data => {
+            console.log("Listening to  change", data.value);
           });
           // dappHero.listenToSmartContractBlockchainEvent(data => {
           //   console.log("The blockChain Events: ", data)

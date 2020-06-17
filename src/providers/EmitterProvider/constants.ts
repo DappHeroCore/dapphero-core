@@ -10,6 +10,11 @@ export const EVENT_NAMES = {
     addressStatusChange: 'address:statusChange',
     balanceStatusChange: 'balance:statusChange',
   },
+  nft: {
+    loadSingleToken: 'nft:loadSingleToken',
+    loadMultipleTokens: 'nft:loadMultipleTokens',
+    loadAllTokens: 'nft:loadAllTokens',
+  },
 }
 
 export const EVENT_STATUS = { pending: 'PENDING', resolved: 'RESOLVED', rejected: 'REJECTED' }
