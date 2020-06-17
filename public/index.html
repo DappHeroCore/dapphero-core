@@ -834,11 +834,29 @@
       crossorigin="anonymous"
     ></script> -->
 
+    <script>
+      document.addEventListener(
+        "dappHeroConfigLoaded",
+        ({ detail: dappHero }) => {
+          // Inside here you can listen to any event you want
+          console.log("It's loaded");
+
+          console.log("dapphero: ", dappHero)
+          dappHero.listenToUserAddressChange(data => {
+            console.log("Listening to address change", data);
+          });
+          // dappHero.listenToSmartContractBlockchainEvent(data => {
+          //   console.log("The blockChain Events: ", data)
+          // })
+        }
+      );
+    </script>
+
     <script
       src=""
       type="text/javascript"
       id="dh-apiKey"
-      data-api="1592342853928x247583279535882240"
+      data-api=""
     ></script>
   </body>
   <!-- [if lte IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/placeholders/3.0.2/placeholders.min.js"></script><![endif] -->

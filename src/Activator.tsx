@@ -78,6 +78,8 @@ export const Activator: React.FC<ActivatorProps> = ({
       listenToTransactionStatusChange: (cb): void => listenToEvent(EVENT_NAMES.contract.statusChange, cb),
       listenToContractInvokeTriggerChange: (cb): void => listenToEvent(EVENT_NAMES.contract.invokeTrigger, cb),
       listenToSmartContractBlockchainEvent: (cb): void => listenToEvent(EVENT_NAMES.contract.contractEvent, cb),
+      listenToUserAddressChange: (cb): void => listenToEvent(EVENT_NAMES.user.addressStatusChange, cb),
+      listenToUserBalanceChange: (cb): void => listenToEvent(EVENT_NAMES.user.balanceStatusChange, cb),
     }
     Object.assign(window, { dappHero })
 

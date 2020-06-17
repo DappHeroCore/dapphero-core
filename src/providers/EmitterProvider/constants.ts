@@ -6,6 +6,10 @@ export const EVENT_NAMES = {
     invokeTrigger: 'contract:invokeTriggerChange',
     contractEvent: 'contract:contractEvent',
   },
+  user: {
+    addressStatusChange: 'address:statusChange',
+    balanceStatusChange: 'balance:statusChange',
+  },
 }
 
 export const EVENT_STATUS = { pending: 'PENDING', resolved: 'RESOLVED', rejected: 'REJECTED' }
