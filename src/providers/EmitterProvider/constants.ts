@@ -16,6 +16,7 @@ export const EVENT_NAMES = {
     loadAllTokens: 'nft:loadAllTokens',
   },
   threeBox: { loadProfile: 'threebox:loadProfile' },
+  ethTransfer: { sendEther: 'ethTransfer:sendEther' },
 }
 
 export const EVENT_STATUS = { pending: 'PENDING', resolved: 'RESOLVED', rejected: 'REJECTED' }
