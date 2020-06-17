@@ -28,7 +28,7 @@ export const useGetTokensFromOwner = ({ assetOwnerAddress, isAllTokens, parsedTo
         })
         .catch((error) => {
           emitToEvent(
-            EVENT_NAMES.nft.loadError,
+            EVENT_NAMES.nft.loadSingleToken,
             { value: error, step: 'Load Single Token', status: EVENT_STATUS.rejected },
           )
           setError({ simpleErrorMessage, completeErrorMessage, error })
@@ -50,7 +50,7 @@ export const useGetTokensFromOwner = ({ assetOwnerAddress, isAllTokens, parsedTo
         })
         .catch((error) => {
           emitToEvent(
-            EVENT_NAMES.nft.loadError,
+            EVENT_NAMES.nft.loadMultipleTokens,
             { value: error, step: 'Load Single Token', status: EVENT_STATUS.rejected },
           )
           setError({ simpleErrorMessage, completeErrorMessage, error })
@@ -72,7 +72,7 @@ export const useGetTokensFromOwner = ({ assetOwnerAddress, isAllTokens, parsedTo
         })
         .catch((error) => {
           emitToEvent(
-            EVENT_NAMES.nft.loadError,
+            EVENT_NAMES.nft.loadAllTokens,
             { value: error, step: 'Load Single Token', status: EVENT_STATUS.rejected },
           )
           setError({ simpleErrorMessage, completeErrorMessage, error })

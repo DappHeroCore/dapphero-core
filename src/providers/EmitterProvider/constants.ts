@@ -14,8 +14,8 @@ export const EVENT_NAMES = {
     loadSingleToken: 'nft:loadSingleToken',
     loadMultipleTokens: 'nft:loadMultipleTokens',
     loadAllTokens: 'nft:loadAllTokens',
-    loadError: 'nft:loadTokenError',
   },
+  threeBox: { loadProfile: 'threebox:loadProfile' },
 }
 
 export const EVENT_STATUS = { pending: 'PENDING', resolved: 'RESOLVED', rejected: 'REJECTED' }
