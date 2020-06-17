@@ -14,6 +14,7 @@ export const EVENT_NAMES = {
     loadSingleToken: 'nft:loadSingleToken',
     loadMultipleTokens: 'nft:loadMultipleTokens',
     loadAllTokens: 'nft:loadAllTokens',
+    loadError: 'nft:loadTokenError',
   },
 }
 

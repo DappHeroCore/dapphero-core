@@ -26,7 +26,13 @@ export const useGetTokensForContractAddress = ({ isSingleToken, isMultipleTokens
           )
           setNfts(nfts)
         })
-        .catch((error) => setError({ simpleErrorMessage, completeErrorMessage, error }))
+        .catch((error) => {
+          emitToEvent(
+            EVENT_NAMES.nft.loadError,
+            { value: error, step: 'Load Single Token', status: EVENT_STATUS.resolved },
+          )
+          setError({ simpleErrorMessage, completeErrorMessage, error })
+        })
     }
 
     if (isMultipleTokens) {
@@ -42,7 +48,13 @@ export const useGetTokensForContractAddress = ({ isSingleToken, isMultipleTokens
           )
           setNfts(nfts)
         })
-        .catch((error) => setError({ simpleErrorMessage, completeErrorMessage, error }))
+        .catch((error) => {
+          emitToEvent(
+            EVENT_NAMES.nft.loadError,
+            { value: error, step: 'Load Single Token', status: EVENT_STATUS.resolved },
+          )
+          setError({ simpleErrorMessage, completeErrorMessage, error })
+        })
     }
 
     if (isAllTokens) {
@@ -58,7 +70,13 @@ export const useGetTokensForContractAddress = ({ isSingleToken, isMultipleTokens
           )
           setNfts(nfts)
         })
-        .catch((error) => setError({ simpleErrorMessage, completeErrorMessage, error }))
+        .catch((error) => {
+          emitToEvent(
+            EVENT_NAMES.nft.loadError,
+            { value: error, step: 'Load Single Token', status: EVENT_STATUS.resolved },
+          )
+          setError({ simpleErrorMessage, completeErrorMessage, error })
+        })
     }
   }, [ assetContractAddress, offset ])
 

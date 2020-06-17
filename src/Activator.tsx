@@ -83,6 +83,7 @@ export const Activator: React.FC<ActivatorProps> = ({
       listenToNFTLoadSingleToken: (cb): void => listenToEvent(EVENT_NAMES.nft.loadSingleToken, cb),
       listenToNFTLoadMultipleToken: (cb): void => listenToEvent(EVENT_NAMES.nft.loadMultipleTokens, cb),
       listenToNFTLoadAllToken: (cb): void => listenToEvent(EVENT_NAMES.nft.loadAllTokens, cb),
+      listenToNFTLoadError: (cb): void => listenToEvent(EVENT_NAMES.nft.loadError, cb),
     }
     Object.assign(window, { dappHero })
 
