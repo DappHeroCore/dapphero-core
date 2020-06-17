@@ -29,7 +29,7 @@ export const useGetTokensForContractAddress = ({ isSingleToken, isMultipleTokens
         .catch((error) => {
           emitToEvent(
             EVENT_NAMES.nft.loadError,
-            { value: error, step: 'Load Single Token', status: EVENT_STATUS.resolved },
+            { value: error, step: 'Load Single Token', status: EVENT_STATUS.rejected },
           )
           setError({ simpleErrorMessage, completeErrorMessage, error })
         })
@@ -51,7 +51,7 @@ export const useGetTokensForContractAddress = ({ isSingleToken, isMultipleTokens
         .catch((error) => {
           emitToEvent(
             EVENT_NAMES.nft.loadError,
-            { value: error, step: 'Load Single Token', status: EVENT_STATUS.resolved },
+            { value: error, step: 'Load Single Token', status: EVENT_STATUS.rejected },
           )
           setError({ simpleErrorMessage, completeErrorMessage, error })
         })
@@ -73,7 +73,7 @@ export const useGetTokensForContractAddress = ({ isSingleToken, isMultipleTokens
         .catch((error) => {
           emitToEvent(
             EVENT_NAMES.nft.loadError,
-            { value: error, step: 'Load Single Token', status: EVENT_STATUS.resolved },
+            { value: error, step: 'Load Single Token', status: EVENT_STATUS.rejected },
           )
           setError({ simpleErrorMessage, completeErrorMessage, error })
         })
