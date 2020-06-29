@@ -7,8 +7,6 @@ import { ethers } from 'ethers'
 import { EmitterContext } from 'providers/EmitterProvider/context'
 import { EVENT_NAMES, EVENT_STATUS } from 'providers/EmitterProvider/constants'
 
-console.log('ethers', ethers)
-
 const apiKey = process.env.REACT_APP_BLOCKNATIVE_API
 interface EthTransferProps {
   element: HTMLElement;
@@ -81,7 +79,6 @@ export const EthTransfer: FunctionComponent<EthTransferProps> = ({ element, amou
             })
         }
       } catch (err) {
-        console.log('transferEther -> err', err)
         emitToEvent(
           EVENT_NAMES.ethTransfer.sendEther,
           { value: err, step: 'Send Ether Error', status: EVENT_STATUS.rejected },
