@@ -100,6 +100,7 @@ export const Activator: React.FC<ActivatorProps> = ({
           && domElementsFilteredForContracts.map((domElement) => (
             <FeatureReducer
               key={domElement.id}
+              domElements={domElements}
               element={domElement.element}
               feature={domElement.feature}
               configuration={configuration}

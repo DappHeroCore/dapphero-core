@@ -25,13 +25,14 @@ export type Configuration = {
 
 export type FeatureReducerProps = {
   feature?: string;
-  element: HTMLElement | Element;
+  element: HTMLElement;
   configuration: Configuration;
   key?: string;
   index?: number;
   info?: any;
   customContractElements?: any;
   retriggerEngine?: any;
+  domElements?: any;
   timeStamp?: number;
 }
 
