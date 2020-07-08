@@ -33,6 +33,11 @@ export const EthEnable: FunctionComponent<EthEnableProps> = ({ element }) => {
 
   const [ buttonStatus, setButtonStatus ] = useState(element.innerText || 'Enable MetaMask')
 
+  const doEnable = (event) => {
+    event.preventDefault()
+    if (enable) { enable() } else { noWeb3Provider() }
+
+  }
   useEffect(() => {
     if (isEnabled) {
       setButtonStatus('Connected')
@@ -45,9 +50,9 @@ export const EthEnable: FunctionComponent<EthEnableProps> = ({ element }) => {
 
   useEffect(() => {
     try {
-      element.addEventListener('click', enable || noWeb3Provider, true)
+      element.addEventListener('click', doEnable, true)
 
-      return (() => element.removeEventListener('click', enable || noWeb3Provider, true))
+      return (() => element.removeEventListener('click', doEnable, true))
     } catch (e) {
       logger.log(e)
     }
