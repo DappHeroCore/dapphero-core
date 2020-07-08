@@ -58,7 +58,7 @@ export const Activator: React.FC<ActivatorProps> = ({
   useEffect(() => {
     const dappHero = {
       debug: false,
-      enabled: true,
+      enabled: ethereum.isEnabled,
       highlightEnabled: false,
       domElements,
       configuration,
@@ -91,7 +91,7 @@ export const Activator: React.FC<ActivatorProps> = ({
     // Dispatch the event.
     const event = new CustomEvent('dappHeroConfigLoaded', { detail: dappHero })
     document.dispatchEvent(event)
-  }, [ AppReady ])
+  }, [ AppReady, ethereum.isEnabled ])
 
   if (!AppReady || !domElementsFilteredForContracts) return null
   return (
