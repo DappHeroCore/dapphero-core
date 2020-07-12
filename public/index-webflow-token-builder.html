@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<!--  This site was created in Webflow. http://www.webflow.com  -->
+<!--  Last Published: Sat Jan 18 2020 14:45:04 GMT+0000 (Coordinated Universal Time)  -->
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>DappHero: Components</title>
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <link href="css/dapphero-components.webflow.css" rel="stylesheet" type="text/css" />
+  </head>
+<body class="body">
+    <div class="section-3"><a href="https://www.dapphero.io" target="_blank" class="w-inline-block"><img src="images/Recurso-1.svg" width="200" height="42" alt=""></a></div>
+    <div class="section-4">
+      <div data-dh-feature="customContract" data-dh-property-method-id="001" data-dh-property-contract-name="ERC20---Token-Factory" data-dh-property-method-name="createToken" class="div-block-36">
+        <h1 class="heading-2">Easy Token Builder</h1>
+        <div class="form-block w-form">
+          <form id="email-form" name="email-form" data-name="Email Form" class="form"><label for="Name" class="field-label">Token Name</label><input type="text" data-dh-property-input-name="name" class="form-field w-input" maxlength="256" name="Name" data-name="Name" placeholder="Token name" data-dh-property-method-id="001" id="Name"><label for="Symbol" class="field-label">Token Symbol</label><input type="text" data-dh-property-input-name="symbol" class="form-field w-input" maxlength="256" name="Symbol" data-name="Symbol" placeholder="Symbol for exchanges" data-dh-property-method-id="001" id="Symbol" required=""><label for="Supply" class="field-label">Initial Supply </label><input type="number" data-dh-property-input-name="supply" class="form-field w-input" maxlength="256" name="Supply" data-name="Supply" placeholder="To be minted to creator" data-dh-property-method-id="001" id="Supply" required="">
+            <div class="div-block-37"><input type="submit" value="Enable Metamask" data-wait="Please wait..." data-dh-feature="network" data-dh-property-enable="true" class="submit-button secondary w-button"><input type="submit" value="Create Token" data-wait="Please wait..." data-dh-property-invoke="true" data-dh-property-method-id="001" class="submit-button w-button">
+              <div data-dh-property-method-id="001" data-dh-property-outputs="true" class="text-block-7">Transaction Hash</div>
+              <div id="success" class="div-block-38">
+                <div class="div-block-39">
+                  <div class="text-block-9">Success! Your new ERC20 Token address is: </div>
+                  <div id="contractAddress" class="text-block-8">0x0...</div><a id="etherscan" href="https://etherscan.io/address/" target="_blank" class="submit-button w-button">Check on Etherscan</a></div>
+              </div>
+            </div>
+          </form>
+          <div class="w-form-done">
+            <div>Thank you! Your submission has been received!</div>
+          </div>
+          <div class="w-form-fail">
+            <div>Oops! Something went wrong while submitting the form.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section-5">
+      <div class="div-block-40">
+        <div class="text-block-10">Interested in learning how to create your own Decentralized Application on Ethereum? <br>Join our <a href="https://t.me/dapphero" target="_blank" class="link">telegram</a> or <a href="#" class="link-2">sign up</a>!</div>
+      </div>
+    </div>
+    <script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.4.1.min.220afd743d.js?site=5ddc85974d7246889a74b0b0" type="text/javascript" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="js/webflow.js" type="text/javascript"></script>
+    <!-- [if lte IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/placeholders/3.0.2/placeholders.min.js"></script><![endif] -->
+    <script src="https://package.dapphero.io/main.js" id="dh-apiKey" data-api="1592833961196x443217065997238300"></script>
+    <script>
+        document.addEventListener(
+          "dappHeroConfigLoaded",
+          ({ detail: dappHero }) => {
+            // Inside here you can listen to any event you want
+            console.log("DappHero Has Loaded!");
+            // For projects with auto-invoked method, you will want to filter on events
+            // dappHero.listenToTransactionStatusChange(data => {
+            //   console.log("Listening to transtaction status change", data);
+            // });
+            // This is how you can listen to any events your smart contract emits
+            dappHero.listenToSmartContractBlockchainEvent((data) => {
+                 console.log("The Data", data)
+                var success = document.getElementById('success');
+                var tx = document.getElementById('contractAddress');
+              var etherscan = document.getElementById('etherscan');
+              etherscan.href = "https://rinkeby.etherscan.io/address/" + data.value.args.contractAddress
+              tx.innerText = data.value.args.contractAddress
+              success.style.display = "block";
+              console.log("The blockChain Events: ", data);
+            });
+            //This is an example method for alerting your users they are on the wrong network
+            //if(window.dappHero.provider.chainId !== 4){
+            //  alert("Wrong network! You should be on rinkeby")
+            //}
+          }
+        );
+      </script>
+  </body>
+  </html>

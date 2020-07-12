@@ -30,6 +30,7 @@ export const Manager: React.FunctionComponent<ManagerProps> = ({ customContractE
         const contractElements = newDomElements.filter((element) => element.feature === 'customContract')
         const methodsByContractAsElements = contractElements.filter((element) => element.contract.contractName === contractName)
         const contract = configuration.contracts.filter((thisContract) => (thisContract.contractName === contractName))[0]
+        const contractNetworkId = configuration.contracts.filter((thisContract) => (thisContract.contractName === contractName))[0].networkId
 
         return (
           <CustomContractRouter
@@ -37,6 +38,7 @@ export const Manager: React.FunctionComponent<ManagerProps> = ({ customContractE
             listOfContractMethods={methodsByContractAsElements}
             contract={contract}
             timestamp={timestamp}
+            contractNetworkId={contractNetworkId}
           />
         )
       })}

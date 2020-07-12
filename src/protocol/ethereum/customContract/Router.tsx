@@ -4,6 +4,7 @@ import * as contexts from 'contexts'
 import * as consts from 'consts'
 import { ethers, logger } from 'ethers'
 import { useWeb3Provider } from 'hooks'
+import { useToasts } from 'react-toast-notifications'
 
 import { EmitterContext } from 'providers/EmitterProvider/context'
 import { EVENT_NAMES, EVENT_STATUS } from 'providers/EmitterProvider/constants'
@@ -22,9 +23,10 @@ type RouterProps = {
   listOfContractMethods: ListOfContractMethods;
   contract: Contract;
   timestamp: number;
+  contractNetworkId: number;
 }
 
-export const Router: React.FunctionComponent<RouterProps> = ({ listOfContractMethods, contract, timestamp }) => {
+export const Router: React.FunctionComponent<RouterProps> = ({ listOfContractMethods, contract, timestamp, contractNetworkId }) => {
   const ethereum = useContext(contexts.EthereumContext)
   const { signer, isEnabled: writeEnabled, chainId: writeChainId, provider } = ethereum
   const { contractAddress, contractAbi, networkId } = contract
@@ -32,6 +34,9 @@ export const Router: React.FunctionComponent<RouterProps> = ({ listOfContractMet
   const [ writeContract, setWriteContract ] = useState(null)
 
   const { actions: { emitToEvent } } = useContext(EmitterContext)
+
+  // Toast Notifications
+  const { addToast } = useToasts()
 
   // Get the Network for our Project
   const contractNetwork = consts.global.ethNetworkName[networkId].toLowerCase()
@@ -50,10 +55,12 @@ export const Router: React.FunctionComponent<RouterProps> = ({ listOfContractMet
       } else {
         readContractInstance = new ethers.Contract(contractAddress, contractAbi, stableReadProvider)
       }
-      readContractInstance.on('*', (data) => emitToEvent(
-        EVENT_NAMES.contract.contractEvent,
-        { value: data, step: 'Contract has emitted a Contract Event', status: EVENT_STATUS.resolved, methodNameKey: null },
-      ))
+      readContractInstance.on('*', (data) => {
+        emitToEvent(
+          EVENT_NAMES.contract.contractEvent,
+          { value: data, step: 'Contract has emitted a Contract Event', status: EVENT_STATUS.resolved, methodNameKey: null },
+        )
+      })
       setReadContract(readContractInstance)
     }
     makeReadContract()
@@ -66,7 +73,13 @@ export const Router: React.FunctionComponent<RouterProps> = ({ listOfContractMet
     }
 
     // TODO: Check if we are on the same chainID as the Contract
+    // if (writeEnabled && writeChainId === contractNetworkId) makeWriteContract()
+
     if (writeEnabled) makeWriteContract()
+    // if (writeChainId !== contractNetworkId) {
+    //   const msg = `Please change your network to ${consts.global.ethNetworkName[contractNetworkId]} to use the deployed contract.`
+    //   addToast(msg, { appearance: 'info', autoDismiss: true, autoDismissTimeout: consts.global.REACT_TOAST_AUTODISMISS_INTERVAL })
+    // }
     // Else pop up information that we are not on the right network
   }, [ writeChainId, signer, writeEnabled ])
 
@@ -86,12 +99,14 @@ export const Router: React.FunctionComponent<RouterProps> = ({ listOfContractMet
           readContract={readContract}
           readChainId={networkId}
           writeContract={writeContract}
+          writeChainId={writeChainId}
           readEnabled={Boolean(readContract)}
           writeEnabled={writeEnabled}
           info={contractMethodElement}
           key={contractMethodElement.id}
           timestamp={timestamp}
           contractAbi={contractAbi}
+          contractNetworkId={contractNetworkId}
         />
       ))}
     </>
