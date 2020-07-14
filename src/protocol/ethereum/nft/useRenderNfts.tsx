@@ -39,32 +39,18 @@ function displayKeyValueElementInnerText(element, key, value, elementType): void
 }
 
 function displayValueOnElementAttribute(element, key, value, selectedAttribute): void {
+
   const values = Array.from(element.querySelectorAll(`[${selectedAttribute}="${key}"`))
+  // if (values.length > 0) console.log("values", values)
   values.forEach((formValue: Element) => {
     const attribute = formValue.getAttribute(selectedAttribute)
+
     if (attribute.includes(key)) {
+
       formValue.setAttribute(selectedAttribute, attribute.replace(key, value))
     }
   })
 }
-
-// function displayKeyValueOnIframe(element, key, value): void {
-//   const iframeKeyValuePaths = document.evaluate(
-//     `//iframe[contains(@src, '${key}')]`,
-//     element,
-//     null,
-//     XPathResult.ANY_TYPE,
-//     null,
-//   )
-//   const iframeKeyValueElement = iframeKeyValuePaths.iterateNext()
-
-//   if (!iframeKeyValueElement) return
-
-//   // TODO: [DEV-255] Does 'getAttribute' exist on type node? In NFT reducer
-//   const iframeSrc = (iframeKeyValueElement as any).getAttribute('src')
-//   const updatedSrc = iframeSrc.replace(key, value);
-//   (iframeKeyValueElement as any).setAttribute('src', updatedSrc)
-// }
 
 export const useRenderNfts = ({ nfts, item, element, getAssetElements }) => {
 
@@ -140,7 +126,6 @@ export const useRenderNfts = ({ nfts, item, element, getAssetElements }) => {
           displayValueOnElementAttribute(clonedItem, '$THIS_ContractAddress', nft?.asset_contract.address, attribute)
           displayValueOnElementAttribute(clonedItem, '$THIS_OwnerAddress', nft?.owner.address, attribute)
         })
-
       })
 
       // Replace root with first cloned item

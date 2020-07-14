@@ -19,6 +19,8 @@ export const sendTx = async ({
 
   const methodDetails = { methodName, methodParams, contractAddress: writeContract.address, contractNetwork: writeContract.provider._network.name }
   const method = writeContract[methodName]
+  console.log('methodName', methodName)
+  console.log('methodParams', methodParams)
 
   const gasPrice = await provider.getGasPrice()
   const estimateMethod = writeContract.estimateGas[methodName]
@@ -53,6 +55,7 @@ export const sendTx = async ({
   if (!willTxRevert) {
     try {
       estimatedGas = await estimateMethod(...methodParams, tempOverride)
+      console.log('estimatedGas', estimatedGas)
       dsp.estimateGas.finish({ methodDetails, dispatch, estimatedGas })
     } catch (error) {
       console.log('(DH-CORE) - Static call attempt returned: ', JSON.stringify(staticCall, null, 2))
@@ -71,6 +74,7 @@ export const sendTx = async ({
     try {
 
       methodResult = await method(...methodParams, overrides)
+      console.log('methodResult', methodResult)
 
       dsp.txFlow.txBroadcast({ methodDetails, dispatch, methodResult })
 
