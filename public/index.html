@@ -1,505 +1,513 @@
 <!DOCTYPE html>
-<!--  This site was created in Webflow. http://www.webflow.com  -->
-<!--  Last Published: Sat Jan 18 2020 14:45:04 GMT+0000 (Coordinated Universal Time)  -->
-<html>
+
+<html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <title>DappHero: Components</title>
-    <meta content="width=device-width, initial-scale=1" name="viewport" />
-  <link href="css/dapphero-components.webflow.css" rel="stylesheet" type="text/css" />
+    <title>DappHero HTML Generation</title>
+
+    <meta charset="UTF-8" />
+    <meta name="author" content="DappHero" />
+    <meta name="description" content="DappHero" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://unpkg.com/mvp.css" />
   </head>
 
-  <body class="body">
-    <div class="page-div">
-      <!-- Network Feature -->
-
-      <h2 style="margin-bottom: 25px">Network Features</h2>
-
-         <!-- Method GetID -->
-      <div class="headline">Network: Get ID</div>
-      <h2 style="margin-bottom: 25px" data-dh-feature="network" data-dh-property-id>NetworkID should be here</h2>
-
-
-       <!-- ============================================================================================================================================ -->
-       <!-- Method Network GetName -->
-       <!-- ============================================================================================================================================ -->
-       <div class="headline">Network: Get Name</div>
-       <div class="headline" data-dh-feature="network" data-dh-property-name>Network ID should be here</div>
-       <!-- ============================================================================================================================================ -->
-
-
-
-       <!-- ============================================================================================================================================ -->
-       <!-- Method Network GetProvider-->
-       <!-- ============================================================================================================================================ -->
-       <div class="headline">Network: Get Provider</div>
-       <div class="headline" data-dh-feature="network" data-dh-property-provider>Network provider should be here</div>
-       <!-- ============================================================================================================================================ -->
-
-
-
-        <!-- ============================================================================================================================================ -->
-        <!-- Method Network Transfer -->
-        <!-- ============================================================================================================================================ -->
-        <div class="headline">Network: Transfer - (unfinished)</div>
-        <input data-dh-feature="network" data-dh-property-transfer="input" data-dh-property-input-name="amount" data-dh-modifier-display-units="ether" placeholder="amount in wei"></input>
-        <input data-dh-feature="network" data-dh-property-transfer="input" data-dh-property-input-name="address" placeholder="address"></input>
-        <button data-dh-feature="network" data-dh-property-transfer="invoke">Transfer Now</button>
-        <div class="headline" data-dh-feature="network" data-dh-property-transfer="output"></div>
-        <!-- ============================================================================================================================================ -->
-
-
-
-        <!-- ============================================================================================================================================ -->
-        <!-- Method Network GetProvider -->
-        <!-- ============================================================================================================================================ -->
-        <div class="headline">Network: Get Provider</div>
-        <div class="headline" data-dh-feature="network" data-dh-property-provider>Network provider should be here</div>
-        <!-- ============================================================================================================================================ -->
-
-
-        <!-- ============================================================================================================================================ -->
-        <!-- Method Enable Network EthEnable -->
-        <!-- ============================================================================================================================================ -->
-        <div class="headline">Network: Enable Button (unfinished)</div>
-        <button data-dh-feature="network" data-dh-property-enable>Enable</button>
-        <!-- ============================================================================================================================================ -->
-
-
-
-    <h2 style="margin-bottom: 25px">User Features</h2>
-
-        <!-- Method GetAddress -->
-       <div class="headline">User: Account Adddress</div>
-       <h2 style="margin-bottom: 25px" data-dh-feature="user" data-dh-property-address="fd">User Address Should be Here</h2>
-
-        <!-- Method GetAddressShort -->
-        <div class="headline">User: Account Adddress Short</div>
-        <h2 style="margin-bottom: 25px" data-dh-feature="user" data-dh-property-address data-dh-modifier-display="short">User Address Should be Here</h2>
-
-         <!-- Method GetBalance -->
-         <div class="headline">User: Get Balance</div>
-         <h2 style="margin-bottom: 25px" data-dh-feature="user" data-dh-property-balance  data-dh-modifier-units="ether" data-dh-modifier-decimals="3">User Address Should be Here</h2>
-
-
-    <h2 style="margin-bottom: 25px">3Box Features</h2>
-
-         <!-- Method GetName-->
-        <div class="headline">3Box: UserName</div>
-        <h2 style="margin-bottom: 25px" data-dh-feature="threebox" data-dh-property-name>3box name</h2>
-
-        <div class="headline">3Box: Website</div>
-        <h2 style="margin-bottom: 25px" data-dh-feature="threebox" data-dh-property-website>3box website</h2>
-
-      <!--
-        ==================================================================================================================
-        Show 3Box Image
-        ==================================================================================================================
-      -->
-      <img src="https://assets.website-files.com/5e306749b7083242f07b24e7/5e36d27d12126763acc00e1a_noun_punk_320426%20(2).png" srcset="https://assets.website-files.com/5e306749b7083242f07b24e7/5e36d27d12126763acc00e1a_noun_punk_320426%20(2)-p-500.png 500w, https://assets.website-files.com/5e306749b7083242f07b24e7/5e36d27d12126763acc00e1a_noun_punk_320426%20(2).png 512w" sizes="100px" data-dh-feature="threebox" data-dh-property-image="true" alt="" class="profile-image">
-
-
-
-
-
-
-
-
-
-
-
-
-        <!-- Custom Contract -->
-
-
-      <h2 style="margin-bottom: 25px">Custom Contract</h2>
-      <!-- Method "hello" -->
-      <div class="headline">Method: "hello"</div>
-      <div class="headline">Payable: false - StateMutability: "view"</div>
-      <div class="headline">
-        <p>Inputs</p>
+  <body>
+    <header>
+      <nav>
+        <img
+          alt="Logo"
+          src="https://media2.giphy.com/media/b5WqMx1eiFv6U/giphy_s.gif?cid=fe6502e17a0e53c0e9644261e8f37f533fd9f82ae80e3e23&rid=giphy_s.gif"
+          height="70"
+        />
         <ul>
-          <li>none</li>
+          <li>Menu Item 1</li>
+          <li><a href="#">Menu Item 2</a></li>
+          <li>
+            <a href="#">Dropdown Menu Item</a>
+            <ul>
+              <li><a href="#">Sublink with a long name</a></li>
+              <li><a href="#">Short sublink</a></li>
+            </ul>
+          </li>
         </ul>
-
-        <p>Outputs</p>
-        <ul>
-          <li>no name - bytes32</li>
-        </ul>
-      </div>
-
-      <div
-        id="dh"
-        data-dh-feature="customContract"
-        data-dh-property-contract-name="dappherotest"
-        data-dh-property-method-name="hello"
-        data-dh-property-method-id="000"
-        data-dh-property-auto-invoke="true"
-        data-dh-property-auto-clear="false"
-      >
-        <button data-dh-property-method-id="000" data-dh-property-invoke class="w-button">
-          Submit
+      </nav>
+      <h1>WrappedEth</h1>
+      <p>
+        <mark>
+          Powered by <a href="https://www.dapphero.io">DappHero.io</a>
+        </mark>
+      </p>
+      <p>
+        This is a description of what you are trying to do with your project.
+        Edit it so you have something snazzy!
+      </p>
+      <br />
+      <p>
+        <button data-dh-feature="network" data-dh-property-enable="true">
+          Enable Web3
         </button>
+      </p>
+    </header>
+    <div>
+      <section><h2>wrapped-eth</h2></section>
+      <header>
+        <section>
+          <section><h2>Public Methods</h2></section>
+          <header>
+            <div
+              data-dh-feature="customContract"
+              data-dh-property-method-id="5xiW"
+              data-dh-property-auto-invoke="true"
+              data-dh-property-contract-name="wrapped-eth"
+              data-dh-property-method-name="name"
+            >
+              <h3>Method <mark>"name"</mark></h3>
+              <section>
+                <aside>
+                  <div
+                    data-dh-property-method-id="5xiW"
+                    data-dh-property-outputs="true"
+                  >
+                    <pre>Output...</pre>
+                  </div>
 
-        <div data-dh-property-method-id="000" data-dh-property-outputs data-dh-modifier-contract-units="bytes32" data-dh-modifier-display-units="ascii" class="component-div">
-          *Return value: -*
-        </div>
-      </div>
+                  <button
+                    data-dh-property-invoke="true"
+                    data-dh-property-method-id="5xiW"
+                  >
+                    name
+                  </button>
+                </aside>
+              </section>
+            </div>
+          </header>
+          ,
+          <header>
+            <div
+              data-dh-feature="customContract"
+              data-dh-property-method-id="iopA"
+              data-dh-property-auto-invoke="true"
+              data-dh-property-contract-name="wrapped-eth"
+              data-dh-property-method-name="totalSupply"
+            >
+              <h3>Method <mark>"totalSupply"</mark></h3>
+              <section>
+                <aside>
+                  <div
+                    data-dh-property-method-id="iopA"
+                    data-dh-property-outputs="true"
+                  >
+                    <pre>Output...</pre>
+                  </div>
 
-      <hr style="margin-bottom: 65px" />
+                  <button
+                    data-dh-property-invoke="true"
+                    data-dh-property-method-id="iopA"
+                  >
+                    totalSupply
+                  </button>
+                </aside>
+              </section>
+            </div>
+          </header>
+          ,
+          <header>
+            <div
+              data-dh-feature="customContract"
+              data-dh-property-method-id="9NGt"
+              data-dh-property-auto-invoke="true"
+              data-dh-property-contract-name="wrapped-eth"
+              data-dh-property-method-name="decimals"
+            >
+              <h3>Method <mark>"decimals"</mark></h3>
+              <section>
+                <aside>
+                  <div
+                    data-dh-property-method-id="9NGt"
+                    data-dh-property-outputs="true"
+                  >
+                    <pre>Output...</pre>
+                  </div>
 
-      <!-- Method "sendEthWithArgs" -->
-      <div class="headline">Method: "sendEthWithArgs"</div>
-      <div class="headline">Payable: true - StateMutability: "payable"</div>
-      <div class="headline">No ETH Sent</div>
-      <div class="headline">
-        <p>Inputs</p>
-        <ul>
-          <li>message - bytes32</li>
-        </ul>
+                  <button
+                    data-dh-property-invoke="true"
+                    data-dh-property-method-id="9NGt"
+                  >
+                    decimals
+                  </button>
+                </aside>
+              </section>
+            </div>
+          </header>
+          ,
+          <header>
+            <div
+              data-dh-feature="customContract"
+              data-dh-property-method-id="oEKx"
+              data-dh-property-auto-invoke="false"
+              data-dh-property-contract-name="wrapped-eth"
+              data-dh-property-method-name="balanceOf"
+            >
+              <h3>Method <mark>"balanceOf"</mark></h3>
+              <section>
+                <aside>
+                  <section>
+                    Input name: <i>anonymous input</i>
+                    <input
+                      type="text"
+                      placeholder="address"
+                      data-dh-property-method-id="oEKx"
+                      data-dh-property-input-name="[0]"
+                    />
+                  </section>
+                  <div
+                    data-dh-property-method-id="oEKx"
+                    data-dh-property-outputs="true"
+                  >
+                    <pre>Output...</pre>
+                  </div>
 
-        <p>Outputs</p>
-        <ul>
-          <li>none</li>
-        </ul>
-      </div>
+                  <button
+                    data-dh-property-invoke="true"
+                    data-dh-property-method-id="oEKx"
+                  >
+                    balanceOf
+                  </button>
+                </aside>
+              </section>
+            </div>
+          </header>
+          ,
+          <header>
+            <div
+              data-dh-feature="customContract"
+              data-dh-property-method-id="RoYC"
+              data-dh-property-auto-invoke="true"
+              data-dh-property-contract-name="wrapped-eth"
+              data-dh-property-method-name="symbol"
+            >
+              <h3>Method <mark>"symbol"</mark></h3>
+              <section>
+                <aside>
+                  <div
+                    data-dh-property-method-id="RoYC"
+                    data-dh-property-outputs="true"
+                  >
+                    <pre>Output...</pre>
+                  </div>
 
-      <div
-        id="dh"
-        data-dh-feature="customContract"
-        data-dh-property-contract-name="dappherotest"
-        data-dh-property-method-name="sendEthWithArgs"
-        data-dh-property-method-id="001"
-      >
-        <input
-          data-dh-property-method-id="001"
-          data-dh-property-contract-name="dappherotest"
-          data-dh-property-input-name="simpleMessage"
-          class="w-input"
-          placeholder="Message:"
-        />
+                  <button
+                    data-dh-property-invoke="true"
+                    data-dh-property-method-id="RoYC"
+                  >
+                    symbol
+                  </button>
+                </aside>
+              </section>
+            </div>
+          </header>
+          ,
+          <header>
+            <div
+              data-dh-feature="customContract"
+              data-dh-property-method-id="7WOc"
+              data-dh-property-auto-invoke="false"
+              data-dh-property-contract-name="wrapped-eth"
+              data-dh-property-method-name="allowance"
+            >
+              <h3>Method <mark>"allowance"</mark></h3>
+              <section>
+                <aside>
+                  <section>
+                    Input name: <i>anonymous input</i>
+                    <input
+                      type="text"
+                      placeholder="address"
+                      data-dh-property-method-id="7WOc"
+                      data-dh-property-input-name="[0]"
+                    />
+                  </section>
+                  <section>
+                    Input name: <i>anonymous input</i>
+                    <input
+                      type="text"
+                      placeholder="address"
+                      data-dh-property-method-id="7WOc"
+                      data-dh-property-input-name="[1]"
+                    />
+                  </section>
+                  <div
+                    data-dh-property-method-id="7WOc"
+                    data-dh-property-outputs="true"
+                  >
+                    <pre>Output...</pre>
+                  </div>
 
-        <button data-dh-property-method-id="001" data-dh-property-invoke class="w-button">
-          Submit
-        </button>
+                  <button
+                    data-dh-property-invoke="true"
+                    data-dh-property-method-id="7WOc"
+                  >
+                    allowance
+                  </button>
+                </aside>
+              </section>
+            </div>
+          </header>
+        </section>
+      </header>
+      <header>
+        <section>
+          <section><h2>Transaction Methods</h2></section>
+          <header>
+            <div
+              data-dh-feature="customContract"
+              data-dh-property-method-id="OgV_"
+              data-dh-property-auto-invoke="false"
+              data-dh-property-contract-name="wrapped-eth"
+              data-dh-property-method-name="approve"
+            >
+              <h3>Method <mark>"approve"</mark></h3>
+              <section>
+                <aside>
+                  <section>
+                    Input name: <i>guy</i>
+                    <input
+                      type="text"
+                      placeholder="address"
+                      data-dh-property-method-id="OgV_"
+                      data-dh-property-input-name="guy"
+                    />
+                  </section>
+                  <section>
+                    Input name: <i>wad</i>
+                    <input
+                      type="text"
+                      placeholder="uint256"
+                      data-dh-property-method-id="OgV_"
+                      data-dh-property-input-name="wad"
+                    />
+                  </section>
+                  <div
+                    data-dh-property-method-id="OgV_"
+                    data-dh-property-outputs="true"
+                    data-dh-property-outputs="true"
+                  >
+                    <pre>Output...</pre>
+                  </div>
 
-        <div data-dh-property-method-id="001" data-dh-property-outputs class="component-div">
-          *Return value: -*
-        </div>
-      </div>
+                  <button
+                    data-dh-property-invoke="true"
+                    data-dh-property-method-id="OgV_"
+                  >
+                    approve
+                  </button>
+                </aside>
+              </section>
+            </div>
+          </header>
+          ,
+          <header>
+            <div
+              data-dh-feature="customContract"
+              data-dh-property-method-id="UaCe"
+              data-dh-property-auto-invoke="false"
+              data-dh-property-contract-name="wrapped-eth"
+              data-dh-property-method-name="transferFrom"
+            >
+              <h3>Method <mark>"transferFrom"</mark></h3>
+              <section>
+                <aside>
+                  <section>
+                    Input name: <i>src</i>
+                    <input
+                      type="text"
+                      placeholder="address"
+                      data-dh-property-method-id="UaCe"
+                      data-dh-property-input-name="src"
+                    />
+                  </section>
+                  <section>
+                    Input name: <i>dst</i>
+                    <input
+                      type="text"
+                      placeholder="address"
+                      data-dh-property-method-id="UaCe"
+                      data-dh-property-input-name="dst"
+                    />
+                  </section>
+                  <section>
+                    Input name: <i>wad</i>
+                    <input
+                      type="text"
+                      placeholder="uint256"
+                      data-dh-property-method-id="UaCe"
+                      data-dh-property-input-name="wad"
+                    />
+                  </section>
+                  <div
+                    data-dh-property-method-id="UaCe"
+                    data-dh-property-outputs="true"
+                    data-dh-property-outputs="true"
+                  >
+                    <pre>Output...</pre>
+                  </div>
 
-      <hr style="margin-bottom: 65px" />
+                  <button
+                    data-dh-property-invoke="true"
+                    data-dh-property-method-id="UaCe"
+                  >
+                    transferFrom
+                  </button>
+                </aside>
+              </section>
+            </div>
+          </header>
+          ,
+          <header>
+            <div
+              data-dh-feature="customContract"
+              data-dh-property-method-id="pT-U"
+              data-dh-property-auto-invoke="false"
+              data-dh-property-contract-name="wrapped-eth"
+              data-dh-property-method-name="withdraw"
+            >
+              <h3>Method <mark>"withdraw"</mark></h3>
+              <section>
+                <aside>
+                  <section>
+                    Input name: <i>wad</i>
+                    <input
+                      type="text"
+                      placeholder="uint256"
+                      data-dh-property-method-id="pT-U"
+                      data-dh-property-input-name="wad"
+                    />
+                  </section>
 
+                  <button
+                    data-dh-property-invoke="true"
+                    data-dh-property-method-id="pT-U"
+                  >
+                    withdraw
+                  </button>
+                </aside>
+              </section>
+            </div>
+          </header>
+          ,
+          <header>
+            <div
+              data-dh-feature="customContract"
+              data-dh-property-method-id="js3a"
+              data-dh-property-auto-invoke="false"
+              data-dh-property-contract-name="wrapped-eth"
+              data-dh-property-method-name="transfer"
+            >
+              <h3>Method <mark>"transfer"</mark></h3>
+              <section>
+                <aside>
+                  <section>
+                    Input name: <i>dst</i>
+                    <input
+                      type="text"
+                      placeholder="address"
+                      data-dh-property-method-id="js3a"
+                      data-dh-property-input-name="dst"
+                    />
+                  </section>
+                  <section>
+                    Input name: <i>wad</i>
+                    <input
+                      type="text"
+                      placeholder="uint256"
+                      data-dh-property-method-id="js3a"
+                      data-dh-property-input-name="wad"
+                    />
+                  </section>
+                  <div
+                    data-dh-property-method-id="js3a"
+                    data-dh-property-outputs="true"
+                    data-dh-property-outputs="true"
+                  >
+                    <pre>Output...</pre>
+                  </div>
 
+                  <button
+                    data-dh-property-invoke="true"
+                    data-dh-property-method-id="js3a"
+                  >
+                    transfer
+                  </button>
+                </aside>
+              </section>
+            </div>
+          </header>
+          ,
+          <header>
+            <div
+              data-dh-feature="customContract"
+              data-dh-property-method-id="COr3"
+              data-dh-property-auto-invoke="true"
+              data-dh-property-contract-name="wrapped-eth"
+              data-dh-property-method-name="deposit"
+            >
+              <h3>Method <mark>"deposit"</mark></h3>
+              <section>
+                <aside>
+                  <section>
+                    Input name: <i>EthValue</i>
+                    <input
+                      type="text"
+                      placeholder="EthValue"
+                      data-dh-property-method-id="COr3"
+                      data-dh-property-input-name="EthValue"
+                    />
+                  </section>
 
-      <!-- Method "sendEthWithArgs: VALUE HARDCODED" -->
-      <div class="headline">Method: "sendEthWithArgs"</div>
-      <div class="headline">Payable: true - StateMutability: "payable"</div>
-      <div class="headline">ETH Value: HardCoded: .15ETH</div>
-      <div class="headline">
-        <p>Inputs</p>
-        <ul>
-          <li>message - bytes32</li>
-        </ul>
-
-        <p>Outputs</p>
-        <ul>
-          <li>none</li>
-        </ul>
-      </div>
-
-      <div
-        id="dh"
-        data-dh-feature="customContract"
-        data-dh-property-contract-name="dappherotest"
-        data-dh-property-method-name="sendEthWithArgs"
-        data-dh-property-method-id="001a"
-        data-dh-property-eth-value=".15"
-      >
-        <input
-          data-dh-property-method-id="001a"
-          data-dh-property-input-name="simpleMessage"
-          class="w-input"
-          placeholder="Message:"
-        />
-
-        <button data-dh-property-method-id="001a" data-dh-property-invoke class="w-button">
-          Submit
-        </button>
-
-        <div data-dh-property-method-id="001a" data-dh-property-outputs class="component-div">
-          *Return value: -*
-        </div>
-      </div>
-
-      <hr style="margin-bottom: 65px" />
-
-
-
-
-      <!-- Method "sendEthWithArgs: VALUE HARDCODED" -->
-      <div class="headline">Method: "sendEthWithArgs"</div>
-      <div class="headline">Payable: true - StateMutability: "payable"</div>
-      <div class="headline">ETH Value: User Input</div>
-      <div class="headline">
-        <p>Inputs</p>
-        <ul>
-          <li>message - bytes32</li>
-        </ul>
-
-        <p>Outputs</p>
-        <ul>
-          <li>none</li>
-        </ul>
-      </div>
-
-      <div
-        id="dh"
-        data-dh-feature="customContract"
-        data-dh-property-contract-name="dappherotest"
-        data-dh-property-method-name="sendEthWithArgs"
-        data-dh-property-method-id="001b"
-      > This is the method </div>
-        <input
-          data-dh-property-method-id="001b"
-          data-dh-property-input-name="simpleMessage"
-          data-dh-modifier-contract-units="bytes32"
-          data-dh-modifier-display-units="ascii"
-          class="w-input"
-          placeholder="Message:"
-          value="howdy"
-        />
-
-        <input
-        data-dh-property-method-id="001b"
-        data-dh-property-input-name="EthValue"
-        class="w-input"
-        placeholder="Amount of ETH to Send"
-        value="0.05"
-        />
-
-
-        <button data-dh-property-method-id="001b" data-dh-property-invoke class="w-button">
-          Submit
-        </button>
-
-        <div data-dh-property-method-id="001b" data-dh-property-outputs data-dh-contract-units="bytes32" data-dh-display-units="ascii" class="component-div">
-          *Return value: -*
-        </div>
-
-
-      <hr style="margin-bottom: 65px" />
-
-
-
-
-
-
-
-      <!-- Method "viewMultipleArgsMultipleReturn" -->
-      <div class="headline">Method: "viewMultipleArgsMultipleReturn"</div>
-      <div class="headline">Payable: false - StateMutability: "view"</div>
-      <div class="headline">
-        <p>Inputs</p>
-        <ul>
-          <li>from - address</li>
-          <li>multiplier - uint256</li>
-        </ul>
-
-        <p>Outputs</p>
-        <ul>
-          <li>_balanceMultiplied - uint256</li>
-          <li>_hello - bytes32</li>
-        </ul>
-      </div>
-
-      <div
-        id="dh"
-        data-dh-feature="customContract"
-        data-dh-property-contract-name="dappherotest"
-        data-dh-property-method-name="viewMultipleArgsMultipleReturn"
-        data-dh-property-method-id="002"
-      >
-        <input
-          data-dh-property-method-id="002"
-          data-dh-property-input-name="fromAddress"
-          class="w-input"
-          placeholder="From:"
-        />
-        <input
-          data-dh-property-method-id="002"
-          data-dh-property-input-name="amount"
-          class="w-input"
-          placeholder="Multiplier:"
-        />
-
-        <button data-dh-property-method-id="002" data-dh-property-invoke class="w-button">
-          Submit
-        </button>
-
-        <div data-dh-property-method-id="002" data-dh-property-outputs class="component-div" data-dh-modifier-displayDecimals="3">
-          *Return value: -*
-        </div>
-      </div>
-
-      <!-- <hr style="margin-bottom: 65px" /> -->
-
-      <!-- Method "sendVariableEthNoArgs" -->
-      <!-- NOTE: TODO: This needs to have ETH attached. -->
-      <div class="headline">Method: "sendVariableEthNoArgs"</div>
-      <div class="headline">Payable: true - StateMutability: "payable"</div>
-      <div>No eth is sent here.</div>
-      <div class="headline">
-        <p>Inputs</p>
-        <ul>
-          <li>none</li>
-        </ul>
-
-        <p>Outputs</p>
-        <ul>
-          <li>none</li>
-        </ul>
-      </div</div>>
-
-      <div
-        id="dh"
-        data-dh-feature="customContract"
-        data-dh-property-contract-name="dappherotest"
-        data-dh-property-method-name="sendEthNoArgs"
-        data-dh-property-method-id="003"
-      >
-        <button data-dh-property-method-id="003" data-dh-property-invoke class="w-button">
-          Submit
-        </button>
-
-        <div data-dh-property-method-id="003" data-dh-property-outputs class="component-div">
-          *Return value: -*
-        </div>
-      </div>
-
-      <hr style="margin-bottom: 65px" />
-
-      <!-- Method "viewMultipleArgsSingleReturn" -->
-      <div class="headline">Method: "viewMultipleArgsSingleReturn"</div>
-      <div class="headline">Payable: false - StateMutability: "view"</div>
-      <div class="headline">
-        <p>Inputs</p>
-        <ul>
-          <li>fromAddress - address</li>
-          <li>amount - uint256</li>
-        </ul>
-
-        <p>Outputs</p>
-        <ul>
-          <li>longInteger - uint256 : (Should be: 8989898989)</li>
-        </ul>
-      </div>
-
-      <div
-        id="dh"
-        data-dh-feature="customContract"
-        data-dh-property-contract-name="dappherotest"
-        data-dh-property-method-name="viewMultipleArgsSingleReturn"
-        data-dh-property-method-id="004"
-      >
-        <input
-          data-dh-property-method-id="004"
-          data-dh-property-input-name="fromAddress"
-          class="w-input"
-          placeholder="From:"
-        />
-
-        <input
-          data-dh-property-method-id="004"
-          data-dh-property-input-name="amount"
-          class="w-input"
-          placeholder="Multiplier:"
-        />
-
-        <button data-dh-property-method-id="004" data-dh-property-invoke class="w-button">
-          Submit
-        </button>
-
-        <div data-dh-property-method-id="004" data-dh-property-outputs data-dh-modifier-decimals="3" class="component-div">
-          *Return value: -*
-        </div>
-      </div>
-
-      <hr style="margin-bottom: 65px" />
-
-      <!-- Method "viewNoArgsMultipleReturn" -->
-      <div class="headline">Method: "viewNoArgsMultipleReturn"</div>
-      <div class="headline">Payable: false - StateMutability: "view"</div>
-      <div class="headline">
-        <p>Inputs</p>
-        <ul>
-          <li>none</li>
-        </ul>
-
-        <p>Outputs</p>
-        <ul>
-          <li>importantNumber - uint256 (should be zero)</li>
-          <li>hello - bytes32</li>
-        </ul>
-      </div>
-
-      <div
-        id="dh"
-        data-dh-feature="customContract"
-        data-dh-property-contract-name="dappherotest"
-        data-dh-property-method-name="viewNoArgsMultipleReturn"
-        data-dh-property-method-id="005"
-      >
-        <button data-dh-property-method-id="005" data-dh-property-invoke class="w-button">
-          Submit
-        </button> -->
-
-          All the args are returned in one, and in their respective output
-          <div
-            class="component-div"
-            data-dh-property-method-id="005"
-            data-dh-modifier-contract-units="bytes32"
-            data-dh-modifier-display-units="ascii"
-            data-dh-property-output-name="sayHello"
-          >
-            A greeting here in bytes32
-          </div>
-          <div
-            class="component-div"
-            data-dh-property-method-id="005"
-            data-dh-modifier-contract-units="bytes32"
-            data-dh-modifier-display-units="ascii"
-            data-dh-property-output-name="sayHello"
-          >
-            A greeting here in bytes32
-          </div>
-
-          <div class="component-div"data-dh-property-method-id="005" data-dh-property-output-name="importantNumber" data-dh-modifier-decimals="3" >Important Number here</div>
-
-          <div data-dh-property-method-id="005" data-dh-property-outputs class="component-div">
-          *Return value: -*
-        </div>
-          <div data-dh-property-method-id="005" data-dh-property-outputs class="component-div">
-          *Return value: -*
-        </div>
-      </div>
-
-      <hr style="margin-bottom: 65px" />
-
-
-    <!-- <script
-      src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.4.1.min.220afd743d.js"
-      type="text/javascript"
-      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-      crossorigin="anonymous"
-    ></script> -->
-
+                  <button
+                    data-dh-property-invoke="true"
+                    data-dh-property-method-id="COr3"
+                  >
+                    deposit
+                  </button>
+                </aside>
+              </section>
+            </div>
+          </header>
+        </section>
+      </header>
+    </div>
     <script
-      src=""
-      type="text/javascript"
       id="dh-apiKey"
-      data-api="1592342853928x247583279535882240"
+      data-api="1586288625489x991636521145335800"
+      src="https://package.dapphero.io/main.js"
     ></script>
+    <style>
+      form {
+        margin: 40px;
+      }
+    </style>
+
+    <script>
+      document.addEventListener(
+        "dappHeroConfigLoaded",
+        ({ detail: dappHero }) => {
+          // Inside here you can listen to any event you want
+          console.log("DappHero Has Loaded!");
+
+          // For projects with auto-invoked method, you will want to filter on events
+          // dappHero.listenToTransactionStatusChange(data => {
+          //   console.log("Listening to transtaction status change", data);
+          // });
+
+          // This is how you can listen to any events your smart contract emits
+   
+          //This is an example method for alerting your users they are on the wrong network
+          //if(window.dappHero.provider.chainId !== 1){
+          //  alert("Wrong network! You should be on 1")
+          //}
+        }
+      );
+    </script>
   </body>
-  <!-- [if lte IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/placeholders/3.0.2/placeholders.min.js"></script><![endif] -->
 </html>

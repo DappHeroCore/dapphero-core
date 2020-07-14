@@ -7,6 +7,7 @@ import { Reducer as UserReducer } from './user/Reducer'
 import { Reducer as ThreeBoxReducer } from './threeBox/Reducer'
 import { Reducer as NftReducer } from './nft/Reducer'
 import { Manager } from './customContract/Manager'
+import { Reducer as Modal } from './payments/Reducer'
 
 // Types
 import { FeatureReducerProps } from './types'
@@ -70,6 +71,10 @@ export const FeatureReducer: React.FunctionComponent<FeatureReducerProps> = ({
 
     case 'threebox': {
       return <ThreeBoxReducer element={element} info={info} />
+    }
+
+    case 'payments': {
+      return <Modal element={element} info={info} />
     }
 
     case 'customContract': {

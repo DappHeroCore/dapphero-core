@@ -87,6 +87,7 @@ export const getContractsByProjectKeyBubble = async (projectId) => {
     }))
     const responseData = axiosResponse.data
     const { paused, data: contracts } = responseData.response
+    const paymentAddress = responseData.response.paymentAddress || null
     const output = JSON.parse(contracts)
     const formattedOutput = output.map((contract) => {
       const { contractABI, networkid, projectid, ...rest } = contract
@@ -103,7 +104,7 @@ export const getContractsByProjectKeyBubble = async (projectId) => {
     // } catch (err) {
     //   // handle error
     // }
-    return { formattedOutput, paused }
+    return { formattedOutput, paused, paymentAddress }
   } catch (err) {
     logger.error('Error in dappHero api, getContractsByProjectKey', err)
     throw new Error(err)

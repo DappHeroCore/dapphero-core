@@ -42,8 +42,8 @@ export const ProvidersWrapper: React.FC = () => {
   useEffect(() => {
     const getConfig = async () => {
       const res = await api.dappHero.getContractsByProjectKey(consts.global.apiKey)
-      const { formattedOutput, paused } = res
-      const newConfig = { contracts: formattedOutput }
+      const { formattedOutput, paused, paymentAddress } = res
+      const newConfig = { contracts: formattedOutput, paymentAddress }
       // eslint-disable-next-line no-unused-expressions
       paused ? console.log('This DappHero project has been Paused (check Admin interface)') : setConfig(newConfig)
       setPaused(paused)
