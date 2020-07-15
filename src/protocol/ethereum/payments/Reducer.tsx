@@ -1,15 +1,17 @@
 import React, { useState, useEffect, useContext } from 'react'
 import ReactDOM from 'react-dom'
 import Modal from 'react-modal'
-import { useWeb3React } from '@web3-react/core'
-import * as hooks from 'hooks'
+import { useToasts } from 'react-toast-notifications'
+import * as consts from 'consts'
 import * as contexts from 'contexts'
-import { QR, EthAddress, Card, Button, Heading, Text, Box } from 'rimble-ui'
+import { QR, EthAddress, Card, Button, Heading, Text, Textarea, Blockie, Flex, Box } from 'rimble-ui'
+import { utils } from 'ethers'
 
 export type ReducerProps = {
   element: HTMLElement;
   info?: any;
   domElements?: any;
+  paymentAddress?: string;
 }
 
 const customStyles = {
@@ -27,24 +29,40 @@ const customStyles = {
   },
 }
 
-export const Reducer: React.FunctionComponent<ReducerProps> = ({ element, info, domElements }) => {
+export const Reducer: React.FunctionComponent<ReducerProps> = ({ element, info, domElements, paymentAddress }) => {
+  const { addToast } = useToasts()
+
   Modal.setAppElement(element)
   // const domElements = hooks.useDomElements()
   const ethereum = useContext(contexts.EthereumContext)
   const { chainId, networkName, providerType } = ethereum
 
-  const PaymentAddrses = '0xAc03BB73b6a9e108530AFf4Df5077c2B3D481e5A'
   let subtitle
   const [ modalIsOpen, setIsOpen ] = React.useState(false)
 
-  function openModal(): void {
-    console.log('open!')
-    setIsOpen(true)
+  function isAddress(address) {
+    try {
+      utils.getAddress(address)
+    } catch (error) {
+      return false
+    }
+    return true
+  }
+
+  function openModal(e): void {
+    e.preventDefault()
+    if (paymentAddress && isAddress(paymentAddress)) {
+      setIsOpen(true)
+    } else {
+      addToast(
+        'No Payment address set.',
+        { appearance: 'info', autoDismiss: true, autoDismissTimeout: consts.global.REACT_TOAST_AUTODISMISS_INTERVAL },
+      )
+    }
   }
   useEffect(() => {
-    const trigger = document.getElementById('modal')
     element.addEventListener('click', openModal)
-  }, [])
+  }, [ paymentAddress ])
 
   function afterOpenModal(): void {
     // references are now sync'd and can be accessed.
@@ -65,25 +83,25 @@ export const Reducer: React.FunctionComponent<ReducerProps> = ({ element, info, 
     contentLabel="Example Modal"
   >
     <div ref={(_subtitle) => (subtitle = _subtitle)} />
-    <Card width="auto" maxWidth="420px" mx="auto" px={[ 3, 3, 4 ]}>
-      <Heading>Heading</Heading>
-      <div className="modalContainer">
-        <Box>
-          <QR value="0xAc03BB73b6a9e108530AFf4Df5077c2B3D481e5A" />
-          <Text mb={4}>
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ullam autem
-      ratione doloribus quidem neque provident eius error dignissimos delectus
-      architecto nemo quos alias sunt voluptate impedit, facilis sequi tempore.
-      Amet!
-          </Text>
-        </Box>
-      </div>
-      <Button width={[ 1, 'auto', 'auto' ]} mr={3}>
-    Accept
-      </Button>
+    <Card width="auto" maxWidth="420px" mx="auto" p={25} px={[ 3, 3, 4 ]}>
+      <Heading>Payment Address</Heading>
 
-      <Button.Outline width={[ 1, 'auto', 'auto' ]} onClick={closeModal} mt={[ 2, 0, 0 ]}>
-    Cancel
+      <Box>
+        <Text mb={4}>
+        To send funds to this Ethereum address, scan this code using your mobile wallet app
+        </Text>
+      </Box>
+
+      <Flex>
+        <Card width="auto" maxWidth="400px" mx="auto" px={[ 3, 3, 4 ]}>
+          <QR value={paymentAddress} />
+        </Card>
+      </Flex>
+      <Flex>
+        <Text.p fontSize={1} m={20}>{paymentAddress}</Text.p>
+      </Flex>
+      <Button.Outline onClick={closeModal} width={[ 1, 'auto', 'auto' ]} mt={[ 2, 3, 3 ]}>
+    Close
       </Button.Outline>
     </Card>
 

@@ -34,5 +34,6 @@ export type FeatureReducerProps = {
   retriggerEngine?: any;
   domElements?: any;
   timeStamp?: number;
+  paymentAddress?: string;
 }
 

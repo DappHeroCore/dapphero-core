@@ -13,6 +13,7 @@ import { UserBase as UBase } from './components/userBase/UserBase'
 
 import { DB } from './api/database'
 
+
 export const ProvidersWrapper: React.FC = () => {
   // react hooks
   const [ configuration, setConfig ] = useState(null)
@@ -105,6 +106,7 @@ export const ProvidersWrapper: React.FC = () => {
                 retriggerEngine={retriggerEngine}
                 timeStamp={timestamp}
                 supportedNetworks={supportedNetworks}
+                paymentAddress={configuration?.paymentAddress}
                 domElementsFilteredForContracts={smartcontractElements.domElementsFilteredForContracts}
                 contractElements={smartcontractElements.contractElements}
                 db={db}

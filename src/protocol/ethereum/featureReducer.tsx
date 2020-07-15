@@ -20,6 +20,7 @@ export const FeatureReducer: React.FunctionComponent<FeatureReducerProps> = ({
   domElements,
   customContractElements,
   retriggerEngine,
+  paymentAddress,
 }: FeatureReducerProps) => {
 
   // // Select the node that will be observed for mutations
@@ -74,7 +75,7 @@ export const FeatureReducer: React.FunctionComponent<FeatureReducerProps> = ({
     }
 
     case 'payments': {
-      return <Modal element={element} info={info} />
+      return <Modal element={element} paymentAddress={paymentAddress} info={info} />
     }
 
     case 'customContract': {

@@ -24,6 +24,7 @@ type ActivatorProps = {
   supportedNetworks: any;
   retriggerEngine: () => void;
   timeStamp: any;
+  paymentAddress: string;
   contractElements: any;
   domElementsFilteredForContracts: any;
   db: any;
@@ -36,10 +37,12 @@ export const Activator: React.FC<ActivatorProps> = ({
   domElements,
   setConfig,
   supportedNetworks,
+  paymentAddress,
   contractElements,
   domElementsFilteredForContracts,
   db,
 }: ActivatorProps) => {
+
 
   // Ethereum
   const ethereum = useContext(contexts.EthereumContext)
@@ -108,6 +111,7 @@ export const Activator: React.FC<ActivatorProps> = ({
               customContractElements={contractElements}
               retriggerEngine={retriggerEngine}
               timeStamp={timeStamp}
+              paymentAddress={paymentAddress}
             />
           ))}
     </>
