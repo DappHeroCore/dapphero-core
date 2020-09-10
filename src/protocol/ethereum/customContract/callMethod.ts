@@ -1,47 +1,29 @@
-import { ACTION_TYPES } from './stateMachine'
+import { dsp } from './stateMachine'
 
-export const callMethod = async ({ readContract, methodName, methodParams, dispatch, isPolling }): Promise<void> => {
+export const callMethod = async ({ readContract, correctedMethodName: methodName, methodParams, dispatch, isPolling }): Promise<string> => {
+  // If there is no readContract (yet) then return null
+  if (!readContract) return null
+
   const method = readContract.functions[methodName]
-  const methodDetails = { methodName, methodParams, contractAddress: readContract.address, contractNetwork: readContract.provider._network.name }
+  const methodDetails = { methodName, methodParams, contractAddress: readContract.address, contractNetwork: readContract.provider?.network?.name }
 
-  dispatch({
-    type: ACTION_TYPES.callMethod,
-    status: {
-      ...methodDetails,
-      msg: `Calling public method { ${methodName} }`,
-      error: false,
-      fetching: true,
-      isPolling,
-    },
-  })
+  dsp.callFlow.callRequested({ methodDetails, dispatch, isPolling })
 
   try {
     const methodResult = await method(...methodParams)
 
-    dispatch({
-      type: ACTION_TYPES.callMethod,
-      status: {
-        ...methodDetails,
-        msg: `Calling public method { ${methodName} } success.`,
-        error: false,
-        fetching: false,
-        isPolling,
-        methodResult,
-      },
-    })
-
+    dsp.callFlow.callMethodSucces({ methodDetails, methodResult, isPolling, dispatch })
     return methodResult
+
   } catch (error) {
 
-    dispatch({
-      type: ACTION_TYPES.callMethodError,
-      status: {
-        ...methodDetails,
-        msg: `Error calling method { ${methodName} } on your contract. Is your Web3 provider on Network: ${readContract.provider._network.name}? Check console for more details.`,
-        isPolling,
-        fetching: false,
-        error,
-      },
-    } )
+    if (isPolling) {
+      dsp.callFlow.callMethodAutoInvokeError({ methodDetails, dispatch, isPolling, error })
+      return 'error... check the console'
+    }
+    // Lets check
+    dsp.callFlow.callMethodError({ methodDetails, dispatch, isPolling, readContract, error })
+    return 'error... check the console'
+
   }
 }

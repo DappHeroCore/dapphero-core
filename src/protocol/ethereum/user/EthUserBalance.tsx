@@ -2,6 +2,7 @@ import { logger } from 'logger/customLogger'
 import { useEffect, useState, useContext, FunctionComponent, useMemo } from 'react'
 import { useInterval } from 'beautiful-react-hooks'
 import { EthereumUnits } from 'types/types'
+import { useNetworkStatus } from 'react-adaptive-hooks/network'
 import * as utils from 'utils'
 import * as contexts from 'contexts'
 import * as consts from '../../../consts'
@@ -18,6 +19,8 @@ export const EthUserBalance: FunctionComponent<EthUserBalanceProps> = ({ element
     , [],
   )
 
+  const initialEffectiveConnectionType = '4g'
+  const { effectiveConnectionType } = useNetworkStatus(initialEffectiveConnectionType)
   units = units ?? 'wei' //eslint-disable-line
   decimals = decimals ?? 0 //eslint-disable-line
 
@@ -27,17 +30,20 @@ export const EthUserBalance: FunctionComponent<EthUserBalanceProps> = ({ element
   const [ balance, setBalance ] = useState(null)
 
   // TODO: [DEV-264] Feature: NotifyJS for UserBalance polling
-  useInterval(() => {
-    const poll = async () => {
-      try {
-        const balance = await provider.getBalance(address)
-        setBalance(balance)
-      } catch (error) {
-        logger.log(`Error getting balance: ${error}`)
-      }
+  const poll = async () => {
+    try {
+      const balance = await provider.getBalance(address)
+      setBalance(balance)
+    } catch (error) {
+      logger.log(`Error getting balance: ${error}`)
     }
+  }
+
+  if (address && isEnabled) poll()
+
+  useInterval(() => {
     if (address && isEnabled) poll()
-  }, consts.global.AUTO_INVOKE_INTERVAL)
+  }, consts.global.AUTO_INVOKE_DYNAMIC[effectiveConnectionType])
 
   useEffect(() => {
     const getBalance = async (): Promise<void> => {

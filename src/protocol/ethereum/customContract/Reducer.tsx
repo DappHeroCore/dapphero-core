@@ -1,10 +1,8 @@
 import React, { useState, useContext, useEffect, useReducer } from 'react'
 import { useToasts } from 'react-toast-notifications'
 import { logger } from 'logger/customLogger'
-import Notify from 'bnc-notify'
-import omit from 'lodash.omit'
+import { useNetworkStatus } from 'react-adaptive-hooks/network'
 
-import * as utils from 'utils'
 import * as consts from 'consts'
 import * as contexts from 'contexts'
 import { EmitterContext } from 'providers/EmitterProvider/context'
@@ -13,51 +11,31 @@ import { EVENT_NAMES, EVENT_STATUS } from 'providers/EmitterProvider/constants'
 import { useAddInvokeTrigger } from './useAddInvokeTrigger'
 import { useAutoInvokeMethod } from './useAutoInvokeMethod'
 import { useDisplayResults } from './useDisplayResults'
-import { stateReducer, ACTION_TYPES } from './stateMachine'
+import { stateReducer, ACTION_TYPES, dsp } from './stateMachine'
 
 import { sendTx } from './sendTx'
 import { callMethod } from './callMethod'
 
+import { notify, getParametersFromInputValues, findReplaceOverloadedMethods } from './utils/utils'
+
 const blockNativeApiKey = process.env.REACT_APP_BLOCKNATIVE_API
-const { AUTO_INVOKE_INTERVAL: POLLING_INTERVAL } = consts.global
-
-// Utils
-const notify = (apiKey, chainId) => Notify({ dappId: apiKey, networkId: chainId })
-
-const getAbiMethodInputs = (abi, methodName, dispatch): Record<string, any> => {
-  const emptyString = '$true'
-  const parseName = (value: string): string => (value === '' ? emptyString : value)
-
-  const method = abi.find(({ name }) => name === methodName)
-
-  if (!method) {
-    dispatch({
-      type: ACTION_TYPES.malformedInputName,
-      status: {
-        error: true,
-        msg: `The method name: { ${methodName} } is incorrect. Perhaps a typo in your html?`,
-      },
-    })
-    return null
-  }
-
-  const parsedMethod = Object.assign(method, { inputs: method.inputs.map((input) => ({ ...input, name: parseName(input.name) })) })
-
-  const output = parsedMethod.inputs.reduce((acc, { name }) => ({ ...acc, [name]: '' }), [])
-  return output
-}
 
 export type ReducerProps = {
-info: any;
-readContract: any;
-writeContract: any;
-readEnabled: any;
-readChainId: any;
-writeEnabled: any;
-timestamp: number;
+  info: any;
+  readContract: any;
+  writeContract: any;
+  readEnabled: any;
+  readChainId: any;
+  writeEnabled: any;
+  timestamp: number;
+  contractAbi: any;
 }
 // Reducer Component
-export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContract, writeContract, readEnabled, readChainId, writeEnabled, timestamp }) => {
+export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContract, writeContract, readEnabled, readChainId, writeEnabled, timestamp, contractAbi }) => {
+
+  const initialEffectiveConnectionType = '4g'
+  const { effectiveConnectionType } = useNetworkStatus(initialEffectiveConnectionType)
+  const POLLING_INTERVAL = consts.global.AUTO_INVOKE_DYNAMIC[effectiveConnectionType]
 
   const [ state, dispatch ] = useReducer(stateReducer, {})
 
@@ -73,7 +51,7 @@ export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContr
   const methodNameKey = properties.find(({ key }) => key === 'methodName')
   const ethValueKey = properties.find((property) => property.key === 'ethValue')
 
-  let ethValue = ethValueKey?.value
+  const ethValue = ethValueKey?.value
   const { value: methodName } = methodNameKey
 
   const { actions: { emitToEvent } } = useContext(EmitterContext)
@@ -99,9 +77,9 @@ export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContr
     }
   }, [ autoInterval, state.error ])
 
+  // Display Error Messages
   useEffect(() => {
     const { msg, error, info: stateInfo } = state
-
     if (error) {
       logger.error(msg, error)
       addToast(msg, { appearance: 'error', autoDismiss: true, autoDismissTimeout: consts.global.REACT_TOAST_AUTODISMISS_INTERVAL })
@@ -111,56 +89,9 @@ export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContr
       logger.info(msg, stateInfo)
       addToast(msg, { appearance: 'info', autoDismiss: true, autoDismissTimeout: consts.global.REACT_TOAST_AUTODISMISS_INTERVAL })
     }
-  }, [ state.error ])
-
-  // Helpers - Get parameters values
-  const getParametersFromInputValues = (): Record<string, any> => {
-    const inputChildrens = childrenElements.filter(({ id }) => id.includes('input'))
-    const abiMethodInputs = getAbiMethodInputs(info.contract.contractAbi, methodName, dispatch)
-
-    if (!inputChildrens.length ) return { parameterValues: [] }
-    const [ inputs ] = inputChildrens
-
-    inputs.element.forEach(({ element, argumentName }) => {
-      const rawValue = element.value
-      const value = address ? (rawValue.replace(consts.clientSide.currentUser, address) ?? rawValue) : rawValue
-
-      try {
-        const displayUnits = element.getAttribute('data-dh-modifier-display-units')
-        const contractUnits = element.getAttribute('data-dh-modifier-contract-units')
-        const convertedValue = value && (displayUnits || contractUnits) ? utils.convertUnits(displayUnits, contractUnits, value) : value
-
-        if (convertedValue) {
-          Object.assign(abiMethodInputs, { [argumentName]: convertedValue })
-        }
-      } catch (err) {
-        dispatch({
-          type: ACTION_TYPES.malformedInputs,
-          status: {
-            error: true,
-            fetching: false,
-            msg: `There seems to be an error with your inputs? Argument Name: ${argumentName}`,
-            methodNameKey,
-          },
-        })
-      }
-
-      // TODO: Check if we need to re-assign the input value (with Drake)
-      element.value = value
-    })
-
-    if (abiMethodInputs?.EthValue) {
-      ethValue = abiMethodInputs?.EthValue
-    }
-
-    const parsedParameters = omit(abiMethodInputs, 'EthValue')
-    const parametersValues = Object.values(parsedParameters)
-
-    return { parametersValues }
-  }
+  }, [ state.error, state.info ])
 
   // Return values to their orignal value when unmounted
-  // TODO: Do we want to do this also for all HTML?
   useEffect(() => {
     let rawValues = []
 
@@ -186,20 +117,21 @@ export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContr
       try {
         event.preventDefault()
         event.stopPropagation()
-      } catch (err) {}
+      } catch (err) { }
     }
-
     // Return early if the read and write instances aren't ready
     // if (!readEnabled && !writeEnabled) return null
 
     emitToEvent(
       EVENT_NAMES.contract.statusChange,
-      { value: null, step: 'Getting and parsing parameters.', status: EVENT_STATUS.pending, methodNameKey },
+      { value: null, step: 'Getting parameters.', status: EVENT_STATUS.pending, methodNameKey },
     )
-    const { parametersValues } = getParametersFromInputValues()
+
+    const { parametersValues, newEthValue } = getParametersFromInputValues({ info, methodName, dispatch, address, methodNameKey, ethValue })
+
     emitToEvent(
       EVENT_NAMES.contract.statusChange,
-      { value: parametersValues, step: 'Getting and parsing parameters.', status: EVENT_STATUS.resolved, methodNameKey },
+      { value: parametersValues, step: 'Parsing parameters.', status: EVENT_STATUS.resolved, methodNameKey },
     )
 
     if (hasInputs) {
@@ -213,18 +145,45 @@ export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContr
             msg: `There appear to be no parameters provided.`,
           },
         })
+
+        emitToEvent(
+          EVENT_NAMES.contract.statusChange,
+          { value: parametersValues, step: 'No paremeters provided.', status: EVENT_STATUS.resolved, methodNameKey },
+        )
       } // TODO: Add Dispatch for State instead of Console.error
+    }
+
+    // Figure out if method is overloaded and which method we should call in that case.
+    const correctedMethodName = findReplaceOverloadedMethods({ methodName, contractAbi, parametersValues })
+
+    // If this is a transaction, but we don't have a write provider, you can stop here.
+    if (isTransaction && !writeEnabled) {
+      dsp.txFlow.txNoWriteProviderEnabled({ dispatch })
+      emitToEvent(
+        EVENT_NAMES.contract.statusChange,
+        { value: parametersValues, step: 'No write provider enabled.', status: EVENT_STATUS.resolved, methodNameKey },
+      )
+      return null
     }
 
     try {
       let value = '0'
       const methodParams = [ ...(hasInputs ? parametersValues : []) ]
 
-      if (ethValue) {
-        value = ethValue
+      if (newEthValue) {
+        value = newEthValue
       }
 
-      if (writeEnabled && isTransaction) {
+      // We need to check the params to be sure that the constants are in the params.
+      // If the constants are in the params we should not invoke a transaction, nor a call method.
+
+      // TODO: [DEV-328] We need to organize consts in one place.
+      const doParamsContainUnformatedConstant = Boolean(methodParams.find((paramValue) => paramValue === '$CURRENT_USER'))
+
+      // Send the user information that their write provider is not connected
+      // We need to also check if the write provider is on the right network of the transaction
+
+      if (writeEnabled && isTransaction && !doParamsContainUnformatedConstant) {
         emitToEvent(
           EVENT_NAMES.contract.statusChange,
           { value: null, step: 'Triggering write transaction.', status: EVENT_STATUS.pending, methodNameKey },
@@ -235,26 +194,28 @@ export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContr
           const methodHash = await sendTx({
             writeContract,
             provider,
-            methodName,
+            correctedMethodName,
             methodParams,
             value,
             notify: notify(blockNativeApiKey, chainId),
             dispatch,
             emitToEvent,
             methodNameKey,
+            addToast,
           })
+
           setResult(methodHash)
         } catch (error) {
           // Do we need to do anything with this error? Maybe no....
         }
 
-      } else if (readEnabled && !isTransaction && !state.error ) {
+      } else if (readEnabled && !isTransaction && !doParamsContainUnformatedConstant) {
         emitToEvent(
           EVENT_NAMES.contract.statusChange,
           { value: null, step: 'Triggering read transaction.', status: EVENT_STATUS.pending, methodNameKey },
         )
 
-        const methodResult = await callMethod({ readContract, methodName, methodParams, dispatch, isPolling })
+        const methodResult = await callMethod({ readContract, correctedMethodName, methodParams, dispatch, isPolling })
         setResult(methodResult)
 
         emitToEvent(
@@ -282,7 +243,7 @@ export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContr
         type: ACTION_TYPES.confirmed,
         status: {
           msg: 'An error has occured when interacting with your contract.',
-          error: err,
+          information: err,
           fetching: false,
           inFlight: false,
         },
@@ -314,7 +275,7 @@ export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContr
 
   return (
     <div style={{ display: 'none' }}>
-    Custom Contract last updated:
+      Custom Contract last updated:
       {timestamp}
     </div>
   )

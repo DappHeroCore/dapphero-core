@@ -41,7 +41,7 @@ export const postLogToBubbleBackend = (payload) => {
   })
 }
 
-export const getContractsByProjectKeyV2 = async (projectId) => {
+export const getContractsByProjectKeyDappHero = async (projectId) => {
   try {
     const axiosResponse = await axios({
       method: GET,
@@ -58,7 +58,7 @@ export const getContractsByProjectKeyV2 = async (projectId) => {
         projectId: projectid,
       }
     })
-    return formattedOutput
+    return { formattedOutput, paused }
   } catch (err) {
     logger.error('Error in dappHero api, getContractsByProjectKeyV2', err)
     throw new Error(err)
@@ -68,14 +68,14 @@ export const getContractsByProjectKeyV2 = async (projectId) => {
 const compareResponses = async (originalOutput, projectId) => {
   const compareOutput = await getContractsByProjectKeyV2(projectId)
   const isEqual = !!(JSON.stringify(originalOutput) === JSON.stringify(compareOutput))
-  logger.info(`Get Contracts Comparison isEqual: ${isEqual.toString()}`)
+  // logger.info(`Cache Check isEqual: ${isEqual.toString()}`)
   if (!isEqual) {
-    logger.info('compareResponses -> compareOutput', compareOutput)
-    logger.info('compareResponses -> originalOutput', originalOutput)
+    logger.info('', compareOutput)
+    logger.info('', originalOutput)
   }
 }
 
-export const getContractsByProjectKey = async (projectId) => {
+export const getContractsByProjectKeyBubble = async (projectId) => {
   logger.log(`projectId: ${projectId}`)
 
   const body = { projectId }
@@ -98,11 +98,11 @@ export const getContractsByProjectKey = async (projectId) => {
       }
     })
 
-    try {
-      compareResponses(formattedOutput, projectId)
-    } catch (err) {
-      // handle error
-    }
+    // try {
+    //   compareResponses(formattedOutput, projectId)
+    // } catch (err) {
+    //   // handle error
+    // }
     return { formattedOutput, paused }
   } catch (err) {
     logger.error('Error in dappHero api, getContractsByProjectKey', err)
@@ -110,3 +110,18 @@ export const getContractsByProjectKey = async (projectId) => {
   }
 }
 
+export const getContractsByProjectKey = async (projectId) => {
+
+  // first try our cache server
+  try {
+    return (await getContractsByProjectKeyDappHero(projectId))
+  } catch (error) {
+  // If the error fails, then try bubble
+    logger.log('(DH-CORE) Error in Global Cache Network, re-trying...', error)
+    try {
+      return (await getContractsByProjectKeyBubble(projectId) )
+    } catch (error) {
+      logger.log('(DH-CORE) Failure in project cache backend', error)
+    }
+  }
+}

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react'
 
 import * as contexts from 'contexts'
 import * as consts from 'consts'
-import { ethers } from 'ethers'
+import { ethers, logger } from 'ethers'
 import { useWeb3Provider } from 'hooks'
 
 import { EmitterContext } from 'providers/EmitterProvider/context'
@@ -27,45 +27,40 @@ type RouterProps = {
 export const Router: React.FunctionComponent<RouterProps> = ({ listOfContractMethods, contract, timestamp }) => {
 
   const ethereum = useContext(contexts.EthereumContext)
-  const { signer, isEnabled: writeEnabled, chainId: writeChainId } = ethereum
+  const { signer, isEnabled: writeEnabled, chainId: writeChainId, provider } = ethereum
   const { contractAddress, contractAbi, networkId } = contract
 
-  const [ readContract, setReadContract ] = useState(null)
   const [ writeContract, setWriteContract ] = useState(null)
 
   const { actions: { emitToEvent } } = useContext(EmitterContext)
 
-  // Set this on the window object
-  useEffect(() => {
-
-    if (!window?.dappHero) return
-
-    Object.assign(window.dappHero.contracts, { [contractAddress]: { readContract, writeContract } })
-  }, [ readContract, writeContract ])
-
-  // WE CAN CHECK HERE IF WE ARE ON THE RIGHT NETWORK WITH THE PROVIDER
+  // Get the Network for our Project
   const contractNetwork = consts.global.ethNetworkName[networkId].toLowerCase()
 
-  // Create the Read Provider
-  const { provider: readOnlyProvider, chainId: readChainId, isEnabled: readEnabled } = useWeb3Provider(
-    consts.global.POLLING_INTERVAL,
-    ethers.getDefaultProvider(contractNetwork),
-    `dh-${contractNetwork}`,
-  )
+  const stableReadProvider = new ethers.providers.JsonRpcProvider(consts.providerSchema.readProviders[contractNetwork].http)
 
+  // TODO: [DEV-340] Mainnet will always load backend provider because ethers calls it "homestead"
+  const [ readContract, setReadContract ] = useState(null)
   useEffect(() => {
     const makeReadContract = (): void => {
-      const readContractInstance = new ethers.Contract(contractAddress, contractAbi, readOnlyProvider)
+
+      let readContractInstance = null
+      // Make the contract instance from either the local provider or remote provider
+      if (provider && contractNetwork === provider?._network?.name) {
+        console.log('Using local provider for contract reads.')
+        readContractInstance = new ethers.Contract(contractAddress, contractAbi, provider)
+      } else {
+        console.log('Using DH-backend provider for contract reads.')
+        readContractInstance = new ethers.Contract(contractAddress, contractAbi, stableReadProvider)
+      }
       readContractInstance.on('*', (data) => emitToEvent(
         EVENT_NAMES.contract.contractEvent,
         { value: data, step: 'Contract has emitted a Contract Event', status: EVENT_STATUS.resolved, methodNameKey: null },
       ))
       setReadContract(readContractInstance)
     }
-
-    // TODO: Check if we are on the right ChainId for the contract
-    if (readOnlyProvider) makeReadContract()
-  }, [ readEnabled, readChainId ])
+    makeReadContract()
+  }, [ ])
 
   useEffect(() => {
     const makeWriteContract = (): void => {
@@ -75,23 +70,31 @@ export const Router: React.FunctionComponent<RouterProps> = ({ listOfContractMet
 
     // TODO: Check if we are on the same chainID as the Contract
     if (writeEnabled) makeWriteContract()
+    // Else pop up information that we are not on the right network
   }, [ writeChainId, signer, writeEnabled ])
 
-  // If the read contract provider isnt ready return early
-  if (!readEnabled) return null
+  // Set this on the window object
+  useEffect(() => {
+    if (!window?.dappHero) return
+    Object.assign(window.dappHero.contracts, { [contractAddress]: { readContract, writeContract } })
+  }, [ readContract, writeContract ])
+
+  // If not read contract or provider, return early
+  if (!readContract) return null
 
   return (
     <>
       {listOfContractMethods.map((contractMethodElement: { id: React.ReactText }) => (
         <CustomContractReducer
           readContract={readContract}
-          readChainId={readChainId}
+          readChainId={networkId}
           writeContract={writeContract}
-          readEnabled={readEnabled}
+          readEnabled={Boolean(readContract)}
           writeEnabled={writeEnabled}
           info={contractMethodElement}
           key={contractMethodElement.id}
           timestamp={timestamp}
+          contractAbi={contractAbi}
         />
       ))}
     </>

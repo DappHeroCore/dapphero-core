@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import * as utils from 'utils'
 import { EVENT_NAMES } from 'providers/EmitterProvider/constants'
+import { getStringFormattedArrayIndiceValue } from '../../../utils/getStringFormattedArrayIndiceValue'
 
 export const useDisplayResults = ({ childrenElements, result, emitToEvent, methodNameKey }): void => {
   useEffect(() => {
@@ -20,9 +21,21 @@ export const useDisplayResults = ({ childrenElements, result, emitToEvent, metho
                 || element.getAttribute('data-dh-modifier-decimals'))
               ?? null
 
-            const convertedValue = result && (displayUnits || contractUnits)
-              ? utils.convertUnits(contractUnits, displayUnits, result)
-              : result
+            // Check if the element has a dataset value
+            const dataSetValue = element.dataset.dhPropertyOutputs
+            // This value is for example: output-name="[2]"
+            // This will return either a number, or "false". It is possible to return "0", this is not "false".
+            const arrayIndiceValue = getStringFormattedArrayIndiceValue(dataSetValue)
+
+            // This function either returns the full object, or the specific index of the object, and converts it if required.
+            const convertedValue = ((): any => {
+              // TODO: Notes, that arrayIndiceValue can return a "0" which does not equal "false", however it also returns "false"
+              const value = (arrayIndiceValue !== false) ? result[arrayIndiceValue] : result
+              if (result.length > 1) return result
+              return (value[0] && (displayUnits || contractUnits)
+                ? utils.convertUnits(contractUnits, displayUnits, value[0])
+                : value)
+            })()
 
             const isNumber = !Number.isNaN(Number(convertedValue))
             if (decimals && isNumber) {
