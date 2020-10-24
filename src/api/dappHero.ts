@@ -117,11 +117,11 @@ export const getContractsByProjectKey = async (projectId) => {
     return (await getContractsByProjectKeyDappHero(projectId))
   } catch (error) {
   // If the error fails, then try bubble
-    logger.log('(DH-CORE) Error in Global Cache Network, re-trying...', error)
+    logger.error('(DH-CORE) Error in Global Cache Network, re-trying...', error)
     try {
       return (await getContractsByProjectKeyBubble(projectId) )
     } catch (error) {
-      logger.log('(DH-CORE) Failure in project cache backend', error)
+      logger.error('(DH-CORE) Failure in project cache backend', error)
     }
   }
 }
