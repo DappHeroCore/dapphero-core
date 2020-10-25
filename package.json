@@ -1,5 +1,7 @@
 {
   "name": "dapphero-core",
+  "author": "Dennison Bertram, Drake Evans, Xivis",
+  "license": "Public Domain",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
