@@ -1,7 +1,7 @@
 {
   "name": "dapphero-core",
   "author": "Dennison Bertram, Drake Evans, Xivis",
-  "license": "Public Domain",
+  "note": "The DappHero code not covered by another license (the code writen by the DappHero Team) is Public Domain",
   "version": "0.1.0",
   "private": true,
   "license": "MIT",
