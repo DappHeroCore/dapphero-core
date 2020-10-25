@@ -13,7 +13,6 @@ import { UserBase as UBase } from './components/userBase/UserBase'
 
 import { DB } from './api/database'
 
-
 export const ProvidersWrapper: React.FC = () => {
   // react hooks
   const [ configuration, setConfig ] = useState(null)
@@ -43,8 +42,8 @@ export const ProvidersWrapper: React.FC = () => {
   useEffect(() => {
     const getConfig = async () => {
       const res = await api.dappHero.getContractsByProjectKey(consts.global.apiKey)
-      const { formattedOutput, paused, paymentAddress } = res
-      const newConfig = { contracts: formattedOutput, paymentAddress }
+      const { formattedOutput, paused } = res
+      const newConfig = { contracts: formattedOutput }
       // eslint-disable-next-line no-unused-expressions
       paused ? console.log('This DappHero project has been Paused (check Admin interface)') : setConfig(newConfig)
       setPaused(paused)
