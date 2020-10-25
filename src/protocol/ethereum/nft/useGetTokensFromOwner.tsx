@@ -1,9 +1,13 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
+import { EmitterContext } from 'providers/EmitterProvider/context'
+import { EVENT_NAMES, EVENT_STATUS } from 'providers/EmitterProvider/constants'
 import { openSeaApi } from './api'
 
 export const useGetTokensFromOwner = ({ assetOwnerAddress, isAllTokens, parsedTokens, isSingleToken, isMultipleTokens, assetContractAddress, tokens, limit, offset }) => {
   const [ nfts, setNfts ] = useState(null)
   const [ error, setError ] = useState(null)
+
+  const { actions: { emitToEvent } } = useContext(EmitterContext)
 
   useEffect(() => {
     if (!assetOwnerAddress) return
@@ -15,8 +19,20 @@ export const useGetTokensFromOwner = ({ assetOwnerAddress, isAllTokens, parsedTo
 
       openSeaApi.owner
         .getSingleAsset({ assetOwnerAddress, assetContractAddress, token })
-        .then(setNfts)
-        .catch((error) => setError({ simpleErrorMessage, completeErrorMessage, error }))
+        .then((nfts) => {
+          emitToEvent(
+            EVENT_NAMES.nft.loadSingleToken,
+            { value: nfts, step: 'Load Single Token', status: EVENT_STATUS.resolved },
+          )
+          setNfts(nfts)
+        })
+        .catch((error) => {
+          emitToEvent(
+            EVENT_NAMES.nft.loadSingleToken,
+            { value: error, step: 'Load Single Token', status: EVENT_STATUS.rejected },
+          )
+          setError({ simpleErrorMessage, completeErrorMessage, error })
+        })
     }
 
     if (isMultipleTokens) {
@@ -25,8 +41,20 @@ export const useGetTokensFromOwner = ({ assetOwnerAddress, isAllTokens, parsedTo
 
       openSeaApi.owner
         .getMultipleAssets({ assetOwnerAddress, assetContractAddress, tokens, limit, offset })
-        .then(setNfts)
-        .catch((error) => setError({ simpleErrorMessage, completeErrorMessage, error }))
+        .then((nfts) => {
+          emitToEvent(
+            EVENT_NAMES.nft.loadMultipleTokens,
+            { value: nfts, step: 'Load Single Token', status: EVENT_STATUS.resolved },
+          )
+          setNfts(nfts)
+        })
+        .catch((error) => {
+          emitToEvent(
+            EVENT_NAMES.nft.loadMultipleTokens,
+            { value: error, step: 'Load Single Token', status: EVENT_STATUS.rejected },
+          )
+          setError({ simpleErrorMessage, completeErrorMessage, error })
+        })
     }
 
     if (isAllTokens) {
@@ -35,8 +63,20 @@ export const useGetTokensFromOwner = ({ assetOwnerAddress, isAllTokens, parsedTo
 
       openSeaApi.owner
         .getAllAssets({ assetOwnerAddress, assetContractAddress, limit, offset })
-        .then(setNfts)
-        .catch((error) => setError({ simpleErrorMessage, completeErrorMessage, error }))
+        .then((nfts) => {
+          emitToEvent(
+            EVENT_NAMES.nft.loadAllTokens,
+            { value: nfts, step: 'Load Single Token', status: EVENT_STATUS.resolved },
+          )
+          setNfts(nfts)
+        })
+        .catch((error) => {
+          emitToEvent(
+            EVENT_NAMES.nft.loadAllTokens,
+            { value: error, step: 'Load Single Token', status: EVENT_STATUS.rejected },
+          )
+          setError({ simpleErrorMessage, completeErrorMessage, error })
+        })
     }
   }, [ assetOwnerAddress, offset ])
 

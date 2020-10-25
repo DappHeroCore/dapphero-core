@@ -3,6 +3,8 @@ import * as contexts from 'contexts'
 import { useWeb3React } from '@web3-react/core'
 import { logger } from 'logger/customLogger'
 import { getProfile } from '3box/lib/api'
+import { EmitterContext } from 'providers/EmitterProvider/context'
+import { EVENT_NAMES, EVENT_STATUS } from 'providers/EmitterProvider/constants'
 import { ThreeBoxProfileDataElement } from './ThreeBoxProfileDataElement'
 import { ThreeBoxProfileImgElement } from './ThreeBoxProfileImgElement'
 
@@ -15,6 +17,9 @@ interface ReducerProps {
 }
 
 export const Reducer: FunctionComponent<ReducerProps> = ({ element, info }) => {
+
+  const { actions: { emitToEvent } } = useContext(EmitterContext)
+
   // const injectedContext = useWeb3React()
   // const { address } = injectedContext
   const defaultProfile = {
@@ -46,9 +51,21 @@ export const Reducer: FunctionComponent<ReducerProps> = ({ element, info }) => {
     const fetchProfile = async () => {
       try {
         // TODO: [DEV-97] How to we check the status of a request? When no Profile this 404's
+        emitToEvent(
+          EVENT_NAMES.threeBox.loadProfile,
+          { value: null, step: 'Three Box Profile Load', status: EVENT_STATUS.pending },
+        )
         const profile = await get3boxProfile(address)
+        emitToEvent(
+          EVENT_NAMES.threeBox.loadProfile,
+          { value: profile, step: 'Three Box Profile Load', status: EVENT_STATUS.resolved },
+        )
         setThreeBoxProfile(profile)
       } catch (error) {
+        emitToEvent(
+          EVENT_NAMES.threeBox.loadProfile,
+          { value: error, step: 'Three Box Profile Load Error', status: EVENT_STATUS.rejected },
+        )
         logger.log('You have no profile. ', error)
       }
     }

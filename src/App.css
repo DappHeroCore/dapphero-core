@@ -36,3 +36,22 @@
     transform: rotate(360deg);
   }
 }
+
+.modalContainer {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: auto;
+  align-content: start;
+}
+.modalContainer:after {
+  display: block;
+  content: " placeholder ";
+  margin: 10px;
+  flex: 999 999 auto;
+}
+.modalItem {
+  flex: 0 0 auto;
+  margin: 10px;
+}
