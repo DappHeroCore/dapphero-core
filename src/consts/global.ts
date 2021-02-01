@@ -9,6 +9,7 @@ export const ethNetworkName = {
   77: 'Sokol',
   99: 'Core',
   100: 'Xdai',
+  80001: 'maticMumbaiTestnet',
 }
 const apiKeyElement = document.getElementById('dh-apiKey')
 export const apiKey = apiKeyElement.getAttribute('data-api')

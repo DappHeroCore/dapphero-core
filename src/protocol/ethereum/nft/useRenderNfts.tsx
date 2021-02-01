@@ -125,7 +125,7 @@ export const useRenderNfts = ({ nfts, item, element, getAssetElements }) => {
         'data-dh-property-method-id', 'data-dh-property-asset-contract-address' ]
 
       // Replace the Inner text for any element type.
-      Array.from(item.root.children).forEach((element) => {
+      Array.from(item.root.children).forEach((element: HTMLElement) => {
         displayKeyValueElementInnerText(clonedItem, '$THIS_TokenID', nft?.token_id, element.nodeName)
         displayKeyValueElementInnerText(clonedItem, '$THIS_ContractAddress', nft?.asset_contract.address, element.nodeName)
         displayKeyValueElementInnerText(clonedItem, '$THIS_OwnerAddress', nft?.owner.address, element.nodeName)
@@ -134,7 +134,7 @@ export const useRenderNfts = ({ nfts, item, element, getAssetElements }) => {
       // TODO: Add recursion to get inner children elements
 
       // Substitute the $THIS value on any attribute from array above, for any child element.
-      Array.from(item.root.children).forEach((element) => {
+      Array.from(item.root.children).forEach((element: HTMLElement) => {
         attributes.forEach((attribute) => {
           displayValueOnElementAttribute(clonedItem, '$THIS_TokenID', nft?.token_id, attribute)
           displayValueOnElementAttribute(clonedItem, '$THIS_ContractAddress', nft?.asset_contract.address, attribute)

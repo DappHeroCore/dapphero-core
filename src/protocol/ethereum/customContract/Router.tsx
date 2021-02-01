@@ -25,7 +25,6 @@ type RouterProps = {
 }
 
 export const Router: React.FunctionComponent<RouterProps> = ({ listOfContractMethods, contract, timestamp }) => {
-
   const ethereum = useContext(contexts.EthereumContext)
   const { signer, isEnabled: writeEnabled, chainId: writeChainId, provider } = ethereum
   const { contractAddress, contractAbi, networkId } = contract
@@ -47,10 +46,8 @@ export const Router: React.FunctionComponent<RouterProps> = ({ listOfContractMet
       let readContractInstance = null
       // Make the contract instance from either the local provider or remote provider
       if (provider && contractNetwork === provider?._network?.name) {
-        console.log('Using local provider for contract reads.')
         readContractInstance = new ethers.Contract(contractAddress, contractAbi, provider)
       } else {
-        console.log('Using DH-backend provider for contract reads.')
         readContractInstance = new ethers.Contract(contractAddress, contractAbi, stableReadProvider)
       }
       readContractInstance.on('*', (data) => emitToEvent(
