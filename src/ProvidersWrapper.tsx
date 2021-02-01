@@ -9,6 +9,9 @@ import { DomElementsContext, EthereumContext } from 'contexts'
 import { EmitterProvider } from 'providers/EmitterProvider/provider'
 import { useWeb3Provider } from 'hooks'
 import { Activator } from './Activator'
+import { UserBase as UBase } from './components/userBase/UserBase'
+
+import { DB } from './api/database'
 
 export const ProvidersWrapper: React.FC = () => {
   // react hooks
@@ -22,6 +25,18 @@ export const ProvidersWrapper: React.FC = () => {
   const retriggerEngine = (): void => { setTimestamp(+new Date()) }
 
   const ethereum = useWeb3Provider(consts.global.POLLING_INTERVAL) // This sets refresh speed of the whole app
+
+  // load serBase
+  const [ db, setDB ] = useState(null)
+  useEffect(() => {
+
+    const makeDBConnection = async () => {
+      setDB(await new DB({ appId: process.env.REACT_APP_USERBASE_APP_ID, projectId: consts.global.apiKey }))
+    }
+    if (consts.global.apiKey) {
+      makeDBConnection()
+    }
+  }, [])
 
   // load contracts effects only if not paused
   useEffect(() => {
@@ -82,6 +97,7 @@ export const ProvidersWrapper: React.FC = () => {
         <CookiesProvider>
           <ToastProvider>
             <EthereumContext.Provider value={ethereum}>
+              {/* <UBase db={db} /> */}
               <Activator
                 configuration={configuration}
                 setConfig={setConfig}
@@ -91,6 +107,7 @@ export const ProvidersWrapper: React.FC = () => {
                 supportedNetworks={supportedNetworks}
                 domElementsFilteredForContracts={smartcontractElements.domElementsFilteredForContracts}
                 contractElements={smartcontractElements.contractElements}
+                db={db}
               />
             </EthereumContext.Provider>
           </ToastProvider>

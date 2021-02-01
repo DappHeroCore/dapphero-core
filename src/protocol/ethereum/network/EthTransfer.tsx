@@ -4,6 +4,8 @@ import { logger } from 'logger/customLogger'
 import * as utils from 'utils'
 import * as contexts from 'contexts'
 import { ethers } from 'ethers'
+import { EmitterContext } from 'providers/EmitterProvider/context'
+import { EVENT_NAMES, EVENT_STATUS } from 'providers/EmitterProvider/constants'
 
 const apiKey = process.env.REACT_APP_BLOCKNATIVE_API
 interface EthTransferProps {
@@ -17,6 +19,8 @@ interface EthTransferProps {
 
 export const EthTransfer: FunctionComponent<EthTransferProps> = ({ element, amountObj, addressObj, outputObj, info }) => {
   const ethereum = useContext(contexts.EthereumContext)
+  const { actions: { emitToEvent } } = useContext(EmitterContext)
+
   const { signer, provider, isEnabled } = ethereum
 
   useEffect(() => {
@@ -48,15 +52,36 @@ export const EthTransfer: FunctionComponent<EthTransferProps> = ({ element, amou
         } ]
 
         if (from && isEnabled) { // We will only attempt this if we actually got our address from the signer ourslves.
+          emitToEvent(
+            EVENT_NAMES.ethTransfer.sendEther,
+            { value: params, step: 'Send Ether', status: EVENT_STATUS.pending },
+          )
           provider.send('eth_sendTransaction', params)
-            .then(notify.hash)
-            .catch((err) => logger.info('There was an error sending ether with metaMask', err))
+            .then((hash) => {
+              emitToEvent(
+                EVENT_NAMES.ethTransfer.sendEther,
+                { value: params, step: 'Send Ether Params', status: EVENT_STATUS.pending },
+              )
+              notify.hash(hash)
+            })
+            .catch((err) => {
+              emitToEvent(
+                EVENT_NAMES.ethTransfer.sendEther,
+                { value: err, step: 'Send Ether Error', status: EVENT_STATUS.rejected },
+              )
+
+              logger.info('There was an error sending ether with metaMask', err)
+            })
             .finally(() => {
               amountObj.element.value = ''
               addressObj.element.value = ''
             })
         }
       } catch (err) {
+        emitToEvent(
+          EVENT_NAMES.ethTransfer.sendEther,
+          { value: err, step: 'Send Ether Error', status: EVENT_STATUS.rejected },
+        )
         logger.warn('There was an error transfering ether', err)
       }
     }
