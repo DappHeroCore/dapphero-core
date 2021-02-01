@@ -7,10 +7,16 @@ import { EthEnable } from './EthEnable'
 import { EthNetworkInfo } from './EthNetworkInfo'
 import { EthTransfer } from './EthTransfer'
 
-export const Reducer = ({ element, info }) => {
-  const domElements = hooks.useDomElements()
+export type ReducerProps = {
+  element: HTMLElement;
+  info?: any;
+  domElements?: any;
+}
+
+export const Reducer: React.FunctionComponent<ReducerProps> = ({ element, info, domElements }) => {
+  // const domElements = hooks.useDomElements()
   const ethereum = useContext(contexts.EthereumContext)
-  const { chainId, networkName, providerType, isEnabled } = ethereum
+  const { chainId, networkName, providerType } = ethereum
 
   switch (info?.properties[0]?.key) {
     case ('enable'): { // TODO: Drake- we need to settle on if we are going to use this style or not so we can be consistent

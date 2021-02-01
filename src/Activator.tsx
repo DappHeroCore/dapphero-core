@@ -26,6 +26,7 @@ type ActivatorProps = {
   timeStamp: any;
   contractElements: any;
   domElementsFilteredForContracts: any;
+  db: any;
 }
 
 export const Activator: React.FC<ActivatorProps> = ({
@@ -37,6 +38,7 @@ export const Activator: React.FC<ActivatorProps> = ({
   supportedNetworks,
   contractElements,
   domElementsFilteredForContracts,
+  db,
 }: ActivatorProps) => {
 
   // Ethereum
@@ -66,6 +68,7 @@ export const Activator: React.FC<ActivatorProps> = ({
       retriggerEngine,
       projectId: consts.global.apiKey,
       provider: ethereum,
+      db,
       toggleHighlight(): void {
         dappHero.highlightEnabled = !dappHero.highlightEnabled
         highlightDomElements(dappHero.highlightEnabled, domElements)
@@ -75,6 +78,13 @@ export const Activator: React.FC<ActivatorProps> = ({
       listenToTransactionStatusChange: (cb): void => listenToEvent(EVENT_NAMES.contract.statusChange, cb),
       listenToContractInvokeTriggerChange: (cb): void => listenToEvent(EVENT_NAMES.contract.invokeTrigger, cb),
       listenToSmartContractBlockchainEvent: (cb): void => listenToEvent(EVENT_NAMES.contract.contractEvent, cb),
+      listenToUserAddressChange: (cb): void => listenToEvent(EVENT_NAMES.user.addressStatusChange, cb),
+      listenToUserBalanceChange: (cb): void => listenToEvent(EVENT_NAMES.user.balanceStatusChange, cb),
+      listenToNFTLoadSingleToken: (cb): void => listenToEvent(EVENT_NAMES.nft.loadSingleToken, cb),
+      listenToNFTLoadMultipleToken: (cb): void => listenToEvent(EVENT_NAMES.nft.loadMultipleTokens, cb),
+      listenToNFTLoadAllToken: (cb): void => listenToEvent(EVENT_NAMES.nft.loadAllTokens, cb),
+      listenTo3BoxProfile: (cb): void => listenToEvent(EVENT_NAMES.threeBox.loadProfile, cb),
+      listenToEthTransfer: (cb): void => listenToEvent(EVENT_NAMES.ethTransfer.sendEther, cb),
     }
     Object.assign(window, { dappHero })
 
@@ -90,6 +100,7 @@ export const Activator: React.FC<ActivatorProps> = ({
           && domElementsFilteredForContracts.map((domElement) => (
             <FeatureReducer
               key={domElement.id}
+              domElements={domElements}
               element={domElement.element}
               feature={domElement.feature}
               configuration={configuration}

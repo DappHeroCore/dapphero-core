@@ -16,6 +16,7 @@ export const FeatureReducer: React.FunctionComponent<FeatureReducerProps> = ({
   element,
   configuration,
   info,
+  domElements,
   customContractElements,
   retriggerEngine,
 }: FeatureReducerProps) => {
@@ -64,7 +65,7 @@ export const FeatureReducer: React.FunctionComponent<FeatureReducerProps> = ({
     }
 
     case 'network': {
-      return <NetworkReducer element={element} info={info} />
+      return <NetworkReducer element={element} info={info} domElements={domElements} />
     }
 
     case 'threebox': {
