@@ -6,7 +6,7 @@ import * as consts from 'consts'
 import ReactTooltip from 'react-tooltip'
 
 interface EthEnableProps {
-  element: HTMLElement;
+  element: any;
 }
 /**
  * This function attaches a click handler to any element that a user wants to be responsbile for
@@ -18,6 +18,9 @@ export const EthEnable: FunctionComponent<EthEnableProps> = ({ element }) => {
     () => element.innerText
     , [],
   )
+
+  const memoizedInputValueForWebflow = useMemo(() => element.value, [])
+
   const ethereum = useContext(contexts.EthereumContext)
   const { addToast } = useToasts()
 
@@ -30,19 +33,26 @@ export const EthEnable: FunctionComponent<EthEnableProps> = ({ element }) => {
 
   const [ buttonStatus, setButtonStatus ] = useState(element.innerText || 'Enable MetaMask')
 
+  const doEnable = (event) => {
+    event.preventDefault()
+    if (enable) { enable() } else { noWeb3Provider() }
+
+  }
   useEffect(() => {
     if (isEnabled) {
       setButtonStatus('Connected')
+      element.value = 'Connected'
     } else {
       setButtonStatus(memoizedValue)
+      element.value = memoizedValue || memoizedInputValueForWebflow
     }
   }, [ isEnabled ])
 
   useEffect(() => {
     try {
-      element.addEventListener('click', enable || noWeb3Provider, true)
+      element.addEventListener('click', doEnable, true)
 
-      return (() => element.removeEventListener('click', enable || noWeb3Provider, true))
+      return (() => element.removeEventListener('click', doEnable, true))
     } catch (e) {
       logger.log(e)
     }

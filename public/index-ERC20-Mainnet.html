@@ -131,6 +131,22 @@
     <!-- include the Glitch button to show what the webpage is about and
           to make it easier for folks to view source and remix -->
     <div class="glitchButton" style="position:fixed;top:20px;right:20px;"></div>
+
+    <script>
+      document.addEventListener(
+        "dappHeroConfigLoaded",
+        ({ detail: dappHero }) => {
+          // Inside here you can listen to any event you want
+          console.log("It's loaded");
+          dappHero.listenToTransactionStatusChange(data => {
+            console.log("Listening to transtaction status change", data);
+          });
+          dappHero.listenToSmartContractBlockchainEvent(data => {
+            console.log("The blockChain Events: ", data)
+          })
+        }
+      );
+    </script>
     <script
       src=""
       id="dh-apiKey"

@@ -27,11 +27,13 @@ export type ReducerProps = {
   readEnabled: any;
   readChainId: any;
   writeEnabled: any;
+  writeChainId: number;
   timestamp: number;
   contractAbi: any;
+  contractNetworkId: number;
 }
 // Reducer Component
-export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContract, writeContract, readEnabled, readChainId, writeEnabled, timestamp, contractAbi }) => {
+export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContract, writeChainId, writeContract, readEnabled, readChainId, writeEnabled, timestamp, contractAbi, contractNetworkId }) => {
 
   const initialEffectiveConnectionType = '4g'
   const { effectiveConnectionType } = useNetworkStatus(initialEffectiveConnectionType)
@@ -182,12 +184,21 @@ export const Reducer: React.FunctionComponent<ReducerProps> = ({ info, readContr
 
       // Send the user information that their write provider is not connected
       // We need to also check if the write provider is on the right network of the transaction
+      // console.log('writeEnabled', writeEnabled)
+      // console.log('isTransaction', isTransaction)
 
       if (writeEnabled && isTransaction && !doParamsContainUnformatedConstant) {
         emitToEvent(
           EVENT_NAMES.contract.statusChange,
           { value: null, step: 'Triggering write transaction.', status: EVENT_STATUS.pending, methodNameKey },
         )
+
+        if (contractNetworkId !== writeChainId) {
+          const msg = `Please change your network to ${consts.global.ethNetworkName[contractNetworkId]} to use the deployed contract.`
+          addToast(msg, { appearance: 'info', autoDismiss: true, autoDismissTimeout: consts.global.REACT_TOAST_AUTODISMISS_INTERVAL })
+          const msg2 = `You are on the wrong network. Confirming this transaction can be dangerous and lead to permanent loss of funds.`
+          addToast(msg2, { appearance: 'error', autoDismiss: true, autoDismissTimeout: consts.global.REACT_TOAST_AUTODISMISS_INTERVAL })
+        }
 
         try {
 
